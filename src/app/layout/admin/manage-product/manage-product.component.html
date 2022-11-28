@@ -1,0 +1,155 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<p-toast></p-toast>
+<p-toast position="center" key="remove" (onClose)="onReject()" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="flex flex-column" style="flex: 1">
+      <div class="text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{message.summary}}</h4>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6">
+          <button type="button" pButton (click)="delete()" label="{{yes|translate}}" class="p-button-success"></button>
+        </div>
+        <div class="col-6">
+          <button type="button" pButton (click)="onReject()" label="{{no|translate}}"
+                  class="p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+<p-toast position="center" key="lock" (onClose)="onReject()" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="flex flex-column" style="flex: 1">
+      <div class="text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{message.summary}}</h4>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6">
+          <button type="button" pButton (click)="lock()" label="{{yes|translate}}" class="p-button-success"></button>
+        </div>
+        <div class="col-6">
+          <button type="button" pButton (click)="onReject()" label="{{no|translate}}"
+                  class="p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+<p-toast position="center" key="unlock" (onClose)="onReject()" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="flex flex-column" style="flex: 1">
+      <div class="text-center">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+        <h4>{{message.summary}}</h4>
+        <p>{{message.detail}}</p>
+      </div>
+      <div class="grid p-fluid">
+        <div class="col-6">
+          <button type="button" pButton (click)="unlock()" label="{{yes|translate}}" class="p-button-success"></button>
+        </div>
+        <div class="col-6">
+          <button type="button" pButton (click)="onReject()" label="{{no|translate}}"
+                  class="p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+<main>
+  <h5 translate>product.manage</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col-3">
+        <button type="button" (mousedown)="create()" class="root-btn" translate>
+          <i class="fa-solid fa-plus me-2"></i>
+          product.create
+        </button>
+      </div>
+      <div class="col-9">
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #search
+                   placeholder='{{inventory | translate}}' aria-label="{inventory | translate}">
+            <button type="button" class="buttonRoot" (mousedown)="searchNameProd(search.value)" pButton pRipple
+                    icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- table -->
+    <section class="table-account">
+      <p-table [value]="getProductsResponse.items" #dt dataKey="id"
+               styleClass="p-datatable-getProductsResponse.totalPages" [rowHover]="true" responsiveLayout="scroll"
+               [filterDelay]="0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Ảnh</th>
+            <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.name
+              <p-sortIcon field="name-product"></p-sortIcon>
+            </th>
+            <th pSortableColumn="price" (mousedown)="sort('price')" translate>product.unit.outprice
+              <p-sortIcon field="price"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status" (mousedown)="sort('status')" translate>product.warehouse.status
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="distributor" (mousedown)="sort('supplierName')" translate>product.supplier.name
+              <p-sortIcon field="distributor"></p-sortIcon>
+            </th>
+            <th pSortableColumn="warehouse" (mousedown)="sort('quality')" translate>product.inventory
+              <p-sortIcon field="warehouse"></p-sortIcon>
+            </th>
+            <th>Thao tác</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td><img src="{{item.img}}" alt="" wight="75%" height="75%"></td>
+            <td><a [routerLink]="['/admin/manage-warehouse/', item.productCode]">{{item.productName}}</a></td>
+            <td>{{item.price}}/{{item.unitPrice}}</td>
+            <td>{{item.statusName}}</td>
+            <td>{{item.supName}}</td>
+            <td>{{item.inventory}} ({{item.unit}})</td>
+            <td>
+              <i *ngIf="item.statusCode==3" class="fa-solid fa-lock text-danger me-2"
+                 (mousedown)="confirmUnlock(item.productCode)"></i>
+              <i *ngIf="item.statusCode!=3 && item.statusCode!=4" class="fa-solid fa-unlock text-success me-2"
+                 (mousedown)="confirmLock(item.productCode)"></i>
+              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4"
+                 (mousedown)="update(item.productCode)"></i>
+              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2"
+                 (mousedown)="confirmRemove(item.productCode)"></i>
+              <i *ngIf="item.statusCode!=4" class="fa-solid fa-clock-rotate-left"></i>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          {{state.first}}
+          <button type="button" pButton icon="pi-refresh"></button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <button type="button" pButton icon="pi-cloud-upload"></button>
+        </ng-template>
+        <ng-template let-item pTemplate="paginatordropdownitem">
+          {{item.value}} - per page
+        </ng-template>
+      </p-table>
+    </section>
+    <p-paginator [rows]="10" [totalRecords]="getProductsResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                 currentPageReportTemplate="Showing {{getProductsResponse.totalPages}} to {{getProductsResponse.totalPages}} of {{getProductsResponse.totalItems}} entries"
+                 (onPageChange)="Pageable($event)"></p-paginator>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

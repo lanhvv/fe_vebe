@@ -1,0 +1,85 @@
+*{padding: 0; margin: 0; box-sizing: border-box;}
+
+body {
+  background-color: #F2F2F2;
+}
+
+@media (min-width: 991.98px) {
+  main {
+    padding-left: 240px;
+  }
+}
+
+#main-navbar{
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  padding: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0;
+  /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+  background-color: #2D3744;
+}
+
+.position-sticky .list-group a{
+  background-color: #2D3744;
+  color: #525C6D;
+  margin: 5px 0 5px 0;
+}
+
+.position-sticky .list-group a:hover{
+  color: white;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+
+.active{
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.active span{
+  color: white;
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Scrollable contents if viewport is shorter than content. */
+}
+
+.dropdown-profile li{
+  height: 35px;
+}
+
+.dropdown-profile li a:hover{
+  cursor: pointer;
+  border-bottom: 1px solid #0061C1;
+}
+
+.root-btn {
+  width: 183px;
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}

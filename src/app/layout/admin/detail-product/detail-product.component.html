@@ -1,0 +1,162 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <p-toast></p-toast>
+  <div class="container pt-4 main-layout add-product">
+    <div class="row">
+      <div class="col">
+        <h2>Thêm sản phẩm</h2>
+      </div>
+    </div>
+      <div class="col-6 float-start">
+        <div class="mb-3">
+          <label for="code-product" class="form-label" translate>product.barcode</label>
+          <input type="text" class="form-control" required id="barCode"  name="barCode" [(ngModel)]="createProductRequest.barCode">
+        </div>
+        <div class="mb-3">
+          <label for="name-product" class="form-label" translate>product.name</label>
+          <input type="text" class="form-control"  minlength="0" maxlength="100"  name="nameProd" [(ngModel)]="createProductRequest.nameProd">
+        </div>
+        <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
+          <label class="form-label-category" translate>product.category.name</label> <br>
+          <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
+            <ng-template pTemplate="selectedItem">
+                <div class="category-item category-item-value" *ngIf="selectedCategory">
+                    <div>{{selectedCategory.name}}</div>
+                </div>
+            </ng-template>
+            <ng-template let-category pTemplate="categoryitem">
+                <div class="category-item">
+                    <div>{{category.name}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown> <br>
+          <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
+        </div>
+        <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.items!=null">
+          <label class="form-label-supplier" translate>product.supplier.name</label> <br>
+          <p-dropdown [options]="getInforCreateProductResponse.items" [(ngModel)]="selectedSupplier" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier">
+            <ng-template pTemplate="selectedItem">
+                <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                    <div>{{selectedSupplier.name}}</div>
+                </div>
+            </ng-template>
+            <ng-template let-supplier pTemplate="supplieritem">
+                <div class="supplier-item">
+                    <div>{{supplier.name}}</div>
+                </div>
+            </ng-template>
+        </p-dropdown><br>
+          <a class="text-category mt-3 text-decoration-none" translate>product.supplier.create</a>
+        </div>
+        <div *ngIf="selectedUnitParent !=null && selectedUnitParent.unitId!=null && getUnitChileResponse!=null && getUnitChileResponse.unitItems!=null">
+          <div *ngFor="let item of unitLayouts;let i=index ">
+            <div class="row unit">
+              <div class="field col-12 md:col-4">
+                <span class="p-float-label">
+                    <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="getUnitChileResponse.unitItems" [(ngModel)]="selectedUnitChilds[i]" optionLabel="unitName" (onChange)="craeteUnit(i)"></p-dropdown>
+                    <label for="dropdown" translate>product.unit.name</label>
+                </span>
+            </div>
+            <div class="field col-12 md:col-4">
+              <span class="p-float-label">
+                  <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.units[i].inPrice">
+                  <label for="inputtext" translate>product.unit.inprice</label>
+              </span>
+          </div>
+          <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+                <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.units[i].outPrice">
+                <label for="inputtext" translate>product.unit.outprice</label>
+            </span>
+        </div>
+              <div class="col-1" *ngIf="1!=unitLayouts.length">
+                <button class="btn btn-danger" (mousedown)="deleteUnitLayout(i)">
+                  xóa
+                </button>
+
+              </div>
+              <div class="col-1" *ngIf="i+1==unitLayouts.length && createProductRequest.units[i].inPrice!=null
+              && createProductRequest.units[i].inPrice!=0 && createProductRequest.units[i].outPrice!=null &&
+              createProductRequest.units[i].outPrice!=0 && createProductRequest.units[i].unitName!=null && createProductRequest.units[i].unitName!='' ">
+                <button class="btn btn-primary" (mousedown)="createUnitLayout()">
+                  thêm
+                </button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 float-end">
+        <div class="row" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.unitItems!=null">
+          <div class="field col-12 md:col-4">
+            <span class="p-float-label">
+              <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
+                <ng-template pTemplate="selectedItem">
+                    <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
+                        <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-unitItem pTemplate="unititem">
+                    <div class="unit-Item">
+                        <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+                <label for="dropdown" translate>product.unit.name</label>
+            </span>
+        </div>
+        <div class="field col-12 md:col-4">
+          <span class="p-float-label">
+              <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.amount">
+              <label for="inputtext" translate>product.unit.amount</label>
+          </span>
+      </div>
+      <div class="field col-12 md:col-4">
+        <span class="p-float-label">
+            <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.inPrice">
+            <label for="inputtext" translate>product.unit.inprice</label>
+        </span>
+    </div>
+          <!-- <div class="col-6">
+            <div class="mb-3">
+              <label for="horizontal">số lượng</label>
+              <input type="text" class="form-control" name="inUnit" id="price-out-product" [(ngModel)]="createProductRequest.amount">
+          </div>
+          </div>
+          <div class="col-6">
+            <div class="mb-3">
+              <label for="price-out-product"  class="form-label">đơn vị</label>
+              <input type="text" class="form-control" name="inUnit" id="price-out-product" [(ngModel)]="createProductRequest.unit">
+            </div>
+          </div> -->
+
+        </div>
+        <div class="mb-3">
+          <label for="description-product" class="form-label" translate>product.description</label>
+          <textarea class="form-control" id="description-product" name="description" rows="3" style="resize: none;" [(ngModel)]="createProductRequest.description"></textarea>
+        </div>
+<!--        <div class="mb-3 image-product">-->
+<!--          <input type="file" class="form-control" rows="3">-->
+<!--        </div>-->
+        <div class="mb-3">
+          <p-fileUpload name="demo[]" url="./upload.php"
+             accept="image/*" [previewWidth]='100' [showUploadButton]="false" [maxFileSize]="1000000" (onSelect)="onUpload($event)" (onRemove)="onRemove()">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles"> </li>
+                </ul>
+            </ng-template>
+      </p-fileUpload>
+        </div>
+      </div>
+      <button class="btn btn-danger btn-exit" (mousedown)="back()" translate>layout.button.back</button>
+      <button class="btn btn-primary btn-save" (mousedown)="create()" translate>layout.button.create</button>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

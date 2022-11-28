@@ -1,0 +1,117 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <h5>Quản lý nhà phân phối</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col-2">
+        <span><p>Số nhà phân phối đang hoạt động: 1</p></span>
+      </div>
+      <div class="col-4">
+        <button class="root-btn" (click)="open(content)">Thêm nhà phân phối</button>
+      </div>
+      <div class="col-6">
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #username
+                   placeholder="Nhập tên nhà phân phối...">
+            <button class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- table -->
+    <section class="table-account">
+      <p-table class="table" [value]="supplierResponse.supplierItems">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="name-supplier">Tên nhà phân phối
+              <p-sortIcon field="name-supplier"></p-sortIcon>
+            </th>
+            <th pSortableColumn="phone-number">Số điện thoại
+              <p-sortIcon field="phone-number"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">Trạng thái
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="create-date">Ngày gia nhập
+              <p-sortIcon field="create-date"></p-sortIcon>
+            </th>
+            <th scope="col">Thao tác</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-distributor>
+          <tr>
+            <td>{{distributor.nameSup}}</td>
+            <td>{{distributor.numberPhone}}</td>
+            <td>{{distributor.statusName}}</td>
+            <td>{{distributor.createdDate}}</td>
+            <td>
+              <i (click)="edit(distributor.id)" class="fa-solid fa-file-pen me-2"></i>
+              <i (click)="delete(distributor.id)" class="fa-solid fa-trash"></i>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!--      <p-paginator [rows]="10" [totalRecords]="listAccountItems.totalItems" [rowsPerPageOptions]="[3,10,25,50]"-->
+      <!--                   currentPageReportTemplate="Showing {{listAccountItems.totalPages}} to {{listAccountItems.totalPages}} of {{listAccountItems.totalItems}} entries"-->
+      <!--      ></p-paginator>-->
+    </section>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Thêm nhà phân phối</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <!--  <form (ngSubmit)="save()">-->
+  <!--  <div class="modal-body">-->
+  <!--      <div class="mb-3 row">-->
+  <!--        <div class="col">-->
+  <!--          <div class="mb-3">-->
+  <!--            <label for="name-distributor" class="form-label">Tên nhà phân phối</label>-->
+  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.nameSup" id="name-distributor">-->
+  <!--          </div>-->
+  <!--          <div class="mb-3">-->
+  <!--            <label class="form-label">Trạng thái</label>-->
+  <!--            <select class="form-select" [(ngModel)]="supplier.status" aria-label="Default select example">-->
+  <!--              <option selected>Open this select menu</option>-->
+  <!--              <option value="1">One</option>-->
+  <!--              <option value="2">Two</option>-->
+  <!--              <option value="3">Three</option>-->
+  <!--            </select>-->
+  <!--          </div>-->
+  <!--          <div class="mb-3">-->
+  <!--            <label for="address-distributor" class="form-label">Địa chỉ</label>-->
+  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.address" id="address-distributor">-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--        <div class="col">-->
+  <!--          <div class="mb-3">-->
+  <!--            <label for="phone-distributor" class="form-label">Số điện thoại</label>-->
+  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.numberPhone" id="phone-distributor">-->
+  <!--          </div>-->
+  <!--          <div class="mb-3">-->
+  <!--            <label for="createDate-distributor" class="form-label">Ngày gia nhập</label>-->
+  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.createdDate" id="createDate-distributor">-->
+  <!--          </div>-->
+  <!--          <div class="mb-3">-->
+  <!--            <label for="email-distributor" class="form-label">Email</label>-->
+  <!--            <input type="email" class="form-control" [(ngModel)]="supplier.email" id="email-distributor">-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--  </div>-->
+  <!--  <div class="modal-footer">-->
+  <!--    <button type="button" class="btn btn-outline-dark"  (click)="modal.close('Save click')">Save</button>-->
+  <!--  </div>-->
+  <!--  </form>-->
+</ng-template>

@@ -1,0 +1,122 @@
+<employee-header [Status]="status"></employee-header>
+
+<div class="sell container-fluid pt-3">
+  <div class="row">
+    <div class="col-8 sell-list_product">
+      <div class="sell-list_product-header bg-primary p-2">
+        <div class="row">
+          <div class="col-4">
+            <p-dropdown [options]="products" optionLabel="name"  [filter]="true" filterBy="name" [showClear]="true" placeholder="{{products==null ? 'abc':products.length}}" (onFilter)="getProduct($event)" [filter]="true">
+              <ng-template let-product pTemplate="productItem" >
+                <div class="product" (mousedown)="selectProduct(product.importId)">
+                  <img [src]="product.img" [class]="'flag flag-' + product.productId"/>
+                  <div>{{product.productName}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+          <div class="col-8">
+            <p class="text-white float-end">Mã hóa đơn: HD6382823</p>
+          </div>
+        </div>
+      </div>
+      <div></div>
+      <div class="sell-list_product-body p-2" *ngIf="cartItem.products!=null" >
+        <div class="sell-list_product-body--item p-3" *ngFor="let item of cartItem.products;let i=index">
+          <div class="row pb-2">
+            <div class="col">{{i+1}}</div>
+            <div class="col">
+              <i class="fa-solid fa-trash"></i>
+            </div>
+            <div class="col">{{item.barCode}}</div>
+            <div class="col">{{item.productName}}</div>
+            <div class="col">
+              <div class="btn-group">
+                <p-dropdown [options]="item.items" optionLabel="unit"  [filter]="false" filterBy="unit" [showClear]="false" >
+                  <ng-template let-unit pTemplate="unitItem" >
+                    <div class="unit" (mousedown)="selectUnit(unit.unitId,item.productId)">
+                      <div>{{unit.unitName}}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
+            <div class="col" *ngIf="selectedUnit!=null">
+              <p-inputNumber type="number" name="amount+{{item.productId}}+{{selectedUnit.unitId}}" id="amount+{{item.productId}}+{{selectedUnit.unitId}}" [(ngModel)]="item.amount" ></p-inputNumber>
+            </div>
+            <div class="col" *ngIf="selectedUnit!=null">
+              {{selectedUnit.outPrice}}
+            </div>
+            <div class="col fw-bold" *ngIf="selectedUnit!=null">
+              {{item.amount*selectedUnit.outPrice}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 sell-money p-3">
+      <div class="sell-money_content">
+        <div class="row">
+          <div class="col">
+            <div class="btn-group">
+              <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                      data-bs-auto-close="true" aria-expanded="false">
+                Nhân viên
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                <li><a class="dropdown-item" href="#">Nhân viên A</a></li>
+                <li><a class="dropdown-item" href="#">Nhân viên B</a></li>
+                <li><a class="dropdown-item" href="#">Nhân viên C</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col">
+            <button class="btn btn-secondary float-end"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn
+              hàng</button>
+          </div>
+          <table class="m-3">
+            <tbody>
+            <tr>
+              <td>Tổng tiền hàng</td>
+              <td>22.000</td>
+            </tr>
+            <tr>
+              <td>Giảm giá</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td class="fw-bold">Khách cần trả</td>
+              <td>22.000</td>
+            </tr>
+            <tr>
+              <td class="fw-bold">Khách thanh toán</td>
+              <td>22.000</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="sell-money_options m-2">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+              <label class="form-check-label" for="flexRadioDefault1">
+                Tiền mặt
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+              <label class="form-check-label" for="flexRadioDefault2">
+                Chuyển khoản
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sell-money_footer">
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary text-uppercase" type="button">thanh toán</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<employee-footer></employee-footer>

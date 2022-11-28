@@ -1,0 +1,48 @@
+<header class="mb-3">
+  <div class="container">
+    <div class="row">
+      <div class="d-flex bd-highlight mb-3">
+        <div class="p-2 bd-highlight">
+          <img src="../../../../assets/image/logo.png" height="30"
+               alt="Vibee Logo" loading="lazy" />
+        </div>
+        <div class="me-auto p-2 bd-highlight">
+          <span class="me-2"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918577/phone.png" alt="" class="me-1">+91 9823 132 111</span>
+          <span><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918597/mail.png" alt="" class="me-1"><a href="mailto:fastsales@gmail.com" class="text-black text-decoration-none">contact@bbbootstrap.com</a></span>
+        </div>
+        <div class="p-2 bd-highlight">
+          <span><i class="fa-regular fa-user me-2"></i><a href="#" class="text-black text-decoration-none">Register</a></span>
+        </div>
+        <div class="p-2 bd-highlight">
+          <div><a href="#" class="text-black text-decoration-none">Sign in</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav style="box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);" class="pt-3 pb-3">
+    <div class="container">
+      <div class="d-flex flex-nowrap bd-highlight">
+        <div class="order-1 p-2 bd-highlight me-3">
+          <i class="fa-solid fa-house me-2"></i>
+          <a routerLink="/employee/list-product" [ngClass]="{'active': Status === 1 }" class="text-black text-decoration-none">Trang chủ</a>
+        </div>
+        <div class="order-2 p-2 bd-highlight me-3">
+          <i class="fa-solid fa-box-open me-2"></i>
+          <a routerLink="/employee/home" [ngClass]="{'active': Status === 2 }" class="text-black text-decoration-none">Gian hàng</a>
+        </div>
+        <div class="order-3 p-2 bd-highlight me-3">
+          <i class="fa-brands fa-cc-paypal me-2"></i>
+          <a href="#" [ngClass]="{'active': Status === 3 }" class="text-black text-decoration-none">Giao dịch</a>
+        </div>
+        <div class="order-4 p-2 bd-highlight me-3">
+          <i class="fa-solid fa-users me-2"></i>
+          <a href="#" [ngClass]="{'active': Status === 4 }" class="text-black text-decoration-none">Đơn vị bán lẻ</a>
+        </div>
+        <div class="order-5 p-2 bd-highlight me-3">
+          <i class="fa-solid fa-chart-line me-2"></i>
+          <a routerLink="/employee/report" [ngClass]="{'active': Status === 5 }" class="text-black text-decoration-none">Báo cáo</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

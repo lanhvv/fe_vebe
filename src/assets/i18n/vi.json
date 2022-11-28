@@ -1,0 +1,125 @@
+{
+  "sidebar": {
+    "home": "Trang chủ",
+    "management": {
+      "order": "Quản lý đơn hàng",
+      "account": "Quản lý tài khoản",
+      "customer": "Quản lý khách hàng",
+      "distributor": "Quản lý nhà phân phối",
+      "product": "Quản lý sản phẩm",
+      "sell": "Bán hàng tại quầy",
+      "warehouse": "Quản lý kho hàng"
+    }
+  },
+  "login": {
+    "form": {
+      "title": "Đăng nhập",
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu",
+      "remember": "Nhớ tài khoản của tôi",
+      "button": "Đăng nhập",
+      "redirect": "Tạo mới tài khoản",
+      "choose": "hoặc đăng nhập với"
+    },
+    "errors": {
+      "messages": {
+        "validate": {
+          "username": {
+            "required": "Tên đăng nhập không được để trống.",
+            "minlength": "Tên đăng nhập tối thiểu nhiều hơn 3 kí tự.",
+            "maxlength": "Tên đăng nhập không vượt quá 100 ký tự.",
+            "pattern": "Tên đăng nhập không hợp lệ."
+          },
+          "password": {
+            "required": "Mật khẩu không được để trống.",
+            "minlength": "Mật khẩu tối thiểu nhiều hơn 3 kí tự.",
+            "maxlength": "Mật khẩu không được vượt quá 50 kí tự.",
+            "pattern": "Mật khẩu không hợp lệ."
+          }
+        }
+      }
+    }
+  },
+  "message": {
+    "success": "thành công",
+    "failed": "thất bại",
+    "error": "lỗi",
+    "warning": "vui lòng chờ đợi trong ít phút"
+  },
+  "product": {
+    "warehouse": {
+      "import": {
+        "amount": {
+          "in": "số lượng nhập",
+          "count": "số lần nhập",
+          "inventory": "tồn kho"
+        },
+        "money": {
+          "in": "vốn"
+        },
+        "lastest": "lần nhập gần nhất",
+        "createddate": "ngày nhập",
+        "creator": "người nhập",
+        "best": "ngày nhập gần nhất"
+      },
+      "export": {
+        "amount": {
+          "out": "số lượng bán"
+        },
+        "money": {
+          "out": "doanh thu",
+          "profit": "lợi nhuận"
+        }
+      },
+      "status": "Trạng thái",
+      "action": "Thao tác",
+      "ratio": "Tỉ lệ nhập xuất"
+    },
+    "supplier": {
+      "name": "Nhà phân phối",
+      "create": "Thêm nhà phân phối",
+      "chose": "Chọn nhà phân phối"
+    },
+    "category": {
+      "name": "Loại sản phẩm",
+      "create": "Thêm loại sản phẩm"
+    },
+    "unit": {
+      "name": "Đơn vị",
+      "create": "Thêm đơn vị",
+      "amount": "Số lượng",
+      "inprice": "Giá nhập",
+      "outprice": "Giá bán"
+    },
+    "inventory": "Tồn kho",
+    "barcode": "Mã vạch",
+    "search": "Nhập tên sản phẩm",
+    "import": "Nhập",
+    "create": "Thêm sản phẩm",
+    "creator": "Người tạo",
+    "name": "Tên sản phẩm",
+    "manage": "Quản lí sản phẩm",
+    "description": "Mô tả",
+    "createddate": "Ngày tạo",
+    "detail": "Chi tiết sản phẩm"
+  },
+  "layout": {
+    "button": {
+      "create": "Thêm sản phẩm",
+      "back": "Quay lại",
+      "chose": "Chọn",
+      "confirm": {
+        "title": {
+          "delete": "Bạn có chắc muốn xóa không ?",
+          "lock": "Bạn có chắc muốn khóa không ?",
+          "unlock": "Bạn có chắc muốn mở khóa không ?"
+        },
+        "content": {
+          "delete": "Xác nhận để tiếp tục"
+        },
+        "yes": "Đồng ý",
+        "no": "Hủy"
+      }
+    }
+  }
+}
