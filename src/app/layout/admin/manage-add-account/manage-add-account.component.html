@@ -1,0 +1,77 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<p-toast></p-toast>
+<main>
+  <h5>Thêm mới tài khoản nhân viên</h5>
+  <div class="container pt-4 main-layout">
+    <form class="row g-3 was-validated">
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Họ và tên</label>
+          <input type="text" class="form-control" [(ngModel)]="createAccountRequest.fullname"
+                 [ngModelOptions]="{standalone: true}"
+                 placeholder="Nhập tên nhân viên"
+                 required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Tên đăng nhập</label>
+          <input type="text" class="form-control" [(ngModel)]="createAccountRequest.username" (change)="checkAccount()"
+                 name="username"
+                 placeholder="Nhập tên đăng nhập"
+                 required>
+          <span *ngIf="createAccountRequest.username != null">{{messageUsername}}</span>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Mật khẩu</label>
+          <input type="password" class="form-control" [(ngModel)]="createAccountRequest.password"
+                 [ngModelOptions]="{standalone: true}"
+                 placeholder="Nhập mật khẩu" required>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Số thẻ căn cước công dân</label>
+          <input type="text" class="form-control" [(ngModel)]="createAccountRequest.cccd" (change)="checkAccount()"
+                 [ngModelOptions]="{standalone: true}"
+                 placeholder="Nhập căn cước công dân" required>
+          <div *ngIf="createAccountRequest.cccd != null">{{messageCccd}}</div>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" [(ngModel)]="createAccountRequest.numberPhone"
+                 (change)="checkAccount()" [ngModelOptions]="{standalone: true}"
+                 placeholder="Nhập số điện thoại" required>
+          <div *ngIf="createAccountRequest.numberPhone != null">{{messagePhone}}</div>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-control" [(ngModel)]="createAccountRequest.email" (change)="checkAccount()"
+                 [ngModelOptions]="{standalone: true}"
+                 placeholder="Nhập email" required>
+          <div *ngIf="createAccountRequest.email != null">{{messageEmail}}</div>
+
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Địa chỉ</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="createAccountRequest.address"
+                    [ngModelOptions]="{standalone: true}"
+                    placeholder="Nhập địa chỉ" required></textarea>
+        </div>
+        <div class="mb-3 col-md-6">
+          <label class="form-label">Chức vụ</label>
+          <select class="form-control" [(ngModel)]="createAccountRequest.role" [ngModelOptions]="{standalone: true}">
+            <option [value]="1">Admin</option>
+            <option [value]="2">Staff</option>
+            <option [value]="3">User</option>
+          </select>
+        </div>
+        <div class="col-md-3 mb-3">
+          <button (click)="create()" type="submit" class="root-btn">Thêm Nhân Viên</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

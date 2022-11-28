@@ -1,0 +1,13 @@
+
+  zxing-scanner {
+    /* Root component needs to have height: 100% */
+    height: 40%;
+    /* Optional : you probably want full-width as well for landscape orientation or tablets */
+    width: 60%;
+
+  }
+
+  video {
+    /* !important because component already sets height property */
+    height: 30% !important;
+  }

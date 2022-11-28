@@ -1,0 +1,67 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <h5>Quản lý tài khoản khách hàng</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col-3">
+        <button class="root-btn">Thêm tài khoản</button>
+      </div>
+      <div class="col-9">
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #username
+                   placeholder="Nhập tên khách hàng...">
+            <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- table -->
+    <section class="table-account">
+      <p-table #dt [value]="listAccountItems.items" dataKey="id"
+               styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true"> [filterDelay]="0" >
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">Mã khách hàng</th>
+            <th scope="col">Họ và tên</th>
+            <th scope="col">Số điện thoại</th>
+            <th scope="col">Số lần mua hàng</th>
+            <th scope="col">Tổng tiền</th>
+            <th scope="col">Thao tác</th>
+          </tr>
+          <tr></tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr class="p-selectable-row">
+            <td>{{item.id}}</td>
+            <td>{{item.fullname}}</td>
+            <td>{{item.numberPhone}}</td>
+            <td>{{item.statusName}}</td>
+            <td>{{item.creator}}</td>
+            <td>
+            </td>
+          </tr>
+
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">No customers found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator [rows]="10" [totalRecords]="listAccountItems.totalItems" [rowsPerPageOptions]="[3,10,25,50]"
+                   currentPageReportTemplate="Showing {{listAccountItems.totalPages}} to {{listAccountItems.totalPages}} of {{listAccountItems.totalItems}} entries"
+      ></p-paginator>
+    </section>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

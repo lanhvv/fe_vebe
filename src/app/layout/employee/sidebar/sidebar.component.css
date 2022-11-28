@@ -1,0 +1,9 @@
+.sidebar-search,
+.sidebar-filter-price,
+.sidebar-filter-category{
+  width: 100%;
+  height: auto;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+}

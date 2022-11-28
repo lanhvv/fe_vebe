@@ -1,0 +1,173 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<main>
+  <h5>Quản lý kho hàng</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row pb-3">
+      <div class="col-2">
+        <button class="root-btn" (click)="showDialog()">Thêm sản phẩm</button>
+      </div>
+      <div class="col">
+        <button class="root-btn">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          Nhập file hàng
+        </button>
+      </div>
+      <div class="col">
+        <span class="p-input-icon-right">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text"
+                 pInputText
+                 [(ngModel)]="nameSupplier"
+                 placeholder="Nhập tên nhà cung cấp">
+        </span>
+      </div>
+      <div class="col">
+        <p-calendar
+          inputId="basic"
+          [(ngModel)]="date"
+          id="date-order-all"
+          inputStyleClass="inputRoot"
+          placeholder="dd/MM/yyyy"></p-calendar>
+      </div>
+    </div>
+    <div class="row">
+      <p-table>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="stt">STT
+              <p-sortIcon field="stt"></p-sortIcon>
+            </th>
+            <th pSortableColumn="code">Mã sản phẩm
+              <p-sortIcon field="code"></p-sortIcon>
+            </th>
+            <th pSortableColumn="name">Tên sản phẩm
+              <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="quantity">Số lượng
+              <p-sortIcon field="quantity"></p-sortIcon>
+            </th>
+            <th pSortableColumn="price">Giá nhập
+              <p-sortIcon field="price"></p-sortIcon>
+            </th>
+            <th>Hành động</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{product.code}}</td>
+            <td>{{product.name}}</td>
+            <td>{{product.category}}</td>
+            <td>{{product.quantity}}</td>
+            <td>{{product.price | currency: 'USD'}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</main>
+
+<!--dialog-->
+<p-dialog header="Nhập kho" [(visible)]="display" [modal]="true" [style]="{width: '1034px', height: '630px'}"
+          [draggable]="false" [resizable]="false">
+  <div class="container-fluid">
+    <form>
+      <div class="row">
+        <div class="col-6" style="margin-right: auto">
+          <div class="mb-3">
+            <label for="supplier" class="form-label">Nhà cung cấp</label>
+            <select id="supplier" class="form-select">
+              <option>Disabled select</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="code" class="form-label">Mã sản phẩm</label>
+            <input type="text" class="form-control" id="code">
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Tên sản phẩm</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Danh mục sản phẩm</label>
+            <select id="category" class="form-select">
+              <option>Disabled select</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label for="unit" class="form-label">Đơn vị</label>
+            <input type="text" class="form-control" id="unit">
+          </div>
+          <div class="mb-3">
+            <label for="in-price" class="form-label">Giá nhập</label>
+            <input type="text" class="form-control" id="in-price">
+          </div>
+          <div class="mb-3">
+            <label for="out-price" class="form-label">Giá bán</label>
+            <input type="text" class="form-control" id="out-price">
+          </div>
+          <div class="mb-3">
+            <label [for]="date" class="form-label">Hạn sử dụng</label> <br>
+            <p-calendar
+              [(ngModel)]="rangeDates"
+              selectionMode="range"
+              styleClass="inputCalendar"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              inputId="date"></p-calendar>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3">
+          <label class="form-label">Ảnh sản phẩm <span class="text-danger">Chỉ nhập tối đa 1 ảnh</span></label> <br>
+          <p-fileUpload #fubauto
+                        mode="basic"
+                        name="mypic[]"
+                        url="./upload.php"
+                        accept="image/*"
+                        (onUpload)="onUpload($event)"
+                        [auto]="true"
+                        chooseLabel="Tải lên"
+                        chooseIcon="pi pi-upload">
+            <ng-template pTemplate="content" let-files>
+              <div>Additional content.</div>
+            </ng-template>
+          </p-fileUpload>
+        </div>
+      </div>
+      <div class="row">
+        <p>Thêm đơn vị sản phẩm</p>
+        <div *ngFor="let i of listUnit">
+          <div class="row mb-3">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Đơn vị" name="nameunit_{{i}}">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Đơn giá" name="price_{{i}}">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Thành tiền" name="cost_{{i}}">
+            </div>
+            <div class="col">
+              <button type="button" class="btn btn-danger" (click)="removeUnit(i)">Xóa</button>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <button class="root-btn-outline" (click)="pushUnit()">Thêm đơn vị</button>
+        </div>
+      </div>
+      <div class="row float-end pb-4">
+        <button class="root-btn">Thêm sản phẩm</button>
+      </div>
+    </form>
+  </div>
+</p-dialog>
