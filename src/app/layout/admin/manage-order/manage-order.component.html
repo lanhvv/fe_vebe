@@ -1,0 +1,878 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <div class="container">
+    <h5>Quản lý đơn hàng</h5>
+    <!-- navbar -->
+    <section>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-order" type="button"
+                  role="tab" aria-controls="all-order" aria-selected="true">
+            Tất cả
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="waitforpacking-tab" data-bs-toggle="tab" data-bs-target="#waitforpacking-order"
+                  type="button" role="tab" aria-controls="waitforpacking-order" aria-selected="false">
+            Chờ đóng gói
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping-order" type="button"
+                  role="tab" aria-controls="shipping-order" aria-selected="false">
+            Đang vận chuyển
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="unpaid-tab" data-bs-toggle="tab" data-bs-target="#unpaid-order" type="button"
+                  role="tab" aria-controls="unpaid-order" aria-selected="false">
+            Thanh toán
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="delivered-tab" data-bs-toggle="tab" data-bs-target="#delivered-order"
+                  type="button" role="tab" aria-controls="delivered-order" aria-selected="false">
+            Giao hàng thành công
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="fail-tab" data-bs-toggle="tab" data-bs-target="#fail-order" type="button"
+                  role="tab" aria-controls="fail-order" aria-selected="false">
+            Giao hàng thất bại
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="cancel-tab" data-bs-toggle="tab" data-bs-target="#cancel-order" type="button"
+                  role="tab" aria-controls="cancel-order" aria-selected="false">
+            Đơn hủy
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <!-- all -->
+        <div class="tab-pane fade show active tab-all mt-3 p-3" id="all-order" role="tabpanel"
+             aria-labelledby="all-tab">
+          <div class="container text-center">
+            <div class="row mb-3">
+              <div class="col-sm-7"></div>
+              <div class="col-sm-5">
+                <label for="date-order-all" class="me-3">Ngày tạo đơn</label>
+                <p-calendar
+                  inputId="basic"
+                  [(ngModel)]="dateAll"
+                  id="date-order-all"
+                  inputStyleClass="inputRoot"
+                  placeholder="dd/MM/yyyy"></p-calendar>
+                <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                  Xuất
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-sm">
+                <form>
+                  <div class="input-group mb-3">
+                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #phonenumber
+                           placeholder="Nhập tên người xác nhận...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                            (mousedown)="searchByPhone(phonenumber.value)"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm">
+                <form>
+                  <div class="p-inputgroup input-group mb-3">
+                    <input type="text" class="form-control inputRoot" pInputText ngModel #search
+                           placeholder="Nhập họ tên khách hàng...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm"></div>
+            </div>
+          </div>
+
+          <div class="pre-table mt-3">
+            <div class="row">
+              <div class="col float-start">
+                <button (click)="showDialogAddOrder()">
+                  Tạo đơn hàng
+                </button>
+              </div>
+              <div class="col">
+                <button class="float-end">
+                  <i class="fa-solid fa-check"></i>
+                  Xác nhận hàng loạt
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-all-order mt-4">
+
+            <p-table #dt [value]="getOrderResponse.items" dataKey="id"
+                     styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true"> [filterDelay]="0" >
+
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th pSortableColumn="id" (mousedown)="sort('id')">
+                    STT
+                    <p-sortIcon field="id"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="id" (mousedown)="sort('id')">
+                    Mã đơn hàng
+                    <p-sortIcon field="id"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullName" (mousedown)="sort('fullName')">
+                    Người đặt
+                    <p-sortIcon field="fullName"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="created_date" (mousedown)="sort('id')">
+                    Ngày đặt
+                    <p-sortIcon field="created_date"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator" (mousedown)="sort('id')">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="price_total" (mousedown)="sort('price_total')">
+                    Tổng tiền
+                    <p-sortIcon field="price_total"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-order>
+                <tr class="p-selectable-row">
+                  <td>
+                    <p-tableCheckbox [value]="order"></p-tableCheckbox>
+                  </td>
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.fullname }}</td>
+                  <td>{{ order.creator }}</td>
+                  <td>{{ order.createdDate | date: "dd/MM/y hh:mm:ss" }}</td>
+                  <td>-</td>
+                  <td>{{ order.price | currency: "VND" }}</td>
+                  <td>
+                    <button class="  border-0 btn  btn-outline-info" (click)=" getById(order.id)">
+                      <i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-outline-success" *ngIf="order.status === 5"><i
+                      class="fas fa-check"></i></button>
+                    <button class="btn btn-outline-danger" (click)="changeStatus(order.id)"
+                            *ngIf="order.status ==5 ">
+                      <i class="fas fa-exclamation"></i></button>
+                    <!-- <button type="button" class=" border-0 btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalDelete" (click)="delete(list.id.ordersId)"
+            ><i class="fas fa-trash-alt"></i></button> -->
+                  </td>
+                </tr>
+
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="8">Không có đơn hàng nào.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                         currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                         (onPageChange)="Pageable($event)"></p-paginator>
+
+
+          </div>
+        </div>
+        <!-- chờ đóng gói -->
+        <div class="tab-pane fade container mt-3" id="waitforpacking-order" role="tabpanel"
+             aria-labelledby="waitforpacking-tab">
+          <div class="container text-center">
+            <div class="row mb-3">
+              <div class="col-sm-7"></div>
+              <div class="col-sm-5">
+                <label for="date-order-waitforpacking" class="me-3">Ngày tạo đơn</label>
+                <p-calendar
+                  inputId="basic"
+                  [(ngModel)]="dateAll"
+                  id="date-order-waitforpacking"
+                  inputStyleClass="inputRoot"
+                  placeholder="dd/MM/yyyy"></p-calendar>
+                <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                  Xuất
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-sm">
+                <form>
+                  <div class="p-inputgroup input-group mb-3">
+                    <input type="text" class="form-control inputRoot" pInputText ngModel #search
+                           placeholder="Nhập họ tên khách hàng...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm">
+                <form>
+                  <div class="input-group mb-3">
+                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #phonenumber
+                           placeholder="Nhập tên người xác nhận...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                            (mousedown)="searchByPhone(phonenumber.value)"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm"></div>
+            </div>
+          </div>
+
+          <div class="pre-table mt-3">
+            <div class="row">
+              <div class="col float-start">
+              </div>
+              <div class="col">
+                <button class="float-end">
+                  <i class="fa-solid fa-boxes-packing"></i>
+                  Xác nhận hàng loạt
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-all-order mt-4">
+            <p-table class="table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th pSortableColumn="id" (mousedown)="sort('id')">
+                    STT
+                    <p-sortIcon field="id"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="id" (mousedown)="sort('id')">
+                    Mã đơn hàng
+                    <p-sortIcon field="id"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullName" (mousedown)="sort('fullName')">
+                    Người đặt
+                    <p-sortIcon field="fullName"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="created_date" (mousedown)="sort('id')">
+                    Ngày đặt
+                    <p-sortIcon field="created_date"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator" (mousedown)="sort('id')">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="price_total" (mousedown)="sort('price_total')">
+                    Tổng tiền
+                    <p-sortIcon field="price_total"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="8">Không có đơn hàng nào.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                       currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                       (onPageChange)="Pageable($event)"></p-paginator>
+        </div>
+        <!-- đang vận chuyển -->
+        <div class="tab-pane fade show mt-3" id="shipping-order" role="tabpanel" aria-labelledby="shipping-tab">
+          <div class="container text-center">
+            <div class="row mb-3">
+              <div class="col-sm-7"></div>
+              <div class="col-sm-5">
+                <label for="date-order-shipping" class="me-3">Ngày tạo đơn</label>
+                <p-calendar
+                  inputId="basic"
+                  [(ngModel)]="dateAll"
+                  id="date-order-shipping"
+                  inputStyleClass="inputRoot"
+                  placeholder="dd/MM/yyyy"></p-calendar>
+                <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                  Xuất
+                </button>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-sm">
+                <form>
+                  <div class="p-inputgroup input-group mb-3">
+                    <input type="text" class="form-control inputRoot" pInputText ngModel #search
+                           placeholder="Nhập họ tên khách hàng...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm">
+                <form>
+                  <div class="input-group mb-3">
+                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #phonenumber
+                           placeholder="Nhập tên người xác nhận...">
+                    <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                            (mousedown)="searchByPhone(phonenumber.value)"></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm"></div>
+            </div>
+          </div>
+
+          <div class="pre-table mt-3">
+            <div class="row">
+              <div class="col float-start"></div>
+              <div class="col">
+                <button class="float-end">
+                  <i class="fa-solid fa-boxes-packing"></i>
+                  Xác nhận hàng loạt
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-all-order mt-4">
+            <p-table class="table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th>
+                    STT
+                  </th>
+                  <th pSortableColumn="idBill">
+                    Mã đơn hàng
+                    <p-sortIcon field="idBill"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullname">
+                    Người đặt
+                    <p-sortIcon field="fullname"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creatDate">
+                    Ngày đặt
+                    <p-sortIcon field="creatDate"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="tong">
+                    Tổng tiền
+                    <p-sortIcon field="tong"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body">
+                <tr>
+                  <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <td>DH0349938293</td>
+                  <td>15/07/2022</td>
+                  <td data-bs-toggle="tooltip" data-bs-placement="top" title="Nhắn tin với khách hàng">
+                    <a href="" class="text-decoration-none">Nguyễn Duy</a>
+                  </td>
+                  <td>108, Cầu Giẽ, xã Đại Xuyên, huyện Phú Xuyên, Hà Nội</td>
+                  <td>Đang giao hàng</td>
+                  <td>Nhân viên</td>
+                  <td>108.000</td>
+                  <td>
+                    <button class="btn btn-outline-primary">
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                       currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                       (onPageChange)="Pageable($event)"></p-paginator>
+        </div>
+        <!-- thanh toán -->
+        <div class="tab-pane fade mt-3" id="unpaid-order" role="tabpanel" aria-labelledby="unpaid-tab">
+          <div class="row mb-3">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
+              <label for="date-order-unpaid" class="me-3">Ngày tạo đơn</label>
+              <p-calendar
+                inputId="basic"
+                [(ngModel)]="dateAll"
+                id="date-order-unpaid"
+                inputStyleClass="inputRoot"
+                placeholder="dd/MM/yyyy"></p-calendar>
+              <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                Xuất
+              </button>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm">
+              <form>
+                <div class="p-inputgroup input-group mb-3">
+                  <input type="text" class="form-control inputRoot" pInputText ngModel #search
+                         placeholder="Nhập họ tên khách hàng...">
+                  <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm">
+              <form>
+                <div class="input-group mb-3">
+                  <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #phonenumber
+                         placeholder="Nhập tên người xác nhận...">
+                  <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                          (mousedown)="searchByPhone(phonenumber.value)"></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm"></div>
+          </div>
+          <div class="pre-table mt-3">
+            <div class="row">
+              <div class="col float-start">
+
+              </div>
+              <div class="col">
+                <button class="float-end">
+                  <i class="fa-solid fa-bolt"></i>
+                  Xác nhận hàng loạt
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-all-order mt-4">
+
+            <p-table #dv [value]="listOrder" dataKey="id" styleClass="p-datatable-customers"
+                     [rowHover]="true">>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th>
+                    STT
+                  </th>
+                  <th pSortableColumn="idBill">
+                    Mã đơn hàng
+                    <p-sortIcon field="idBill"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullname">
+                    Người đặt
+                    <p-sortIcon field="fullname"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creatDate">
+                    Ngày đặt
+                    <p-sortIcon field="creatDate"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="tong">
+                    Tổng tiền
+                    <p-sortIcon field="tong"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-order>
+                <tr class="p-selectable-row">
+                  <td>
+                    <p-tableCheckbox [value]="order"></p-tableCheckbox>
+                  </td>
+                  <td>{{ order.idBill }}</td>
+                  <td>{{ order.fullname }}</td>
+                  <td>{{ order.creatDate | date: "dd/MM/y hh:mm:ss" }}</td>
+                  <td>{{ order.creator }}</td>
+                  <td>{{ order.tong | currency: "VND" }}</td>
+                  <td></td>
+                </tr>
+
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="8">No customers found.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                         currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                         (onPageChange)="Pageable($event)"></p-paginator>
+          </div>
+        </div>
+        <!-- giao hàng thanh công -->
+        <div class="tab-pane fade mt-3" id="delivered-order" role="tabpanel" aria-labelledby="delivered-tab">
+          <div class="row mb-3">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
+              <label for="date-order-delivered" class="me-3">Ngày tạo đơn</label>
+              <p-calendar
+                inputId="basic"
+                [(ngModel)]="dateAll"
+                id="date-order-delivered"
+                inputStyleClass="inputRoot"
+                placeholder="dd/MM/yyyy"></p-calendar>
+              <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                Xuất
+              </button>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-sm">
+              <form>
+                <div class="p-inputgroup input-group mb-3">
+                  <input type="text" class="form-control inputRoot" pInputText ngModel #search
+                         placeholder="Nhập họ tên khách hàng...">
+                  <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm">
+              <form>
+                <div class="input-group mb-3">
+                  <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #phonenumber
+                         placeholder="Nhập tên người xác nhận...">
+                  <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                          (mousedown)="searchByPhone(phonenumber.value)"></button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm"></div>
+          </div>
+
+          <div class="table-all-order mt-4">
+            <p-table class="table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th>
+                    STT
+                  </th>
+                  <th pSortableColumn="idBill">
+                    Mã đơn hàng
+                    <p-sortIcon field="idBill"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullname">
+                    Người đặt
+                    <p-sortIcon field="fullname"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creatDate">
+                    Ngày đặt
+                    <p-sortIcon field="creatDate"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="tong">
+                    Tổng tiền
+                    <p-sortIcon field="tong"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body">
+                <tr>
+                  <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <td>DH0349938293</td>
+                  <td>15/07/2022</td>
+                  <td data-bs-toggle="tooltip" data-bs-placement="top" title="Nhắn tin với khách hàng">
+                    <a href="" class="text-decoration-none">Nguyễn Duy</a>
+                  </td>
+                  <td>108, Cầu Giẽ, xã Đại Xuyên, huyện Phú Xuyên, Hà Nội</td>
+                  <td>Đang giao hàng</td>
+                  <td>Nhân viên</td>
+                  <td>108.000</td>
+                  <td>
+                    <button class="btn btn-outline-primary">
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                       currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                       (onPageChange)="Pageable($event)"></p-paginator>
+        </div>
+        <!-- giao thất bại -->
+        <div class="tab-pane fade mt-3" id="fail-order" role="tabpanel" aria-labelledby="fail-tab">
+          <div class="row mb-3">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
+              <label for="date-order-fail" class="me-3">Ngày tạo đơn</label>
+              <p-calendar
+                inputId="basic"
+                [(ngModel)]="dateAll"
+                id="date-order-fail"
+                inputStyleClass="inputRoot"
+                placeholder="dd/MM/yyyy"></p-calendar>
+              <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                Xuất
+              </button>
+            </div>
+          </div>
+          <div class="pre-table mt-3">
+            <div class="row">
+              <div class="col float-start">
+
+              </div>
+              <div class="col">
+                <button class="float-end">
+                  Giao lại hàng
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-all-order mt-4">
+            <p-table class="table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th>
+                    STT
+                  </th>
+                  <th pSortableColumn="idBill">
+                    Mã đơn hàng
+                    <p-sortIcon field="idBill"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullname">
+                    Người đặt
+                    <p-sortIcon field="fullname"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creatDate">
+                    Ngày đặt
+                    <p-sortIcon field="creatDate"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="tong">
+                    Tổng tiền
+                    <p-sortIcon field="tong"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body">
+                <tr>
+                  <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <td>DH0349938293</td>
+                  <td>15/07/2022</td>
+                  <td data-bs-toggle="tooltip" data-bs-placement="top" title="Nhắn tin với khách hàng">
+                    <a href="" class="text-decoration-none">Nguyễn Duy</a>
+                  </td>
+                  <td>108, Cầu Giẽ, xã Đại Xuyên, huyện Phú Xuyên, Hà Nội</td>
+                  <td>Đang giao hàng</td>
+                  <td>Nhân viên</td>
+                  <td>108.000</td>
+                  <td>
+                    <button class="btn btn-outline-primary">
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                       currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                       (onPageChange)="Pageable($event)"></p-paginator>
+        </div>
+        <!-- đơn hủy -->
+        <div class="tab-pane fade mt-3" id="cancel-order" role="tabpanel" aria-labelledby="cancel-tab">
+          <div class="row mb-3">
+            <div class="col-sm-7"></div>
+            <div class="col-sm-5">
+              <label for="date-order-cancel" class="me-3">Ngày tạo đơn</label>
+              <p-calendar
+                inputId="basic"
+                [(ngModel)]="dateAll"
+                id="date-order-cancel"
+                inputStyleClass="inputRoot"
+                placeholder="dd/MM/yyyy"></p-calendar>
+              <button class="btn btn-calendar ms-3" style="max-width: 100px; height: 40px">
+                Xuất
+              </button>
+            </div>
+          </div>
+          <div class="table-all-order mt-4">
+            <p-table class="table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th>
+                    STT
+                  </th>
+                  <th pSortableColumn="idBill">
+                    Mã đơn hàng
+                    <p-sortIcon field="idBill"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fullname">
+                    Người đặt
+                    <p-sortIcon field="fullname"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creatDate">
+                    Ngày đặt
+                    <p-sortIcon field="creatDate"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="creator">
+                    Người xác nhận
+                    <p-sortIcon field="creator"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="tong">
+                    Tổng tiền
+                    <p-sortIcon field="tong"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="action">Hành động</th>
+                </tr>
+                <tr></tr>
+              </ng-template>
+              <ng-template pTemplate="body">
+                <tr>
+                  <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <td>DH0349938293</td>
+                  <td>15/07/2022</td>
+                  <td data-bs-toggle="tooltip" data-bs-placement="top" title="Nhắn tin với khách hàng">
+                    <a href="" class="text-decoration-none">Nguyễn Duy</a>
+                  </td>
+                  <td>108, Cầu Giẽ, xã Đại Xuyên, huyện Phú Xuyên, Hà Nội</td>
+                  <td>Đang giao hàng</td>
+                  <td>Nhân viên</td>
+                  <td>108.000</td>
+                  <td>
+                    <button class="btn btn-outline-primary">
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-paginator [rows]="10" [totalRecords]="getOrderResponse.totalItems" [rowsPerPageOptions]="[10,25,50]"
+                       currentPageReportTemplate="Showing {{getOrderResponse.totalPages}} to {{getOrderResponse.totalPages}} of {{getOrderResponse.totalItems}} entries"
+                       (onPageChange)="Pageable($event)"></p-paginator>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <admin-footer></admin-footer>
+
+</main>
+<!--Main layout-->
+
+<!--popup-->
+<p-dialog header="Thêm mới đơn hàng: {{text}}" [(visible)]="addOrder" [style]="{width: '75vw'}" [modal]="true">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label for="name" class="form-label">Họ và tên khách hàng</label>
+          <input type="text" class="form-control" id="name">
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label for="phone" class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" id="phone">
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label for="address" class="form-label">Địa chỉ</label>
+          <textarea class="form-control" id="address" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-2">
+        <p>Tên sản phẩm</p>
+      </div>
+      <div class="col-6">
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="name-product" class="form-control inputRoot" pInputText ngModel #nameProduct
+                   placeholder="Nhập tên sản phẩm">
+            <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+      <div class="col-4">
+        <div class="overall-price p-2">
+          <p>Tổng tiền hàng: <span class="text-danger fw-bold">1.000.000 VNĐ</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <p-card>
+          <ng-template pTemplate="header">
+            <img
+              src="https://thachlonghai.com.vn/FileManager/Thachlonghai/Sanpham/Nuoc_Rau_Cau/Vi_Dua_Thom/Nuoc_rau_cau_Long_Hai_vi_dua_01.jpg">
+          </ng-template>
+          <p>Thạch rau câu Long Hải</p>
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col">
+                <p-dropdown optionLabel="name" styleClass="dropdown-unit-product"></p-dropdown>
+              </div>
+              <div class="col">
+                <button class="btn-quantity" (click)="decreaseQuantity()">-</button>
+                <input [ngModel]="quantity" class="input-quantity" disabled>
+                <button class="btn-quantity" (click)="increaseQuantity()">+</button>
+              </div>
+            </div>
+            <div class="row">
+              <button class="root-btn-product">Thêm</button>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+  <div class="row float-end">
+    <button class="root-btn-product">Hoàn thành đơn hàng</button>
+  </div>
+</p-dialog>

@@ -1,0 +1,193 @@
+<div class="sell container-fluid pt-3">
+  <!--  <button class="btn btn-outline-danger" *ngIf="!checkList" (click)="deleteAll()">Xóa hết đơn hàng</button>-->
+  <div class="row mb-2">
+    <div class="float-start">
+      <div class="tabPOS p-2 float-start me-1" *ngFor="let bill of listBill">
+        <span (click)="changeBill(bill)">Hóa đơn {{bill}}</span>
+        <i class="fa-solid fa-x float-end mt-1 ms-1" (click)="deleteBill(bill)" *ngIf="listBill.length!==1"></i>
+      </div>
+      <button class="btnPOS ms-2" (click)="addBill()" *ngIf="!isButtonPOS"><i class="fa-solid fa-plus"></i></button>
+    </div>
+  </div>
+
+  <div *ngFor="let detail of listDetailBill">
+    <div class="row" *ngIf="detail == currentBill">
+      <div class="col-8 sell-list_product">
+        <div class="sell-list_product-header p-2">
+          <div class="row">
+            <div class="col-4">
+<!--              <input type="text" class="form-control" placeholder="Mã sản phẩm">-->
+              <p-dropdown
+                [options]="products"
+                optionLabel="name"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                placeholder="{{products==null ? 'abc':products.length}}"
+                (onFilter)="getProduct($event)"
+                styleClass="searchProduct">
+                <ng-template let-product pTemplate="productItem" >
+                  <div class="product float-start" (mousedown)="selectProduct(product.importId)">
+                    <img [src]="product.img" [class]="'flag flag-' + product.productId"/>
+                    {{product.productName}}
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-8">
+              <p class="text-white float-end">Mã hóa đơn: {{detail}}</p>
+            </div>
+          </div>
+        </div>
+        <table *ngIf="cartItem.products!=null" class="table mt-3">
+          <tbody>
+            <tr *ngFor="let item of cartItem.products; let i=index" class="sell-list_product-body--item p-3">
+              <th scope="row">{{i+1}}</th>
+              <th>
+                <button style="border: none; outline: none;" (click)="deleteProductOnCart(item.barCode)">
+                  <i class="fa-solid fa-trash text-danger"></i>
+                </button>
+              </th>
+              <th>
+                {{item.barCode}}
+              </th>
+              <th>
+                {{item.productName}}
+              </th>
+              <th>
+                <div class="btn-group">
+                  <p-dropdown [options]="item.items" optionLabel="unit" [filter]="false" filterBy="unitName" [showClear]="false" styleClass="elementUnitProduct">
+                    <ng-template let-unit pTemplate="unitItem">
+                      <div class="unit" (mousedown)="selectUnit(unit.unitId,item.productId)">
+                        {{unit.unitName}}
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </th>
+              <th>
+                <div *ngIf="selectedUnit!=null">
+                  <p-inputNumber
+                    type="number"
+                    name="amount+{{item.productId}}+{{selectedUnit.unitId}}"
+                    id="amount+{{item.productId}}+{{selectedUnit.unitId}}"
+                    [(ngModel)]="item.amount">
+                  </p-inputNumber>
+                </div>
+              </th>
+              <th>
+                <div *ngIf="selectedUnit!=null">
+                  {{selectedUnit.outPrice}}
+                </div>
+              </th>
+              <th>
+                <div *ngIf="selectedUnit!=null" class="fw-bold">
+                  {{item.amount*selectedUnit.outPrice}}
+                </div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-4 sell-money p-3">
+        <div class="sell-money_content">
+          <div class="row">
+            <div class="col">
+              <div class="btn-group">
+                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        data-bs-auto-close="true" aria-expanded="false">
+                  Nhân viên
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                  <li><a class="dropdown-item" href="#">Nhân viên A</a></li>
+                  <li><a class="dropdown-item" href="#">Nhân viên B</a></li>
+                  <li><a class="dropdown-item" href="#">Nhân viên C</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col">
+              <button class="btn btn-secondary float-end"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng
+              </button>
+            </div>
+            <table class="m-3 tableInfoMoney">
+              <tbody>
+              <tr>
+                <td>Tổng tiền hàng</td>
+                <td>{{numToString(toltal)}}</td>
+              </tr>
+              <tr>
+                <td>Giảm giá</td>
+                <td><input value="0" class="inputSale"></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Khách cần trả</td>
+                <td>{{numToString(toltal)}}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Khách thanh toán</td>
+                <td>
+                  <input class="inputSale" [(ngModel)]="moneyPay">
+                  <!--                <div class="col-8">-->
+                  <!--                  <input type="text" class="form-control" placeholder="Số tiền khách đưa">-->
+                  <!--                </div>-->
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Tiền thừa</td>
+                <td>
+                  <div class="col-8">
+                    <input type="text" class="form-control inputSale" [(ngModel)]="moneyPay - toltal">
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <div style="display: flex;">
+              <p-radioButton class="me-3" (click)="choosePayment()" name="groupname" value="money"
+                             [(ngModel)]="selectedValue" label="Tiền mặt"></p-radioButton>
+              <p-radioButton (click)="showDialogPayment()" name="groupname" value="payment" [(ngModel)]="selectedValue"
+                             label="Quét mã"></p-radioButton>
+            </div>
+            <div class="sell-money_recommend m-3 ps-5 pe-3 pt-3 pb-3 flex-row flex-wrap" *ngIf="isPayment">
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>
+            </div>
+            <div class="sell-money_bank p-3 row" *ngIf="!isPayment">
+
+            </div>
+          </div>
+        </div>
+        <div class="sell-money_footer">
+          <div class="d-grid gap-2">
+            <button class="btn text-uppercase" type="button" *ngIf="isPayment">thanh toán</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Thanh toán chuyển khoản" [(visible)]="dialogPayment" [style]="{width: '30vw'}" [draggable]="true" [resizable]="false" [modal]="true">
+  <div class="sell-money_bank p-3 row">
+    <div class="col">
+      <img src="./assets/image/images.png">
+    </div>
+    <div class="col">
+      <div class="mb-3">STK: <b>9521012002</b></div>
+      <div class="mb-3">Chủ tài khoản: <br><b>NGUYEN LE HAI</b></div>
+      <div>Ngân hàng: <b>MB BANK</b></div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="sell-money_footer">
+      <div class="d-grid gap-2">
+        <button class="btn text-uppercase" type="button">thanh toán</button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

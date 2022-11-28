@@ -1,0 +1,123 @@
+<div class="app">
+  <div class="sign-in">
+    <div class="sign-in_left text-center">
+      <div class="sign-in_logo">
+        <img src="../../../assets/image/signin.png" alt="">
+      </div>
+      <div class="sign-in_text">
+        <a href="" translate>login.form.redirect</a>
+      </div>
+    </div>
+    <div class="sign-in_right">
+      <div class="sign-in_title">
+        <p translate class="text-uppercase">login.form.title</p>
+      </div>
+      <div class="sign-in_form mt-5">
+        <form action="" [formGroup]="loginForm" (ngSubmit)="generateToken()">
+          <div class="mb-3">
+            <label for="username" class="form-label" translate>login.form.username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              maxlength="100"
+              minlength="3"
+              (keypress)="onKeyPress($event, regexUsername)"
+              autofocus
+              formControlName="username"
+              autocomplete="username"
+              name="username">
+            <div *ngIf="loginForm.get('username')!.invalid && loginForm.get('username')!.dirty">
+              <small
+                class="form-text text-danger"
+                *ngIf="loginForm.get('username')?.errors?.required"
+                translate
+              >
+                login.errors.messages.validate.username.required
+              </small>
+              <small
+                class="form-text text-danger"
+                *ngIf="loginForm.get('username')?.errors?.minlength"
+                translate
+              >
+                login.errors.messages.validate.username.minlength
+              </small>
+              <small
+                class="form-text text-danger"
+                *ngIf="loginForm.get('username')?.errors?.maxlength"
+                translate
+              >
+                login.errors.messages.validate.username.maxlength
+              </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label" translate>login.form.password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              maxlength="50"
+              formControlName="password"
+              name="password">
+            <div *ngIf="loginForm.get('password')!.invalid && (loginForm.get('password')!.dirty || loginForm.get('password')!.touched)">
+              <small
+                class="form-text text-danger"
+                *ngIf="loginForm.get('password')?.errors?.required"
+                translate
+              >
+                login.errors.messages.validate.password.required
+              </small>
+              <small
+                class="form-text text-red-500 text-sm"
+                *ngIf="loginForm.get('password')?.errors?.maxlength"
+                translate
+              >
+                login.errors.messages.validate.password.maxlength
+              </small>
+            </div>
+          </div>
+          <div class="form-check mb-3">
+            <div class="row">
+              <div class="col float-start">
+                <input class="form-check-input" type="checkbox" value="" id="rememberMe">
+                <label class="form-check-label" for="rememberMe" formControlName="rememberMe" name="rememberMe">
+                  <span translate>login.form.remember</span>
+                </label>
+              </div>
+              <div class="col">
+                <a class="float-end text-decoration-underline text-fotgot-pass" (click)="isShowDialogForgotPass=true">Quên mật khẩu?</a>
+              </div>
+            </div>
+
+          </div>
+          <div class="mb-3 text-center">
+            <button [disabled]="!loginForm.valid"><span translate>login.form.button</span></button>
+          </div>
+        </form>
+      </div>
+<!--      <div class="sign-in_social text-center">-->
+<!--        <p translate>login.form.choose</p>-->
+<!--        <i>-->
+<!--          <img src="../../../assets/image/google.png" alt="">-->
+<!--        </i>-->
+<!--      </div>-->
+    </div>
+  </div>
+</div>
+
+<!--quên mật khẩu-->
+<p-dialog header="Quên mật khẩu" [(visible)]="isShowDialogForgotPass" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <div class="mb-3">
+    <label for="forgot-username" class="form-label">Tên đăng nhập</label>
+    <input type="text" class="form-control" id="forgot-username">
+  </div>
+  <div class="mb-3">
+    <label for="forgot-email" class="form-label">Email</label>
+    <input type="email" class="form-control" id="forgot-email">
+  </div>
+  <div class="mb-3 text-center">
+    <button class="forgot-btn" (click)="changePassWord()">Gửi yêu cầu</button>
+  </div>
+</p-dialog>

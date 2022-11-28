@@ -1,0 +1,180 @@
+<!--Main Navigation-->
+<header>
+  <!-- Sidebar -->
+  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse">
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mx-3 mt-4">
+        <a routerLink="/admin/home" [ngClass]="{'active': Status === 1 }"
+           class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+          <span translate><i class="fa-solid fa-house fw-bold me-2"></i> sidebar.home</span>
+        </a>
+        <a routerLink="/admin/manage-order" [ngClass]="{'active': Status === 2 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-clipboard-list fw-bold me-2"></i> sidebar.management.order</span>
+        </a>
+        <a routerLink="/admin/manage-account" [ngClass]="{'active': Status === 3 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-circle-user fw-bold me-2"></i> sidebar.management.account</span>
+        </a>
+        <a routerLink="/admin/manage-customer" [ngClass]="{'active': Status === 4 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-handshake-simple fw-bold me-2"></i> sidebar.management.customer</span>
+        </a>
+        <a routerLink="/admin/manage-distributor" [ngClass]="{'active': Status === 5 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-users fw-bold me-2"></i> sidebar.management.distributor</span>
+        </a>
+        <a routerLink="/admin/manage-product" [ngClass]="{'active': Status === 6 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-box-archive fw-bold me-2"></i> sidebar.management.product</span>
+        </a>
+        <a routerLink="/admin/sell-pos" target="_blank" [ngClass]="{'active': Status === 7 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-brands fa-sellcast fw-bold me-2"></i> sidebar.management.sell</span>
+        </a>
+        <a routerLink="/admin/manage-warehouse" [ngClass]="{'active': Status === 8 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-warehouse fw-bold me-2"></i> sidebar.management.warehouse</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <!-- Sidebar -->
+
+  <!-- Navbar -->
+  <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
+              aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Brand -->
+      <a class="navbar-brand" routerLink="/admin/home">
+        <img src="../../../../assets/image/logo.png" height="30"
+             alt="Vibee Logo" loading="lazy" />
+      </a>
+
+      <!-- Right links -->
+      <ul class="navbar-nav ms-auto d-flex flex-row">
+        <!-- Notification dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#"
+             id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown"
+             aria-expanded="false">
+            <i class="fas fa-bell fs-3"></i>
+            <span class="badge rounded-circle badge-notification bg-danger p-1">1</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/manage-profile">
+                <i class="fa-solid fa-user"></i>
+                Tài khoản của tôi
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="isDialogChangePass = true">
+                <i class="fa-solid fa-gear"></i>
+                Đổi mật khẩu
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Icon
+        <li class="nav-item">
+            <a class="nav-link me-3 me-lg-0" href="#">
+                <i class="fas fa-fill-drip"></i>
+            </a>
+        </li>-->
+
+        <!-- Icon dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="./assets/image/united-states.png" alt="">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" href="#">
+                <img src="./assets/image/united-states.png" alt="">
+                English
+                <i class="fa fa-check text-success ms-2"></i>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <img src="./assets/image/vietnam.png" alt="">
+                Vietnamese
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Avatar -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#"
+             id="navbarDropdownAvatar" role="button" data-bs-toggle="dropdown"
+             aria-expanded="false">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
+                 class="rounded-circle" height="30" alt="Avatar" loading="lazy" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/manage-profile">
+                <i class="fa-solid fa-user"></i>
+                Tài khoản của tôi
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="isDialogChangePass = true">
+                <i class="fa-solid fa-gear"></i>
+                Đổi mật khẩu
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+</header>
+<!--Main Navigation-->
+
+<!--đổi mật khẩu-->
+<p-dialog header="Đổi mật khẩu" [(visible)]="isDialogChangePass" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <div class="mb-3">
+    <label for="change-old-pass" class="form-label">Mật khẩu cũ</label>
+    <input type="password" class="form-control" id="change-old-pass">
+  </div>
+  <div class="mb-3">
+    <label for="change-new-pass" class="form-label">Mật khẩu mới</label>
+    <input type="password" class="form-control" id="change-new-pass">
+  </div>
+  <div class="mb-3">
+    <label for="change-re-pass" class="form-label">Nhập lại mật khẩu mới</label>
+    <input type="password" class="form-control" id="change-re-pass">
+  </div>
+  <div class="mb-3 text-center">
+    <button class="root-btn" (click)="changePassWord()">Gửi yêu cầu</button>
+  </div>
+</p-dialog>

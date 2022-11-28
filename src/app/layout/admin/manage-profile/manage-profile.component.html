@@ -1,0 +1,100 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <h5>Quản lý tài khoản khách hàng</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <p style="color: #0061C1; font-weight: bold">Thông tin cá nhân</p>
+    </div>
+    <div class="row">
+      <div class="col-2" style="width: 11.666667%">
+        <p-image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd651fp_sYNflsHA0nTUbHwn8clTIAjesbH3sWQX3t7A&s" styleClass="image-profile" alt="Image"></p-image>
+      </div>
+      <div class="col-10">
+        <p style="color: #0061C1; font-weight: bold">Chủ cửa hàng</p>
+        <h5>Hải Nguyễn</h5>
+        <p>hainl</p>
+      </div>
+    </div>
+    <!--form xem thông tin-->
+    <div class="row mt-3" *ngIf="!isShowFormEdit">
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="show-fullname" class="form-label">Họ và tên</label>
+          <input type="text" class="form-control" id="show-fullname" [ngModel]="fullname" disabled>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label class="form-label">Ngày sinh</label>
+          <p-calendar inputId="basic" [(ngModel)]="date" styleClass="input-dob" dateFormat="dd/mm/yy" disabled></p-calendar>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="show-email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="show-email" [ngModel]="email" disabled>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="show-cccd" class="form-label">Căn cước công dân</label>
+          <input type="text" class="form-control" id="show-cccd" [ngModel]="cccd" disabled>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="show-address" class="form-label">Địa chỉ</label>
+          <textarea class="form-control" id="show-address" rows="3" [ngModel]="address" disabled></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <button class="root-btn ms-2" (click)="isShowFormEdit = true">Chỉnh sửa thông tin</button>
+      </div>
+    </div>
+
+    <!--form edit-->
+    <div class="row mt-3" *ngIf="isShowFormEdit">
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="edit-fullname" class="form-label">Họ và tên</label>
+          <input type="text" class="form-control" id="edit-fullname" [ngModel]="fullname">
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label class="form-label">Ngày sinh</label>
+          <p-calendar inputId="basic" [(ngModel)]="date" styleClass="input-dob" dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="edit-email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="edit-email" [ngModel]="email">
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="edit-cccd" class="form-label">Căn cước công dân</label>
+          <input type="text" class="form-control" id="edit-cccd" [ngModel]="cccd">
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="mb-3">
+          <label for="edit-address" class="form-label">Địa chỉ</label>
+          <textarea class="form-control" id="edit-address" rows="3" [ngModel]="address"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <button class="root-btn ms-2" (click)="editProfile()">Hoàn thành</button>
+      </div>
+    </div>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->
+

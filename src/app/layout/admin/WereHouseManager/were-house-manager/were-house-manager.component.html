@@ -1,0 +1,234 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main class="py-6 bg-surface-secondary">
+    <p-toast></p-toast>
+    <div class="container -fluid">
+        <br><br>
+      <div class="row">
+        <div class="row g-6 mb-6">
+            <div class="col-xl-8">
+                <div class="card">
+                    <p-chart type="line" [data]="basicData" [options]="basicOptions"></p-chart>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card h-full">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <a class="">
+                                    <img alt="Image placeholder" [src]="getWarehouseResponse.getProductResult.img" class="avatar rounded-circle" height="100px" width="100px">
+                                  </a>
+                            </div>
+                            <div class="col ml-md-n2">
+                                <a href="#!" class="d-block h6 mb-0">{{getWarehouseResponse.getProductResult.productName}}</a>
+                                <small class="d-block text-muted" >{{getWarehouseResponse.getProductResult.statusName}}</small>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-xs btn-primary btn-icon rounded-pill">
+                                    <span class="btn-inner--icon"><i class="far fa-edit"></i></span>
+                                    <span class="btn-inner--text" (mousedown)="failed('aghhaaa')" translate>product.import</span>
+                                  </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-facebook mr-2"></i>product.warehouse.import.amount.in
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.sumInAmount}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-whatsapp mr-2"></i>product.warehouse.export.amount.out
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.sumOutAmount}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center" >
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-instagram mr-2"></i>product.warehouse.import.amount.count
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.countImported}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-linkedin mr-2"></i>product.warehouse.import.amount.inventory
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.inventory}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-linkedin mr-2"></i>product.warehouse.import.money.in
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.sumInPrice}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-linkedin mr-2"></i>product.warehouse.export.money.out
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.sumOutPrice}}</span>
+                            </div>
+                          </div>
+                          <hr class="my-3">
+                          <div class="row align-items-center">
+                            <div class="col">
+                              <h6 class="text-sm mb-0" translate>
+                                <i class="fab fa-linkedin mr-2"></i>product.warehouse.export.money.profit
+                              </h6>
+                            </div>
+                            <div class="col-auto">
+                              <span class="text-sm">{{getWarehouseResponse.getProductResult.profit}}</span>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <!-- pre-table-->
+      <section class="pre-table">
+        
+<div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+    <div class="grid">
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3" translate="">product.warehouse.import.money.in</span>
+                        <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.inPrice}} VND</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareInMoney}} % </span>
+                <span class="text-500" translate>product.warehouse.import.lastest</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3" translate>product.warehouse.export.money.out</span>
+                        <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.outPrice}} VND</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-orange-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareOutMoney}} % </span>
+                <span class="text-500" translate>product.warehouse.import.lastest</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3" translate>product.warehouse.export.money.profit</span>
+                        <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.profit}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-inbox text-cyan-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareProfit}} % </span>
+                <span class="text-500" translate>product.warehouse.import.lastest</span>
+            </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-3">
+            <div class="surface-card shadow-2 p-3 border-round">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block text-500 font-medium mb-3" translate>product.warehouse.ratio</span>
+                        <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.outAmount}}/{{getWarehouseResponse.getLastImportItem.inAmount}}</div>
+                    </div>
+                    <div class="flex align-items-center justify-content-center bg-purple-100 border-round" style="width:2.5rem;height:2.5rem">
+                        <i class="pi pi-comment text-purple-500 text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-green-500 font-medium"><p-progressBar value="{{retio}}" labelTemplate="{value}%" displayOnly="true"></p-progressBar></span>
+            </div>
+        </div>
+    </div>
+</div>
+      </section>
+      <!-- table -->
+       <section class="table-account">
+        <p-table [value]="getWarehouseResponse.getWarehouseItems" #dt dataKey="id" styleClass="p-datatable-getProductsResponse.totalPages" [rowHover]="true"  responsiveLayout="scroll"
+        [filterDelay]="0">
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.warehouse.import.creator <p-sortIcon field="name-product" ></p-sortIcon></th>
+              <th pSortableColumn="price" (mousedown)="sort('price')" translate>product.warehouse.import.createddate <p-sortIcon field="price" ></p-sortIcon></th>
+              <th pSortableColumn="status" (mousedown)="sort('status')" translate>product.warehouse.import.money.in <p-sortIcon field="status" ></p-sortIcon></th>
+              <th pSortableColumn="status" (mousedown)="sort('status')" translate>product.warehouse.import.amount.in <p-sortIcon field="status" ></p-sortIcon></th>
+              <th pSortableColumn="distributor" (mousedown)="sort('supplierName')" translate>product.warehouse.export.amount.out <p-sortIcon field="distributor" ></p-sortIcon></th>
+              <th pSortableColumn="warehouse" (mousedown)="sort('quality')" translate>product.warehouse.import.amount.inventory <p-sortIcon field="warehouse" ></p-sortIcon></th>
+              <th pSortableColumn="warehouse" (mousedown)="sort('quality')" translate>product.warehouse.status <p-sortIcon field="warehouse" ></p-sortIcon></th>
+              <th>Thao tác</th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-item>
+            <tr>
+                <td>{{item.creator}}</td>
+                <td>{{item.createdDate}}</td>
+              <td>{{item.inPrice}}</td>
+              <td>{{item.inAmount}} ({{item.unit}})</td>
+              <td>{{item.outAmount}} ({{item.unit}})</td>
+              <td>{{item.inventory}}</td>
+              <td>{{item.statusName}}</td>
+              <td>
+                <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4" (mousedown)="update(item.warehouseId)"></i>
+                <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2" (mousedown)="deleteProd(item.warehouseId)"></i>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            {{state.first}}
+            <button type="button" pButton icon="pi-refresh"></button>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+            <button type="button" pButton icon="pi-cloud-upload"></button>
+        </ng-template>
+        <ng-template let-item pTemplate="paginatordropdownitem">
+            {{item.value}} - per page
+        </ng-template>
+        </p-table>
+      </section>
+    </div>
+  
+    <admin-footer></admin-footer>
+  </main>

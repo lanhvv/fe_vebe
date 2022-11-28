@@ -1,0 +1,70 @@
+<employee-header [Status]="statusPage"></employee-header>
+
+<div class="container">
+  <div class="text-center">
+    <h5>Báo cáo cuối ngày</h5>
+    <p>Ngày bán: 18/11/2022</p>
+    <p>Chi nhánh: Tạp hóa Huyền Trang</p>
+  </div>
+  <div class="float-end">
+    <button class="root-btn">Xuất báo cáo</button>
+  </div>
+  <div>
+    <p-table dataKey="name" [tableStyle]="{'min-width': '60rem'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5rem"></th>
+          <th>Số lượng</th>
+          <th>Doanh thu</th>
+          <th>Tổng tiền giảm giá</th>
+          <th>Thực lĩnh</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-expanded="expanded">
+        <tr>
+          <td>
+            <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td>
+          <td>97</td>
+          <td>4.023.500</td>
+          <td>0</td>
+          <td>4.023.500</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion">
+        <tr>
+          <td colspan="7">
+            <div class="p-3">
+              <p-table dataKey="id">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Mã hóa đơn</th>
+                    <th>Số lượng hàng</th>
+                    <th>Tổng tiền hàng</th>
+                    <th>Người bán</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                  <tr>
+                    <td>HD993823923</td>
+                    <td>10</td>
+                    <td>400.000</td>
+                    <td>Hai Nguyen</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="6">There are no order for this product yet.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+
+<employee-footer></employee-footer>

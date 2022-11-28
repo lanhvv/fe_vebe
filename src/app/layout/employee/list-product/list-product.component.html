@@ -1,0 +1,72 @@
+<employee-header [Status]="status"></employee-header>
+
+<div class="container-fluid">
+  <div class="search-results"
+       infiniteScroll
+       [infiniteScrollDistance] = "4"
+       [infiniteScrollThrottle]="50"
+       [immediateCheck] = "true"
+       (scrolled)="onScroll()"
+  >
+  <div class="row">
+    <div class="col-3 sidebar">
+      <div class="sidebar-search p-5">
+        <div class="mb-3">
+          <form (ngSubmit)="onSearch()">
+            <input type="text" class="form-control" [(ngModel)]="searchProduct" name="name"
+                   placeholder="Nhập tên sản phẩm">
+          </form>
+        </div>
+      </div>
+      <div class="sidebar-filter-category mt-3 p-3">
+        <p class="fw-bold">Lọc theo loại sản phẩm</p>
+        <p-dropdown [options]="types" (onClick)="onClick()" [(ngModel)]="selectedType" optionLabel="name" optionValue="id"></p-dropdown>
+      </div>
+      <div class="sidebar-filter-price mt-3 p-3">
+        <p class="fw-bold">Lọc theo giá tiền</p>
+        <div *ngFor="let item of typePrices" class="field-checkbox">
+          <p-radioButton value="{{item.price}}" label="{{item.title}}" (onClick)="onClickRadio()" [(ngModel)]="selectedValue"></p-radioButton>
+        </div>
+      </div>
+    </div>
+    <div class="col-9 d-flex flex-wrap">
+      <div *ngFor="let item of products.results;">
+        <div class="box-product" *ngFor="let info of item.results;">
+          <div class="col-4 float-start p-1">
+            <img src="{{item.results[0].img}}" class="image-product" alt="{{item.productName}}">
+          </div>
+          <div class="col-8 float-end p-1">
+            <h5>
+              <a>{{item.productName}}</a>
+            </h5>
+            <code>Product Category</code>
+            <h4>{{item.results[0].exportStallItems[0].outPrice}}</h4>
+            <hr>
+            <code>Product description</code>
+            <div>
+              <button class="root-btn">
+                <i class="fa-sharp fa-solid fa-cart-plus"></i>
+                Thêm vào giỏ hàng
+              </button>
+            </div>
+            <p>Số lượng hàng còn lại</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row pb-5">
+    <div class="col-md-12 p-5">
+      <ngx-spinner
+        bdColor=""
+        size="default"
+        color="#581f87"
+        type="ball-pulse-sync"
+        [fullScreen] = "false"
+      >
+      </ngx-spinner>
+    </div>
+  </div>
+</div>
+
+<employee-footer></employee-footer>

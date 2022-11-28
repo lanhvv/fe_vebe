@@ -1,0 +1,132 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<main>
+  <div class="container main-layout">
+    <div class="row">
+      <div class="col-3">
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Lựa chọn bảng giá</option>
+          <option value="1">Bảng giá bán lẻ</option>
+          <option value="2">Bảng giá bán buôn</option>
+          <option value="3">Bảng giá nhập hàng</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <button class="root-btn">In mã vạch</button>
+      </div>
+      <div class="col-6">
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #nameproduct
+                   placeholder="Nhập tên sản phẩm">
+            <button class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <p-table>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>STT</th>
+            <th>Ảnh</th>
+            <th>Mã barcode</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <tr>
+            <td>1</td>
+            <td>
+              <img src="https://www.primefaces.org/showcase/javax.faces.resource/demo/images/galleria/galleria12.jpg.xhtml" width="100px" height="100px">
+            </td>
+            <td>
+              <a class="text-decoration-none" href="">832323828382338</a>
+            </td>
+            <td>
+              bánh gấu
+              <i class="fa-solid fa-circle-info ms-2"></i>
+            </td>
+            <td>
+              <button class="btn-quantity" (click)="decreaseQuantity()">-</button>
+              <input [ngModel]="quantity" class="input-quantity">
+              <button class="btn-quantity" (click)="increaseQuantity()">+</button>
+            </td>
+            <td>
+              <input class="input-table" [ngModel]="price"/>
+            </td>
+            <td>
+              <button style="border: none; outline: none;">
+                <i class="fa-solid fa-x"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <div class="container main-layout">
+    <div class="row">
+      <p class="fw-bold">Thiết lập mẫu in tem</p>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-nameproduct">
+          <label class="form-check-label" for="barcode-nameproduct">
+            Tên sản phẩm
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withoutVND" checked>
+          <label class="form-check-label" for="barcode-price_withoutVND">
+            Giá bán
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withVND" checked>
+          <label class="form-check-label" for="barcode-price_withVND">
+            Giá bán kèm đơn vị VND
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withUnit" checked>
+          <label class="form-check-label" for="barcode-price_withUnit">
+            Giá bán kèm đơn vị tính
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-nameshop">
+          <label class="form-check-label" for="barcode-nameshop">
+            Tên cửa hàng
+          </label>
+        </div>
+      </div>
+      <div class="col-8 text-center">
+        <div class="container-barcode">
+          <p style="font-size: 20px">Tên cửa hàng</p>
+          <p>Tên sản phẩm</p>
+          <img src=" http://www.barcodesinc.com/generator/image.php?code=832323828382338&style=197&type=C128B&width=300&height=150&xres=1&font=4">
+          <h4 class="mt-1">13,000 VNĐ</h4>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <p class="fw-bold">Chú ý:</p>
+      <ul class="ms-4 pe-4">
+        <li>
+          <i>Trong trường hợp mã barcode in ra không đọc được, vui lòng sử dụng mẫu giấy lớn hơn hoặc rút ngắn mã barcode của sản phẩm.</i>
+        </li>
+        <li>
+          <i>Các mã barcode in ra khó đọc bao gồm: barcode có chứa ký tự đặc biệt (@ * ^ , . / ~...) hoặc tiếng việt có dấu hoặc dài quá 15 ký tự. Bạn cần điều chỉnh các mã này trước khi in.</i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,285 @@
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <h5>Quản lý tài khoản</h5>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col-2">
+        <span><p>Số người đang hoạt động: {{listAccountItems.countStatus}}</p></span>
+      </div>
+      <div class="col-4">
+        <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
+      </div>
+      <div class="col-6">
+        <div class="input-group mb-3">
+          <form>
+            <div class="input-group mb-3">
+              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #username
+                     placeholder="Nhập tên nhân viên...">
+              <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
+                      (mousedown)="searchByUsername(username.value)"></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- table -->
+    <section class="table-account">
+      <div class="table-all-order mt-4">
+
+        <p-table #dt [value]="listAccountItems.items" dataKey="id"
+                 styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true"> [filterDelay]="0" >
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th scope="col">Mã nhân viên</th>
+              <th scope="col">Họ và tên</th>
+              <th scope="col">Email</th>
+              <th scope="col">Số điện thoại</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Creator</th>
+              <th scope="col">Thao tác</th>
+            </tr>
+            <tr></tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr class="p-selectable-row">
+              <td>{{item.id}}</td>
+              <td>{{item.fullname}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.numberPhone}}</td>
+              <td>{{item.statusName}}</td>
+              <td>{{item.creator}}</td>
+              <td>
+                <button *ngIf="item.status==2" (mousedown)="unlockAccount(item.id)">
+                  <i class="fa-solid fa-lock text-danger me-2"></i>
+                </button>
+
+                <button (click)="getId(item.id)">
+                  <i class="fa-solid fa-file-pen me-2"></i>
+                </button>
+                <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+
+              </td>
+            </tr>
+
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="8">Chưa có tài khoản nào, hãy thêm mới tài khoản.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <p-paginator [rows]="10" [totalRecords]="listAccountItems.totalItems" [rowsPerPageOptions]="[3,10,25,50]"
+                     currentPageReportTemplate="Showing {{listAccountItems.totalPages}} to {{listAccountItems.totalPages}} of {{listAccountItems.totalItems}} entries"
+                     (onPageChange)="Pageable($event)"></p-paginator>
+      </div>
+    </section>
+  </div>
+  <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"
+                   rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+  <p-toast></p-toast>
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->
+
+<!--dialog add account-->
+<p-dialog header="Thêm mới tài khoản" [(visible)]="isDialogAccount" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <form class="row mt-2" [formGroup]="accountForm">
+    <div class="row">
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Họ và tên</label>
+        <input type="text"
+               class="form-control"
+               formControlName="fullName"
+               placeholder="Nhập họ và tên"
+               minlength="5"
+               maxlength="50"
+               [pattern]="regexFullName"
+               required>
+        <div *ngIf="accountForm.controls['fullName'].invalid && (accountForm.controls['fullName'].dirty || accountForm.controls['fullName'].touched)">
+          <div *ngIf="accountForm.controls['fullName'].errors?.required">
+            <span class="text-danger" >Họ tên người dùng không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['fullName'].hasError('minlength')">
+            <span class="text-danger" >Họ tên người dùng không được ít hơn 5 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['fullName'].hasError('maxlength')">
+            <span class="text-danger" >Họ tên người dùng không được nhiều hơn 50 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['fullName'].hasError('pattern')">
+            <span class="text-danger" >Họ tên người dùng không đúng định dạng</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Tên đăng nhập</label>
+        <input type="text"
+               class="form-control"
+               (change)="checkAccount()"
+               formControlName="userName"
+               placeholder="Nhập tên đăng nhập"
+               minlength="5"
+               maxlength="100"
+               required>
+        <div *ngIf="accountForm.controls['userName'].invalid && (accountForm.controls['userName'].dirty || accountForm.controls['userName'].touched)">
+          <div *ngIf="accountForm.controls['userName'].errors?.required">
+            <span class="text-danger" >Tên đăng nhập không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['userName'].hasError('minlength')">
+            <span class="text-danger" >Tên đăng nhập không được ít hơn 5 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['userName'].hasError('maxlength')">
+            <span class="text-danger" >Tên đăng nhập không được nhiều hơn 50 ký tự</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Mật khẩu</label>
+        <input type="password"
+               class="form-control"
+               placeholder="Nhập mật khẩu"
+               formControlName="passWord"
+               minlength="8"
+               maxlength="50"
+               [pattern]="regexPassWord"
+               required>
+        <div *ngIf="accountForm.controls['passWord'].invalid && (accountForm.controls['passWord'].dirty || accountForm.controls['passWord'].touched)">
+          <div *ngIf="accountForm.controls['passWord'].errors?.required">
+            <span class="text-danger" >Mật khẩu không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['passWord'].hasError('minlength')">
+            <span class="text-danger" >Mật khẩu không được ít hơn 8 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['passWord'].hasError('maxlength')">
+            <span class="text-danger" >Mật khẩu không được nhiều hơn 50 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['passWord'].hasError('pattern')">
+            <span class="text-danger" >Mật khẩu không đúng định dạng</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Số thẻ căn cước công dân</label>
+        <input type="text"
+               class="form-control"
+               (change)="checkAccount()"
+               placeholder="Nhập căn cước công dân"
+               formControlName="cccd"
+               minlength="9"
+               maxlength="12"
+               required>
+        <div *ngIf="accountForm.controls['cccd'].invalid && (accountForm.controls['cccd'].dirty || accountForm.controls['cccd'].touched)">
+          <div *ngIf="accountForm.controls['cccd'].errors?.required">
+            <span class="text-danger" >Căn cước công dân không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['cccd'].hasError('minlength')">
+            <span class="text-danger" >Căn cước công dân không được ít hơn 9 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['cccd'].hasError('maxlength')">
+            <span class="text-danger" >Căn cước công dân không được nhiều hơn 12 ký tự</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Số điện thoại</label>
+        <input type="text"
+               class="form-control"
+               (change)="checkAccount()"
+               placeholder="Nhập số điện thoại"
+               formControlName="phoneNumber"
+               minlength="10"
+               maxlength="10"
+               [pattern]="regexPhone"
+               required>
+        <div *ngIf="accountForm.controls['phoneNumber'].invalid && (accountForm.controls['phoneNumber'].dirty || accountForm.controls['phoneNumber'].touched)">
+          <div *ngIf="accountForm.controls['phoneNumber'].errors?.required">
+            <span class="text-danger" >Số điện thoại không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['phoneNumber'].hasError('minlength')">
+            <span class="text-danger" >Số điện thoại không được ít hơn 10 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['phoneNumber'].hasError('maxlength')">
+            <span class="text-danger" >Số điện thoại không được nhiều hơn 10 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['phoneNumber'].hasError('pattern')">
+            <span class="text-danger" >Số điện thoại không đúng định dạng</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email"
+               class="form-control"
+               (change)="checkAccount()"
+               placeholder="Nhập email"
+               formControlName="email"
+               [pattern]="regexEmail"
+               minlength="5"
+               maxlength="100">
+        <div *ngIf="accountForm.controls['email'].invalid && (accountForm.controls['email'].dirty || accountForm.controls['email'].touched)">
+          <div *ngIf="accountForm.controls['email'].errors?.required">
+            <span class="text-danger" >Email không được để trống</span>
+          </div>
+          <div *ngIf="accountForm.controls['email'].hasError('minlength')">
+            <span class="text-danger" >Email không được ít hơn 5 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['email'].hasError('maxlength')">
+            <span class="text-danger" >Email không được nhiều hơn 100 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['email'].hasError('pattern')">
+            <span class="text-danger" >Email không đúng định dạng</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Chức vụ</label>
+        <!--          <select class="form-control" [(ngModel)]="createAccountRequest.role" [ngModelOptions]="{standalone: true}">-->
+        <!--            <option [value]="1">Admin</option>-->
+        <!--            <option [value]="2">Staff</option>-->
+        <!--            <option [value]="3">User</option>-->
+        <!--          </select>-->
+        <p-dropdown [options]="roleAccount"
+                    formControlName="role"
+                    optionLabel="name"
+                    [showClear]="true"
+                    [required]="true">
+        </p-dropdown>
+        <div *ngIf="accountForm.controls['role'].invalid && (accountForm.controls['role'].dirty || accountForm.controls['role'].touched)">
+          <div *ngIf="accountForm.controls['role'].errors?.required">
+            <span class="text-danger" >Chức vụ không được để trống</span>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label">Địa chỉ</label>
+        <textarea class="form-control"
+                  rows="3"
+                  placeholder="Nhập địa chỉ"
+                  formControlName="address"
+                  minlength="10"
+                  maxlength="200">
+          </textarea>
+        <div *ngIf="accountForm.controls['address'].invalid && (accountForm.controls['address'].dirty || accountForm.controls['address'].touched)">
+          <div *ngIf="accountForm.controls['address'].hasError('minlength')">
+            <span class="text-danger" >Địa chỉ không được ít hơn 10 ký tự</span>
+          </div>
+          <div *ngIf="accountForm.controls['address'].hasError('maxlength')">
+            <span class="text-danger" >Địa chỉ không được nhiều hơn 200 ký tự</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3 float-end">
+        <button (click)="createAccount()" type="submit" class="root-btn">Thêm tài khoản</button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
