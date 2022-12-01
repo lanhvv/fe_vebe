@@ -25,7 +25,6 @@ import { MatButtonModule } from '@angular/material/button';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import { ProfileComponent } from './layout/profile/profile.component';
-import { ChangPassComponent } from './layout/chang-pass/chang-pass.component';
 import {DialogModule} from 'primeng/dialog';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldControl, MatFormFieldModule} from '@angular/material/form-field';
 import {ScanComponent} from "./layout/scan/scan.component";
@@ -54,7 +53,7 @@ export function tokenGetter() {
     RegisterComponent,
     ForgotPasswordComponent,
     ProfileComponent,
-    ChangPassComponent,
+    ScanComponent
   ],
   imports: [
     BrowserModule,

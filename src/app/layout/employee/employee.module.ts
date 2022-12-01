@@ -23,11 +23,11 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { TypeProductComponent } from './type-product/type-product.component';
 import {TreeTableModule} from "primeng/treetable";
 import {ImageModule} from 'primeng/image';
-
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
-import {TreeSelectModule} from "primeng/treeselect";
 import {DialogModule} from "primeng/dialog";
+import {TreeSelectModule} from "primeng/treeselect";
+
 @NgModule({
   declarations: [
     ListProductComponent,
@@ -54,9 +54,9 @@ import {DialogModule} from "primeng/dialog";
     CalendarModule,
     MatDialogModule,
     TreeTableModule,
+    ImageModule,
     ConfirmDialogModule,
     ToastModule,
-    ImageModule,
     DialogModule,
     TreeSelectModule
   ],

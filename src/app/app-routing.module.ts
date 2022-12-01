@@ -9,7 +9,6 @@ import { AdminRouting } from './layout/admin/admin-routing.module';
 import {ScanComponent} from "./layout/scan/scan.component";
 import {ForgotPasswordComponent} from "./layout/forgot-password/forgot-password.component";
 import {ProfileComponent} from "./layout/profile/profile.component";
-import {ChangPassComponent} from "./layout/chang-pass/chang-pass.component";
 
 
 const routes: Routes = [
@@ -33,10 +32,6 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent
-  },
-  {
-    path:'changpass',
-    component: ChangPassComponent
   },
   {
     path: '',

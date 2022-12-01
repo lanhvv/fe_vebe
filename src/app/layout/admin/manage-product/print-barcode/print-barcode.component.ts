@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+const htmlToPdfmake = require("html-to-pdfmake");
+const pdfMake = require('pdfmake/build/pdfmake.js');
+const pdfFonts = require('pdfmake/build/vfs_fonts.js');
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-print-barcode',
@@ -6,10 +10,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./print-barcode.component.css']
 })
 export class PrintBarcodeComponent implements OnInit {
+  @ViewChild('pdfBarCode') pdfBarCode!: ElementRef;
+
+  qrvalue: string = '832323828382338'
 
   status: number | undefined;
   quantity = 1;
   price: number = 0;
+
+  name_product: boolean= false;
+  out_price: boolean=true;
+  price_with_vnd: boolean = false;
+  price_with_unit: boolean = false;
+  name_shop: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -32,4 +46,12 @@ export class PrintBarcodeComponent implements OnInit {
       this.quantity += 1;
     }
   }
+
+  exportBarCode(){
+    const pdfBar = this.pdfBarCode.nativeElement;
+    var html = htmlToPdfmake(pdfBar.innerHTML);
+    const documentDefinition = { content: html };
+    pdfMake.createPdf(documentDefinition).download();
+  }
+
 }

@@ -49,10 +49,11 @@ import {DialogModule} from "primeng/dialog";
 import {CardModule} from "primeng/card";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import {ImageModule} from 'primeng/image';
-import { ImportExcelComponent } from './manage-warehouse/import-excel/import-excel.component';
 import {CellComponent} from "./share/cell.component";
 import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
+import { QRCodeModule } from 'angularx-qrcode';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
+import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 
 @NgModule({
   declarations: [
@@ -76,10 +77,10 @@ import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
     ReportProductComponent,
     ManageWarehouseComponent,
     ManageProfileComponent,
-    ManageUnitComponent,
     ImportExcelComponent,
     CellComponent,
-    PrintBarcodeComponent
+    PrintBarcodeComponent,
+    ManageUnitComponent
   ],
     imports: [
         CommonModule,
@@ -112,7 +113,8 @@ import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
         InputTextModule,
         DialogModule,
         CardModule,
-        ImageModule
+        ImageModule,
+        QRCodeModule
     ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
