@@ -28,6 +28,7 @@ export class ManageUpdateAccountComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // @ts-ignore
     this.updateAccount = new FormGroup<any>({
       fullname: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),

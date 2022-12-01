@@ -22,11 +22,16 @@ import {  MatPaginatorModule } from '@angular/material/paginator';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import { ProfileComponent } from './layout/profile/profile.component';
 import {DialogModule} from 'primeng/dialog';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldControl, MatFormFieldModule} from '@angular/material/form-field';
+import {ScanComponent} from "./layout/scan/scan.component";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatListModule} from "@angular/material/list";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {MatIconModule} from "@angular/material/icon";
 
 export function rootLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, "assets/i18n/", ".json");
@@ -47,7 +52,8 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ProfileComponent
+    ProfileComponent,
+    ScanComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +89,11 @@ export function tokenGetter() {
     PaginatorModule,
     NgbModule,
     ToastModule,
-    DialogModule
+    DialogModule,
+    MatMenuModule,
+    MatListModule,
+    ZXingScannerModule,
+    MatIconModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

@@ -17,9 +17,10 @@ import {SellPosComponent} from "./sell-pos/sell-pos.component";
 import {ManageWarehouseComponent} from "./manage-warehouse/manage-warehouse.component";
 import { WereHouseManagerComponent } from './WereHouseManager/were-house-manager/were-house-manager.component';
 import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
+import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcode.component";
-import * as path from "path";
+// import * as path from "path";
 
 
 export const AdminRouting: Route[] = [
@@ -107,6 +108,14 @@ export const AdminRouting: Route[] = [
             component: DetailDistributorComponent
           }
         ]
+      },
+      {
+        path:'manage-unit',
+        component: ManageUnitComponent
+      },
+      {
+        path:'manager-profile',
+        component:ManageProfileComponent
       },
       {
         path: 'manage-profile',

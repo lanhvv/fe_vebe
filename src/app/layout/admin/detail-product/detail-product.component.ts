@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import {Category} from "../../../shared/model/category.model";
+// @ts-ignore
 import {DropdownFilterOptions} from 'primeng/dropdown';
 import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
 import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
