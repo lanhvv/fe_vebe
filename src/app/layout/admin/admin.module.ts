@@ -54,6 +54,7 @@ import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barc
 import { QRCodeModule } from 'angularx-qrcode';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
+import {PasswordModule} from "primeng/password";
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel
         DialogModule,
         CardModule,
         ImageModule,
-        QRCodeModule
+        QRCodeModule,
+        PasswordModule
     ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
