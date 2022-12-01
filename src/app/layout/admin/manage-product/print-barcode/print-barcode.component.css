@@ -40,7 +40,7 @@ main {
 
 .container-barcode{
   width: 50%;
-  height: 300px;
+  height: auto;
   border: 1px dotted #cccccc;
   padding: 20px 10px;
 }

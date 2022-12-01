@@ -23,6 +23,10 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { TypeProductComponent } from './type-product/type-product.component';
 import {TreeTableModule} from "primeng/treetable";
 import {ImageModule} from 'primeng/image';
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ToastModule} from "primeng/toast";
+import {DialogModule} from "primeng/dialog";
+import {TreeSelectModule} from "primeng/treeselect";
 
 @NgModule({
   declarations: [
@@ -50,7 +54,11 @@ import {ImageModule} from 'primeng/image';
     CalendarModule,
     MatDialogModule,
     TreeTableModule,
-    ImageModule
+    ImageModule,
+    ConfirmDialogModule,
+    ToastModule,
+    DialogModule,
+    TreeSelectModule
   ],
   exports:[
     SellOfflineComponent

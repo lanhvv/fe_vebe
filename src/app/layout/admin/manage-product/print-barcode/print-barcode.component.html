@@ -14,7 +14,7 @@
         </select>
       </div>
       <div class="col-3">
-        <button class="root-btn">In mã vạch</button>
+        <button class="root-btn" (click)="exportBarCode();">In mã vạch</button>
       </div>
       <div class="col-6">
         <form>
@@ -78,42 +78,48 @@
     <div class="row">
       <div class="col-4">
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" value="" id="barcode-nameproduct">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-nameproduct"
+                 [ngModel]="name_product" (change)="name_product=!name_product">
           <label class="form-check-label" for="barcode-nameproduct">
             Tên sản phẩm
           </label>
         </div>
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withoutVND" checked>
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withoutVND"
+                 [ngModel]="out_price" (change)="out_price=!out_price">
           <label class="form-check-label" for="barcode-price_withoutVND">
             Giá bán
           </label>
         </div>
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withVND" checked>
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withVND"
+                 [ngModel]="price_with_vnd" (change)="price_with_vnd=!price_with_vnd">
           <label class="form-check-label" for="barcode-price_withVND">
             Giá bán kèm đơn vị VND
           </label>
         </div>
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withUnit" checked>
+          <input class="form-check-input" type="checkbox" value="" id="barcode-price_withUnit"
+                 [ngModel]="price_with_unit" (change)="price_with_unit=!price_with_unit">
           <label class="form-check-label" for="barcode-price_withUnit">
             Giá bán kèm đơn vị tính
           </label>
         </div>
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" value="" id="barcode-nameshop">
+          <input class="form-check-input" type="checkbox" value="" id="barcode-nameshop"
+                 [ngModel]="name_shop" (change)="name_shop=!name_shop">
           <label class="form-check-label" for="barcode-nameshop">
             Tên cửa hàng
           </label>
         </div>
       </div>
-      <div class="col-8 text-center">
+      <div class="col-8 text-center" id="pdfBarCode" #pdfBarCode>
         <div class="container-barcode">
-          <p style="font-size: 20px">Tên cửa hàng</p>
-          <p>Tên sản phẩm</p>
-          <img src=" http://www.barcodesinc.com/generator/image.php?code=832323828382338&style=197&type=C128B&width=300&height=150&xres=1&font=4">
-          <h4 class="mt-1">13,000 VNĐ</h4>
+          <p style="font-size: 20px" *ngIf="name_shop">Tên cửa hàng</p>
+          <p *ngIf="name_product">Tên sản phẩm</p>
+<!--          <img src=" http://www.barcodesinc.com/generator/image.php?code=832323828382338&style=197&type=C128B&width=300&height=150&xres=1&font=4">-->
+          <qrcode [qrdata]="'832323828382338'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+          <h4 class="mt-1" *ngIf="out_price">13,000 <span *ngIf="price_with_vnd">VNĐ</span> <span *ngIf="price_with_unit">/ gói</span></h4>
         </div>
       </div>
     </div>

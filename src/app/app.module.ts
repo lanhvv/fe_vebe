@@ -26,7 +26,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import { ProfileComponent } from './layout/profile/profile.component';
-import { ChangPassComponent } from './layout/chang-pass/chang-pass.component';
 import {DialogModule} from 'primeng/dialog';
 
 export function rootLoaderFactory(http: HttpClient){
@@ -48,8 +47,7 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ProfileComponent,
-    ChangPassComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

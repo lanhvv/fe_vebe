@@ -52,6 +52,7 @@ import {ImageModule} from 'primeng/image';
 import { ImportExcelComponent } from './manage-warehouse/import-excel/import-excel.component';
 import {CellComponent} from "./share/cell.component";
 import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barc
         InputTextModule,
         DialogModule,
         CardModule,
-        ImageModule
+        ImageModule,
+        QRCodeModule
     ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

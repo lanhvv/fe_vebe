@@ -8,7 +8,6 @@ import { ManageProductComponent } from './layout/admin/manage-product/manage-pro
 import {ForgotPasswordComponent} from "./layout/forgot-password/forgot-password.component";
 import { AdminRouting } from './layout/admin/admin-routing.module';
 import {ProfileComponent} from "./layout/profile/profile.component";
-import {ChangPassComponent} from "./layout/chang-pass/chang-pass.component";
 
 
 const routes: Routes = [
@@ -28,10 +27,6 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent
-  },
-  {
-    path:'changpass',
-    component: ChangPassComponent
   },
   {
     path: '',

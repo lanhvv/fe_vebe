@@ -8,4 +8,10 @@ export class ResponseStatisticStaff {
   totalPages !: number;
   page !: number;
   pageSize !: number;
+
+  totalPriceOfBills !: number;
+  totalPriceOfDiscount !: number;
+  actualAmount !: number;
+  countBills !: number;
+  countProducts !: number;
 }
