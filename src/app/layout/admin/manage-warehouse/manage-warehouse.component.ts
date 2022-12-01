@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MessageService} from "primeng/api";
+import * as XLSX from 'xlsx';
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+type AOV = any[][];
 
 @Component({
   selector: 'app-manage-warehouse',
@@ -13,18 +16,23 @@ export class ManageWarehouseComponent implements OnInit {
   date ?: string;
   display: boolean = false;
   uploadedFiles: any[] = [];
-
   listUnit: number[] = [];
-
   rangeDates?: Date[];
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+  fileName: string = 'SheetJS.xlsx';
+  excelForm!: FormGroup;
 
-
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.status = 8;
   }
+
+  data: AOV = [
+    [1, 2],
+    [3, 4]
+  ];
 
   showDialog() {
     this.display = true;
@@ -51,4 +59,37 @@ export class ManageWarehouseComponent implements OnInit {
     this.listUnit = this.listUnit.filter(x => x !== index);
   }
 
+//  upload file
+  onFileChange(evt: any){
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>evt.target;
+    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      /* read workbook */
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+      /* grab first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      this.data = <AOV>XLSX.utils.sheet_to_json(ws, { header: 1 });
+      console.log(this.data);
+      this.excelForm = this.fb.group({
+        data: this.fb.array([]),
+      });
+      const formArray = this.excelForm.get('data') as FormArray;
+      for (let i = 1; i < this.data.length; i++) {
+        const formGroup = {};
+        for (let j = 0; j < this.data[0].length; j++) {
+          // @ts-ignore
+          formGroup[this.data[0][j]] = [this.data[i][j]];
+        }
+        formArray.push(this.fb.group(formGroup));
+      }
+    };
+    reader.readAsBinaryString(target.files[0]);
+  }
 }

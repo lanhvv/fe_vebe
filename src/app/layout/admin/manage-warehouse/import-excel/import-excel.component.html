@@ -1,0 +1,76 @@
+<div class="container-fluid">
+  <div class="content">
+    <div class="row">
+      <div class="float-start mb-3">
+        <a type="button" routerLink="/admin/manage-warehouse" class="root-btn text-center text-decoration-none p-2 me-4">
+          <i class="fa-solid fa-arrow-left me-3"></i>
+          Quay lại
+        </a>
+        <a type="button"
+           class="root-btn text-decoration-none pt-2 text-center"
+           href="assets/file%20lưu%20kho.xlsx"
+           download>
+          <i class="fa-solid fa-download me-1"></i>
+          Tải file mẫu
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <div class="note">
+          <div class="mb-3">
+            <label class="form-label">Chọn nhà cung cấp</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Open this select menu</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </select>
+          </div>
+          <div class="text-note">
+            <p>Chú ý:</p>
+            <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
+            <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="float-end">
+        <button class="root-btn" (click)="changeFile()" *ngIf="data.length > 0">Sửa đổi file</button>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="box-file-upload" *ngIf="!isShowData">
+        <label class="custom-file-upload">
+          <input type="file" (change)="onFileChange($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+          <i class="fa fa-cloud-upload"></i> Custom Upload
+        </label>
+      </div>
+      <div class="show-data" *ngIf="isShowData">
+        <form [formGroup]="excelForm">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th *ngFor="let val of data[0]" scope="col">
+                  {{val}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of excelFormArray.controls" [formGroup]="getFormGroup(row)">
+                <td *ngFor="let val of data[0]">
+                  <app-cell [field]="val" [value]="row.get(val)!.value" [formGroup]="getFormGroup(row)"></app-cell>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        <button (click)="saveData()" class="root-btn mt-3">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>

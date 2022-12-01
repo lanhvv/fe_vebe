@@ -1,72 +1,70 @@
-<!-- <employee-header></employee-header> -->
+<employee-header [Status]="statusPage"></employee-header>
 
-<div class="card mt-4 pe-4 ps-4">
-  <div class="row text-center">
-    <div class="col-12 row position-relative">
-      <h2 class="p-0 m-0"><b>Báo cáo cuối ngày về tháng</b></h2>
-      <h4 class="p-0 m-0">Ngày bán: {{date}}</h4>
-      <h4 class="p-0 m-0">Chi nhánh: Tạp hóa Huyền Trang</h4>
-
-      <div class="position-absolute top-100 start-100 translate-middle">
-        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
-      </div>
-    </div>
-
-    <table class="table mt-4">
-      <thead class="table-primary">
-      <tr>
-        <th></th>
-        <th>Thời gian</th>
-        <th>Số lượng</th>
-        <th>Doanh thu</th>
-        <th>Tổng tiền giảm giá</th>
-        <th>Thực lĩnh</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td><a data-bs-toggle="collapse" href="#collapse" aria-expanded="false" class="text-black"><i class="pi pi-angle-down"></i></a>Hóa đơn: {{statistics.countBills}}</td>
-        <td>{{date}}</td>
-        <td>{{statistics.countProducts}}</td>
-        <td>{{statistics.totalPriceOfBills}}</td>
-        <td>{{statistics.totalPriceOfDiscount}}</td>
-        <td>{{statistics.actualAmount}}</td>
-      </tr>
-      </tbody>
-    </table>
+<div class="container">
+  <div class="text-center">
+    <h5>Báo cáo cuối ngày</h5>
+    <p>Ngày bán: 18/11/2022</p>
+    <p>Chi nhánh: Tạp hóa Huyền Trang</p>
   </div>
-
-
-  <!--<p-calendar [(ngModel)]="dateValue" dateFormat="dd-mm-yy" (onSelect)="chooseDate()"></p-calendar>-->
-
-  <div class="collapse" id="collapse">
-    <p-table [value]="statistics.list" tyleClass="p-datatable-sm">
+  <div class="float-end">
+    <button class="root-btn">Xuất báo cáo</button>
+  </div>
+  <div>
+    <p-table dataKey="name" [tableStyle]="{'min-width': '60rem'}">
       <ng-template pTemplate="header">
         <tr>
-          <!--          <th pSortableColumn="index" (mousedown)="sort('index')">STT <p-sortIcon field="index"></p-sortIcon></th>-->
-          <th pSortableColumn="idBill" (mousedown)="sort('idBill')">Mã hóa đơn <p-sortIcon field="idBill"></p-sortIcon></th>
-          <th pSortableColumn="creator" (mousedown)="sort('creator')">Tên người tạo <p-sortIcon field="creator"></p-sortIcon></th>
-          <th pSortableColumn="createdDate" (mousedown)="sort('createdDate')">Ngày tạo <p-sortIcon field="createdDate"></p-sortIcon></th>
-          <th pSortableColumn="price" (mousedown)="sort('price')">Giá <p-sortIcon field="price"></p-sortIcon></th>
-          <th pSortableColumn="status" (mousedown)="sort('status')">Trạng thái <p-sortIcon field="status"></p-sortIcon></th>
+          <th style="width: 5rem"></th>
+          <th>Số lượng</th>
+          <th>Doanh thu</th>
+          <th>Tổng tiền giảm giá</th>
+          <th>Thực lĩnh</th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-statistic>
+      <ng-template pTemplate="body" let-expanded="expanded">
         <tr>
-          <!--          <td>{{statistic.index}}</td>-->
-          <td>{{statistic.idBill}}</td>
-          <td>{{statistic.creator}}</td>
-          <td>{{statistic.createdDate}}</td>
-          <td>{{statistic.price}}</td>
-          <td>{{statistic.statusName}}</td>
+          <td>
+            <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+          </td>
+          <td>97</td>
+          <td>4.023.500</td>
+          <td>0</td>
+          <td>4.023.500</td>
         </tr>
       </ng-template>
-
+      <ng-template pTemplate="rowexpansion">
+        <tr>
+          <td colspan="7">
+            <div class="p-3">
+              <p-table dataKey="id">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Mã hóa đơn</th>
+                    <th>Số lượng hàng</th>
+                    <th>Tổng tiền hàng</th>
+                    <th>Người bán</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                  <tr>
+                    <td>HD993823923</td>
+                    <td>10</td>
+                    <td>400.000</td>
+                    <td>Hai Nguyen</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="6">There are no order for this product yet.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
     </p-table>
-    <p-paginator [rows]="10" [totalRecords]="statistics.totalItems" [rowsPerPageOptions]="[10,25,50]" (onPageChange)="paginate($event)"
-    ></p-paginator>
   </div>
+
 </div>
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
-<p-toast></p-toast>
+
 <employee-footer></employee-footer>

@@ -6,10 +6,6 @@ import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import {LoginService} from "../../services/login.service";
 import {LoginResponse} from "../../shared/response/LoginResponse";
-import { ForgotPasswordRequest } from 'src/app/shared/model/request/forgotPasswordRequest';
-import { BaseResponse } from 'src/app/shared/model/response/BaseResponse';
-import { ManagerEmailService } from 'src/app/services/manager-public/manager-email.service';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +13,6 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  forgotPasswordRequest:ForgotPasswordRequest;
-  baseResponse: BaseResponse
 
   regexUsername = /^[^!#$%^()~&*,/';<>?|:"`]*$/;
   authenticationError = false;
@@ -44,13 +38,8 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private tokenStorage: TokenStorageService,
     private authService: AuthService,
-    private translateService:TranslateConfigService,
-    private managerEmailService:ManagerEmailService ,
-    private  messageService: MessageService
-  ) {
-    this.forgotPasswordRequest = new ForgotPasswordRequest()
-    this.baseResponse = new BaseResponse()
-  }
+    private translateService:TranslateConfigService
+  ) { }
 
   ngOnInit(): void {
     this.language=this.translateService.getLanguage()!;
@@ -138,22 +127,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  forgotPassWord(){
+  changePassWord(){
   //  hàm xử lý, code xong nếu pass thì thêm câu lệnh này
-  this.managerEmailService.forgotPassword(this.forgotPasswordRequest).subscribe(response => {
-    this.baseResponse = response as BaseResponse;
-    if(this.baseResponse.status.status=="1"){
-      this.messageService.add({severity:'success', summary: 'Successful', detail: this.baseResponse.status.message, life: 3000});
-       this.forgotPasswordRequest.username=""
-       this.forgotPasswordRequest.email=""
-       this.isShowDialogForgotPass = false;
-    }
-    else {
-      this.messageService.add({severity:'error', summary: 'Successful', detail: this.baseResponse.status.message, life: 3000});
-      this.isShowDialogForgotPass = true;
-    }
-    })
-
+    this.isShowDialogForgotPass = false;
   }
-
 }

@@ -11,7 +11,7 @@
         <span><p>Số nhà phân phối đang hoạt động: 1</p></span>
       </div>
       <div class="col-4">
-        <button class="root-btn" (click)="open(content)">Thêm nhà phân phối</button>
+        <button class="root-btn" (click)="isShowDialog=true">Thêm nhà phân phối</button>
       </div>
       <div class="col-6">
         <form>
@@ -25,7 +25,7 @@
     </div>
     <!-- table -->
     <section class="table-account">
-      <p-table class="table" [value]="supplierResponse.supplierItems">
+      <p-table class="table">
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="name-supplier">Tên nhà phân phối
@@ -67,51 +67,123 @@
 </main>
 <!--Main layout-->
 
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Thêm nhà phân phối</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <!--  <form (ngSubmit)="save()">-->
-  <!--  <div class="modal-body">-->
-  <!--      <div class="mb-3 row">-->
-  <!--        <div class="col">-->
-  <!--          <div class="mb-3">-->
-  <!--            <label for="name-distributor" class="form-label">Tên nhà phân phối</label>-->
-  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.nameSup" id="name-distributor">-->
-  <!--          </div>-->
-  <!--          <div class="mb-3">-->
-  <!--            <label class="form-label">Trạng thái</label>-->
-  <!--            <select class="form-select" [(ngModel)]="supplier.status" aria-label="Default select example">-->
-  <!--              <option selected>Open this select menu</option>-->
-  <!--              <option value="1">One</option>-->
-  <!--              <option value="2">Two</option>-->
-  <!--              <option value="3">Three</option>-->
-  <!--            </select>-->
-  <!--          </div>-->
-  <!--          <div class="mb-3">-->
-  <!--            <label for="address-distributor" class="form-label">Địa chỉ</label>-->
-  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.address" id="address-distributor">-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="mb-3">-->
-  <!--            <label for="phone-distributor" class="form-label">Số điện thoại</label>-->
-  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.numberPhone" id="phone-distributor">-->
-  <!--          </div>-->
-  <!--          <div class="mb-3">-->
-  <!--            <label for="createDate-distributor" class="form-label">Ngày gia nhập</label>-->
-  <!--            <input type="text" class="form-control" [(ngModel)]="supplier.createdDate" id="createDate-distributor">-->
-  <!--          </div>-->
-  <!--          <div class="mb-3">-->
-  <!--            <label for="email-distributor" class="form-label">Email</label>-->
-  <!--            <input type="email" class="form-control" [(ngModel)]="supplier.email" id="email-distributor">-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--  </div>-->
-  <!--  <div class="modal-footer">-->
-  <!--    <button type="button" class="btn btn-outline-dark"  (click)="modal.close('Save click')">Save</button>-->
-  <!--  </div>-->
-  <!--  </form>-->
-</ng-template>
+<p-dialog header="Thêm nhà phân phối" [(visible)]="isShowDialog" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <form [formGroup]="distributorForm">
+    <div class="modal-body">
+      <div class="mb-3 row">
+        <div class="col">
+          <div class="mb-4">
+            <label for="name-distributor" class="form-label">Tên nhà phân phối</label>
+            <input
+              formControlName="fullName"
+              type="text"
+              class="form-control"
+              id="name-distributor"
+              required
+              minlength="3"
+              maxlength="100">
+            <div *ngIf="distributorForm.controls['fullName'].invalid && (distributorForm.controls['fullName'].dirty || distributorForm.controls['fullName'].touched)">
+              <div *ngIf="distributorForm.controls['fullName'].errors?.required">
+                <span class="text-danger" >Tên nhà phân phối không được để trống</span>
+              </div>
+              <div *ngIf="distributorForm.controls['fullName'].hasError('minlength')">
+                <span class="text-danger" >Tên nhà phân phối không được ít hơn 3 ký tự</span>
+              </div>
+              <div *ngIf="distributorForm.controls['fullName'].hasError('maxlength')">
+                <span class="text-danger" >Tên nhà phân phối không được nhiều hơn 100 ký tự</span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Trạng thái</label>
+            <p-dropdown
+              formControlName="statusDistributor"
+              styleClass="status-distributor"
+              optionLabel="name"
+              [showClear]="true"
+              [required]="true">
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-4">
+            <label for="phone-distributor" class="form-label">Số điện thoại</label>
+            <input
+              formControlName="phoneNumber"
+              type="text"
+              class="form-control"
+              id="phone-distributor"
+              required
+              minlength="10"
+              maxlength="10">
+            <div *ngIf="distributorForm.controls['phoneNumber'].invalid && (distributorForm.controls['phoneNumber'].dirty || distributorForm.controls['phoneNumber'].touched)">
+              <div *ngIf="distributorForm.controls['phoneNumber'].errors?.required">
+                <span class="text-danger" >Số điện thoại không được để trống</span>
+              </div>
+              <div *ngIf="distributorForm.controls['phoneNumber'].hasError('minlength')">
+                <span class="text-danger" >Số điện thoại phải là 10 ký tự</span>
+              </div>
+              <div *ngIf="distributorForm.controls['phoneNumber'].hasError('maxlength')">
+                <span class="text-danger" >Số điện thoại phải là 10 ký tự</span>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="email-distributor" class="form-label">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              class="form-control"
+              id="email-distributor"
+              [pattern]="regexEmail"
+              minlength="10"
+              maxlength="100">
+            <div *ngIf="distributorForm.controls['email'].invalid && (distributorForm.controls['email'].dirty || distributorForm.controls['email'].touched)">
+              <div *ngIf="distributorForm.controls['email'].hasError('pattern')">
+                <span class="text-danger" >Địa chỉ email không chính xác</span>
+              </div>
+              <div *ngIf="distributorForm.controls['email'].hasError('minlength')">
+                <span class="text-danger" >Địa chỉ email không được nhỏ hơn 5 ký tự</span>
+              </div>
+              <div *ngIf="distributorForm.controls['email'].hasError('maxlength')">
+                <span class="text-danger" >Địa chỉ email không được lớn hơn 100 ký tự</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="address-distributor" class="form-label">Địa chỉ</label>
+          <textarea
+            formControlName="address"
+            class="form-control"
+            id="address-distributor"
+            rows="3"
+            required
+            minlength="10"
+            maxlength="200">
+        </textarea>
+          <div *ngIf="distributorForm.controls['address'].invalid && (distributorForm.controls['address'].dirty || distributorForm.controls['address'].touched)">
+            <div *ngIf="distributorForm.controls['address'].errors?.required">
+              <span class="text-danger" >Địa chỉ nhà phân phối không được để trống</span>
+            </div>
+            <div *ngIf="distributorForm.controls['address'].hasError('minlength')">
+              <span class="text-danger" >Địa chỉ nhà phân phối không được ít hơn 10 ký tự</span>
+            </div>
+            <div *ngIf="distributorForm.controls['address'].hasError('maxlength')">
+              <span class="text-danger" >Địa chỉ nhà phân phối không được nhiều hơn 200 ký tự</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="float-end">
+      <button
+        type="submit"
+        class="root-btn me-2"
+        (click)="isShowDialog=false"
+        [disabled]="distributorForm.pristine || distributorForm.valid">Hoàn thành</button>
+    </div>
+  </form>
+
+</p-dialog>

@@ -10,3 +10,14 @@ body{
   border-radius: 20px;
   padding: 50px;
 }
+
+.root-btn {
+  width: 183px;
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}

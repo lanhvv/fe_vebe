@@ -5,6 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {DistributorService} from "../../../services/distributor/distributor.service";
 import {SupplierResponse} from "../../../shared/model/response/SupplierResponse";
 import {TranslateConfigService} from "../../../services/translate-config.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-manage-distributor',
@@ -12,24 +13,43 @@ import {TranslateConfigService} from "../../../services/translate-config.service
   styleUrls: ['./manage-distributor.component.css']
 })
 export class ManageDistributorComponent implements OnInit {
+  regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
+  regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(?!domain\.web\b)((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  distributorForm!: FormGroup;
   status: number | undefined;
-
   supplierResponse !: SupplierResponse;
   closeResult = '';
-
   supplier!: Supplier;
   language!: string;
+  isShowDialog: boolean = false;
+
 
   constructor(
     private modalService: NgbModal,
     private distributorService:DistributorService,
-    private translateService: TranslateConfigService) {
+    private translateService: TranslateConfigService,
+    private fb: FormBuilder) {
+    this.formDistributor();
   }
 
   ngOnInit(): void {
     this.status = 5;
     this.loadInit();
     this.language = this.translateService.getLanguage()!;
+  }
+
+  formDistributor(){
+    this.distributorForm = this.fb.group({
+      email: new FormControl('', [
+        Validators.minLength(5),
+        Validators.maxLength(100),
+        Validators.pattern(this.regexEmail)
+      ]),
+      statusDistributor: ['', [Validators.required]],
+      fullName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+      address: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)])
+    })
   }
 
   loadInit() {

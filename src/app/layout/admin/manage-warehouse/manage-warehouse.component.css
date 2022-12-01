@@ -50,7 +50,7 @@ main {
   background: white;
 }
 
->>> .inputCalendar {
+>>> .inputCalendar, .input-file {
   width: 460px;
 }
 

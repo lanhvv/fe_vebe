@@ -69,6 +69,7 @@ export class UnitItemEdit {
 }
 
 
+// @ts-ignore
 export class RequestUnit {
   idDelete!:number;
   idParent!:number;

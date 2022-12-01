@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfileRespone } from '../../../shared/model/response/profileRespone';
-import { ProfileService } from '../../../services/admin/user/profile.service';
-import { ProfileRequest } from '../../../shared/model/request/profileRequest';
-import { BaseResponse } from 'src/app/shared/model/response/BaseResponse';
-import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-manage-profile',
@@ -11,47 +6,20 @@ import { MessageService, ConfirmationService } from 'primeng/api';
   styleUrls: ['./manage-profile.component.css']
 })
 export class ManageProfileComponent implements OnInit {
-  response: ProfileRespone;
-  responseProfile!: ProfileRespone[];
-  isShowFormEdit: boolean = false;
-  request!: ProfileRequest;
-  baseResponse!: BaseResponse
-  constructor(private profileService: ProfileService, private messageService: MessageService,private confirmationService: ConfirmationService) {
-    this.response = new ProfileRespone(),
-    this.baseResponse = new BaseResponse()
 
-  }
+  isShowFormEdit: boolean = false;
+  fullname: string = 'Nguyễn Lê Hải';
+  email: string = 'hainlph17388@fpt.edu.vn';
+  date: string = '21/01/2002';
+  cccd: string = '0226784983';
+  address: string= 'Cầu Giẽ, xã Đại Xuyên, huyện Phú Xuyên, Hà Nội';
+
+  constructor() { }
 
   ngOnInit(): void {
-    this.edit()
   }
-  edit(){
-   this.profileService.edit().subscribe(response => {
-    this.response= response as ProfileRespone
-
-  })
-}
-  //  fullname!: string;
-  cccd!: string;
-  address!: string;
-  numberPhone! : string;
-  email!: string;
 
   editProfile(){
-    this.request = { "fullname": this.response.fullname, "cccd": this.response.cccd,
-    "address": this.response.address, "numberPhone": this.response.numberPhone,
-     "email": this.response.email
-    }
-    this.profileService.update(this.request).subscribe(response =>{
-    this.baseResponse = response as BaseResponse
-    if(this.baseResponse.status.message == "1"){
-      this.messageService.add({severity:'success', summary: 'Successful', detail: ' Update success', life: 3000});
-    }
-    else{
-      this.messageService.add({severity:'error', summary: 'Error', detail: 'Update failse', life: 3000});
-    }
-    this.ngOnInit();
-    })
     // hàm xử lý thông tin, sau khi edit xong, nếu thành công thì chạy thêm câu lệnh dưới
     this.isShowFormEdit = false;
   }

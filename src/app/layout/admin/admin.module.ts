@@ -49,6 +49,9 @@ import {DialogModule} from "primeng/dialog";
 import {CardModule} from "primeng/card";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import {ImageModule} from 'primeng/image';
+import { ImportExcelComponent } from './manage-warehouse/import-excel/import-excel.component';
+import {CellComponent} from "./share/cell.component";
+import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 
 @NgModule({
@@ -73,7 +76,10 @@ import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
     ReportProductComponent,
     ManageWarehouseComponent,
     ManageProfileComponent,
-    ManageUnitComponent
+    ManageUnitComponent,
+    ImportExcelComponent,
+    CellComponent,
+    PrintBarcodeComponent
   ],
     imports: [
         CommonModule,
