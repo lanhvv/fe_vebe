@@ -10,10 +10,10 @@
         <button class="root-btn" (click)="showDialog()">Thêm sản phẩm</button>
       </div>
       <div class="col">
-        <button class="root-btn">
+        <a type="button" routerLink="/admin/manage-warehouse/upload-file" class="root-btn text-center text-decoration-none p-2">
           <i class="fa-solid fa-cloud-arrow-up"></i>
           Nhập file hàng
-        </button>
+        </a>
       </div>
       <div class="col">
         <span class="p-input-icon-right">
@@ -72,7 +72,7 @@
   </div>
 </main>
 
-<!--dialog-->
+<!--dialog nhập kho-->
 <p-dialog header="Nhập kho" [(visible)]="display" [modal]="true" [style]="{width: '1034px', height: '630px'}"
           [draggable]="false" [resizable]="false">
   <div class="container-fluid">

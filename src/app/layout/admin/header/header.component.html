@@ -164,20 +164,17 @@
           [draggable]="false" [resizable]="false">
   <div class="mb-3">
     <label for="change-old-pass" class="form-label">Mật khẩu cũ</label>
-    <input type="password" class="form-control" id="change-old-pass" [(ngModel)]="changePasswordRequest.oldPassword">
+    <input type="password" class="form-control" id="change-old-pass">
   </div>
   <div class="mb-3">
     <label for="change-new-pass" class="form-label">Mật khẩu mới</label>
-    <input type="password" class="form-control" id="change-new-pass" [(ngModel)]="changePasswordRequest.newPassword">
+    <input type="password" class="form-control" id="change-new-pass">
   </div>
   <div class="mb-3">
     <label for="change-re-pass" class="form-label">Nhập lại mật khẩu mới</label>
-    <input type="password" class="form-control" id="change-re-pass"  [(ngModel)]="changePasswordRequest.reEnterPassword">
+    <input type="password" class="form-control" id="change-re-pass">
   </div>
   <div class="mb-3 text-center">
-    <button class="root-btn" (mousedown)="changePassWord()">Gửi yêu cầu</button>
+    <button class="root-btn" (click)="changePassWord()">Gửi yêu cầu</button>
   </div>
 </p-dialog>
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"
-rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-<p-toast></p-toast>

@@ -1,0 +1,156 @@
+<div class="container-fluid">
+  <p-toast></p-toast>
+  <div class="content">
+    <div class="row">
+      <div class="float-start mb-3">
+        <a type="button" routerLink="/admin/manage-warehouse" class="root-btn text-center text-decoration-none p-2 me-4">
+          <i class="fa-solid fa-arrow-left me-3"></i>
+          Quay lại
+        </a>
+        <a type="button"
+           class="root-btn text-decoration-none pt-2 text-center"
+           href="assets/file%20lưu%20kho.xlsx"
+           download>
+          <i class="fa-solid fa-download me-1"></i>
+          Tải file mẫu
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <div class="note">
+          <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status==='1'">
+            <label class="form-label">Chọn nhà cung cấp</label>
+            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier">
+              <ng-template pTemplate="selectedItem">
+                <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                  <div>{{selectedSupplier.supplierName}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-supplier pTemplate="item">
+                <div class="supplier">
+                  <div>{{supplier.supplierName}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="float-end">
+        <button class="root-btn" (click)="changeFile()" *ngIf="data.length > 0">Sửa đổi file</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          <button pButton pRipple label="xóa" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+<!--          <p-fileUpload mode="basic" [maxFileSize]="1000000" label="chọn file" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>-->
+<!--          </p-fileUpload>-->
+
+          <p-fileUpload (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Import" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()"></p-fileUpload>
+          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help"></button>
+        </ng-template>
+      </p-toolbar>
+      <div class="text-note" *ngIf="this.productResponse==null || this.productResponse.status.status=='1'">
+        <p>Chú ý:</p>
+        <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
+        <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
+      </div>
+      <p-table *ngIf="this.productResponse!=null && this.productResponse.status.status=='0'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" [tableStyle]="{'min-width': '75rem'}"
+               [(selection)]="selectedProducts" [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 4rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Image</th>
+            <th pSortableColumn="rating">mã sản phẩm <p-sortIcon field="productCode"></p-sortIcon></th>
+            <th pSortableColumn="price">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
+            <th pSortableColumn="rating">QR CODE <p-sortIcon field="QrCode"></p-sortIcon></th>
+            <th pSortableColumn="rating">mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
+            <th pSortableColumn="rating">loại sản phẩm <p-sortIcon field="categury"></p-sortIcon></th>
+            <th pSortableColumn="rating">ngày hết hạn <p-sortIcon field="rangeDate"></p-sortIcon></th>
+            <th pSortableColumn="rating">đơn vị</th>
+            <th pSortableColumn="rating">thao tác</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-expanded="expanded">
+          <tr>
+            <td>
+              <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td>{{product.productCode}}</td>
+            <td>{{product.productName}}</td>
+            <td>{{product.qrCode}}</td>
+            <td>{{product.barCode}}</td>
+            <td>{{product.typeProduct}}</td>
+            <td>{{product.rangeDate}}</td>
+            <td>
+              <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                    <div>{{selectedSupplier.supplierName}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-supplier pTemplate="item">
+                  <div class="supplier">
+                    <div>{{supplier.supplierName}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+              <td>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td colspan="7">
+              <div class="p-3">
+                <p-table [value]="product.orders" dataKey="id">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>đơn vị</th>
+                      <th>giá nhập</th>
+                      <th>giá bán</th>
+                      <th>hành động</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-export>
+                    <tr>
+                      <td>{{export.unitName}}</td>
+                      <td>{{export.inPrice| currency:'VND'}}</td>
+                      <td>{{export.outPrice| currency:'VND'}}</td>
+                      <td><p-button type="button" icon="pi pi-delete"></p-button></td>
+                    </tr>
+                  </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">There are no order for this product yet.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+            In total there are {{this.productResponse.products ? productResponse.products.length : 0 }} products.
+          </div>
+    </ng-template>
+  </p-table>
+  </div>
+</div>

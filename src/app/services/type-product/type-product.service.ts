@@ -15,9 +15,9 @@ const AUTH_API = environment.base;
   providedIn: 'root'
 })
 export class TypeProductService {
-  api = "http://localhost:1507//vibee/api/v1/auth/";
+  api = "http://localhost:1507/vibee/api/v1/auth";
   readonly URL = AUTH_API+"vibee/api/v1/auth";
-  readonly URLSELECTION = AUTH_API+"vibee/api/v1/getAllSelectType";
+  readonly URLSELECTION = AUTH_API+"vibee/api/v1/auth/getAllSelectType";
   deleteTypeProductRequest!: DeleteTypeProductRequest;
   constructor(private httpClient: HttpClient ,private tokenService: TokenStorageService) { }
   httpOptions = {
@@ -34,32 +34,32 @@ export class TypeProductService {
   }
 
   getFilesystem() {
-    return this.httpClient.get<any>(this.URL+'getAllSelectType', this.httpOptions)
+    return this.httpClient.get<any>(this.URL+'/getAllSelectType', this.httpOptions)
   }
 
   getAllTypeProduct(request:GetOrderRequest){
-    return this.httpClient.get(this.URL+"getAllType1?pagenumber="+request.page+"&pagesize="+request.pageSize+
+    return this.httpClient.get(this.URL+"/getAllType1?pagenumber="+request.page+"&pagesize="+request.pageSize+
       "&valuefilter="+request.filter.valueFilter+"&typefilter="+request.filter.typeFilter+"&language="+request.language+"&search="+request.searchText, this.httpOptions);
   }
   create(request: CreateTypeProductRequest): Observable<any>{
-    return this.httpClient.post<any>(this.URL+'createTyProduct', request,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'/createTyProduct', request,this.httpOptions);
   }
   delete(request: number): Observable<any>{
     this.deleteTypeProductRequest=new DeleteTypeProductRequest();
     this.deleteTypeProductRequest.id=request;
-    return this.httpClient.post<any>(this.URL+'deleteType', this.deleteTypeProductRequest,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'/deleteType', this.deleteTypeProductRequest,this.httpOptions);
   }
   update(request: UpdateTypeProductRequest): Observable<any>{
-    return this.httpClient.post<any>(this.URL+'updateType', request,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'/updateType', request,this.httpOptions);
   }
   edit(request: number):Observable<any> {
-    return this.httpClient.get(this.URL+'editType/'+request,this.httpOptions);
+    return this.httpClient.get(this.URL+'/editType/'+request,this.httpOptions);
   }
   //getDetailParentById
   detailTypeProductById(request: number):Observable<any> {
-    return this.httpClient.get(this.URL+'getDetailParentById/'+request,this.httpOptions);
+    return this.httpClient.get(this.URL+'/getDetailParentById/'+request,this.httpOptions);
   }
   createDetail(request: CreateTypeProductDetailRequest): Observable<any>{
-    return this.httpClient.post<any>(this.URL+'createTyProductDetail', request,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'/createTyProductDetail', request,this.httpOptions);
   }
 }

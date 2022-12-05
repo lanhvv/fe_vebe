@@ -18,6 +18,9 @@ import {ManageWarehouseComponent} from "./manage-warehouse/manage-warehouse.comp
 import { WereHouseManagerComponent } from './WereHouseManager/were-house-manager/were-house-manager.component';
 import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
+import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
+import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcode.component";
+// import * as path from "path";
 
 
 export const AdminRouting: Route[] = [
@@ -42,7 +45,16 @@ export const AdminRouting: Route[] = [
       },
       {
         path: 'manage-product',
-        component: ManageProductComponent
+        children: [
+          {
+            path: '',
+            component: ManageProductComponent
+          },
+          {
+            path: 'print-barcode',
+            component: PrintBarcodeComponent
+          }
+        ]
       },
       {
         path: 'sell-pos',
@@ -63,6 +75,10 @@ export const AdminRouting: Route[] = [
       {
         path: 'manage-warehouse',
         component: ManageWarehouseComponent
+      },
+      {
+        path: 'manage-warehouse/upload-file',
+        component: ImportExcelComponent
       },
       {
         path: 'manage-order-detail/:id',
@@ -104,6 +120,10 @@ export const AdminRouting: Route[] = [
       {
         path:'manager-profile',
         component:ManageProfileComponent
+      },
+      {
+        path: 'manage-profile',
+        component: ManageProfileComponent
       }
     ]
   }

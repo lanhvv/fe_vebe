@@ -1,4 +1,4 @@
-import {BaseResponse} from "./BaseResponse";
+import { BaseResponse } from 'src/app/shared/response/BaseResponse';
 
 export class ProfileRespone extends BaseResponse {
     fullname!: string;

@@ -41,3 +41,8 @@ main {
   background: #E5EFF9 !important;
   border-radius: 5px;
 }
+
+>>> .p-dropdown{
+  width: 100% !important;
+  height: 40px !important;
+}

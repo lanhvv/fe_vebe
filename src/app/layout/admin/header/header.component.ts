@@ -16,10 +16,11 @@ export class HeaderAdminComponent implements OnInit {
 
 
   isDialogChangePass: boolean = false;
-  constructor(private translate: TranslateConfigService, private messageService: MessageService, 
-    private profileService:ProfileService,) { 
+  constructor(private translate: TranslateConfigService, private messageService: MessageService,
+    private profileService:ProfileService,) {
       this.baseResponse = new BaseResponse();
-      this.changePasswordRequest = new ChangePasswordRequest()
+      // @ts-ignore
+    this.changePasswordRequest = new ChangePasswordRequest()
     }
 
   @Input() Status: number | undefined;

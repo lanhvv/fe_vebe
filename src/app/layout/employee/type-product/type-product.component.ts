@@ -53,7 +53,7 @@ export class TypeProductComponent implements OnInit {
   constructor(private typeProductService: TypeProductService, private router: Router, private confirmationService: ConfirmationService,
               private messageService: MessageService, private activatedRoute: ActivatedRoute) {
     this.files = new TypeProductItemsResponse(),
-    this.typeResponse = new CreateResponse();
+      this.typeResponse = new CreateResponse();
     this.typeItemsResponse = new TypeItemsResponse()
     this.typeRequest = new CreateTypeProductRequest();
     this.category = new SelectionTypeProductItems()
@@ -131,7 +131,7 @@ export class TypeProductComponent implements OnInit {
 
   update() {
     this.updateTypeProductRequest={"name":this.updateTypeProductResponse.name,"description":this.updateTypeProductResponse.description,
-      "parentId": this.updateTypeProductResponse.parentId, "id": this.updateTypeProductResponse.id}
+      "parentId": this.updateTypeProductResponse.parentid, "id": this.updateTypeProductResponse.id}
     console.log(this.typeProductItems.Id)
     this.typeProductService.update(this.updateTypeProductRequest).subscribe(responsse => {
       this.typeResponse = responsse as CreateResponse;

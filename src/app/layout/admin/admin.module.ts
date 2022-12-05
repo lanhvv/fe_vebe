@@ -50,6 +50,11 @@ import {CardModule} from "primeng/card";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import {ImageModule} from 'primeng/image';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
+import {CellComponent} from "./share/cell.component";
+import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
+import {Toolbar, ToolbarModule} from "primeng/toolbar";
 
 @NgModule({
   declarations: [
@@ -73,41 +78,46 @@ import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
     ReportProductComponent,
     ManageWarehouseComponent,
     ManageProfileComponent,
+    ImportExcelComponent,
+    CellComponent,
+    PrintBarcodeComponent,
     ManageUnitComponent
   ],
-    imports: [
-        CommonModule,
-        TranslateModule,
-        PaginatorModule,
-        TableModule,
-        MultiSelectModule,
-        DropdownModule,
-        HttpClientModule,
-        MatTableModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        FormsModule,
-        ReactiveFormsModule,
-        PaginatorModule,
-        FileUploadModule,
-        RouterModule,
-        PanelModule,
-        SplitterModule,
-        ChartModule,
-        ToastModule,
-        TabViewModule,
-        RippleModule,
-        MessagesModule,
-        MessageModule,
-        ProgressBarModule,
-        ConfirmDialogModule,
-        CalendarModule,
-        RadioButtonModule,
-        InputTextModule,
-        DialogModule,
-        CardModule,
-        ImageModule
-    ],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    PaginatorModule,
+    TableModule,
+    MultiSelectModule,
+    DropdownModule,
+    HttpClientModule,
+    MatTableModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PaginatorModule,
+    FileUploadModule,
+    RouterModule,
+    PanelModule,
+    SplitterModule,
+    ChartModule,
+    ToastModule,
+    TabViewModule,
+    RippleModule,
+    MessagesModule,
+    MessageModule,
+    ProgressBarModule,
+    ConfirmDialogModule,
+    CalendarModule,
+    RadioButtonModule,
+    InputTextModule,
+    DialogModule,
+    CardModule,
+    ImageModule,
+    QRCodeModule,
+    ToolbarModule
+  ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
 })

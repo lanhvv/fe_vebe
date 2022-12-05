@@ -1,11 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {CreateAccountRequest} from '../../../shared/model/request/createAccountRequest';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ManagerAccountService} from '../../../services/manager-account/manager-account.service';
 import {CreateAccountResponse} from "../../../shared/model/response/createAccountResponse";
 import {MessageService} from "primeng/api";
 
+class roleAccount{
+  id!: number;
+  role!: string;
+}
 @Component({
   selector: 'app-manage-add-account',
   templateUrl: './manage-add-account.component.html',
@@ -20,15 +24,39 @@ export class ManageAddAccountComponent implements OnInit {
   messagePhone: any;
   createAccountResponse: CreateAccountResponse;
   status: number | undefined;
+  accountForm!: FormGroup;
+  roleAccount: roleAccount[];
 
+  regexFullName = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
+  regexPassWord = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
+  regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(?!domain\.web\b)((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(
     private router: Router,
     private managerAccountService: ManagerAccountService,
-    private fb: FormBuilder,private  messageService: MessageService
+    private fb: FormBuilder,
+    private  messageService: MessageService
   ) {
     this.createAccountRequest = new CreateAccountRequest();
     this.createAccountResponse = new CreateAccountResponse();
+    this.roleAccount = [
+      {id: 1, role: 'Admin'},
+      {id: 2, role: 'Staff'}
+    ]
+  }
+
+  formAccount(){
+    this.accountForm = this.fb.group({
+      fullName: new FormControl('', [Validators.minLength(5), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexFullName)]),
+      userName: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.required]),
+      passWord: new FormControl('', [Validators.minLength(8), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexPassWord)]),
+      cccd: new FormControl('', [Validators.minLength(9), Validators.maxLength(12)]),
+      phoneNumber: new FormControl('', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)]),
+      email: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.pattern(this.regexEmail)]),
+      address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
+      role: new FormControl('', [Validators.required])
+    })
   }
 
   validation_messages = {

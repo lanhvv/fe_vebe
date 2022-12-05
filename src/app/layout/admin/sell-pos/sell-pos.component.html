@@ -19,7 +19,7 @@
           <div class="row">
             <div class="col-4">
 <!--              <input type="text" class="form-control" placeholder="Mã sản phẩm">-->
-              <p-dropdown [options]="products" optionLabel="products" [filter]="true" filterBy="product" [showClear]="true" (onFilter)="getProduct($event)"
+              <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="product" [showClear]="true" (onFilter)="getProduct($event)"
                 styleClass="searchProduct">
                 <ng-template let-product pTemplate="productItem" >
                   <div class="product float-start" (mousedown)="selectProduct(product.productCode)">
@@ -52,8 +52,8 @@
               </th>
               <th>
                 <div class="btn-group" *ngIf="item!=null">
-                  <select class="form-unit-select" aria-label="Default select example" [(ngModel)]="unitIndex" (ngModelChange)=chosseUnit(i)>
-                    <option selected *ngFor="let e of item.items;let j = index" value="{{j}}">{{e.unitName}}</option>
+                  <select class="form-unit-select" aria-label="Default select example" id="unit+{{item.importId}}+{{i}}" [(ngModel)]="unitIndex" (ngModelChange)=chosseUnit(i)>
+                    <option selected *ngFor="let e of item.items;let j = index" value="{{j}}" id="unit+{{e.unitId}}+{{e.exportId}}+{{item.importId}}+{{j}}+{{i}}">{{e.unitName}}</option>
                   </select>
                 </div>
               </th>

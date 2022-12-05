@@ -68,14 +68,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
           <tr>
-            <td ttEditableColumn>
+            <td >
               <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-              <p-treeTableCellEditor>
-                <ng-template pTemplate="input">
-                  <input pInputText type="text" >
-                </ng-template>
-                <ng-template pTemplate="output">{{rowData.name}}</ng-template>
-              </p-treeTableCellEditor>
+              {{rowData.name}}
             </td>
             <td ttEditableColumn>
               <p-treeTableCellEditor>
@@ -255,7 +250,8 @@
                     </div>
                     <div class="mb-3">
                       <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                      <textarea class="form-control" [(ngModel)]="updateTypeProductResponse.description" id="description-category" name="description" rows="3" style="resize: none;"></textarea>
+                      <textarea [(ngModel)]="updateTypeProductResponse.description" [ngModelOptions]="{standalone: true}"
+                                class="form-control" id="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3"></div>
                     <div class="col-md-3 mb-3">

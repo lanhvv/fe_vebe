@@ -111,15 +111,13 @@
           [draggable]="false" [resizable]="false">
   <div class="mb-3">
     <label for="forgot-username" class="form-label">Tên đăng nhập</label>
-    <input type="text" class="form-control" id="forgot-username" [(ngModel)]="forgotPasswordRequest.username" >
+    <input type="text" class="form-control" id="forgot-username">
   </div>
   <div class="mb-3">
     <label for="forgot-email" class="form-label">Email</label>
-    <input type="email" class="form-control" id="forgot-email" [(ngModel)]="forgotPasswordRequest.email">
+    <input type="email" class="form-control" id="forgot-email">
   </div>
   <div class="mb-3 text-center">
-    <button class="forgot-btn" (mousedown)="forgotPassWord()">Gửi yêu cầu</button>
+    <button class="forgot-btn" (click)="changePassWord()">Gửi yêu cầu</button>
   </div>
-<p-toast></p-toast>
 </p-dialog>
-

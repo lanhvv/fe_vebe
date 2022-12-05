@@ -70,35 +70,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  login(): void{
-    //const { username, password } = this.loginForm;
-    this.loginService.login({
-      username: this.loginForm.get('username')!.value,
-      password: this.loginForm.get('password')!.value,
-      // rememberMe: this.loginForm.get('rememberMe')!.value,
-    })
-      .subscribe(
-        data => {
-          this.tokenStorage.saveToken(data.token);
-          this.tokenStorage.saveUser(data);
-          this.roles = this.authService.getRolesFromToken(data.token);
-
-          if(this.roles.includes("ADMIN")){
-            this.router.navigate(['/admin']);
-            console.log("admin")
-          } else {
-            this.router.navigate(['/employee']);
-            console.log("employee")
-          }
-          // this.reloadPage();
-        },
-        err => {
-          this.errorMessage = err.error.message;
-          this.isLoginFailed = true;
-        }
-      );
-  }
-
   generateToken(){
     var basicToken= btoa(this.loginForm.get('username')!.value+":"+this.loginForm.get('password')!.value)
     //const { username, password } = this.loginForm;
@@ -115,7 +86,6 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/employee']);
             console.log("employee")
           }
-          // this.reloadPage();
         },
         err => {
           this.errorMessage = err.error.message;
@@ -138,6 +108,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  changePassWord(){
+  //  hàm xử lý, code xong nếu pass thì thêm câu lệnh này
+    this.isShowDialogForgotPass = false;
+  }
   forgotPassWord(){
   //  hàm xử lý, code xong nếu pass thì thêm câu lệnh này
   this.managerEmailService.forgotPassword(this.forgotPasswordRequest).subscribe(response => {
