@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
 import {SearchViewStallResponse} from "../../../shared/model/response/SearchViewStallResponse";
@@ -10,13 +10,16 @@ import {ExportItem} from "../../../shared/model/response/ExportItem";
 import {ProductService} from "../../../services/employee/product/product.service";
 import {ViewStallResponse} from "../../../shared/model/response/ViewStallResponse";
 import {Unit} from "../../../shared/model/Unit";
+import {BarcodeFormat} from "@zxing/library";
+import {BehaviorSubject} from "rxjs";
+import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 
 @Component({
   selector: 'app-sell-pos',
   templateUrl: './sell-pos.component.html',
   styleUrls: ['./sell-pos.component.css']
 })
-export class SellPosComponent implements OnInit {
+export class SellPosComponent implements OnInit, OnDestroy {
 
   status: number | undefined;
   language!: string;
@@ -50,6 +53,25 @@ export class SellPosComponent implements OnInit {
   currentBill = 1;
   dialogPayment: boolean = false;
 
+  dialogScanQR: boolean = false;
+  enable : boolean = true;
+  hasPermission !: boolean;
+  torchEnabled = false;
+  tryHarder = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
+  scanner !: ZXingScannerComponent;
+
+  availableDevices !: MediaDeviceInfo[];
+  currentDevice !: MediaDeviceInfo;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
+
   constructor(
     private translateService: TranslateConfigService,
     private sellOfflineService: SellOfflineService,
@@ -58,7 +80,6 @@ export class SellPosComponent implements OnInit {
     this.cartsItem=[];
     this.carts=[];
     this.cartCode="CartCode::"+(new Date().getFullYear());
-    // console.log(this.cartCode);
     this.cartItem=new CartItem();
     this.cartItem.cartCode=this.cartCode;
     this.carts.push(this.cartItem);
@@ -74,6 +95,10 @@ export class SellPosComponent implements OnInit {
     } else {
       this.checkList = false;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.enable = false;
   }
 
   getTotal() {
@@ -197,4 +222,55 @@ export class SellPosComponent implements OnInit {
   deleteProductOnCart(code: string){
     this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code)
   }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+  }
+
+  //get value scan
+  qrResultString !: string;
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    this.dialogScanQR = false;
+    console.log(this.qrResultString);
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
+
+  onDeviceSelectChange(selected: Event) {
+    this.enable = true;
+    const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
+    // @ts-ignore
+    this.currentDevice = device;
+    console.log(this.currentDevice);
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
+
+  getValue(event: Event): string {
+    console.log((event.target as HTMLInputElement).value);
+    return (event.target as HTMLInputElement).value;
+  }
+
+  enableCameraState : boolean = false;
+  enableCamera() {
+    this.enableCameraState = !this.enableCameraState;
+    if (this.enableCameraState) {
+      this.dialogScanQR = true;
+      this.enable = true;
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
+      // @ts-ignore
+      this.currentDevice = device;
+      console.log(this.currentDevice);
+    } else {
+      this.enable = false;
+      // @ts-ignore
+      this.currentDevice = undefined;
+    }
+  }
+
 }

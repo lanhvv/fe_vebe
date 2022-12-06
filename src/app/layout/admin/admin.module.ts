@@ -55,6 +55,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {PasswordModule} from "primeng/password";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 @NgModule({
   declarations: [
@@ -116,7 +117,8 @@ import {PasswordModule} from "primeng/password";
         CardModule,
         ImageModule,
         QRCodeModule,
-        PasswordModule
+        PasswordModule,
+        ZXingScannerModule,
     ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

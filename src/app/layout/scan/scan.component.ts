@@ -6,7 +6,7 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {BehaviorSubject} from "rxjs";
 
 @Component({
-  selector: 'app-register',
+  selector: 'vibee-scan',
   templateUrl: './scan.component.html',
   styleUrls: ['./scan.component.css']
 })
@@ -29,7 +29,7 @@ export class ScanComponent implements OnInit, OnDestroy {
   ];
 
 
-  enable : boolean = false;
+  enable : boolean = true;
   hasPermission !: boolean;
   torchEnabled = false;
   tryHarder = false;
@@ -42,16 +42,13 @@ export class ScanComponent implements OnInit, OnDestroy {
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
-    // this.enable = true;
-    // this.currentDevice = this.availableDevices[0];
-    // console.log(this.availableDevices[0]);
   }
 
   //get value scan
   qrResultString !: string;
   onCodeResult(resultString: string) {
     this.qrResultString = resultString;
-    // console.log(this.qrResultString);
+    console.log(this.qrResultString);
   }
 
   onHasPermission(has: boolean) {
@@ -75,20 +72,12 @@ export class ScanComponent implements OnInit, OnDestroy {
     return (event.target as HTMLInputElement).value;
   }
 
-
-  // public onerror(e: Error, s): void {
-  //   if (!!e && e.name !== 'NotFoundException') {
-  //     this.scannerStatusError(e.message);
-  //   }
-  // }
-
-
   enableCameraState : boolean = false;
   enableCamera() {
     this.enableCameraState = !this.enableCameraState;
     if (this.enableCameraState) {
       this.enable = true;
-      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[0].deviceId);
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
       // @ts-ignore
       this.currentDevice = device;
       console.log(this.currentDevice);
