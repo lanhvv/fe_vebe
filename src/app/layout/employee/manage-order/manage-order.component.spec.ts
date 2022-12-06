@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteAllComponent } from './delete-all.component';
+import { ManageOrderComponent } from './manage-order.component';
 
-describe('DeleteAllComponent', () => {
-  let component: DeleteAllComponent;
-  let fixture: ComponentFixture<DeleteAllComponent>;
+describe('ManageOrderComponent', () => {
+  let component: ManageOrderComponent;
+  let fixture: ComponentFixture<ManageOrderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteAllComponent ]
+      declarations: [ ManageOrderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DeleteAllComponent);
+    fixture = TestBed.createComponent(ManageOrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

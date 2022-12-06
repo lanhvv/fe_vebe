@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
-import {DeleteAllComponent} from "../delete-all/delete-all.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ViewStallResponse} from "../../../shared/model/response/ViewStallResponse";
 import {ViewStallResult} from "../../../shared/model/response/ViewStallResult";

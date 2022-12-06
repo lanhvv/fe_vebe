@@ -1,68 +1,54 @@
-<employee-header xmlns="http://www.w3.org/1999/html"></employee-header>
-<main>
+<employee-header xmlns="http://www.w3.org/1999/html" [Status]="status"></employee-header>
 
-  <div class="container pt-4 main-layout">
+<main>
+  <div class="container-fluid pt-4 main-layout">
     <div class="row">
-      <div class="col">
-        <h2 translate>product.manage</h2>
+      <h5>Quản lý loại sản phẩm</h5>
+    </div>
+    <div class="row">
+      <div class="col float-start">
+        <button type="button" class="root-btn" (click)="showDialog()" label="Show">Thêm mới</button>
       </div>
       <div class="col">
-        <button type="button" (click)="showDialog()" icon="pi pi-pencil" label="Show">Thêm</button>
+        <form>
+          <div class="input-group mb-3">
+            <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #name
+                   placeholder="Nhập tên danh mục">
+            <button type="button" class="buttonRoot" pButton pRipple
+                    (mousedown)="searchByName(name.value)">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-    <!-- pre-table-->
-    <section class="pre-table">
-      <div class="row">
-        <div class="col">
-        </div>
-        <div class="col">
-
-          <form>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" (change)="searchByName(name.value)" ngModel #name name="name"
-                     placeholder="Nhập name category" aria-label="Nhập name category"
-                     aria-describedby="button-search-account">
-              <button class="btn btn-outline-success" type="button" id="button-search-account"
-                      (mousedown)="searchByName(name.value)">
-                <i class="fa-solid fa-magnifying-glass"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
     <!-- table -->
     <section class="table-account">
       <p-treeTable #tt [value]="files.data" [columns]="cols">
-        <ng-template pTemplate="caption">
-          FileSystem
-        </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-
             <th ttSortableColumn="name" (mousedown)="sort('name')">
-              Name
+              Tên danh mục
               <p-treeTableSortIcon field="name"></p-treeTableSortIcon>
             </th>
             <th ttSortableColumn="description" (mousedown)="sort('description')">
-              Description
+              Mô tả
               <p-treeTableSortIcon field="description"></p-treeTableSortIcon>
             </th>
             <th ttSortableColumn="statusName" (mousedown)="sort('statusName')">
-              Status
+              Trạng thái
               <p-treeTableSortIcon field="statusName"></p-treeTableSortIcon>
             </th>
             <th ttSortableColumn="amountProduct" (mousedown)="sort('amountProduct')">
-              Amount Product
+              Số lượng hàng
               <p-treeTableSortIcon field="amountProduct"></p-treeTableSortIcon>
             </th>
             <th ttSortableColumn="creator" (mousedown)="sort('creator')">
-              Creator
+              Người tạo
               <p-treeTableSortIcon field="creator"></p-treeTableSortIcon>
             </th>
-
-            <th style="width: 8rem">
-              <p-button icon="pi pi-cog"></p-button>
+            <th>
+              Hành động
             </th>
           </tr>
         </ng-template>
@@ -85,19 +71,17 @@
             <td>{{rowData.amountProduct}}</td>
             <td ttEditableColumn>{{rowData.creator}}</td>
             <td>
-              <button label="Confirm" (mousedown)="delete(rowData.id)">
+              <button type="button" class="btn btn-primary m-1" (click)="showDialogDetail(rowData.id)">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+              <button type="button" class="btn btn-success m-1" (click)="showDialogDetailUpdate(rowData.id)">
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+              <button type="button" class="btn btn-danger m-1" (mousedown)="delete(rowData.id)">
                 <i class="fa-solid fa-trash"></i>
               </button>
-              <button type="button" (click)="showDialogDetail(rowData.id)" icon="pi pi-trash" label="Show">Thêm</button>
-              <button type="button" (click)="showDialogDetailUpdate(rowData.id)" icon="pi pi-trash" label="Show">Sửa</button>
-
             </td>
           </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-          <div style="text-align:left">
-            <p-button icon="pi pi-refresh"></p-button>
-          </div>
         </ng-template>
       </p-treeTable>
       <p-paginator [rows]="10" [totalRecords]="files.totalItems" [rowsPerPageOptions]="[10,25,50]"
@@ -111,175 +95,103 @@
   <employee-footer></employee-footer>
 </main>
 
-<p-dialog header="Title" [(visible)]="display">
-  <div class="container pt-4 main-layout">
-    <section class="table-account">
-      <div class="row mt-1">
-        <div class="col-lg-12 col-sm-12">
-          <div class="container bg-white mt-3 mb-5" style="border-radius: 2%">
-            <h2 mat-dialog-title class="text-center mt-3" style="color: darkblue; font-size: 35px">Thêm Category</h2>
-            <div class="row mt-3">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                <form class="row g-3 was-validated">
-                  <div class="row">
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Name Category</label>
-                      <input [(ngModel)]="typeRequest.name" [ngModelOptions]="{standalone: true}" type="text"
-                             class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                      <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
-                                class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3"></div>
-                    <h5>Category chính</h5>
-                    <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
-                                optionLabel="name" [filter]="true" filterBy="name"
-                                [showClear]="true" placeholder="Select a Country">
-                      <ng-template pTemplate="selectedItem">
-                        <div class="country-item country-item-value" *ngIf="category">
-                          <div>{{category.name}}</div>
-                        </div>
-                      </ng-template>
-                      <ng-template let-category pTemplate="item">
-                        <div class="country-item">
-                          <div>{{category.name}}</div>
-                        </div>
-                      </ng-template>
-                    </p-dropdown>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success" (mousedown)="create()"
-                      >Thêm
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success"
-                      >Hủy
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3"></div>
-                  </div>
-                  <div class="row">
-
-                  </div>
-
-                </form>
-              </div>
-              <div class="col-lg-2"></div>
+<p-dialog header="Thêm mới danh mục" [(visible)]="display" [modal]="true" [style]="{width: '50vw'}">
+  <form>
+    <div class="row">
+      <div class="mb-3">
+        <label for="name-category" class="form-label">Tên danh mục</label>
+        <input [(ngModel)]="typeRequest.name" [ngModelOptions]="{standalone: true}" type="text"
+               class="form-control" id="name-category">
+      </div>
+      <div class="mb-3">
+        <label for="description-category" class="form-label">Mô tả</label>
+        <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
+                  class="form-control" id="description-category" rows="3"></textarea>
+      </div>
+      <div class="mb-3" style="width: 300px;">
+        <label class="form-label">Danh mục chính</label>
+        <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
+                    optionLabel="name" [filter]="true" filterBy="name"
+                    [showClear]="true" styleClass="dropdown-select">
+          <ng-template pTemplate="selectedItem">
+            <div class="country-item country-item-value" *ngIf="category">
+              <div>{{category.name}}</div>
             </div>
-          </div>
+          </ng-template>
+          <ng-template let-category pTemplate="item">
+            <div class="country-item">
+              <div>{{category.name}}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="row text-center">
+        <div class="col">
+          <button type="submit" class="root-btn me-2" (mousedown)="create()">
+            Thêm mới
+          </button>
+          <button type="submit" class="btn btn-outline-primary">
+            Hủy
+          </button>
         </div>
       </div>
-    </section>
-  </div>
-
+    </div>
+  </form>
 </p-dialog>
 
-<p-dialog header="Title" [(visible)]="displaydetail">
-
-  <div class="container pt-4 main-layout">
-    <section class="table-account">
-      <div class="row mt-1">
-        <div class="col-lg-12 col-sm-12">
-          <div class="container bg-white mt-3 mb-5" style="border-radius: 2%">
-            <h2 mat-dialog-title class="text-center mt-3" style="color: darkblue; font-size: 35px">Thêm Category</h2>
-            <div class="row mt-3">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                <form class="row g-3 was-validated">
-                  <div class="row">
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Name Category</label>
-                      <input [(ngModel)]="typeDetailRequest.name" [ngModelOptions]="{standalone: true}" type="text"
-                             class="form-control" id="exampleFormControlInput" placeholder="name@example.com">
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                      <textarea [(ngModel)]="typeDetailRequest.description" [ngModelOptions]="{standalone: true}"
-                                class="form-control" id="exampleFormControlTextarea" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3"></div>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success" (mousedown)="createDetail()"
-                      >Thêm
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success"
-                      >Hủy
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3"></div>
-                  </div>
-                  <div class="row">
-
-                  </div>
-
-                </form>
-              </div>
-              <div class="col-lg-2"></div>
-            </div>
-          </div>
+<p-dialog header="Xem thông tin chi tiết" [(visible)]="displaydetail" [modal]="true" [style]="{width: '50vw'}">
+  <form>
+    <div class="row">
+      <div class="mb-3">
+        <label for="detail-name-category" class="form-label">Tên danh mục</label>
+        <input [(ngModel)]="typeDetailRequest.name" [ngModelOptions]="{standalone: true}" type="text"
+               class="form-control" id="detail-name-category">
+      </div>
+      <div class="mb-3">
+        <label for="detail-des-category" class="form-label">Mô tả</label>
+        <textarea [(ngModel)]="typeDetailRequest.description" [ngModelOptions]="{standalone: true}"
+                  class="form-control" id="detail-des-category" rows="3"></textarea>
+      </div>
+      <div class="row text-center">
+        <div class="col">
+          <button type="submit" class="root-btn me-2" (mousedown)="create()">
+            Thêm mới
+          </button>
+          <button type="submit" class="btn btn-outline-primary">
+            Hủy
+          </button>
         </div>
       </div>
-    </section>
-  </div>
-
+    </div>
+  </form>
 </p-dialog>
 
-<p-dialog header="Title" [(visible)]="updateType">
-
-  <div class="container pt-4 main-layout">
-    <section class="table-account">
-      <div class="row mt-1">
-        <div class="col-lg-12 col-sm-12">
-          <div class="container bg-white mt-3 mb-5" style="border-radius: 2%">
-            <h2 mat-dialog-title class="text-center mt-3" style="color: darkblue; font-size: 35px">Thêm Category</h2>
-            <div class="row mt-3">
-              <div class="col-lg-2"></div>
-              <div class="col-lg-8">
-                <form class="row g-3 was-validated">
-                  <div class="row">
-
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">Name Category</label>
-                      <input [(ngModel)]="updateTypeProductResponse.name" [ngModelOptions]="{standalone: true}" type="text"
-                             class="form-control" id="name" placeholder="Name">
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                      <textarea [(ngModel)]="updateTypeProductResponse.description" [ngModelOptions]="{standalone: true}"
-                                class="form-control" id="description" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3"></div>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success" (mousedown)="update()"
-                      >Update
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                      <button type="submit" class="btn btn-success"
-                      >Hủy
-                      </button>
-                    </div>
-                    <div class="col-md-3 mb-3"></div>
-                  </div>
-                  <div class="row">
-
-                  </div>
-
-                </form>
-              </div>
-              <div class="col-lg-2"></div>
-            </div>
-          </div>
+<p-dialog header="Chỉnh sửa thông tin danh mục" [(visible)]="updateType" [modal]="true" [style]="{width: '50vw'}">
+  <form>
+    <div class="row">
+      <div class="mb-3">
+        <label for="update-name-category" class="form-label">Tên danh mục</label>
+        <input [(ngModel)]="updateTypeProductResponse.name" [ngModelOptions]="{standalone: true}" type="text"
+               class="form-control" id="update-name-category">
+      </div>
+      <div class="mb-3">
+        <label for="update-des-category" class="form-label">Mô tả</label>
+        <textarea [(ngModel)]="updateTypeProductResponse.description" [ngModelOptions]="{standalone: true}"
+                  class="form-control" id="update-des-category" rows="3"></textarea>
+      </div>
+      <div class="row text-center">
+        <div class="col">
+          <button type="submit" class="root-btn me-2" (mousedown)="create()">
+            Thêm mới
+          </button>
+          <button type="submit" class="btn btn-outline-primary">
+            Hủy
+          </button>
         </div>
       </div>
-    </section>
-  </div>
-
+    </div>
+  </form>
 </p-dialog>
 
 

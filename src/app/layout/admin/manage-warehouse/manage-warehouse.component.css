@@ -50,11 +50,51 @@ main {
   background: white;
 }
 
->>> .inputCalendar, .input-file {
+>>> .inputCalendar {
   width: 460px;
+}
+
+.input-file{
+  width: 200px;
+  height: 40px;
+  border: 1px solid #0061C1;
+  outline: none;
 }
 
 >>> .p-calendar .p-datepicker {
   top: -136px !important;
   left: -460px !important;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.box-file-upload{
+  background: #d3e7ff;
+  width: 100%;
+  padding: 50px;
+  border: 3px dashed #8fd9ea;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+
+label.file-upload-btn {
+  width: 182px;
+  height: 120px;
+  background-image: url(http://www.pngall.com/wp-content/uploads/2/Upload-PNG-Image-File.png);
+  background-size: cover;
+  background-position: center center;
+  background-origin: border-box;
+  background-repeat: no-repeat;
 }
