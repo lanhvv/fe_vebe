@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MessageService} from "primeng/api";
 import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {HttpClient} from "@angular/common/http";
 type AOV = any[][];
 
 @Component({
@@ -21,8 +22,10 @@ export class ManageWarehouseComponent implements OnInit {
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'SheetJS.xlsx';
   excelForm!: FormGroup;
+  url: string | ArrayBuffer | null = '';
+  enableImage: boolean = false;
 
-  constructor(private messageService: MessageService, private fb: FormBuilder) {
+  constructor(private messageService: MessageService, private fb: FormBuilder, private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -59,7 +62,7 @@ export class ManageWarehouseComponent implements OnInit {
     this.listUnit = this.listUnit.filter(x => x !== index);
   }
 
-//  upload file
+//  upload file excel
   onFileChange(evt: any){
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>evt.target;
@@ -91,5 +94,22 @@ export class ManageWarehouseComponent implements OnInit {
       }
     };
     reader.readAsBinaryString(target.files[0]);
+  }
+
+  onFileSelectedImage(event: any){
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = (event: ProgressEvent) => {
+        this.url = (<FileReader>event.target).result;
+        this.enableImage = true;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  changeImage(){
+    this.url = '';
+    this.enableImage = false;
   }
 }

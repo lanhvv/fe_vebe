@@ -39,8 +39,12 @@
           <a href="#" [ngClass]="{'active': Status === 4 }" class="text-black text-decoration-none">Đơn vị bán lẻ</a>
         </div>
         <div class="order-5 p-2 bd-highlight me-3">
-          <i class="fa-solid fa-chart-line me-2"></i>
-          <a routerLink="/employee/report" [ngClass]="{'active': Status === 5 }" class="text-black text-decoration-none">Báo cáo</a>
+          <i class="fa-solid fa-list-check me-2"></i>
+          <a routerLink="/employee/type-product" [ngClass]="{'active': Status === 6 }" class="text-black text-decoration-none">Danh mục sản phẩm</a>
+        </div>
+        <div class="order-6 p-2 bd-highlight me-3">
+          <i class="fa-brands fa-first-order me-2"></i>
+          <a routerLink="/employee/manage-order" [ngClass]="{'active': Status === 5 }" class="text-black text-decoration-none">Đơn hàng</a>
         </div>
       </div>
     </div>

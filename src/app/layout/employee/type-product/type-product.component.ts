@@ -48,7 +48,9 @@ export class TypeProductComponent implements OnInit {
   updateTypeProductResponse: UpdateTypeProductResponse
 
   cols!: any[];
-  id: any
+  id: any;
+
+  status: number = 0;
 
   constructor(private typeProductService: TypeProductService, private router: Router, private confirmationService: ConfirmationService,
               private messageService: MessageService, private activatedRoute: ActivatedRoute) {
@@ -66,6 +68,7 @@ export class TypeProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.status = 6;
     this.getall();
     this.typeProductService.getFilesystem().subscribe((response) =>
       this.filesType = response as SelectionTypeProductItemsResponse

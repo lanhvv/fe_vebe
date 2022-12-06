@@ -128,19 +128,15 @@
       <div class="row">
         <div class="mb-3">
           <label class="form-label">Ảnh sản phẩm <span class="text-danger">Chỉ nhập tối đa 1 ảnh</span></label> <br>
-          <p-fileUpload #fubauto
-                        mode="basic"
-                        name="mypic[]"
-                        url="./upload.php"
-                        accept="image/*"
-                        (onUpload)="onUpload($event)"
-                        [auto]="true"
-                        chooseLabel="Tải lên"
-                        chooseIcon="pi pi-upload">
-            <ng-template pTemplate="content" let-files>
-              <div>Additional content.</div>
-            </ng-template>
-          </p-fileUpload>
+          <div class="custom-file-upload" *ngIf="!enableImage">
+            <label>
+              <input type="file" (change)="onFileSelectedImage($event)">
+              <i class="fa fa-cloud-upload"></i> Custom Upload
+            </label>
+          </div>
+          <button class="root-btn" *ngIf="enableImage" (click)="changeImage()">Thay đổi ảnh</button>
+          <br>
+          <img [src]="url" style="width: 200px; height: 200px; margin-top: 10px" *ngIf="enableImage">
         </div>
       </div>
       <div class="row">
