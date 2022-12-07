@@ -1,18 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "24c29a4d-089b-4591-830b-656d31086e3f"
-  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "VibeeFE": {
+    "vibee": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -20,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/VibeeFE",
+            "outputPath": "dist/vibee",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -30,13 +23,10 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              { "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css" },
               "src/styles.css",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
-
             ],
             "scripts": []
           },
@@ -62,20 +52,6 @@
               ],
               "outputHashing": "all"
             },
-            "remoteDevelopment": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
-              ]
-            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -91,13 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "VibeeFE:build:production"
+              "browserTarget": "vibee:build:production"
             },
             "development": {
-              "browserTarget": "VibeeFE:build:development"
-            },
-            "remoteDevelopment": {
-              "browserTarget": "VibeeFE:build:remoteDevelopment"
+              "browserTarget": "vibee:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -105,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "VibeeFE:build"
+            "browserTarget": "vibee:build"
           }
         },
         "test": {
@@ -120,7 +93,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
           }
@@ -128,5 +104,9 @@
       }
     }
   },
-  "defaultProject": "VibeeFE"
+  "cli": {
+    "analytics": "a53f2439-90fa-41fd-895a-a4d901b258c0"
+  }
+
+
 }

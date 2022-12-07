@@ -3,7 +3,7 @@ const htmlToPdfmake = require("html-to-pdfmake");
 const pdfMake = require('pdfmake/build/pdfmake.js');
 const pdfFonts = require('pdfmake/build/vfs_fonts.js');
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
+declare var require: any
 @Component({
   selector: 'app-print-barcode',
   templateUrl: './print-barcode.component.html',

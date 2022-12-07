@@ -8,7 +8,7 @@ import {GetProductsRequest} from "../../../shared/model/request/GetProductsReque
   providedIn: 'root'
 })
 export class ProductService {
-  api="http://172.16.36.191:1507/vibee/api/v1/product";
+  api="http://localhost:1507/vibee/api/v1/product";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -23,7 +23,11 @@ export class ProductService {
     return this.httpClient.get(this.api+"/view-stall?searchValue="+searchValue+"&language="+language, this.httpOptions);
   }
 
-  selectProduct(language:string,productId:number,cartId:number){
-    return this.httpClient.get(this.api+`/selected/${productId}/${cartId}?language=`+language, this.httpOptions);
+  selectProduct(language:string,productCode:string,cartId:string){
+    return this.httpClient.get(this.api+`/selected/${productCode}/${cartId}?language=`+language, this.httpOptions);
+  }
+
+  changeBill(language:string,productCode:string,cartId:string){
+    return this.httpClient.post(this.api+`/selected/${productCode}/${cartId}?language=`+language, this.httpOptions);
   }
 }

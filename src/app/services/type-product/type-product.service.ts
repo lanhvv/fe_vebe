@@ -16,6 +16,7 @@ const AUTH_API = environment.base;
 })
 export class TypeProductService {
   api = "http://localhost:1507/vibee/api/v1/auth";
+  apiCategory = AUTH_API+"vibee/api/v1/catalog";
   readonly URL = AUTH_API+"vibee/api/v1/auth";
   readonly URLSELECTION = AUTH_API+"vibee/api/v1/auth/getAllSelectType";
   deleteTypeProductRequest!: DeleteTypeProductRequest;
@@ -61,5 +62,13 @@ export class TypeProductService {
   }
   createDetail(request: CreateTypeProductDetailRequest): Observable<any>{
     return this.httpClient.post<any>(this.URL+'/createTyProductDetail', request,this.httpOptions);
+  }
+
+  getTypeProducts(language:string){
+    return this.httpClient.get(this.apiCategory+'/type-product/get-all?language='+language,this.httpOptions);
+  }
+
+  getUnits(language:string){
+    return this.httpClient.get(this.apiCategory+'/unit/get-all?language='+language,this.httpOptions);
   }
 }

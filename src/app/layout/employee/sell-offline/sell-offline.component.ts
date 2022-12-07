@@ -58,7 +58,6 @@ export class SellOfflineComponent implements OnInit {
     this.status = 2;
   }
   getProduct(input:Event){
-    console.log(input)
     this.search=input
     this.productService.search(this.language,this.search.filter).subscribe(response=>{
       this.productResponse=response as ViewStallResponse;
@@ -69,8 +68,8 @@ export class SellOfflineComponent implements OnInit {
     })
   }
 
-  selectProduct(id:number){
-    this.productService.selectProduct(this.language,id,0).subscribe(response=>{
+  selectProduct(productCode:string){
+    this.productService.selectProduct(this.language,productCode,"0").subscribe(response=>{
       this.productSelected=response as SelectProductResponse;
       if (this.productSelected.status.status==="1"){
         this.cartsItem.push(this.productSelected.result);
