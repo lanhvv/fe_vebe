@@ -87,4 +87,5 @@ main {
 
 >>> .dropdown-unit-product {
   height: 40px !important;
+  width: 100%;
 }

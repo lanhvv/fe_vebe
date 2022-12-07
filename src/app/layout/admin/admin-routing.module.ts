@@ -45,16 +45,7 @@ export const AdminRouting: Route[] = [
       },
       {
         path: 'manage-product',
-        children: [
-          {
-            path: '',
-            component: ManageProductComponent
-          },
-          {
-            path: 'print-barcode',
-            component: PrintBarcodeComponent
-          }
-        ]
+        component: ManageProductComponent
       },
       {
         path: 'sell-pos',
@@ -74,7 +65,16 @@ export const AdminRouting: Route[] = [
       },
       {
         path: 'manage-warehouse',
-        component: ManageWarehouseComponent
+        children: [
+          {
+            path: '',
+            component: ManageWarehouseComponent
+          },
+          {
+            path: 'print-barcode',
+            component: PrintBarcodeComponent
+          }
+        ]
       },
       {
         path: 'manage-warehouse/upload-file',

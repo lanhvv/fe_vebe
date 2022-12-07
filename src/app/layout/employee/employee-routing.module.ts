@@ -4,6 +4,7 @@ import {SellOfflineComponent} from "./sell-offline/sell-offline.component";
 import {ReportComponent} from "./report/report.component";
 import {TypeProductComponent} from "./type-product/type-product.component";
 import {ManageOrderComponent} from "./manage-order/manage-order.component";
+import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 
 export const EmployeeRouting: Route[] = [
   {
@@ -30,10 +31,13 @@ export const EmployeeRouting: Route[] = [
         path: 'type-product',
         component: TypeProductComponent
       },
-
       {
         path: 'manage-order',
         component: ManageOrderComponent
+      },
+      {
+        path: 'manage-profile',
+        component: ManageProfileComponent
       },
     ]
   }

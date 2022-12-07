@@ -18,6 +18,13 @@ main {
   border-radius: 5px;
 }
 
+.root-btn-table{
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
 .root-btn-outline {
   width: 183px;
   height: 40px;
