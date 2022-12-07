@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseApi: 'http://localhost:1507/vibee/api/v1/',
+  // baseApi: 'https://6ac20b190b08d1.lhr.life:80/vibee/api/v1/',
   // baseApi: 'http://localhost:1507/',
   baseApiAdmin: 'http://localhost:1507/vibee/api/v1/admins/',
   base: 'http://localhost:1507/'
