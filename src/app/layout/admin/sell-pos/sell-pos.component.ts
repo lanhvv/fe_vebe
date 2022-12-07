@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
 import {SearchViewStallResponse} from "../../../shared/model/response/SearchViewStallResponse";
@@ -69,7 +69,10 @@ export class SellPosComponent implements OnInit, OnDestroy {
   scanner !: ZXingScannerComponent;
 
   availableDevices !: MediaDeviceInfo[];
-  currentDevice !: MediaDeviceInfo;
+  currentDevice !: MediaDeviceInfo | undefined;
+  enableCameraState : boolean = false;
+
+  dialogExportBill: boolean = false;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -106,6 +109,7 @@ export class SellPosComponent implements OnInit, OnDestroy {
     } else {
       this.checkList = false;
     }
+    this.enableCamera();
   }
 
   ngOnDestroy(): void {
@@ -163,22 +167,18 @@ export class SellPosComponent implements OnInit, OnDestroy {
     }
   }
 
-  // addBill() {
-  //   if (this.listBill.length == 10) {
-  //     this.isButtonPOS = true;
-  //   } else {
-  //     let lastNumber = this.listBill[this.listBill.length - 1];
-  //     this.listBill.push(++lastNumber);
-  //     this.listDetailBill.push(lastNumber);
-  //   }
-  // }
+  addBill() {
+    if (this.listBill.length == 10) {
+      this.isButtonPOS = true;
+    } else {
+      let lastNumber = this.listBill[this.listBill.length - 1];
+      this.listBill.push(++lastNumber);
+      this.listDetailBill.push(lastNumber);
+    }
+  }
 
   choosePayment() {
-    if (this.selectedValue == 'money') {
-      this.isPayment = true;
-    } else {
-      this.isPayment = false;
-    }
+    this.isPayment = this.selectedValue == 'money';
   }
 
   changeBill(index: number) {
@@ -299,6 +299,8 @@ export class SellPosComponent implements OnInit, OnDestroy {
         alert("Thanh toán thành công");
       }
     })
+    this.dialogPayment = false;
+    this.dialogExportBill = true;
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -310,6 +312,7 @@ export class SellPosComponent implements OnInit, OnDestroy {
   onCodeResult(resultString: string) {
     this.qrResultString = resultString;
     this.dialogScanQR = false;
+    this.currentDevice = undefined;
     console.log(this.qrResultString);
   }
 
@@ -334,21 +337,28 @@ export class SellPosComponent implements OnInit, OnDestroy {
     return (event.target as HTMLInputElement).value;
   }
 
-  enableCameraState : boolean = false;
   enableCamera() {
     this.enableCameraState = !this.enableCameraState;
     if (this.enableCameraState) {
-      this.dialogScanQR = true;
       this.enable = true;
       const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
-      // @ts-ignore
       this.currentDevice = device;
       console.log(this.currentDevice);
     } else {
       this.enable = false;
-      // @ts-ignore
       this.currentDevice = undefined;
     }
   }
 
+  openDialogScan(){
+    this.enableCamera();
+    setTimeout(() => {
+      this.dialogScanQR = true;
+    });
+  }
+
+  exportBill(){
+  //  xử lý xuất bill file pdf
+    this.dialogExportBill = false;
+  }
 }
