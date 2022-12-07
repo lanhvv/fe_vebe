@@ -64,6 +64,7 @@ export class SellPosComponent implements OnInit, OnDestroy {
 
   availableDevices !: MediaDeviceInfo[];
   currentDevice !: MediaDeviceInfo;
+  enableCameraState : boolean = false;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -95,6 +96,7 @@ export class SellPosComponent implements OnInit, OnDestroy {
     } else {
       this.checkList = false;
     }
+    this.enableCamera();
   }
 
   ngOnDestroy(): void {
@@ -256,7 +258,6 @@ export class SellPosComponent implements OnInit, OnDestroy {
     return (event.target as HTMLInputElement).value;
   }
 
-  enableCameraState : boolean = false;
   enableCamera() {
     this.enableCameraState = !this.enableCameraState;
     if (this.enableCameraState) {
