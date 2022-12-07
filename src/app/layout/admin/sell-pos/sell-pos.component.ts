@@ -125,7 +125,7 @@ export class SellPosComponent implements OnInit {
     }
     this.sumPrice=0;
     for (let i=0; i<this.viewBillRequest.detailBills.length; i++) {
-      this.sumPrice+=(this.viewBillRequest.detailBills[i].outPrice*this.viewBillRequest.detailBills[i].amount);
+      this.sumPrice+=(this.viewBillRequest.detailBills[i].export.outPrice*this.viewBillRequest.detailBills[i].amount);
     }
     return this.sumPrice;
   }
@@ -179,14 +179,12 @@ export class SellPosComponent implements OnInit {
         this.createDetailBillResult=new CreateDetailBillResult()
         this.createDetailBillResult.productCode=this.productSelected.result.productCode;
         this.createDetailBillResult.productId=this.productSelected.result.productId;
-        this.createDetailBillResult.unitId=this.productSelected.result.items[this.productSelected.result.items.length-1].unitId;
         this.createDetailBillResult.img=this.productSelected.result.img;
         this.createDetailBillResult.productName=this.productSelected.result.productName;
         this.createDetailBillResult.amount=this.productSelected.result.amount;
-        this.createDetailBillResult.outPrice=this.productSelected.result.items[this.productSelected.result.items.length-1].outPrice;
         this.createDetailBillResult.importId=this.productSelected.result.importId;
         this.createDetailBillResult.barCode=this.productSelected.result.barCode;
-        this.createDetailBillResult.exportId=this.productSelected.result.items[this.productSelected.result.items.length-1].exportId;
+        this.createDetailBillResult.export=this.productSelected.result.items[this.productSelected.result.items.length-1];
         if (this.viewBillRequest==null){
           this.viewBillRequest=new ViewBillRequest();
           this.viewBillRequest.detailBills=[this.createDetailBillResult];
@@ -244,16 +242,16 @@ export class SellPosComponent implements OnInit {
     this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code)
   }
 
-  chosseUnit(identity:number){
-    console.log(this.unitIndex);
-    this.viewBillRequest.detailBills[identity].unitId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].unitId;
-    this.sumPrice-=this.viewBillRequest.detailBills[identity].outPrice;
-    this.viewBillRequest.detailBills[identity].outPrice=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].outPrice;
-    this.viewBillRequest.detailBills[identity].exportId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].exportId;
-    this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-      console.log(response);
-    })
-  }
+  // chosseUnit(identity:number){
+  //   console.log(this.unitIndex);
+  //   this.viewBillRequest.detailBills[identity].unitId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].unitId;
+  //   this.sumPrice-=this.viewBillRequest.detailBills[identity].outPrice;
+  //   this.viewBillRequest.detailBills[identity].outPrice=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].outPrice;
+  //   this.viewBillRequest.detailBills[identity].exportId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].exportId;
+  //   this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
+  //     console.log(response);
+  //   })
+  // }
 
   changeAmount(){
     this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{

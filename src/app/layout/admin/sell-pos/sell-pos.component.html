@@ -50,13 +50,19 @@
               <th>
                 {{item.productName}}
               </th>
-              <th>
-                <div class="btn-group" *ngIf="item!=null">
-                  <select class="form-unit-select" aria-label="Default select example" id="unit+{{item.importId}}+{{i}}" [(ngModel)]="unitIndex" (ngModelChange)=chosseUnit(i)>
-                    <option selected *ngFor="let e of item.items;let j = index" value="{{j}}" id="unit+{{e.unitId}}+{{e.exportId}}+{{item.importId}}+{{j}}+{{i}}">{{e.unitName}}</option>
-                  </select>
-                </div>
-              </th>
+              <td *ngIf="this.item!=null">
+                <p-dropdown [options]="this.item.items" [(ngModel)]="this.viewBillRequest.detailBills[i].export" optionLabel="unitName" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category">
+                  <ng-template pTemplate="selectedItem">
+                    <div class="supplier-item supplier-item-value" *ngIf="this.viewBillRequest.detailBills[i].export">
+                      <div>{{this.viewBillRequest.detailBills[i].export.unitName}}</div>
+                    </div>
+                  </ng-template>
+                  <ng-template let-category pTemplate="item">
+                    <div class="supplier">
+                      <div>{{category.unitName}}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown></td>
               <th>
                 <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
                   <p-inputNumber
@@ -68,12 +74,12 @@
               </th>
               <th>
                 <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-                  {{viewBillRequest.detailBills[i].outPrice | number:'1.0-0'}}
+                  {{viewBillRequest.detailBills[i].export.outPrice | number:'1.0-0'}}
                 </div>
               </th>
               <th>
                 <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-                  {{viewBillRequest.detailBills[i].outPrice * viewBillRequest.detailBills[i].amount | number:'1.0-0'}}
+                  {{viewBillRequest.detailBills[i].export.outPrice * viewBillRequest.detailBills[i].amount | number:'1.0-0'}}
                 </div>
               </th>
             </tr>

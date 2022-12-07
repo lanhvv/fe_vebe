@@ -1,5 +1,5 @@
+<p-toast></p-toast>
 <div class="container-fluid">
-  <p-toast></p-toast>
   <div class="content">
     <div class="row">
       <div class="float-start mb-3">
@@ -16,14 +16,13 @@
         </a>
       </div>
     </div>
-
     <div class="row">
       <div class="col-2"></div>
       <div class="col-8">
         <div class="note">
           <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status==='1'">
             <label class="form-label">Chọn nhà cung cấp</label>
-            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier">
+            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="chọn nhà cung cấp" (ngModelChange)="chooseSupplier()" )>
               <ng-template pTemplate="selectedItem">
                 <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
                   <div>{{selectedSupplier.supplierName}}</div>
@@ -50,14 +49,11 @@
       <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
           <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-          <button pButton pRipple label="xóa" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+          <button pButton pRipple label="xóa" icon="pi pi-trash" class="p-button-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
         </ng-template>
         <ng-template pTemplate="right">
-<!--          <p-fileUpload mode="basic" [maxFileSize]="1000000" label="chọn file" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>-->
-<!--          </p-fileUpload>-->
-
-          <p-fileUpload (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Import" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()"></p-fileUpload>
-          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help"></button>
+          <p-fileUpload (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Import" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()" [disabled]="!selectedSupplier"></p-fileUpload>
+          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help" [disabled]="!selectedProducts || !selectedProducts.length" (mousedown)="import()" ></button>
         </ng-template>
       </p-toolbar>
       <div class="text-note" *ngIf="this.productResponse==null || this.productResponse.status.status=='1'">
@@ -65,22 +61,23 @@
         <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
         <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
       </div>
-      <p-table *ngIf="this.productResponse!=null && this.productResponse.status.status=='0'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" [tableStyle]="{'min-width': '75rem'}"
+      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" [tableStyle]="{'min-width': '75rem'}"
                [(selection)]="selectedProducts" [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
         <ng-template pTemplate="header">
           <tr>
             <th style="width: 4rem">
+            </th>
+            <th style="width: 4rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th>Image</th>
-            <th pSortableColumn="rating">mã sản phẩm <p-sortIcon field="productCode"></p-sortIcon></th>
-            <th pSortableColumn="price">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
-            <th pSortableColumn="rating">QR CODE <p-sortIcon field="QrCode"></p-sortIcon></th>
-            <th pSortableColumn="rating">mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
-            <th pSortableColumn="rating">loại sản phẩm <p-sortIcon field="categury"></p-sortIcon></th>
-            <th pSortableColumn="rating">ngày hết hạn <p-sortIcon field="rangeDate"></p-sortIcon></th>
-            <th pSortableColumn="rating">đơn vị</th>
-            <th pSortableColumn="rating">thao tác</th>
+            <th pSortableColumn="productName">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
+            <th pSortableColumn="BarCode">mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
+            <th pSortableColumn="categury">loại sản phẩm <p-sortIcon field="categury"></p-sortIcon></th>
+            <th pSortableColumn="rangeDate">ngày hết hạn <p-sortIcon field="rangeDate"></p-sortIcon></th>
+            <th pSortableColumn="inAmount">số lượng <p-sortIcon field="inAmount"></p-sortIcon></th>
+            <th>đơn vị</th>
+            <th pSortableColumn="inPrice">tổng tiền <p-sortIcon field="inPrice"></p-sortIcon></th>
+            <th>thao tác</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product let-expanded="expanded">
@@ -91,66 +88,113 @@
             <td>
               <p-tableCheckbox [value]="product"></p-tableCheckbox>
             </td>
-            <td>{{product.productCode}}</td>
-            <td>{{product.productName}}</td>
-            <td>{{product.qrCode}}</td>
-            <td>{{product.barCode}}</td>
-            <td>{{product.typeProduct}}</td>
-            <td>{{product.rangeDate}}</td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.productName" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.productName}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
-              <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier">
+                  {{product.barcode}}
+            </td>
+            <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
+              <p-dropdown [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
-                    <div>{{selectedSupplier.supplierName}}</div>
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
+                    <div>{{this.product.typeProduct.name}}</div>
                   </div>
                 </ng-template>
-                <ng-template let-supplier pTemplate="item">
+                <ng-template let-category pTemplate="item">
                   <div class="supplier">
-                    <div>{{supplier.supplierName}}</div>
+                    <div>{{category.name}}</div>
                   </div>
                 </ng-template>
               </p-dropdown></td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.rangeDates" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.rangeDates}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.inAmount" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.inAmount}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
+              <p-dropdown [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Unit">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                    <div>{{product.unit.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-unit pTemplate="item">
+                  <div class="unit" (mousedown)="selectUnit(product)" >
+                    <div>{{unit.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.inPrice">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.inPrice}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
               <td>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
               </td>
             </tr>
-          </ng-template>
+        </ng-template>
         <ng-template pTemplate="rowexpansion" let-product>
           <tr>
             <td colspan="7">
               <div class="p-3">
-                <p-table [value]="product.orders" dataKey="id">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>đơn vị</th>
-                      <th>giá nhập</th>
-                      <th>giá bán</th>
-                      <th>hành động</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-export>
-                    <tr>
+                <table>
+                  <thead>
+                    <th>đơn vị</th>
+                    <th>giá nhập</th>
+                    <th>giá bán</th>
+                    <th>thao tác</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
-                      <td>{{export.inPrice| currency:'VND'}}</td>
-                      <td>{{export.outPrice| currency:'VND'}}</td>
-                      <td><p-button type="button" icon="pi pi-delete"></p-button></td>
+                      <td><input type="number" [(ngModel)]="export.inPrice" id="in-price"></td>
+                      <td><input type="number" [(ngModel)]="export.outPrice" id="out-price"></td>
+                      <td>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteExport(export,product)"></button>
+                      </td>
                     </tr>
-                  </ng-template>
-              <ng-template pTemplate="emptymessage">
-                <tr>
-                  <td colspan="6">There are no order for this product yet.</td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-      <div class="flex align-items-center justify-content-between">
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex align-items-center justify-content-between">
             In total there are {{this.productResponse.products ? productResponse.products.length : 0 }} products.
           </div>
-    </ng-template>
-  </p-table>
+        </ng-template>
+      </p-table>
   </div>
 </div>
+</div>
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

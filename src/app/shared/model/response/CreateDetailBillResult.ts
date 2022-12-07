@@ -8,7 +8,6 @@ export class CreateDetailBillResult {
   img!:String;
   amount!:number;
   productCode!:String;
-  unitId!:number;
-  outPrice!:number;
-  exportId!:number;
+  export!:ExportItem;
+
 }

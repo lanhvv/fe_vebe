@@ -1,4 +1,6 @@
 import {ExportResult} from "../v_export/ExportResult";
+import {GetTypeProductResult} from "../v_type_product/GetTypeProductResult";
+import {GetUnitResult} from "../v_unit/GetUnitResult";
 
 export class ImportProductResult{
   id!: number;
@@ -13,11 +15,11 @@ export class ImportProductResult{
   supplierId!: number;
   img!: string;
   inPrice!: number;
-  typeProduct!: number;
-  barCode!: string;
+  typeProduct!: GetTypeProductResult;
+  barcode!: string;
   productCode!: string;
-  unitId!: number;
-  export!:ExportResult[];
+  unit!: GetUnitResult;
+  exports!:ExportResult[];
   creator!: string;
-  rangeDate!: string;
+  rangeDates!: string;
 }
