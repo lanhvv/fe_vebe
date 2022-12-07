@@ -4,7 +4,6 @@ import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 type AOV = any[][];
-
 @Component({
   selector: 'app-manage-warehouse',
   templateUrl: './manage-warehouse.component.html',

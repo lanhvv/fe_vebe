@@ -3,4 +3,5 @@ export class ProductStallResult{
   productName!:String;
   barCode!:String;
   img!:String;
+  productCode!:String;
 }

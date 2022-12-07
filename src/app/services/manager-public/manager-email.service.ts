@@ -10,7 +10,7 @@ const AUTH_API = environment.base;
   providedIn: 'root'
 })
 export class ManagerEmailService {
-  readonly URL = AUTH_API+"vibee/api/v1/";
+  readonly URL = AUTH_API +"vibee/api/v1/auth"
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export class ManagerEmailService {
   };
   constructor(  private tokenService: TokenStorageService,private httpClient: HttpClient) { }
   forgotPassword(request: ForgotPasswordRequest){
-    return this.httpClient.post<any>(this.URL+'forgot', request,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'/forgot', request,this.httpOptions);
   }
   changPassword(request:ChangePasswordRequest):Observable<any>{
     return this.httpClient.post<any>(this.URL+'change', request,this.httpOptions);

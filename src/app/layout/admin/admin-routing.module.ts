@@ -97,6 +97,10 @@ export const AdminRouting: Route[] = [
         component: ManageUpdateAccountComponent
       },
       {
+        path: 'manage-warehouse/:id',
+        component: WereHouseManagerComponent
+      },
+      {
         path: 'manage-distributor',
         children: [
           {
