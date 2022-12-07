@@ -17,7 +17,8 @@ import {TokenStorageService} from "../../token-storage.service";
 })
 export class ProductService {
   // api="http://localhost:8080/vibee/api/v1/admins/product";
-  api="http://localhost:1507/vibee/api/v1/product";
+  // api="http://localhost:1507/vibee/api/v1/product";
+  api = "https://kk87p.localtonet.com/vibee/api/v1/product";
 
   message="";
   constructor(private httpClient: HttpClient,private route: Router,private tokenService: TokenStorageService) {
