@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
 import {SearchViewStallResponse} from "../../../shared/model/response/SearchViewStallResponse";
@@ -15,13 +15,17 @@ import {CreateDetailBillResult} from "../../../shared/model/response/CreateDetai
 import {BillService} from "../../../services/bill/bill.service";
 import {TransactionBillRequest} from "../../../shared/model/request/TransactionBillRequest";
 import {BaseResponse} from "../../../shared/response/BaseResponse";
+import {BarcodeFormat} from "@zxing/library";
+import {BehaviorSubject} from "rxjs";
+import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 
 @Component({
   selector: 'app-sell-pos',
   templateUrl: './sell-pos.component.html',
   styleUrls: ['./sell-pos.component.css']
 })
-export class SellPosComponent implements OnInit {
+export class SellPosComponent implements OnInit, OnDestroy {
+
   status: number | undefined;
   language!: string;
   listCart: any = "";
@@ -54,6 +58,26 @@ export class SellPosComponent implements OnInit {
   unitIndex=0;
   transactionRequest!:TransactionBillRequest;
   transactionResponse!:BaseResponse;
+
+  dialogScanQR: boolean = false;
+  enable : boolean = true;
+  hasPermission !: boolean;
+  torchEnabled = false;
+  tryHarder = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
+  scanner !: ZXingScannerComponent;
+
+  availableDevices !: MediaDeviceInfo[];
+  currentDevice !: MediaDeviceInfo;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
+
   constructor(
     private translateService: TranslateConfigService,
     private sellOfflineService: SellOfflineService,
@@ -63,7 +87,6 @@ export class SellPosComponent implements OnInit {
     this.cartsItem=[];
     this.carts=[];
     this.cartCode="CartCode::"+(new Date().getTime());
-    // console.log(this.cartCode);
     this.cartItem=new CartItem();
     this.cartItem.cartCode=this.cartCode;
     this.carts.push(this.cartItem);
@@ -85,14 +108,16 @@ export class SellPosComponent implements OnInit {
     }
   }
 
-  // getTotal() {
-  //   this.listCart = this.sellOfflineService.getListGioHang();
-  //   if (this.listCart.length !== 0) {
-  //     for (let i = 0; i < this.listCart.length; i++) {
-  //       this.toltal += (this.listCart[i].gia * ((100 - this.listCart[i].promotion) / 100)) * this.listCart[i].productQuantity;
-  //     }
-  //   }
-  // }
+  ngOnDestroy(): void {
+    this.enable = false;
+  }
+
+  getTotal() {
+    this.listCart = this.sellOfflineService.getListGioHang();
+    for (let i = 0; i < this.listCart.length; i++) {
+      this.toltal += (this.listCart[i].gia * ((100 - this.listCart[i].promotion) / 100)) * this.listCart[i].productQuantity;
+    }
+  }
 
   openDialogDelete(productId: any) {
     this.sellOfflineService.xoaSanPham(productId);
@@ -206,7 +231,6 @@ export class SellPosComponent implements OnInit {
         })
       }
     })
-
   }
 
   selectUnit(unitId:number,importId:number){
@@ -276,4 +300,55 @@ export class SellPosComponent implements OnInit {
       }
     })
   }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+  }
+
+  //get value scan
+  qrResultString !: string;
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    this.dialogScanQR = false;
+    console.log(this.qrResultString);
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
+
+  onDeviceSelectChange(selected: Event) {
+    this.enable = true;
+    const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
+    // @ts-ignore
+    this.currentDevice = device;
+    console.log(this.currentDevice);
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
+
+  getValue(event: Event): string {
+    console.log((event.target as HTMLInputElement).value);
+    return (event.target as HTMLInputElement).value;
+  }
+
+  enableCameraState : boolean = false;
+  enableCamera() {
+    this.enableCameraState = !this.enableCameraState;
+    if (this.enableCameraState) {
+      this.dialogScanQR = true;
+      this.enable = true;
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
+      // @ts-ignore
+      this.currentDevice = device;
+      console.log(this.currentDevice);
+    } else {
+      this.enable = false;
+      // @ts-ignore
+      this.currentDevice = undefined;
+    }
+  }
+
 }

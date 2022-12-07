@@ -42,60 +42,63 @@ export function tokenGetter() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AdminComponent,
-    EmployeeComponent,
-    // HeaderAdminComponent,
-    // FooterAdminComponent,
-    // ManageAccountComponent,
-    LoginComponent,
-    RegisterComponent,
-    ForgotPasswordComponent,
-    ProfileComponent,
-    ScanComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    // AdminRoutingModule,
-    BrowserAnimationsModule,
-    MatPaginatorModule,
-    PaginatorModule,
-    CalendarModule,
-    FormsModule,
-    MultiSelectModule,
-    MatTableModule,
-    HttpClientModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: rootLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: ["example.com"],
-        disallowedRoutes: ["http://example.com/examplebadroute/"],
-      },
-    }),
-    ReactiveFormsModule,
-    TableModule,
-    ButtonModule,
-    PaginatorModule,
-    NgbModule,
-    ToastModule,
-    DialogModule,
-    MatMenuModule,
-    MatListModule,
-    ZXingScannerModule,
-    MatIconModule
-  ],
-  providers: [ConfirmationService, MessageService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        AdminComponent,
+        EmployeeComponent,
+        // HeaderAdminComponent,
+        // FooterAdminComponent,
+        // ManageAccountComponent,
+        LoginComponent,
+        RegisterComponent,
+        ForgotPasswordComponent,
+        ProfileComponent,
+        ScanComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        // AdminRoutingModule,
+        BrowserAnimationsModule,
+        MatPaginatorModule,
+        PaginatorModule,
+        CalendarModule,
+        FormsModule,
+        MultiSelectModule,
+        MatTableModule,
+        HttpClientModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: rootLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: tokenGetter,
+                allowedDomains: ["example.com"],
+                disallowedRoutes: ["http://example.com/examplebadroute/"],
+            },
+        }),
+        ReactiveFormsModule,
+        TableModule,
+        ButtonModule,
+        PaginatorModule,
+        NgbModule,
+        ToastModule,
+        DialogModule,
+        MatMenuModule,
+        MatListModule,
+        ZXingScannerModule,
+        MatIconModule
+    ],
+    providers: [ConfirmationService, MessageService],
+    exports: [
+
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -18,7 +18,6 @@ import { ReportComponent } from './report/report.component';
 import {ButtonModule} from "primeng/button";
 import {PaginatorModule} from "primeng/paginator";
 import {CalendarModule} from "primeng/calendar";
-import { DeleteAllComponent } from './delete-all/delete-all.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { TypeProductComponent } from './type-product/type-product.component';
 import {TreeTableModule} from "primeng/treetable";
@@ -27,6 +26,8 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
 import {DialogModule} from "primeng/dialog";
 import {TreeSelectModule} from "primeng/treeselect";
+import { ManageOrderComponent } from './manage-order/manage-order.component';
+import {CardModule} from "primeng/card";
 
 @NgModule({
   declarations: [
@@ -36,8 +37,8 @@ import {TreeSelectModule} from "primeng/treeselect";
     FooterEmployeeComponent,
     SellOfflineComponent,
     ReportComponent,
-    DeleteAllComponent,
     TypeProductComponent,
+    ManageOrderComponent,
   ],
   imports: [
     RouterModule.forChild(EmployeeRouting),
@@ -58,7 +59,8 @@ import {TreeSelectModule} from "primeng/treeselect";
     ConfirmDialogModule,
     ToastModule,
     DialogModule,
-    TreeSelectModule
+    TreeSelectModule,
+    CardModule
   ],
   exports:[
     SellOfflineComponent

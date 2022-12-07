@@ -114,3 +114,13 @@
 >>> .p-dialog-header-close {
   display:none;
 }
+
+.root-btn-product {
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}

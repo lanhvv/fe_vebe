@@ -28,7 +28,7 @@
                   </div>
                 </ng-template>
               </p-dropdown>
-
+              <button class="root-btn-product" (click)="enableCamera()">Quét mã vạch</button>
             </div>
             <div class="col-8">
               <p class="text-white float-end">Mã hóa đơn: {{cartCode}}</p>
@@ -187,4 +187,21 @@
       </div>
     </div>
   </ng-template>
+</p-dialog>
+
+<!--scan mã vạch-->
+<p-dialog header="" [(visible)]="dialogScanQR" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+<!--  <button (click)="enableCamera()">Camera</button>-->
+  <zxing-scanner
+    (camerasFound)="onCamerasFound($event)"
+    (scanSuccess)="onCodeResult($event)"
+    [torch]="torchEnabled"
+    [tryHarder]="tryHarder"
+    (permissionResponse)="onHasPermission($event)"
+    [(device)]="currentDevice"
+    (scanSuccess)="onCodeResult($event)"
+    (torchCompatible)="onTorchCompatible($event)"
+    [enable] = "enable"
+    [formats]="formatsEnabled"
+  ></zxing-scanner>
 </p-dialog>

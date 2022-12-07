@@ -55,6 +55,8 @@ import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barc
 import { QRCodeModule } from 'angularx-qrcode';
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
+import {PasswordModule} from "primeng/password";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 @NgModule({
   declarations: [
@@ -86,7 +88,6 @@ import {Toolbar, ToolbarModule} from "primeng/toolbar";
   imports: [
     CommonModule,
     TranslateModule,
-    PaginatorModule,
     TableModule,
     MultiSelectModule,
     DropdownModule,
@@ -116,8 +117,10 @@ import {Toolbar, ToolbarModule} from "primeng/toolbar";
     CardModule,
     ImageModule,
     QRCodeModule,
+    PasswordModule,
+    ZXingScannerModule,
     ToolbarModule
-  ],
+    ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
 })
