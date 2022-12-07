@@ -123,4 +123,16 @@
   border-radius: 5px;
   text-decoration: none;
   text-align: center;
+  width: 161px;
+}
+
+.second-btn-product {
+  height: 40px;
+  background-color: #f8f9fa;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  width: 161px;
 }

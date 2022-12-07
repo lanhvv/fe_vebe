@@ -6,8 +6,7 @@
         <span (click)="changeBill(bill)">Hóa đơn {{bill}}</span>
         <i class="fa-solid fa-x float-end mt-1 ms-1" (click)="deleteBill(bill)" *ngIf="listBill.length!==1"></i>
       </div>
-<!--      <button class="btnPOS ms-2" (click)="addBill()" *ngIf="!isButtonPOS"><i class="fa-solid fa-plus"></i></button>-->
-      <button class="btnPOS ms-2" *ngIf="!isButtonPOS"><i class="fa-solid fa-plus"></i></button>
+      <button class="btnPOS ms-2" (click)="addBill()" *ngIf="!isButtonPOS"><i class="fa-solid fa-plus"></i></button>
     </div>
   </div>
 
@@ -28,7 +27,7 @@
                   </div>
                 </ng-template>
               </p-dropdown>
-              <button class="root-btn-product" (click)="enableCamera()">Quét mã vạch</button>
+              <button class="root-btn-product" (click)="openDialogScan()">Quét mã vạch</button>
             </div>
             <div class="col-8">
               <p class="text-white float-end">Mã hóa đơn: {{cartCode}}</p>
@@ -103,8 +102,8 @@
               </div>
             </div>
             <div class="col">
-              <button class="btn btn-secondary float-end"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng
-              </button>
+<!--              <button class="btn btn-secondary float-end"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng-->
+<!--              </button>-->
             </div>
             <table class="m-3 tableInfoMoney">
               <tbody>
@@ -146,22 +145,11 @@
               <p-radioButton (click)="showDialogPayment()" name="groupname" value="payment" [(ngModel)]="selectedValue"
                              label="Quét mã"></p-radioButton>
             </div>
-<!--            <div class="sell-money_recommend m-3 ps-5 pe-3 pt-3 pb-3 flex-row flex-wrap" *ngIf="isPayment">-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--              <p class="sell-money_recommend_item fw-bold text-center me-3">25.000</p>-->
-<!--            </div>-->
-            <div class="sell-money_bank p-3 row" *ngIf="!isPayment">
-
-            </div>
           </div>
         </div>
-        <div class="sell-money_footer">
+        <div class="sell-money_footer mt-3">
           <div class="d-grid gap-2">
-            <button class="btn text-uppercase" type="button" *ngIf="!isPayment" (mousedown)="transaction()" )>thanh toán</button>
+            <button class="btn text-uppercase" type="button" *ngIf="isPayment" (mousedown)="transaction()">thanh toán</button>
           </div>
         </div>
       </div>
@@ -199,9 +187,20 @@
     [tryHarder]="tryHarder"
     (permissionResponse)="onHasPermission($event)"
     [(device)]="currentDevice"
-    (scanSuccess)="onCodeResult($event)"
     (torchCompatible)="onTorchCompatible($event)"
     [enable] = "enable"
     [formats]="formatsEnabled"
   ></zxing-scanner>
+</p-dialog>
+
+<!--dialog export hóa đơn-->
+<p-dialog header="" [(visible)]="dialogExportBill" [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
+  <div class="text-center">
+    <img src="assets/image/export.png" width="81" height="81">
+    <h5>Bạn có muốn in hóa đơn không?</h5>
+  </div>
+  <div>
+    <button class="root-btn-product" (click)="exportBill()">In hóa đơn</button>
+    <button class="second-btn-product" (click)="dialogExportBill=false">Hủy</button>
+  </div>
 </p-dialog>

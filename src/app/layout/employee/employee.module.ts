@@ -28,6 +28,8 @@ import {DialogModule} from "primeng/dialog";
 import {TreeSelectModule} from "primeng/treeselect";
 import { ManageOrderComponent } from './manage-order/manage-order.component';
 import {CardModule} from "primeng/card";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import {CardModule} from "primeng/card";
     ReportComponent,
     TypeProductComponent,
     ManageOrderComponent,
+    ManageProfileComponent,
   ],
   imports: [
     RouterModule.forChild(EmployeeRouting),
@@ -60,7 +63,8 @@ import {CardModule} from "primeng/card";
     ToastModule,
     DialogModule,
     TreeSelectModule,
-    CardModule
+    CardModule,
+    ZXingScannerModule,
   ],
   exports:[
     SellOfflineComponent
