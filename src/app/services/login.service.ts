@@ -14,11 +14,8 @@ const AUTH_API = environment.baseApi;
 })
 export class LoginService {
 
-  API: string = 'http://localhost:1507/';
   FIRST_USERNAME: string = 'CTIwGGVDooOmNfUpvsFM';
   FIRST_PASSWORD: string = 'SxbaNxSguVlzGbNlsJep';
-  USER_NAME: string = 'bD9EdCjnZHOsH1Wkop4r';
-  ROLE: string = 'tSUJTZyGodr7kbSb9Lo8';
   message: string = '';
   username: string | undefined;
   role: string | undefined;
@@ -31,20 +28,13 @@ export class LoginService {
   };
 
   constructor(private http: HttpClient) { }
-
-  doLogin(username: string, password: string): Observable<any>{
-    return this.http.post<any>( environment.baseApi +'login', {
-      username: username,
-      password: password
-    });
-  }
-
+  url=AUTH_API+"auth";
     login(credentials: { password: string | null; username: string | null }): Observable<any> {
-    return this.http.post(AUTH_API + 'login', credentials,this.httpOptions);
+    return this.http.post(this.url + 'login', credentials,this.httpOptions);
   }
 
   generateToken(basicToken: string , language: string ){
-    return this.http.get(AUTH_API + 'auth/login?language='+language, {headers:
+    return this.http.get(this.url + '/login?language='+language, {headers:
       new HttpHeaders({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:4200/',
@@ -54,47 +44,6 @@ export class LoginService {
     });
   }
 
-  // doChangePassword(username: string, password: string, newPassword: string): Observable<any>{
-  //   return this.http.post(this.API + 'change-password', {
-  //     username: username,
-  //     password: password,
-  //     newPassword: newPassword
-  //   },{
-  //     headers: new HttpHeaders({'Authorization': this.getToken()})
-  //   })
-  // }
-
-  // saveToken(token: string): void{
-  //   this.cookieService.set('Bearer', btoa(token), {expires: 0});
-  //   // localStorage.setItem("Token", btoa(token));
-  // }
-  //
-  // getToken(): string{
-  //   // let token: string|null = localStorage.getItem('Token');
-  //   let token: string = this.cookieService.get('Bearer');
-  //   return token === '' ? '' : 'Bearer ' + atob(token);
-  // }
-  //
-  // removeToken(): void{
-  //   // localStorage.removeItem("Token");
-  //   this.cookieService.delete('Bearer');
-  // }
-  //
-  // saveUserName(username: string): void{
-  //   this.cookieService.set(this.USER_NAME, btoa(username), {expires: 0});
-  //   // localStorage.setItem('username', username);
-  // }
-  //
-  // getUserName(): string{
-  //   let temp = this.cookieService.get(this.USER_NAME);
-  //   return temp === '' ? '' : atob(temp);
-  //   // return localStorage.getItem('username');
-  // }
-  //
-  // removeUserName(){
-  //   this.cookieService.delete(this.USER_NAME);
-  // }
-
   setMessage(message: string): void{
     this.message = message;
   }
@@ -103,19 +52,6 @@ export class LoginService {
     return this.message;
   }
 
-  // saveRole(role: string){
-  //   // localStorage.setItem('role', role);
-  //   this.cookieService.set(this.ROLE, btoa(role), {expires: 0});
-  // }
-  //
-  // getRole(): string{
-  //   let temp = this.cookieService.get(this.ROLE);
-  //   return temp === '' ? '' : atob(temp);
-  // }
-  //
-  // removeRole(){
-  //   this.cookieService.delete(this.ROLE);
-  // }
 
   setRememberMe(username: string, password: string, days: number): void{
     this.removeRememberMe();

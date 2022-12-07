@@ -8,7 +8,7 @@
           <div class="col-4">
             <p-dropdown [options]="products" optionLabel="name"  [filter]="true" filterBy="name" [showClear]="true" placeholder="{{products==null ? 'abc':products.length}}" (onFilter)="getProduct($event)" [filter]="true">
               <ng-template let-product pTemplate="productItem" >
-                <div class="product" (mousedown)="selectProduct(product.importId)">
+                <div class="product" (mousedown)="selectProduct(product.productCode)">
                   <img [src]="product.img" [class]="'flag flag-' + product.productId"/>
                   <div>{{product.productName}}</div>
                 </div>

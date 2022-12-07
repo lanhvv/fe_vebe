@@ -8,4 +8,5 @@ export class ViewStallResult{
   img!:String;
   amount!:number;
   items!:ExportItem[];
+  productCode!:String;
 }
