@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {environment} from "../../../environments/environment.dev";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {TokenStorageService} from "../token-storage.service";
 import {ImportProductResult} from "../../shared/result/product/ImportProductResult";
 import {ImportWarehouseResponse} from "../../shared/response/v_warehouse/ImportWarehouseResponse";
+import {environment} from "../../../environments/environment";
 const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'

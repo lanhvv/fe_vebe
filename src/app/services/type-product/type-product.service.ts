@@ -10,13 +10,13 @@ import {EditAccountRequest} from "../../shared/model/request/editAccountRequest"
 import {UpdateTypeProductRequest} from "../../shared/model/request/updateTypeProductRequest";
 import {GetOrderRequest} from "../../shared/model/request/getOrderRequest";
 import {CreateTypeProductDetailRequest} from "../../shared/model/request/createTypeProductDetailRequest";
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class TypeProductService {
   api = "http://localhost:1507/vibee/api/v1/auth";
-  apiCategory = AUTH_API+"vibee/api/v1/catalog";
+  apiCategory = AUTH_API+"catalog";
   readonly URL = AUTH_API+"vibee/api/v1/auth";
   readonly URLSELECTION = AUTH_API+"vibee/api/v1/auth/getAllSelectType";
   deleteTypeProductRequest!: DeleteTypeProductRequest;

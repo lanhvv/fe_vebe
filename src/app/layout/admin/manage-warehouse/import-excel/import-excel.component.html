@@ -20,9 +20,9 @@
       <div class="col-2"></div>
       <div class="col-8">
         <div class="note">
-          <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status==='1'">
+          <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status=='1'">
             <label class="form-label">Chọn nhà cung cấp</label>
-            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="chọn nhà cung cấp" (ngModelChange)="chooseSupplier()" )>
+            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="chọn nhà cung cấp" (ngModelChange)="chooseSupplier()">
               <ng-template pTemplate="selectedItem">
                 <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
                   <div>{{selectedSupplier.supplierName}}</div>
@@ -53,7 +53,7 @@
         </ng-template>
         <ng-template pTemplate="right">
           <p-fileUpload (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Import" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()" [disabled]="!selectedSupplier"></p-fileUpload>
-          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help" [disabled]="!selectedProducts || !selectedProducts.length" (mousedown)="import()" ></button>
+          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help" [disabled]="!productResponse || !productResponse.products.length" (mousedown)="import()" ></button>
         </ng-template>
       </p-toolbar>
       <div class="text-note" *ngIf="this.productResponse==null || this.productResponse.status.status=='1'">
@@ -102,7 +102,7 @@
                   {{product.barcode}}
             </td>
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
-              <p-dropdown [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category">
+              <p-dropdown [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category" (ngModelChange)="saveProducts()">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
                     <div>{{this.product.typeProduct.name}}</div>
@@ -135,14 +135,14 @@
               </p-cellEditor>
             </td>
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
-              <p-dropdown [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Unit">
+              <p-dropdown [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Unit" (ngModelChange)="selectUnit(product)">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
-                  <div class="unit" (mousedown)="selectUnit(product)" >
+                  <div class="unit" >
                     <div>{{unit.name}}</div>
                   </div>
                 </ng-template>
@@ -150,7 +150,7 @@
             <td pEditableColumn>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="product.inPrice">
+                  <input pInputText type="text" [(ngModel)]="product.inPrice" (ngModelChange)="saveProducts()">
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{product.inPrice}}
@@ -176,8 +176,8 @@
                   <tbody>
                     <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
-                      <td><input type="number" [(ngModel)]="export.inPrice" id="in-price"></td>
-                      <td><input type="number" [(ngModel)]="export.outPrice" id="out-price"></td>
+                      <td><input type="number" [(ngModel)]="export.inPrice" id="in-price" (ngModelChange)="saveProducts()"></td>
+                      <td><input type="number" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()"></td>
                       <td>
                         <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteExport(export,product)"></button>
                       </td>
