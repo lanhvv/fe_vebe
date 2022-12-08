@@ -120,10 +120,6 @@ export const AdminRouting: Route[] = [
       {
         path:'manager-profile',
         component:ManageProfileComponent
-      },
-      {
-        path: 'manage-profile',
-        component: ManageProfileComponent
       }
     ]
   }
