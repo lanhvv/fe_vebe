@@ -10,12 +10,13 @@ import { CreateProductResponse } from 'src/app/shared/model/response/CreateProdu
 import { Router } from '@angular/router';
 import { LockRequest } from 'src/app/shared/model/request/lockRequest';
 import {TokenStorageService} from "../token-storage.service";
-
+import {environment} from "../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  api="http://localhost:1507/vibee/api/v1/admins/product";
+  api=AUTH_API+"/admins/product";
   message="";
   constructor(private httpClient: HttpClient,private route: Router, private tokenService: TokenStorageService) {
 

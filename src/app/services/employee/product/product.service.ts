@@ -3,12 +3,13 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {TokenStorageService} from "../../token-storage.service";
 import {GetProductsRequest} from "../../../shared/model/request/GetProductsRequest";
-
+import {environment} from "../../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  api="http://localhost:1507/vibee/api/v1/product";
+  api=AUTH_API+"/product";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',

@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {UpdateAccountRequest} from "../../shared/model/request/updateAccountRequest";
 import {EditAccountRequest} from "../../shared/model/request/editAccountRequest";
-const AUTH_API = environment.baseApiAdmin;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"/account/";
+  readonly URL = AUTH_API+"admins/account/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {

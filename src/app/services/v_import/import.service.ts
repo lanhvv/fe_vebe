@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {TokenStorageService} from "../token-storage.service";
-import {environment} from "../../../environments/environment.dev";
+import {environment} from "../../../environments/environment";
 import {ImportWarehouseResponse} from "../../shared/response/v_warehouse/ImportWarehouseResponse";
 import {ImportProductResult} from "../../shared/result/product/ImportProductResult";
 const AUTH_API = environment.baseApi;

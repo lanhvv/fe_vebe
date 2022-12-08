@@ -3,18 +3,19 @@ import { Injectable } from '@angular/core';
 import {TokenStorageService} from "../../token-storage.service";
 import {Filter} from "../../../shared/model/Filter";
 import {CustomerRequest} from "../../../shared/model/request/CustomerRequest";
+import {environment} from "../../../../environments/environment";
 // import {TokenStorageService} from "../token-storage.service";
 // import {UnitItems} from "../../shared/model/UnitItems";
 // import {UnitRequest} from "../../shared/model/request/UnitRequest";
 // import {AccountCustomerItem} from "../../shared/model/AccountCustomerItem";
 // import {CustomerRequest} from "../../shared/model/request/CustomerRequest";
 // import {Filter} from "../../shared/model/Filter";
-
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class AccountCustomerService {
-  apiAdmin = "http://localhost:1507/vibee/api/v1/admins/customers"
+  apiAdmin = AUTH_API+"/admins/customers"
 
   constructor(private client:HttpClient,
               private tokenService: TokenStorageService) {

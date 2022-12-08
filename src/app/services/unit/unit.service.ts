@@ -4,14 +4,14 @@ import {TokenStorageService} from "../token-storage.service";
 import {UnitRequest} from "../../shared/model/request/UnitRequest";
 import {UnitItems} from "../../shared/model/UnitItems";
 import {environment} from "../../../environments/environment";
-const AUTH_API = environment.baseApiAdmin;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class UnitService {
-  api=AUTH_API+"vibee/api/v1/catalog";
+  api=AUTH_API+"catalog";
 
-  apiAdmin = AUTH_API+"/unit";
+  apiAdmin = AUTH_API+"admins/unit";
   constructor(private client:HttpClient,
               private tokenService: TokenStorageService) {
 
