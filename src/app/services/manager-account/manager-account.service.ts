@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {UpdateAccountRequest} from "../../shared/model/request/updateAccountRequest";
 import {EditAccountRequest} from "../../shared/model/request/editAccountRequest";
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })

@@ -4,12 +4,13 @@ import {Router} from "@angular/router";
 import {TokenStorageService} from "../token-storage.service";
 import {ViewBillRequest} from "../../shared/model/response/ViewBillResquest";
 import {TransactionBillRequest} from "../../shared/model/request/TransactionBillRequest";
-
+import {environment} from "../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class BillService {
-  api="http://localhost:1507/vibee/api/v1/bill";
+  api=AUTH_API+"/bill";
   constructor(private httpClient: HttpClient,private route: Router, private tokenService: TokenStorageService) { }
   httpOptions = {
     headers: new HttpHeaders({

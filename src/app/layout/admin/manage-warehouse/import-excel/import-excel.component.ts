@@ -209,6 +209,7 @@ export class ImportExcelComponent implements OnInit {
     this.warehouseService.getWarehouseBySupplier(this.language!,this.selectedSupplier.supplierId).subscribe(response=>{
       this.productResponse=response as ImportWarehouseResponse;
       if(this.productResponse.status.status=== '1'){
+        this.productResponse.supplierCode = this.selectedSupplier.supplierId;
         this.success(this.productResponse.status.message);
       }else{
         this.failed(this.productResponse.status.message);

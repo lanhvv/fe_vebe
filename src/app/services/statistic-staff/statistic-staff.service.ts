@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Filter} from "../../shared/model/Filter";
 import {TokenStorageService} from "../token-storage.service";
-
+import {environment} from "../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class StatisticStaffService {
-  api = "http://localhost:1507/vibee/api/v1/staff/statistic";
+  api = AUTH_API+"/staff/statistic";
   constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
   httpOptions = {
