@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {UpdateAccountRequest} from "../../shared/model/request/updateAccountRequest";
 import {EditAccountRequest} from "../../shared/model/request/editAccountRequest";
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApiAdmin;
 @Injectable({
   providedIn: 'root'
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"vibee/api/v1/admins/account/";
+  readonly URL = AUTH_API+"/account/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {
