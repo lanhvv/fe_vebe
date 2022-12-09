@@ -1,5 +1,5 @@
 import {Status} from "../Status";
-import {Supplier} from "../supplier.model";
+import {Supplier} from "../../model/supplier.model";
 
 export class SupplierResponse {
   status !: Status;
