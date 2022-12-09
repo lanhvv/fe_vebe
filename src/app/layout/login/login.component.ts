@@ -10,6 +10,7 @@ import { ForgotPasswordRequest } from 'src/app/shared/model/request/forgotPasswo
 import { ManagerEmailService } from 'src/app/services/manager-public/manager-email.service';
 import { MessageService } from 'primeng/api';
 import {BaseResponse} from "../../shared/response/BaseResponse";
+import {LoadingService} from "../../services/loading/loading.service";
 
 @Component({
   selector: 'app-login',
@@ -46,7 +47,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private translateService:TranslateConfigService,
     private managerEmailService:ManagerEmailService ,
-    private  messageService: MessageService
+    private  messageService: MessageService,
+    private loadingService: LoadingService,
   ) {
     this.forgotPasswordRequest = new ForgotPasswordRequest()
     this.baseResponse = new BaseResponse()
@@ -71,6 +73,7 @@ export class LoginComponent implements OnInit {
   }
 
   generateToken(){
+    this.loadingService.setLoading(true);
     var basicToken= btoa(this.loginForm.get('username')!.value+":"+this.loginForm.get('password')!.value)
     //const { username, password } = this.loginForm;
     this.loginService.generateToken(basicToken,this.language).subscribe(data => {
@@ -78,16 +81,21 @@ export class LoginComponent implements OnInit {
           this.tokenStorage.saveToken(this.loginResponse.accessToken);
           this.tokenStorage.saveUser(data);
           this.roles = this.loginResponse.role;
-
           if(this.roles.includes("ADMIN")){
-            this.router.navigate(['/admin']);
-            console.log("admin")
+            this.router.navigate(['/admin'])
+              .then(() => {
+                this.loadingService.setLoading(false);
+              })
+            ;
           } else {
-            this.router.navigate(['/employee']);
-            console.log("employee")
+            this.router.navigate(['/employee/home'])
+              .then(() => {
+                this.loadingService.setLoading(false);
+              });
           }
         },
         err => {
+          this.loadingService.setLoading(false);
           this.errorMessage = err.error.message;
           this.isLoginFailed = true;
         }

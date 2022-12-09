@@ -32,6 +32,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatListModule} from "@angular/material/list";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import {MatIconModule} from "@angular/material/icon";
+import {LoadingComponent} from "./layout/loading/loading.component";
 
 export function rootLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, "assets/i18n/", ".json");
@@ -53,7 +54,8 @@ export function tokenGetter() {
         RegisterComponent,
         ForgotPasswordComponent,
         ProfileComponent,
-        ScanComponent
+        ScanComponent,
+        LoadingComponent
     ],
     imports: [
         BrowserModule,

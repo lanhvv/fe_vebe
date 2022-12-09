@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { ChangePasswordRequest } from '../../../shared/model/request/changePasswordRequest';
 import { BaseResponse } from 'src/app/shared/response/BaseResponse';
 import { ProfileService } from 'src/app/services/admin/user/profile.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'admin-header',
@@ -17,7 +18,7 @@ export class HeaderAdminComponent implements OnInit {
 
   isDialogChangePass: boolean = false;
   constructor(private translate: TranslateConfigService, private messageService: MessageService,
-    private profileService:ProfileService,) {
+    private profileService:ProfileService, private router: Router) {
       this.baseResponse = new BaseResponse();
       // @ts-ignore
     this.changePasswordRequest = new ChangePasswordRequest()
@@ -46,6 +47,11 @@ export class HeaderAdminComponent implements OnInit {
         this.changePasswordRequest.reEnterPassword="";
   }
   })
+  }
 
+  logout(){
+    sessionStorage.removeItem('auth-user');
+    sessionStorage.removeItem('Authorization');
+    this.router.navigate(['/login']);
   }
 }
