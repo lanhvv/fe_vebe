@@ -1,0 +1,53 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <div class="container pt-4">
+    <div class="order-detail">
+      <div class="order-detail_header">
+        <div class="row">
+          <div class="col-3">
+            <p class="fw-bold">Người xác nhận: <span>{{listDetailOrder.orderItems.creator}}</span></p>
+            <p class="fw-bold">Thời gian xác nhận: <span>{{listDetailOrder.orderItems.verifyDate| date: "dd/MM/y hh:mm:ss"}}</span></p>
+          </div>
+          <div class="col-3">
+            <p class="fw-bold">Mã đơn hàng: <span>{{listDetailOrder.orderItems.id}}</span></p>
+            <p class="fw-bold">Thời gian đặt hàng: <span>{{listDetailOrder.orderItems.verifyDate| date: "dd/MM/y hh:mm:ss"}}</span></p>
+          </div>
+          <div class="col-3" *ngFor="let item of listDetailOrder.timelineItems ">
+            <p class="fw-bold">Tình trạng đơn hàng: <span>{{item.statusName }}</span></p>
+            <p class="fw-bold">Thời gian: <span>{{item.createdDate | date: "dd/MM/y hh:mm:ss"}}</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="order-detail_body">
+        <table class="table">
+          <thead>
+          <tr >
+            <th scope="col">Mã sản phẩm</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Đơn giá</th>
+            <th scope="col">Giá</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let o of listDetailOrder.items">
+            <th scope="row">{{o.productId}}</th>
+            <td>{{o.productName}}</td>
+            <td>{{o.quantityDetail}}</td>
+            <td>{{o.price}}</td>
+            <td>{{o.quantityDetail * o.price}}</td>
+          </tr>
+          <tr>
+            <td colspan="4"  class="fw-bold">Tổng tiền</td>
+            <td class="text-danger fw-bold">{{listDetailOrder.orderItems.price}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>

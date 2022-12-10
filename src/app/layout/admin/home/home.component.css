@@ -1,0 +1,32 @@
+main{
+  padding: 20px;
+  margin-left: 16%;
+}
+
+.todolist,
+.report,
+.myproduct
+{
+  width: 100%;
+  height: auto;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.report-money{
+  height: 130px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.report{
+  min-height: 500px;
+}
+
+.myproduct-top_item img{
+  width: 100%;
+  max-height: 120px;
+  border-radius: 5px;
+}
+
+>>> .calendar{
+  width: 300px !important;
+}

@@ -1,0 +1,127 @@
+<!--Main Navigation-->
+<admin-header [Status] = status></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main style="margin-top: 58px;">
+  <div class="container pt-4">
+    <!-- danh sách cần làm -->
+    <div class="todolist p-3 rounded">
+      <h2>Danh sách cần làm</h2>
+      <p>Những việc bạn sẽ phải làm</p>
+      <div class="row">
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{sumUnconfimred}}</p>
+          <p>Chờ xác nhận</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{sumPacking}}</p>
+          <p>Chờ đóng gói</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{sumShipping}}</p>
+          <p>Đang vận chuyển</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{sumCancel}}</p>
+          <p>Đơn hủy</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{blockProduct}}</p>
+          <p>Sản phẩm tạm khóa</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{soldOutProduct}}</p>
+          <p>Sản phẩm hết hàng</p>
+        </div>
+      </div>
+    </div>
+    <!--  báo cáo tiền bán hàng  -->
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col me-1 report-money p-3 rounded">
+          <h3>Tổng tiền bán hàng trong ngày</h3>
+          <div class="row">
+            <div class="col-10">
+              <h1 class="text-primary fw-bold">{{totalSumPriceOnDay | currency: "VND"}} VNĐ</h1>
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'equal'">
+              <img src="assets/image/equals-symbol.png">
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'less'">
+              <img src="assets/image/up-arrow%20(1).png">
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'more'">
+              <img src="assets/image/up-arrow.png">
+            </div>
+          </div>
+        </div>
+
+        <div class="col ms-1 report-money p-3 rounded">
+          <h3>Tổng tiền thực lãi trong ngày</h3>
+          <div class="row">
+            <div class="col-10">
+              <h1 class="text-primary fw-bold">900.000 VNĐ</h1>
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'equal'">
+              <img src="assets/image/equals-symbol.png">
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'less'">
+              <img src="assets/image/up-arrow%20(1).png">
+            </div>
+            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'more'">
+              <img src="assets/image/up-arrow.png">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- phân tích bán hàng -->
+    <div class=" container report mt-3 p-3 rounded">
+      <div class="row">
+        <div class="col-8">
+          <h2>Phân tích bán hàng</h2>
+          <p>Tổng quan về dữ liệu cửa hàng cho kích thước đơn hàng đã xác nhận</p>
+        </div>
+        <div class="col-4">
+          <div class="field col-12 md:col-4">
+            <p-calendar
+              [(ngModel)]="rangeDates"
+              selectionMode="range"
+              [readonlyInput]="true"
+              inputId="range"
+              placeholder="Lựa chọn khoảng ngày"
+              inputStyleClass="calendar"
+              [showIcon]="true"
+              (onSelect)="chooseDate()"
+              [maxDate]="maxDateValue"
+              ></p-calendar>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <p-chart type="line" [data]="multiAxisData" [options]="multiAxisOptions"></p-chart>
+      </div>
+    </div>
+    <!-- sản phẩm của tôi -->
+    <div class="myproduct mt-3 p-3 rounded">
+      <h2>Sản phẩm của tôi</h2>
+      <button class="btn btn-outline-success">Thêm sản phẩm</button>
+      <p>Đăng tải thêm sản phẩm để bắt đầu kinh doanh</p>
+      <div class="myproduct-top">
+        <div class="row">
+          <!-- top 5 product -->
+          <div class="col-2" *ngFor="let product of products">
+            <div class="myproduct-top_item">
+              <img src="{{product.img}}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->
+

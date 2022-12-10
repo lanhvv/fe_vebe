@@ -1,0 +1,151 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col">
+        <h2>Quản lý tài khoản</h2>
+      </div>
+      <div class="col">
+        <a class="btn btn-outline-primary float-end" routerLink="/admin/manage-add-account">Thêm tài khoản</a>
+      </div>
+    </div>
+
+    <section class="table-account" style="margin-left: 200px;">
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew(0, 0)"></button>
+      <form class="float-end" (ngSubmit)="onSearch()">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input type="text" pInputText placeholder="Search" [(ngModel)]="nameSearch" name="name"/>
+      </span>
+      </form>
+      <div class="table-all-order mt-4">
+
+        <div class="container-fluid">
+          <p-table [value]="units.list">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="col-1">Index</th>
+                <th class="col-1">Name</th>
+                <th class="col-3">Description</th>
+                <th class="col-1">Amount</th>
+                <th class="col-1">Creator</th>
+                <th class="col-2">Date</th>
+                <th class="col-2">Edit</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowIndex="rowIndex" let-unit>
+              <tr>
+                <td>{{rowIndex+1}}</td>
+                <td>{{unit.unitName}}</td>
+                <td>{{unit.description}}</td>
+                <td>{{unit.amount}}</td>
+                <td>{{unit.creator}}</td>
+                <td>{{unit.createdDate | date}}</td>
+                <td>
+                  <i class="pi pi-plus-circle me-1" (click)="openNew(unit.id, 0)"></i>
+                  <i class="pi pi-trash me-1" (click)="deleteSelectUnit(unit.id, 0)" ></i>
+                  <i class="pi pi-pencil me-1" (click)="openUpdate(unit.id, 0)"></i>
+                  <a *ngIf="unit.list != null" data-bs-toggle="collapse" href="#collapse-{{unit.id}}" aria-expanded="false" class="text-black"><i class="pi pi-angle-down"></i></a>
+                </td>
+              </tr>
+              <tr class="collapse" id="collapse-{{unit.id}}" *ngFor="let item of unit.list; let i = index">
+                <td class="border-danger">{{i+1}}</td>
+                <td>{{item.unitName}}</td>
+                <td>{{item.description}}</td>
+                <td>{{item.amount}}</td>
+                <td>{{item.creator}}</td>
+                <td>{{item.createdDate | date}}</td>
+                <td>
+                  <i class="pi pi-trash me-1" (click)="deleteSelectUnit(item.id, unit.id)"></i>
+                  <i class="pi pi-pencil me-1" (click)="openUpdate(item.id, item.parent)"></i>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]" (onPageChange)="paginate($event)" ></p-paginator>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p-dialog [(visible)]="unitDialog" [style]="{width: '550px'}" header="Unit" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <input type="text" pInputText id="name" [(ngModel)] = "unit.unitName" required /> <br>
+        <small class="p-invalid text-danger" *ngIf="submitted && !unit.unitName">Name is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)] = "unit.description"  required rows="3" cols="20"></textarea>
+      </div>
+      <div class="p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="price">Amount</label>
+          <p-inputNumber id="price"  mode="decimal" [(ngModel)] = "unit.amount" [min]="1"></p-inputNumber>
+          <small class="p-invalid text-danger" *ngIf="submitted && !unit.amount">Amount is required.</small>
+        </div>
+      </div>
+
+      <div class="field" *ngIf="showCategory">
+        <label class="mb-3">Category</label> <br>
+        <small class="p-invalid text-danger" *ngIf="submitted && !selectedValueLocateUnit">category is required.</small>
+        <div class="formgrid grid">
+          <div class="field-radiobutton col-6">
+            <p-radioButton id="locate1" name="locate" value="parent" [(ngModel)]="selectedValueLocateUnit"></p-radioButton>
+            <label for="locate1">Parent</label>
+          </div>
+          <div class="field-radiobutton col-6">
+            <p-radioButton id="locate2" name="locate" value="child" [(ngModel)]="selectedValueLocateUnit"></p-radioButton>
+            <label for="locate2">Child</label>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAndUpdateUnit()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog [(visible)]="chooseUnitParentDialog" [style]="{width: '550px'}" header="Chọn Đơn vị lớn nhất để đứng đầu nhánh đơn vị" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field-radiobutton" *ngFor="let item of unitDeleteEdit, let i = index">
+        <p-radioButton name="city" value="{{item.id}}" [(ngModel)]="unitIdChooseParent" inputId="item{{i}}"></p-radioButton>
+        <label>{{item.unitName}}</label>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text" (click)="hideChooseUnitParentDialog()"></button>
+      <button pButton pRipple label="Tiếp theo" icon="pi pi-check" class="p-button-text" (click)="openEditAmountUnit()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog [(visible)]="editUnitParentDialog" [style]="{width: '550px'}" header="Hãy sửa lại số lượng của đơn vị" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <h5 class="text-danger">*Đơn vị sẽ từ cao tới thấp, nên hãy nhập số lượng tăng dần qua các đơn vị</h5>
+      <div class="field-radiobutton row" *ngFor="let item of cloneUnitDeleteEdit, let i = index">
+        <span  class="col-4 align-content-between"><label>{{item.unitName}}</label></span>
+        <span class="col-8">
+          <p-inputNumber  mode="decimal" [(ngModel)] = "item.amount" [min]="1"></p-inputNumber>
+          <small class="p-invalid text-danger" *ngIf="submitEditUnitParentDialog && !item.amount">{{item.unitName}} is required.</small>
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Quay lại" icon="pi pi-times" class="p-button-text" (click)="prevChooseUnitParentDialog()"></button>
+      <button pButton pRipple label="Hoàn thành" icon="pi pi-check" class="p-button-text" (click)="confirmDeleteParentUnit()"></button>
+    </ng-template>
+  </p-dialog>
+
+
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+  <p-toast></p-toast>
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

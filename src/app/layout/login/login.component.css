@@ -1,0 +1,105 @@
+*{box-sizing: border-box; padding: 0; margin: 0;}
+
+.app{
+  position: relative;
+  height: 100vh;
+  background: #FBFBFB;
+}
+
+.form-control{
+  padding: .375rem .75rem;
+}
+
+.sign-in{
+  position: absolute;
+  width: 1045px;
+  height: 530px;
+  left: 15%;
+  top: 52px;
+  background: #FFFFFF;
+  box-shadow: 0px 12px 7px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+
+.sign-in_logo{
+  position: absolute;
+  width: 305px;
+  height: 363px;
+  left: 100px;
+  top: 40px;
+  float: left;
+}
+
+.sign-in_logo img{
+  height: 363px;
+}
+
+.sign-in_text{
+  position: absolute;
+  width: 157px;
+  height: 22px;
+  left: 220px;
+  top: 370px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.sign-in_text a{
+  color: #000000;
+}
+
+.sign-in_text a:hover{
+  color: #0061C1;
+}
+
+.sign-in_right{
+  float: right;
+  width: 500px;
+  height: 500px;
+  padding: 40px 20px;
+}
+
+.sign-in_title p{
+  height: 48px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  color: #000000;
+  padding-bottom: 10px;
+}
+
+.sign-in_form{
+  top: 100px;
+}
+
+.sign-in_form button,
+.forgot-btn{
+  width: 329px;
+  height: 64px;
+  left: 669px;
+  top: 433px;
+  background: #0061C1;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  text-align: center;
+  color: white;
+}
+
+.form-check{
+  padding-left: 1.5em;
+}
+
+.form-check input{
+  margin-top: .25em;
+}
+
+.text-fotgot-pass:hover{
+  color: #0061C1;
+  cursor: pointer;
+}
+.text-fotgot-pass{
+  color: black;
+}

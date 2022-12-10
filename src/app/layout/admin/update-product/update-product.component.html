@@ -1,0 +1,161 @@
+<!--Main Navigation-->
+<admin-header></admin-header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main>
+  <div class="container pt-4 main-layout">
+    <div class="row">
+      <div class="col">
+        <h2 translate>
+          product.detail
+          <i class="fa-solid fa-file-pen ms-3 button-edit text-success" (click)="isShowForm = !isShowForm" (mousedown)="info()"></i>
+        </h2>
+      </div>
+    </div>
+    <form action="" *ngIf="isShowForm">
+      <div class="row">
+        <div class="col">
+          <div class="mb-3" >
+            <label for="code-product" class="form-label" translate>product.barcode</label>
+            <input type="text" class="form-control" id="code-product" [(ngModel)]="infoUpdateProductResponse.barCode" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label" translate>product.name</label>
+            <input type="text" class="form-control" id="name-product" [(ngModel)]="infoUpdateProductResponse.nameProd" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="mb-3" *ngIf="infoUpdateProductResponse!=null && infoUpdateProductResponse.typeProductItems!=null">
+            <label class="form-label-category" translate>product.category.name</label> <br>
+            <p-dropdown [options]="infoUpdateProductResponse.typeProductItems" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedCategory" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="{{selectedCategory.name}}">
+              <ng-template pTemplate="selectedItem">
+                  <div class="category-item category-item-value" *ngIf="selectedCategory">
+                      <div>{{selectedCategory.name}}</div>
+                  </div>
+              </ng-template>
+              <ng-template let-category pTemplate="categoryitem">
+                  <div class="category-item">
+                      <div>{{category.name}}</div>
+                  </div>
+              </ng-template>
+          </p-dropdown> <br>
+            <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3" *ngIf="infoUpdateProductResponse!=null && infoUpdateProductResponse.statusItems!=null">
+            <label class="form-label-status" translate>product.warehouse.status</label> <br>
+            <p-dropdown [options]="infoUpdateProductResponse.statusItems" [(ngModel)]="selectedStatus" optionLabel="statusName" name="statusOptions" [filter]="false" filterBy="statusName" [showClear]="true" placeholder="{{selectedStatus.statusName}}">
+              <ng-template pTemplate="selectedStatusItem">
+                  <div class="status-item status-item-value" *ngIf="selectedStatus">
+                      <div>{{selectedStatus.statusName}}</div>
+                  </div>
+              </ng-template>
+              <ng-template let-status pTemplate="statusItems">
+                  <div class="status-item">
+                      <div>{{status.statusName}}</div>
+                  </div>
+              </ng-template>
+          </p-dropdown>
+          </div>
+        </div>
+        <div class="col">
+          <div class="teste">
+            <label for="upload" class="thumbnail">
+              <img [src]="infoUpdateProductResponse.img" alt="Testing" />
+              <div class="image-overlay">
+                <div class="circle-icon">
+                  <span class="fa fa-upload" aria-hidden="true"></span>
+                </div>
+              </div>
+            </label>
+            <!-- <p-fileUpload  [url]="infoUpdateProductResponse.img"
+             accept="image/*" [previewWidth]='100' [showUploadButton]="false" [(ngModel)]="img" [ngModelOptions]="{standalone: true}" [maxFileSize]="1000000" (onSelect)="changeImg($event)"></p-fileUpload> --> -->
+            <input type="file" id="upload" accept="image/png" [(ngModel)]="infoUpdateProductResponse.img" (change)="changeImg($event)" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <label for="description-product" class="form-label" translate>product.description</label>
+        <textarea class="form-control" [(ngModel)]="infoUpdateProductResponse.description" id="description-product" name="description" rows="3" style="resize: none;"></textarea>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col text-center">
+          <button class="btn btn-success w-25" (mousedown)="update()">Lưu</button>
+        </div>
+      </div>
+    </form>
+
+    <!--  form detail  -->
+    <form action="" *ngIf="!isShowForm">
+      <div class="row">
+        <div class="col">
+          <div class="mb-3">
+            <label for="code-product" class="form-label" translate>product.barcode</label>
+            <input type="text" class="form-control" id="code-product" value="{{getDetailProductResponse.barCode}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label" translate>product.name</label>
+            <input type="text" class="form-control" id="name-product" value="{{getDetailProductResponse.name}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label" translate>product.creator</label>
+            <input type="text" class="form-control" id="name-product" value="{{getDetailProductResponse.creator}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label"  translate>product.createddate</label>
+            <input type="text" class="form-control" id="name-product" value="{{ getDetailProductResponse.createdDate}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label" translate>product.category.name</label>
+            <input type="text" class="form-control" id="name-product" value="{{getDetailProductResponse.categoryName}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="name-product" class="form-label" translate>product.supplier.name</label>
+            <ul *ngFor="let x of getDetailProductResponse.supplierNames">
+                <li>{{x}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mb-3">
+            <label for="quantity-product" class="form-label" translate>product.warehouse.status</label>
+            <input type="text" class="form-control" id="quantity-product" value="{{ getDetailProductResponse.statusName}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="in-price-product" class="form-label" translate>product.warehouse.import.amount.in</label>
+            <input type="text" class="form-control" id="in-price-product" value="{{getDetailProductResponse.sumInAmount + getDetailProductResponse.unitName}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="out-price-product" class="form-label" translate>product.warehouse.export.amount.out</label>
+            <input type="text" class="form-control" id="out-price-product" value="{{getDetailProductResponse.sumOutAmount + getDetailProductResponse.unitName}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="quantity-product" class="form-label" translate>product.inventory</label>
+            <input type="text" class="form-control" id="quantity-product" value="{{getDetailProductResponse.inventory + getDetailProductResponse.unitName}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="quantity-product" class="form-label" translate>product.warehouse.import.amount.count</label>
+            <input type="text" class="form-control" id="quantity-product" value="{{getDetailProductResponse.sumImport}}" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="quantity-product" class="form-label" translate>product.warehouse.import.best</label>
+            <input type="text" class="form-control" id="quantity-product" value="{{getDetailProductResponse.importDate}}" disabled>
+          </div>
+        </div>
+        <div class="col">
+          <div class="image">
+            <img src="{{getDetailProductResponse.image}}">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <label for="quantity-product" class="form-label" translate>product.description</label>
+          <textarea class="form-control" id="description-product" name="description" rows="3" style="resize: none;" value="{{getDetailProductResponse.description}}" disabled></textarea>
+      </div>
+    </form>
+  </div>
+
+  <admin-footer></admin-footer>
+</main>
+<!--Main layout-->

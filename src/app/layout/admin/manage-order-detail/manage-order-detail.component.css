@@ -1,0 +1,29 @@
+main {
+  margin: 4% 0 0 16%;
+}
+
+.order-detail {
+  box-sizing: border-box;
+  position: absolute;
+  min-width: 1210px;
+  height: 100%;
+  background: #FEFEFE;
+  border: 1px solid #CBC9C9;
+  border-radius: 20px;
+}
+
+.order-detail_header {
+  box-sizing: border-box;
+  position: absolute;
+  min-width: 1210px;
+  height: 122px;
+  background: #79BEFE;
+  border: 1px solid #5593CB;
+  border-radius: 20px;
+  padding: 20px 10px;
+}
+
+.order-detail_body {
+  padding: 10px;
+  margin-top: 122px;
+}

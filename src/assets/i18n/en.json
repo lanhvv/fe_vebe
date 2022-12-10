@@ -1,0 +1,43 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "management": {
+      "order": "Management Orders",
+      "account": "Management Account",
+      "customer": "Management Customer",
+      "distributor": "Management Distributor",
+      "product": "Management Product",
+      "sell": "Sell",
+      "warehouse": "Management Warehouse"
+    }
+  },
+  "login": {
+    "form": {
+      "title": "Sign in",
+      "username": "User name",
+      "password": "Password",
+      "remember": "Remember me",
+      "button": "Login",
+      "redirect": "Create an account",
+      "choose": "or login with"
+    },
+    "errors": {
+      "messages": {
+        "validate": {
+          "username": {
+            "required": "Your username is required.",
+            "minlength": "Your username is required to be at least 3 character.",
+            "maxlength": "Your username cannot be longer than 50 characters.",
+            "pattern": "Your username is invalid."
+          },
+          "password": {
+            "required": "Your password is required.",
+            "minlength": "Your password is required to be at least 3 character.",
+            "maxlength": "Your password cannot be longer than 50 characters.",
+            "pattern": "Your password is invalid."
+          }
+        }
+      }
+    }
+  }
+}

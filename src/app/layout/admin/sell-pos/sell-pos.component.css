@@ -1,0 +1,116 @@
+.sell {
+  background: #F0F2F4;
+  height: 100vh;
+}
+
+.sell-list_product-header {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #0061C1;
+}
+
+.sell-money {
+  border-radius: 10px;
+  background-color: white;
+  /*width: 100%;*/
+  height: auto;
+}
+
+.sell-money_footer button {
+  background-color: #0061C1;
+  color: white;
+}
+
+.sell-money table {
+  height: 200px;
+}
+
+.sell-money_content {
+  min-height: 400px;
+}
+
+.sell-list_product-body--item {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: -4px -4px 40px 0px rgb(0 0 0 / 25%);
+  background-color: white;
+}
+
+.sell-list_product-body--item input {
+  border: none;
+  outline: none;
+  width: 30px;
+}
+
+.tabPOS {
+  min-width: 110px;
+  max-width: 100%;
+  height: 42px;
+  background-color: #0061C1;
+  color: white;
+  border-top-left-radius: 10px;
+  cursor: pointer;
+}
+
+.active {
+  box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btnPOS {
+  border-radius: 50%;
+  border: none;
+  background-color: #0061C1;
+  color: white;
+  width: 40px;
+  height: 40px;
+}
+
+#tableComputer thead {
+  background-color: #E5EFF9;
+}
+
+.inputSale {
+  border-width: 0 0 1px;
+  outline: 0;
+  border-color: black;
+}
+
+.tableInfoMoney tbody tr {
+  height: 60px;
+}
+
+.sell-money_recommend {
+  background-color: #E5EFF9;
+  border-radius: 10px;
+  width: 420px;
+  height: auto;
+  display: flex;
+}
+
+.sell-money_recommend_item {
+  width: 82px;
+  height: 26px;
+}
+
+.sell-money_recommend_item:hover {
+  cursor: pointer;
+}
+
+>>> .searchProduct{
+  width: 300px;
+}
+
+>>> .elementUnitProduct{
+  height: 30px;
+}
+
+>>> .p-inputnumber-input{
+  height: 30px;
+  width: 50px;
+}
+
+>>> .p-dialog-header-close {
+  display:none;
+}
