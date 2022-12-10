@@ -67,6 +67,7 @@ export class HomeComponent implements OnInit {
 
   getReportSumProduct(){
     this.dashboardService.reportSumProduct().subscribe((data: any) =>{
+      console.log(data);
       this.blockProduct = data.block_product;
       this.soldOutProduct = data.sold_out;
     });
@@ -74,6 +75,7 @@ export class HomeComponent implements OnInit {
 
   getReportSumOrder(){
     this.dashboardService.reportSumOrder().subscribe((data: any) =>{
+      console.log("getReportSumOrder"+data.sumOrderUnConfimred);
       this.sumUnconfimred = data.sumOrderUnConfimred;
       this.sumPacking = data.sumOrderPacking;
       this.sumShipping = data.sumOrderShipping;
@@ -112,6 +114,7 @@ export class HomeComponent implements OnInit {
     let lastDay = this.datePipe.transform(Date.now() + -1*24*3600*1000, 'yyyy-MM-dd');
 
     this.dashboardService.reportSumPriceOnDay(dateNow, lastDay).subscribe((data: any) =>{
+      console.log(data);
       this.totalSumPriceOnDay = data.sumPriceOnDay;
       this.statusSumPrice = data.statusPrice;
     })

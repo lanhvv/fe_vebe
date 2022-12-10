@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // baseApi: 'http://localhost:1507/vibee/api/v1/';
-  baseApi: 'https://603eg.localtonet.com/vibee/api/v1/'
+  baseApi: 'http://localhost:1507/vibee/api/v1/'
+  // baseApi: 'https://603eg.localtonet.com/vibee/api/v1/'
 };
 
 /*
