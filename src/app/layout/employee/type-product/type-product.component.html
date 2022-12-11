@@ -111,8 +111,7 @@
       <div class="mb-3" style="width: 300px;">
         <label class="form-label">Danh mục chính</label>
         <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
-                    optionLabel="name" [filter]="true" filterBy="name"
-                    [showClear]="true" styleClass="dropdown-select">
+                    optionLabel="name" [filter]="true" filterBy="name" styleClass="dropdown-select">
           <ng-template pTemplate="selectedItem">
             <div class="country-item country-item-value" *ngIf="category">
               <div>{{category.name}}</div>

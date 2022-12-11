@@ -22,103 +22,55 @@ interface StatusSupplier {
   styleUrls: ['./manage-distributor.component.css']
 })
 export class ManageDistributorComponent implements OnInit {
-  // regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
-  // regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(?!domain\.web\b)((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  // distributorForm!: FormGroup;
-  // status: number | undefined;
-  // supplierResponse !: SupplierResponse;
-  // closeResult = '';
-  // supplier!: Supplier;
-  // language!: string;
-  // isShowDialog: boolean = false;
-  //
-  //
-  // constructor(
-  //   private modalService: NgbModal,
-  //   private distributorService:DistributorService,
-  //   private translateService: TranslateConfigService,
-  //   private fb: FormBuilder) {
-  //   this.formDistributor();
-  // }
-  //
-  // ngOnInit(): void {
-  //   this.status = 5;
-  //   this.loadInit();
-  //   this.language = this.translateService.getLanguage()!;
-  // }
-  //
-  // formDistributor(){
-  //   this.distributorForm = this.fb.group({
-  //     email: new FormControl('', [
-  //       Validators.minLength(5),
-  //       Validators.maxLength(100),
-  //       Validators.pattern(this.regexEmail)
-  //     ]),
-  //     statusDistributor: ['', [Validators.required]],
-  //     fullName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-  //     address: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
-  //     phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)])
-  //   })
-  // }
-  //
-  // loadInit() {
-  //   this.distributorService.display().subscribe(data => {
-  //     this.supplierResponse = data as SupplierResponse;
-  //     // console.log(this.supplierResponse);
-  //   });
-  // }
-  //
-  //
-  // open(content: any) {
-  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-  //     this.closeResult = `Closed with: ${result}`;
-  //   }, (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
-  //
-  // private getDismissReason(reason: any): string {
-  //   if (reason === ModalDismissReasons.ESC) {
-  //     return 'by pressing ESC';
-  //   } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-  //     return 'by clicking on a backdrop';
-  //   } else {
-  //     return `with: ${reason}`;
-  //   }
-  // }
-  //
-  // edit(id:number) {
-  //   console.log("edit nef "+id);
-  // }
-  //
-  // delete(id:number) {
-  //   console.log("edit nef "+id);
-  //   this.distributorService.delete(id).subscribe(data => {
-  //       this.loadInit();
-  //   });
-  // }
-  //
-  // save() {
-  //   console.log("nane: "+this.supplier.nameSup);
-  // }
+  regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
+  regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(?!domain\.web\b)((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  distributorForm!: FormGroup;
+  status: number | undefined;
   supplierResponse : SupplierResponse = new SupplierResponse();
   closeResult = '';
+  supplier : Supplier = new Supplier();
+  language!: string;
   createSupplierResponse!:CreateSupplierResponse;
   totalItems !: number;
-  supplier : Supplier = new Supplier();
   form : CreateSupplier = new CreateSupplier();
-  constructor(private modalService: NgbModal,
-              private distributorService:DistributorService,
-              private messageService : MessageService,
-              private confirmationService : ConfirmationService) {
-  }
-
-  ngOnInit(): void {
-    this.loadInit();
-  }
 
   search:string = "";
   suppliersActive : number = 0;
+
+  supplierDialog!: boolean;
+  submitted!: boolean;
+
+  page = 0;
+  row = 10;
+
+  constructor(private modalService: NgbModal,
+              private distributorService:DistributorService,
+              private messageService : MessageService,
+              private confirmationService : ConfirmationService,
+              private translateService: TranslateConfigService,
+              private fb: FormBuilder,) {
+  }
+
+  ngOnInit(): void {
+    this.status = 5;
+    this.loadInit();
+    this.language = this.translateService.getLanguage()!;
+  }
+
+  formDistributor(){
+    this.distributorForm = this.fb.group({
+      email: new FormControl('', [
+        Validators.minLength(5),
+        Validators.maxLength(100),
+        Validators.pattern(this.regexEmail)
+      ]),
+      statusDistributor: ['', [Validators.required]],
+      fullName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
+      address: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)])
+    })
+  }
+
   loadInit() {
     this.distributorService.display(this.search, "", this.filter, this.page, this.row).subscribe(data => {
       this.supplierResponse = data as SupplierResponse;
@@ -126,6 +78,33 @@ export class ManageDistributorComponent implements OnInit {
       this.suppliersActive = this.supplierResponse.supplierActive;
       console.log(this.supplierResponse);
     });
+  }
+
+
+  open(content: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  edit(id:number) {
+    console.log("edit nef "+id);
+  }
+
+  save() {
+    console.log("nane: "+this.supplier.nameSup);
   }
 
   delete(id:number) {
@@ -199,9 +178,6 @@ export class ManageDistributorComponent implements OnInit {
     }
   }
 
-  supplierDialog!: boolean;
-  submitted!: boolean;
-
   showSuccess(detail:string) {
     this.messageService.add({severity:'success', summary: 'Success', detail: detail});
   }
@@ -210,8 +186,6 @@ export class ManageDistributorComponent implements OnInit {
     this.messageService.add({severity:'error', summary: 'Error', detail: error});
   }
 
-  page = 0;
-  row = 10;
   paginate(event:any) {
     //event.first = Index of the first record
     //event.rows = Number of rows to display in new page
