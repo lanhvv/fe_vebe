@@ -58,8 +58,8 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountResponse = new CreateAccountResponse();
     this.createAccountRequest = new CreateAccountRequest();
     this.roleAccount = [
-      {id: 1, role: 'Admin'},
-      {id: 2, role: 'Staff'}
+      {id: 1, role: 'Chủ cửa hàng'},
+      {id: 2, role: 'Nhân viên'}
     ];
     this.formAccount();
   }
@@ -79,7 +79,7 @@ export class ManageAccountComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)]),
       email: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.pattern(this.regexEmail)]),
       address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
-      role: new FormControl('', [Validators.required])
+      // role: new FormControl('', [Validators.required])
     })
   }
 

@@ -235,25 +235,25 @@
           </div>
         </div>
       </div>
-      <div class="mb-3 col-md-6">
-        <label class="form-label">Chức vụ</label>
-        <!--          <select class="form-control" [(ngModel)]="createAccountRequest.role" [ngModelOptions]="{standalone: true}">-->
-        <!--            <option [value]="1">Admin</option>-->
-        <!--            <option [value]="2">Staff</option>-->
-        <!--            <option [value]="3">User</option>-->
-        <!--          </select>-->
-        <p-dropdown [options]="roleAccount"
-                    formControlName="role"
-                    optionLabel="name"
-                    [required]="true">
-        </p-dropdown>
-        <div *ngIf="accountForm.controls['role'].invalid && (accountForm.controls['role'].dirty || accountForm.controls['role'].touched)">
-          <div *ngIf="accountForm.controls['role'].errors?.required">
-            <span class="text-danger" >Chức vụ không được để trống</span>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3 col-md-6">
+<!--      <div class="mb-3 col-md-6">-->
+<!--        <label class="form-label">Chức vụ</label>-->
+<!--        &lt;!&ndash;          <select class="form-control" [(ngModel)]="createAccountRequest.role" [ngModelOptions]="{standalone: true}">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <option [value]="1">Admin</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <option [value]="2">Staff</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <option [value]="3">User</option>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </select>&ndash;&gt;-->
+<!--        <p-dropdown [options]="roleAccount"-->
+<!--                    formControlName="role"-->
+<!--                    optionLabel="name"-->
+<!--                    [required]="true">-->
+<!--        </p-dropdown>-->
+<!--        <div *ngIf="accountForm.controls['role'].invalid && (accountForm.controls['role'].dirty || accountForm.controls['role'].touched)">-->
+<!--          <div *ngIf="accountForm.controls['role'].errors?.required">-->
+<!--            <span class="text-danger" >Chức vụ không được để trống</span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div class="mb-3">
         <label class="form-label">Địa chỉ</label>
         <textarea class="form-control"
                   rows="3"

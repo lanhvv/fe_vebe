@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
     this.language=this.translateService.getLanguage()!;
     if(this.authService.isLoggedIn()){
       if(this.authService.getRolesFromToken(this.tokenStorage.getToken())){
-
       }
       this.router.navigate(['/admin']);
     } else {
@@ -87,6 +86,7 @@ export class LoginComponent implements OnInit {
                 this.loadingService.setLoading(false);
               })
             ;
+            // this.router.navigate(['/admin']);
           } else {
             this.router.navigate(['/employee/home'])
               .then(() => {

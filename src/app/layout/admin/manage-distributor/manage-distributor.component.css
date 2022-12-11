@@ -46,3 +46,7 @@ main {
   width: 320px;
   height: 40px;
 }
+
+.field input{
+  height: 40px !important;
+}

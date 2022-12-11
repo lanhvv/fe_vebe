@@ -1,3 +1,7 @@
 .active{
   border-bottom: 3px solid #0061C1 !important;
 }
+
+.logout:hover{
+  cursor: pointer;
+}
