@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="row">
-      <p-table [value]="importInWarehouse.data">
+      <p-table [value]="data">
         <ng-template pTemplate="header">
           <tr>
             <th>
@@ -162,6 +162,7 @@
           </div>
         </div>
       </div>
+
     </div>
     <div class="col-5 float-end">
       <div class="row">
@@ -179,19 +180,16 @@
                   </div>
               </ng-template>
           </p-dropdown>
-              <label for="dropdown" translate>product.unit.name</label>
           </span>
       </div>
       <div class="field col-12 md:col-4">
         <span class="p-float-label">
             <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.amount">
-            <label for="inputtext" translate>product.unit.amount</label>
         </span>
     </div>
     <div class="field col-12 md:col-4">
       <span class="p-float-label">
           <input type="text" id="inputtext" pInputText [(ngModel)]="createProductRequest.inPrice">
-          <label for="inputtext" translate>product.unit.inprice</label>
       </span>
   </div>
       </div>
@@ -214,7 +212,10 @@
             <p-calendar [(ngModel)]="createProductRequest.rangeDates" [ngModelOptions]="{standalone: true}" [locale]="es" dateFormat="dd/mm/yy"  ></p-calendar>
         </div>
       </div>
+
     </div>
+
+
     <button class="btn btn-danger btn-exit" (mousedown)="back()" translate>layout.button.back</button>
     <button class="btn btn-primary btn-save" (mousedown)="create()" translate>layout.button.create</button>
 

@@ -1,12 +1,4 @@
-import { DetailDebitItems } from './DetailDebitItems';
-export class PayRequest {
-  fullName!: string
-  phoneNumber!: string
-  totalAmountOwed!: number
-  billId!: number
-  address!: string
-  typeOfDebtor!: number
-  expectedDateOfPaymentOfDebt!: Date
-  debitItems!: DetailDebitItems[]
+import { BaseRequest } from './BaseRequest';
+export class PayRequest extends BaseRequest {
   inPrice!: number
 }

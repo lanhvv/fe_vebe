@@ -42,7 +42,6 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {CalendarModule} from "primeng/calendar";
 import { SellPosComponent } from './sell-pos/sell-pos.component';
 import { ReportProductComponent } from './manage-product/report-product/report-product.component';
-import { ManageWarehouseComponent } from './manage-warehouse/manage-warehouse.component';
 import {RadioButtonModule} from "primeng/radiobutton";
 import {InputTextModule} from "primeng/inputtext";
 import {DialogModule} from "primeng/dialog";
@@ -73,7 +72,6 @@ import { ManagerWarehouseImportComponent } from './manager-warehouse-import/mana
     ManageUpdateAccountComponent,
     SellPosComponent,
     ReportProductComponent,
-    ManageWarehouseComponent,
     ManageProfileComponent,
     ManageUnitComponent,
     ManagerWarehouseImportComponent

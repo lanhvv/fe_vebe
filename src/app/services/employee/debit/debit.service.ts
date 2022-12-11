@@ -7,6 +7,8 @@ import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PayDebit } from '../../../shared/model/request/payDebit';
 import { UpdateDebitRequest } from '../../../shared/model/request/updateDebitRequest';
+import { PayRequest } from '../../../shared/model/request/PayRequest';
+import { ListPayRequest } from 'src/app/shared/model/request/ListPayRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +28,8 @@ export class DebitService {
     private tokenService: TokenStorageService) {
 
   }
-  getAll(request:GetOrderRequest){
-    return this.httpClient.get(this.URL+"findAll?pagenumber="+request.page+"&pagesize="+request.pageSize+
+  getAll(idUser:number ,request:GetOrderRequest){
+    return this.httpClient.get(this.URL+"findAll/"+idUser+"?pagenumber="+request.page+"&pagesize="+request.pageSize+
     "&valuefilter="+request.filter.valueFilter+"&typefilter="+request.filter.typeFilter+"&language="+request.language+"&search="+request.searchText, this.httpOptions);
   }
   getById(request:number){
@@ -39,7 +41,18 @@ export class DebitService {
   getDetailBill(bill: number){
     return this.httpClient.get(this.URL+"getDetailByBill/"+bill, this.httpOptions);
   }
-  pay(idDebit: number,request: UpdateDebitRequest){
+  pay(idDebit: number,request: PayRequest){
     return this.httpClient.post<any>(this.URL+'payDebit/'+idDebit,request,this.httpOptions);
   }
+  totalAmountOwed(request: ListPayRequest){
+    return this.httpClient.post<any>(this.URL+'/total',request,this.httpOptions);
+  }
+  listUserDebit(request:GetOrderRequest){
+    return this.httpClient.get(this.URL+"listUserDebit?pagenumber="+request.page+"&pagesize="+request.pageSize+
+    "&valuefilter="+request.filter.valueFilter+"&typefilter="+request.filter.typeFilter+"&language="+request.language+"&search="+request.searchText, this.httpOptions);
+  }
+  update(idDebit: number,request: UpdateDebitRequest):Observable<any>{
+    return this.httpClient.post<any>(this.URL+'updateDebit/'+idDebit, request,this.httpOptions);
+  }
+
 }

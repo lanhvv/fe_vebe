@@ -14,7 +14,6 @@ import { ManageAddAccountComponent } from './manage-add-account/manage-add-accou
 import {ManageUpdateAccountComponent} from "./manage-update-account/manage-update-account.component";
 import {ReportProductComponent} from "./manage-product/report-product/report-product.component";
 import {SellPosComponent} from "./sell-pos/sell-pos.component";
-import {ManageWarehouseComponent} from "./manage-warehouse/manage-warehouse.component";
 import { WereHouseManagerComponent } from './WereHouseManager/were-house-manager/were-house-manager.component';
 import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
@@ -60,10 +59,6 @@ export const AdminRouting: Route[] = [
       {
         path: 'manage-order',
         component: ManageOrderComponent
-      },
-      {
-        path: 'manage-warehouse',
-        component: ManageWarehouseComponent
       },
       {
         path: 'manage-order-detail/:id',

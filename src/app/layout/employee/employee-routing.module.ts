@@ -3,6 +3,7 @@ import {ListProductComponent} from "./list-product/list-product.component";
 import {ReportComponent} from "./report/report.component";
 import { TypeProductComponent } from './type-product/type-product.component';
 import { DebitComponent } from './debit/debit.component';
+import { UserDebitComponent } from './user-debit/user-debit.component';
 
 export const EmployeeRouting: Route[] = [
   {
@@ -23,6 +24,10 @@ export const EmployeeRouting: Route[] = [
       {
         path: 'debit',
         component: DebitComponent
+      },
+      {
+        path: 'user-debit',
+        component: UserDebitComponent
       }
     ]
   }

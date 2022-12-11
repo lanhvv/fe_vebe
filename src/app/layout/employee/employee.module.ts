@@ -26,6 +26,7 @@ import {ImageModule} from 'primeng/image';
 import {TreeSelectModule} from "primeng/treeselect";
 import {DialogModule} from "primeng/dialog";
 import { DebitComponent } from './debit/debit.component';
+import { UserDebitComponent } from './user-debit/user-debit.component';
 @NgModule({
   declarations: [
     ListProductComponent,
@@ -35,6 +36,7 @@ import { DebitComponent } from './debit/debit.component';
     ReportComponent,
     TypeProductComponent,
     DebitComponent,
+    UserDebitComponent,
   ],
   imports: [
     RouterModule.forChild(EmployeeRouting),

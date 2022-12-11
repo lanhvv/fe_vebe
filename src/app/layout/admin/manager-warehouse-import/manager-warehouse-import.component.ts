@@ -78,8 +78,13 @@ export class ManagerWarehouseImportComponent implements OnInit {
   deleteById(key:number, redisId: string){
     this.importService.deleteById(key, redisId, this.language).subscribe(response => {
       this.baseResponse = response as BaseResponse;
-    this.ngOnInit()
+      if(this.baseResponse.status.status=='1'){
+        this.success(this.createProductResponse.status.message);
+      }else{
+        this.failed(this.createProductResponse.status.message);
+      }
     });
+    this.ngOnInit()
   }
   getAllImportInWarehouse(id: any){
     this.importService.getImportInWarehouse(id).subscribe(response => {
@@ -146,9 +151,9 @@ export class ManagerWarehouseImportComponent implements OnInit {
 
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
-      this.selectedCategory.id=response.category.id
-      this.createProductRequest.nameProd= response.productName
-      this.createProductRequest.description= response.desciption
+      // this.selectedCategory.id=response.category.id
+      // this.createProductRequest.nameProd= response.productName
+      // this.createProductRequest.description= response.desciption
     })
   }
   getUnitLayouts(){
@@ -157,6 +162,7 @@ export class ManagerWarehouseImportComponent implements OnInit {
   }
 
   getInformations(){
+    console.log("liên nè")
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
       console.log(this.getInforCreateProductResponse.unitItems);
