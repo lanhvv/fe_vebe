@@ -153,7 +153,7 @@ export class ImportExcelComponent implements OnInit {
   }
 
   getUnits() {
-    this.typeProductService.getUnits(this.language+"").subscribe(response=>{
+    this.typeProductService.getUnits(this.language+"").subscribe((response: GetUnitResponse)=>{
       this.getUnitResponse = response as GetUnitResponse;
       console.log(this.getUnitResponse);
       if (this.getUnitResponse.status.status === '0'){
