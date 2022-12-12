@@ -52,11 +52,11 @@ export const AdminRouting: Route[] = [
         component: SellPosComponent
       },
       {
-        path: 'detail-product',
+        path: 'detail-product'  ,
         component: DetailProductComponent
       },
       {
-        path: 'update-product',
+        path: 'update-product/:id',
         component: UpdateProductComponent
       },
       {
