@@ -3,26 +3,28 @@ import { Injectable } from '@angular/core';
 import {TokenStorageService} from "../token-storage.service";
 import {UnitRequest} from "../../shared/model/request/UnitRequest";
 import {UnitItems} from "../../shared/model/UnitItems";
-
+import {environment} from "../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class UnitService {
-  api="http://localhost:1507/vibee/api/v1/auth";
-  apiAdmin = "http://localhost:1507/vibee/api/v1/admins/unit";
+  api=AUTH_API+"catalog";
+
+  apiAdmin = AUTH_API+"admins/unit";
   constructor(private client:HttpClient,
               private tokenService: TokenStorageService) {
 
   }
 
-  // httpOptions = {
-  //   headers: new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     'Authorization':`Bearer `+ this.tokenService.getToken()!,
-  //     'Access-Control-Allow-Origin': 'http://localhost:4200/',
-  //     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-  //   }),
-  // };
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization':`Bearer `+ this.tokenService.getToken()!,
+      'Access-Control-Allow-Origin': 'http://localhost:4200/',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+    }),
+  };
 
 
   getChild(id:number,language:string){
@@ -61,6 +63,14 @@ export class UnitService {
     console.log(this.requestUnit);
     return this.client.post(this.apiAdmin+"/delete", this.requestUnit);
   }
+
+  getUnits(language:string){
+    return this.client.get(this.api+`/unit/get-all?language=${language}`);
+  }
+
+  getUnitsByUnitSelected(language:string, id:number){
+    return this.client.get(this.api+`/unit/get-units-by-select-unit?language=${language}&id=${id}`,this.httpOptions);
+  }
 }
 
 export class UnitItemEdit {
@@ -69,6 +79,7 @@ export class UnitItemEdit {
 }
 
 
+// @ts-ignore
 export class RequestUnit {
   idDelete!:number;
   idParent!:number;

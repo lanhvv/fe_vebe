@@ -1,67 +1,110 @@
 <!--Main Navigation-->
-<admin-header [Status]=status></admin-header>
+<admin-header></admin-header>
 <!--Main Navigation-->
 
 <!--Main layout-->
 <main>
-  <h5>Quản lý tài khoản khách hàng</h5>
   <div class="container pt-4 main-layout">
     <div class="row">
-      <div class="col-3">
-        <button class="root-btn">Thêm tài khoản</button>
+      <div class="col">
+        <h2>Quản lý tài khoản</h2>
       </div>
-      <div class="col-9">
-        <form>
-          <div class="input-group mb-3">
-            <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #username
-                   placeholder="Nhập tên khách hàng...">
-            <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
-          </div>
-        </form>
+      <div class="col">
+        <a class="btn btn-outline-primary float-end">Thêm tài khoản</a>
       </div>
     </div>
-    <!-- table -->
-    <section class="table-account">
-      <p-table #dt [value]="listAccountItems.items" dataKey="id"
-               styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true"> [filterDelay]="0" >
 
+    <section class="table-account" style="margin-left: 200px;">
+      <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="open()"></button>
+      <form (ngSubmit)="onSearch()">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+            <input type="text" pInputText class="form-control" [(ngModel)]="search" name="name"
+                   placeholder="Email, name, number phone">
+      </span>
+      </form>
+      <p-radioButton name="groupname" value="0" [(ngModel)]="selectedStatus" (onClick)="onStatus()" label="off"></p-radioButton>
+      <p-radioButton name="groupname" value="1" [(ngModel)]="selectedStatus" (onClick)="onStatus()" label="on"></p-radioButton>
+      <p-table [value]="customers.customers" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
-            <th scope="col">Mã khách hàng</th>
-            <th scope="col">Họ và tên</th>
-            <th scope="col">Số điện thoại</th>
-            <th scope="col">Số lần mua hàng</th>
-            <th scope="col">Tổng tiền</th>
-            <th scope="col">Thao tác</th>
+            <th></th>
+            <th pSortableColumn="fullname" (mousedown)="sort('fullname')">Name<p-sortIcon field="fullname"></p-sortIcon></th>
+            <th pSortableColumn="address" (mousedown)="sort('address')">Address<p-sortIcon field="address"></p-sortIcon></th>
+            <th pSortableColumn="numberphone" (mousedown)="sort('numberphone')">Number phone<p-sortIcon field="numberphone"></p-sortIcon></th>
+            <th pSortableColumn="cccd" (mousedown)="sort('cccd')">CCCD<p-sortIcon field="cccd"></p-sortIcon></th>
+            <th pSortableColumn="email" (mousedown)="sort('email')">Email<p-sortIcon field="email"></p-sortIcon></th>
+            <th>Status</th>
           </tr>
-          <tr></tr>
         </ng-template>
-        <ng-template pTemplate="body" let-item>
-          <tr class="p-selectable-row">
-            <td>{{item.id}}</td>
-            <td>{{item.fullname}}</td>
-            <td>{{item.numberPhone}}</td>
-            <td>{{item.statusName}}</td>
-            <td>{{item.creator}}</td>
-            <td>
-            </td>
-          </tr>
-
-        </ng-template>
-
-        <ng-template pTemplate="emptymessage">
+        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-customer>
           <tr>
-            <td colspan="8">No customers found.</td>
+            <td>{{rowIndex+1}}</td>
+            <td>{{customer.fullname}}</td>
+            <td>{{customer.address}}</td>
+            <td>{{customer.numberphone}}</td>
+            <td>{{customer.cccd}}</td>
+            <td>{{customer.email}}</td>
+            <td *ngIf="customer.status == 1">
+              <i class="pi pi-lock-open" (click)="lock(customer.idCustomer)"></i>
+            </td>
+            <td *ngIf="customer.status == 0">
+              <i class="pi pi-lock" (click)="unlock(customer.idCustomer)"></i>
+            </td>
           </tr>
         </ng-template>
       </p-table>
-
-      <p-paginator [rows]="10" [totalRecords]="listAccountItems.totalItems" [rowsPerPageOptions]="[3,10,25,50]"
-                   currentPageReportTemplate="Showing {{listAccountItems.totalPages}} to {{listAccountItems.totalPages}} of {{listAccountItems.totalItems}} entries"
-      ></p-paginator>
+      <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]" (onPageChange)="paginate($event)" ></p-paginator>
     </section>
   </div>
 
+  <p-dialog [(visible)]="customerDialog" [style]="{width: '550px'}" header="Customer" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="name">Username</label>
+        <input type="text" pInputText id="username" [(ngModel)]="customerRequest.username" required  />
+        <small class="p-error" *ngIf="submitted && !customerRequest.username">Name is required.</small>
+      </div>
+      <div class="field">
+        <label for="name">Password</label>
+        <p-password [toggleMask]="true" id="password" [(ngModel)]="customerRequest.password" required></p-password>
+        <small class="p-error" *ngIf="submitted && !customerRequest.password">Name is required.</small>
+      </div>
+      <div class="field">
+        <label for="name">Fullname</label>
+        <input type="text" pInputText id="name" [(ngModel)]="customerRequest.fullname" required  />
+        <small class="p-error" *ngIf="submitted && !customerRequest.fullname">Name is required.</small>
+      </div>
+      <div class="field">
+        <label for="cccd">CCCD</label>
+        <input type="text" pInputText id="cccd" [(ngModel)]="customerRequest.cccd" required />
+        <small class="p-error" *ngIf="submitted && !customerRequest.cccd">CCCD is required.</small>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="text" pInputText id="email" [(ngModel)]="customerRequest.email" required  />
+        <small class="p-error" *ngIf="submitted && !customerRequest.email">Email is required.</small>
+      </div>
+      <div class="field">
+        <label for="name">Numberphone</label>
+        <input type="text" pInputText id="numberphone" [(ngModel)]="customerRequest.numberPhone" required  />
+        <small class="p-error" *ngIf="submitted && !customerRequest.numberPhone">Number phone is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="address">Address</label>
+        <textarea id="address" pInputTextarea [(ngModel)] = "customerRequest.address"  required rows="3" cols="20"></textarea>
+        <small class="p-error" *ngIf="submitted && !customerRequest.address">Address is required.</small>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+  <p-toast></p-toast>
   <admin-footer></admin-footer>
 </main>
 <!--Main layout-->

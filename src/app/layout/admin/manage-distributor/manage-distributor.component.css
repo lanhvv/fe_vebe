@@ -41,3 +41,12 @@ main {
   background: #E5EFF9 !important;
   border-radius: 5px;
 }
+
+>>> .status-distributor{
+  width: 320px;
+  height: 40px;
+}
+
+.field input{
+  height: 40px !important;
+}

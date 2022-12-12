@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserDebitComponent } from './user-debit.component';
+import { SellOfflineComponent } from './sell-offline.component';
 
-describe('UserDebitComponent', () => {
-  let component: UserDebitComponent;
-  let fixture: ComponentFixture<UserDebitComponent>;
+describe('SellOfflineComponent', () => {
+  let component: SellOfflineComponent;
+  let fixture: ComponentFixture<SellOfflineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserDebitComponent ]
+      declarations: [ SellOfflineComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserDebitComponent);
+    fixture = TestBed.createComponent(SellOfflineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

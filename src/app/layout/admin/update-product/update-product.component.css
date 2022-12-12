@@ -68,3 +68,25 @@ input[type=file] {
 .button-edit{
   cursor: pointer;
 }
+
+.root-btn {
+  width: 183px;
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  display: none;
+}

@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { TokenStorageService } from '../token-storage.service';
-import { environment } from 'src/environments/environment.dev';
 import { GetOrderRequest } from '../../shared/model/request/getOrderRequest';
-
+import {environment} from "../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class ManagerOrderService {
-  readonly URL="http://localhost:1507/vibee/api/v1/admins/order";
+  readonly URL=AUTH_API+"/admins/order";
   key: string = " ";
   httpOptions = {
     headers: new HttpHeaders({
@@ -46,7 +46,7 @@ export class ManagerOrderService {
 
 
 getPageOrder(pageNum: number):Observable<any>{
-  return this.httpClient.get<any>(environment.URL_BASE +this.URL+'?pageIndex='+pageNum);
+  return this.httpClient.get<any>(this.URL+'?pageIndex='+pageNum);
 }
 getAll2(page: number, pageSize: number,valueFilter: string, typeFilter: string,language:string, searchText:string): Observable<any> {//&filter=idBill&keyword=1
   return this.httpClient.get(this.URL+"/findAllBill?pagenumber="+page+"&pagesize="+pageSize+

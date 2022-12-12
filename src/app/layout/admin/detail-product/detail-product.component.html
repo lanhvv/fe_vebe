@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="col-5 float-end">
-        <div class="row">
+        <div class="row" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.unitItems!=null">
           <div class="field col-12 md:col-4">
             <span class="p-float-label">
               <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
@@ -155,8 +155,7 @@
       </div>
       <button class="btn btn-danger btn-exit" (mousedown)="back()" translate>layout.button.back</button>
       <button class="btn btn-primary btn-save" (mousedown)="create()" translate>layout.button.create</button>
-
-    </div>
+  </div>
 
   <admin-footer></admin-footer>
 </main>

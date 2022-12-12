@@ -6,6 +6,8 @@ import { RegisterComponent } from './layout/register/register.component';
 import {ListProductComponent} from "./layout/employee/list-product/list-product.component";
 import { ManageProductComponent } from './layout/admin/manage-product/manage-product.component';
 import { AdminRouting } from './layout/admin/admin-routing.module';
+import {ForgotPasswordComponent} from "./layout/forgot-password/forgot-password.component";
+import {ProfileComponent} from "./layout/profile/profile.component";
 
 
 const routes: Routes = [
@@ -17,6 +19,14 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'forgot-pass',
+    component: ForgotPasswordComponent
+  },
+  {
+    path:'profile',
+    component:ProfileComponent
   },
   {
     path: '',

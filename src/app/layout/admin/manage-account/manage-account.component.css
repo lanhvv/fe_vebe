@@ -36,8 +36,12 @@ main {
   background-color: #0061C1;
   height: 40px;
 }
-
->>> .p-datatable .p-datatable-thead > tr > th {
+.p-datatable .p-datatable-thead > tr > th {
   background: #E5EFF9 !important;
   border-radius: 5px;
+}
+
+.p-dropdown{
+  width: 100% !important;
+  height: 40px !important;
 }

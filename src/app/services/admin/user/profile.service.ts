@@ -3,8 +3,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { ProfileRequest } from '../../../shared/model/request/profileRequest';
 import { ChangePasswordRequest } from '../../../shared/model/request/changePasswordRequest';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-const AUTH_API = environment.base;
+import {environment} from "../../../../environments/environment";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })

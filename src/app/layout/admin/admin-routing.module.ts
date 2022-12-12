@@ -14,9 +14,14 @@ import { ManageAddAccountComponent } from './manage-add-account/manage-add-accou
 import {ManageUpdateAccountComponent} from "./manage-update-account/manage-update-account.component";
 import {ReportProductComponent} from "./manage-product/report-product/report-product.component";
 import {SellPosComponent} from "./sell-pos/sell-pos.component";
+import {ManageWarehouseComponent} from "./manage-warehouse/manage-warehouse.component";
 import { WereHouseManagerComponent } from './WereHouseManager/were-house-manager/were-house-manager.component';
 import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
+import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
+import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcode.component";
+// import * as path from "path";
+// import * as path from "path";
 import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
 
 
@@ -42,23 +47,45 @@ export const AdminRouting: Route[] = [
       },
       {
         path: 'manage-product',
-        component: ManageProductComponent
+        children: [
+          {
+            path: '',
+            component: ManageProductComponent
+          },
+          {
+            path: 'update-product/:id',
+            component: UpdateProductComponent
+          },
+          {
+            path: 'detail-product',
+            component: DetailProductComponent
+          }
+        ]
       },
       {
         path: 'sell-pos',
         component: SellPosComponent
       },
       {
-        path: 'detail-product',
-        component: DetailProductComponent
-      },
-      {
-        path: 'update-product',
-        component: UpdateProductComponent
-      },
-      {
         path: 'manage-order',
         component: ManageOrderComponent
+      },
+      {
+        path: 'manage-warehouse',
+        children: [
+          {
+            path: '',
+            component: ManageWarehouseComponent
+          },
+          {
+            path: 'print-barcode',
+            component: PrintBarcodeComponent
+          }
+        ]
+      },
+      {
+        path: 'manage-warehouse/upload-file',
+        component: ImportExcelComponent
       },
       {
         path: 'manage-order-detail/:id',
@@ -75,6 +102,10 @@ export const AdminRouting: Route[] = [
       {
         path: 'manage-update-account/:id',
         component: ManageUpdateAccountComponent
+      },
+      {
+        path: 'manage-warehouse/:id',
+        component: WereHouseManagerComponent
       },
       {
         path: 'manage-distributor',

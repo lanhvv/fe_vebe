@@ -856,17 +856,14 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col">
+                <p-dropdown optionLabel="name" styleClass="dropdown-unit-product"></p-dropdown>
+              </div>
+              <div class="col">
                 <button class="btn-quantity" (click)="decreaseQuantity()">-</button>
                 <input [ngModel]="quantity" class="input-quantity" disabled>
                 <button class="btn-quantity" (click)="increaseQuantity()">+</button>
               </div>
             </div>
-            <div class="row mb-2">
-              <div class="col">
-                <p-dropdown optionLabel="name" styleClass="dropdown-unit-product"></p-dropdown>
-              </div>
-            </div>
-
             <div class="row">
               <button class="root-btn-product">Thêm</button>
             </div>

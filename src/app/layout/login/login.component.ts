@@ -1,4 +1,3 @@
-import { BaseResponse } from 'src/app/shared/response/BaseResponse';
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {TranslateConfigService} from "../../services/translate-config.service";
 import {TokenStorageService} from "../../services/token-storage.service";
@@ -10,6 +9,8 @@ import {LoginResponse} from "../../shared/response/LoginResponse";
 import { ForgotPasswordRequest } from 'src/app/shared/model/request/forgotPasswordRequest';
 import { ManagerEmailService } from 'src/app/services/manager-public/manager-email.service';
 import { MessageService } from 'primeng/api';
+import {BaseResponse} from "../../shared/response/BaseResponse";
+import {LoadingService} from "../../services/loading/loading.service";
 
 @Component({
   selector: 'app-login',
@@ -46,7 +47,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private translateService:TranslateConfigService,
     private managerEmailService:ManagerEmailService ,
-    private  messageService: MessageService
+    private  messageService: MessageService,
+    private loadingService: LoadingService,
   ) {
     this.forgotPasswordRequest = new ForgotPasswordRequest()
     this.baseResponse = new BaseResponse()
@@ -56,7 +58,6 @@ export class LoginComponent implements OnInit {
     this.language=this.translateService.getLanguage()!;
     if(this.authService.isLoggedIn()){
       if(this.authService.getRolesFromToken(this.tokenStorage.getToken())){
-
       }
       this.router.navigate(['/admin']);
     } else {
@@ -70,36 +71,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  login(): void{
-    //const { username, password } = this.loginForm;
-    this.loginService.login({
-      username: this.loginForm.get('username')!.value,
-      password: this.loginForm.get('password')!.value,
-      // rememberMe: this.loginForm.get('rememberMe')!.value,
-    })
-      .subscribe(
-        data => {
-          this.tokenStorage.saveToken(data.token);
-          this.tokenStorage.saveUser(data);
-          this.roles = this.authService.getRolesFromToken(data.token);
-
-          if(this.roles.includes("ADMIN")){
-            this.router.navigate(['/admin']);
-            console.log("admin")
-          } else {
-            this.router.navigate(['/employee']);
-            console.log("employee")
-          }
-          // this.reloadPage();
-        },
-        err => {
-          this.errorMessage = err.error.message;
-          this.isLoginFailed = true;
-        }
-      );
-  }
-
   generateToken(){
+    this.loadingService.setLoading(true);
     var basicToken= btoa(this.loginForm.get('username')!.value+":"+this.loginForm.get('password')!.value)
     //const { username, password } = this.loginForm;
     this.loginService.generateToken(basicToken,this.language).subscribe(data => {
@@ -107,17 +80,22 @@ export class LoginComponent implements OnInit {
           this.tokenStorage.saveToken(this.loginResponse.accessToken);
           this.tokenStorage.saveUser(data);
           this.roles = this.loginResponse.role;
-
           if(this.roles.includes("ADMIN")){
-            this.router.navigate(['/admin']);
-            console.log("admin")
+            this.router.navigate(['/admin'])
+              .then(() => {
+                this.loadingService.setLoading(false);
+              })
+            ;
+            // this.router.navigate(['/admin']);
           } else {
-            this.router.navigate(['/employee']);
-            console.log("employee")
+            this.router.navigate(['/employee/home'])
+              .then(() => {
+                this.loadingService.setLoading(false);
+              });
           }
-          // this.reloadPage();
         },
         err => {
+          this.loadingService.setLoading(false);
           this.errorMessage = err.error.message;
           this.isLoginFailed = true;
         }
@@ -138,6 +116,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  changePassWord(){
+  //  hàm xử lý, code xong nếu pass thì thêm câu lệnh này
+    this.isShowDialogForgotPass = false;
+  }
   forgotPassWord(){
   //  hàm xử lý, code xong nếu pass thì thêm câu lệnh này
   this.managerEmailService.forgotPassword(this.forgotPasswordRequest).subscribe(response => {

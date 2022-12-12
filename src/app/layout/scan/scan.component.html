@@ -1,0 +1,27 @@
+<zxing-scanner
+(camerasFound)="onCamerasFound($event)"
+(scanSuccess)="onCodeResult($event)"
+[torch]="torchEnabled"
+[tryHarder]="tryHarder"
+(permissionResponse)="onHasPermission($event)"
+[(device)]="currentDevice"
+(scanSuccess)="onCodeResult($event)"
+(torchCompatible)="onTorchCompatible($event)"
+[enable] = "enable"
+[formats]="formatsEnabled"
+></zxing-scanner>
+<hr>
+
+<!--<header>-->
+<!--    <select   (change)="onDeviceSelectChange($event)">-->
+<!--      <option value="" [selected]="!currentDevice">No Device Selected</option>-->
+<!--&lt;!&ndash;      <option *ngFor="let device of availableDevices" [value]="device.deviceId"&ndash;&gt;-->
+<!--&lt;!&ndash;              [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>&ndash;&gt;-->
+
+<!--      <option [value]="availableDevices[0].deviceId"-->
+<!--      >{{availableDevices[0].label}}</option>-->
+<!--    </select>-->
+<!--</header>-->
+
+<button (click)="enableCamera()">bật cam</button>
+

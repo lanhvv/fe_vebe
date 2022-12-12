@@ -1,0 +1,205 @@
+<p-toast></p-toast>
+<div class="container-fluid">
+  <div class="content">
+    <div class="row">
+      <div class="float-start mb-3">
+        <a type="button" routerLink="/admin/manage-warehouse" class="root-btn text-center text-decoration-none p-2 me-4">
+          <i class="fa-solid fa-arrow-left me-3"></i>
+          Quay lại
+        </a>
+        <a type="button"
+           class="root-btn text-decoration-none pt-2 text-center"
+           href="assets/file%20lưu%20kho.xlsx"
+           download>
+          <i class="fa-solid fa-download me-1"></i>
+          Tải file mẫu
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-7">
+        <div class="note">
+          <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status=='1'">
+            <label>Lựa chọn nhà cung cấp</label> <br>
+            <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
+              <ng-template pTemplate="selectedItem">
+                <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                  <div>{{selectedSupplier.supplierName}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-supplier pTemplate="item">
+                <div class="supplier">
+                  <div>{{supplier.supplierName}}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="float-end">
+        <button class="root-btn" (click)="changeFile()" *ngIf="data.length > 0">Sửa đổi file</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+<!--          <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>-->
+          <button pButton pRipple label="Xóa sản phẩm" icon="pi pi-trash" class="p-button-danger root-btn-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <p-fileUpload styleClass="root-btn-upload" (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Nhập file" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()" [disabled]="!selectedSupplier"></p-fileUpload>
+          <button pButton pRipple label="Hoàn thành" class="root-btn ms-3" [disabled]="!productResponse || !productResponse.products.length" (mousedown)="import()" ></button>
+        </ng-template>
+      </p-toolbar>
+      <div class="ps-5" *ngIf="this.productResponse==null">
+        <p>Chú ý:</p>
+        <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
+        <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
+      </div>
+      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
+               [(selection)]="selectedProducts" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="th-table" style="width: 4rem">
+            </th>
+            <th class="th-table" style="width: 4rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="th-table" pSortableColumn="productName">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
+            <th class="th-table" pSortableColumn="BarCode">Mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
+            <th class="th-table">Loại sản phẩm</th>
+            <th class="th-table">Ngày hết hạn</th>
+            <th class="th-table" pSortableColumn="inAmount">Số lượng <p-sortIcon field="inAmount"></p-sortIcon></th>
+            <th class="th-table">Đơn vị</th>
+            <th class="th-table" pSortableColumn="inPrice">Tổng tiền <p-sortIcon field="inPrice"></p-sortIcon></th>
+            <th class="th-table">Thao tác</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-expanded="expanded">
+          <tr>
+            <td>
+              <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>
+              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+            </td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.productName" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.productName}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+                  {{product.barcode}}
+            </td>
+            <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
+                    <div>{{this.product.typeProduct.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-category pTemplate="item">
+                  <div class="supplier">
+                    <div>{{category.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.rangeDates" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.rangeDates}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.inAmount" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.inAmount}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                    <div>{{product.unit.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-unit pTemplate="item">
+                  <div class="unit" >
+                    <div>{{unit.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+            <td pEditableColumn>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="text" [(ngModel)]="product.inPrice" (ngModelChange)="saveProducts()">
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{product.inPrice}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+              <td>
+                <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteProduct(product)"></button>
+              </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td colspan="10">
+              <div class="p-3">
+                <table>
+                  <thead>
+                    <th>Đơn vị</th>
+                    <th>Giá nhập</th>
+                    <th>Giá bán</th>
+                    <th>Thao tác</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let export of this.productResponse.products[product.id].exports">
+                      <td>{{export.unitName}}</td>
+                      <td>
+                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.inPrice" id="in-price" (ngModelChange)="saveProducts()">
+                      </td>
+                      <td>
+                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">
+                      </td>
+                      <td>
+                        <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteExport(export,product)"></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex align-items-center justify-content-between">
+            In total there are {{this.productResponse.products ? productResponse.products.length : 0 }} products.
+          </div>
+        </ng-template>
+      </p-table>
+  </div>
+</div>
+</div>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -1,7 +1,7 @@
 import { Category } from "../category.model";
 import { InfoUnitItem } from "../InfoUnitItem";
 import { BaseResponse } from "./BaseResponse";
-import { GetSupplierItem } from "./GetSupplierItem";
+import { GetSupplierItem } from "./GetSupplieritem";
 
 export class GetInfoCreateProdResponse extends BaseResponse{
     items!:GetSupplierItem[];

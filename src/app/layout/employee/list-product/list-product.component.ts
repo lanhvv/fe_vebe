@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import {NgxSpinnerService} from "ngx-spinner";
 import {TypeProductService} from "../../../services/type-product/type-product.service";
+import {ResponseProducts} from "../../../shared/model/response/ResponseProducts";
 import {ResponseTypeProducts} from "../../../shared/model/response/ResponseTypeProduct";
 import {TypeProduct} from "../../../shared/model/TypeProduct";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
@@ -11,7 +12,6 @@ import {GetProductsRequest} from "../../../shared/model/request/GetProductsReque
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {ViewStallResponse} from "../../../shared/response/product/ViewStallResponse";
 import { ProductService } from 'src/app/services/Product/product.service';
-// import { ProductService } from 'src/app/services/employee/product/product.service';
 
 
 
@@ -35,7 +35,7 @@ export class ListProductComponent implements OnInit {
               private stallService:StallServiceService,
               private translateService:TranslateConfigService) { }
 
-  status!: number;
+  status: number | undefined;
   products !:ViewStallResponse;
   notEmptyPost = true;
   notscrolly = true;

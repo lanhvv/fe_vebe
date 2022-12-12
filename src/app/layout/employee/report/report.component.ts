@@ -4,7 +4,6 @@ import {ResponseStatisticStaff} from "../../../shared/model/response/response-st
 import {Status} from "../../../shared/model/Status";
 import {Filter} from "../../../shared/model/Filter";
 import {filter} from "rxjs/operators";
-import {ConfirmationService, MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-report',
@@ -13,19 +12,16 @@ import {ConfirmationService, MessageService} from "primeng/api";
 })
 export class ReportComponent implements OnInit {
 
-  constructor(private statisticStaff:StatisticStaffService,
-              private messageService : MessageService,
-              private confirmationService: ConfirmationService) { }
+  statusPage!: number;
+  constructor(private statisticStaff:StatisticStaffService) { }
 
   statistics !: ResponseStatisticStaff;
   filter!:Filter;
-  date = "";
 
   ngOnInit(): void {
+    this.statusPage = 5;
     this.filter={"typeFilter":"","valueFilter":""}
     this.loadOnInit();
-    var today  = new Date();
-    this.date = today.toLocaleDateString("en-US");
   }
 
   dateValue = new Date();
@@ -59,17 +55,12 @@ export class ReportComponent implements OnInit {
   exportExcel() {
     this.page = 0;
     this.row = 10;
-    console.log("Hello");
-    this.confirmationService.confirm({
-      message: 'Bạn có muốn xuất file excel?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.statisticStaff.exportExcel(this.page, this.row, this.formatDate(this.dateValue)).subscribe(data => {
-          this.status = data as Status;
-          this.messageService.add({severity:'success', summary: 'Success', detail: 'Đã xuất file excel thành công!'});
-        });
-      }});
+    this.statisticStaff.exportExcel(this.page, this.row, this.formatDate(this.dateValue)).subscribe(data => {
+        this.status = data as Status;
+        if (this.status.status === "1") {
+          console.log("success!");
+        }
+    });
   }
 
   chooseDate() {

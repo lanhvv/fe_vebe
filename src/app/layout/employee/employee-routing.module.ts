@@ -1,7 +1,10 @@
 import {Route} from "@angular/router";
 import {ListProductComponent} from "./list-product/list-product.component";
+import {SellOfflineComponent} from "./sell-offline/sell-offline.component";
 import {ReportComponent} from "./report/report.component";
-import { TypeProductComponent } from './type-product/type-product.component';
+import {TypeProductComponent} from "./type-product/type-product.component";
+import {ManageOrderComponent} from "./manage-order/manage-order.component";
+import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 import { DebitComponent } from './debit/debit.component';
 import { UserDebitComponent } from './user-debit/user-debit.component';
 
@@ -14,13 +17,30 @@ export const EmployeeRouting: Route[] = [
         component: ListProductComponent
       },
       {
+        path: 'home',
+        component: SellOfflineComponent,
+        pathMatch: 'full'
+      },
+      {
         path: 'report',
         component: ReportComponent
       },
       {
+        path: 'sell-offline',
+        component: SellOfflineComponent
+      },
+      {
         path: 'type-product',
         component: TypeProductComponent
-      },//DebitComponent
+      },
+      {
+        path: 'manage-order',
+        component: ManageOrderComponent
+      },
+      {
+        path: 'manage-profile',
+        component: ManageProfileComponent
+      },
       {
         path: 'debit',
         component: DebitComponent

@@ -5,7 +5,7 @@ import {ForgotPasswordRequest} from "../../shared/model/request/forgotPasswordRe
 import {environment} from "../../../environments/environment";
 import {ChangePasswordRequest} from "../../shared/model/request/changePasswordRequest";
 import {Observable} from "rxjs";
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })

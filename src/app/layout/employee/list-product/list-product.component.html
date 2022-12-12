@@ -7,7 +7,7 @@
        [infiniteScrollThrottle]="50"
        [immediateCheck] = "true"
        (scrolled)="onScroll()"
-  >
+  ></div>
   <div class="row">
     <div class="col-3 sidebar">
       <div class="sidebar-search p-5">
@@ -20,7 +20,7 @@
       </div>
       <div class="sidebar-filter-category mt-3 p-3">
         <p class="fw-bold">Lọc theo loại sản phẩm</p>
-        <p-dropdown [options]="types" (onClick)="onClick()" [(ngModel)]="selectedType" optionLabel="name" optionValue="id"></p-dropdown>
+        <p-dropdown styleClass="dropdown_category" [options]="types" (onClick)="onClick()" [(ngModel)]="selectedType" optionLabel="name" optionValue="id"></p-dropdown>
       </div>
       <div class="sidebar-filter-price mt-3 p-3">
         <p class="fw-bold">Lọc theo giá tiền</p>

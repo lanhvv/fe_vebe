@@ -16,10 +16,10 @@
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-circle-user fw-bold me-2"></i> sidebar.management.account</span>
         </a>
-        <a routerLink="/admin/manage-customer" [ngClass]="{'active': Status === 4 }"
-           class="list-group-item list-group-item-action py-2 ripple">
-          <span translate><i class="fa-solid fa-handshake-simple fw-bold me-2"></i> sidebar.management.customer</span>
-        </a>
+<!--        <a routerLink="/admin/manage-customer" [ngClass]="{'active': Status === 4 }"-->
+<!--           class="list-group-item list-group-item-action py-2 ripple">-->
+<!--          <span translate><i class="fa-solid fa-handshake-simple fw-bold me-2"></i> sidebar.management.customer</span>-->
+<!--        </a>-->
         <a routerLink="/admin/manage-distributor" [ngClass]="{'active': Status === 5 }"
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-users fw-bold me-2"></i> sidebar.management.distributor</span>
@@ -28,11 +28,11 @@
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-box-archive fw-bold me-2"></i> sidebar.management.product</span>
         </a>
-        <a routerLink="/admin/sell-pos" target="_blank" [ngClass]="{'active': Status === 7 }"
-           class="list-group-item list-group-item-action py-2 ripple">
-          <span translate><i class="fa-brands fa-sellcast fw-bold me-2"></i> sidebar.management.sell</span>
-        </a>
-        <a routerLink="/admin/manage-warehouse-import" [ngClass]="{'active': Status === 8 }"
+<!--        <a routerLink="/admin/sell-pos" target="_blank" [ngClass]="{'active': Status === 7 }"-->
+<!--           class="list-group-item list-group-item-action py-2 ripple">-->
+<!--          <span translate><i class="fa-brands fa-sellcast fw-bold me-2"></i> sidebar.management.sell</span>-->
+<!--        </a>-->
+        <a routerLink="/admin/manage-warehouse" [ngClass]="{'active': Status === 8 }"
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-warehouse fw-bold me-2"></i> sidebar.management.warehouse</span>
         </a>
@@ -60,34 +60,34 @@
       <!-- Right links -->
       <ul class="navbar-nav ms-auto d-flex flex-row">
         <!-- Notification dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#"
-             id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">
-            <i class="fas fa-bell fs-3"></i>
-            <span class="badge rounded-circle badge-notification bg-danger p-1">1</span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">
-            <li>
-              <a class="dropdown-item" routerLink="/admin/manage-profile">
-                <i class="fa-solid fa-user"></i>
-                Tài khoản của tôi
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" (click)="isDialogChangePass = true">
-                <i class="fa-solid fa-gear"></i>
-                Đổi mật khẩu
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Đăng xuất
-              </a>
-            </li>
-          </ul>
-        </li>
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#"-->
+<!--             id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown"-->
+<!--             aria-expanded="false">-->
+<!--            <i class="fas fa-bell fs-3"></i>-->
+<!--            <span class="badge rounded-circle badge-notification bg-danger p-1">1</span>-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" routerLink="/admin/manage-profile">-->
+<!--                <i class="fa-solid fa-user"></i>-->
+<!--                Tài khoản của tôi-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" (click)="isDialogChangePass = true">-->
+<!--                <i class="fa-solid fa-gear"></i>-->
+<!--                Đổi mật khẩu-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <i class="fa-solid fa-right-from-bracket"></i>-->
+<!--                Đăng xuất-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </li>-->
 
         <!-- Icon
         <li class="nav-item">
@@ -97,30 +97,30 @@
         </li>-->
 
         <!-- Icon dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="./assets/image/united-states.png" alt="">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" href="#">
-                <img src="./assets/image/united-states.png" alt="">
-                English
-                <i class="fa fa-check text-success ms-2"></i>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <img src="./assets/image/vietnam.png" alt="">
-                Vietnamese
-              </a>
-            </li>
-          </ul>
-        </li>
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"-->
+<!--             role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            <img src="./assets/image/united-states.png" alt="">-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <img src="./assets/image/united-states.png" alt="">-->
+<!--                English-->
+<!--                <i class="fa fa-check text-success ms-2"></i>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <hr class="dropdown-divider" />-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <img src="./assets/image/vietnam.png" alt="">-->
+<!--                Vietnamese-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </li>-->
 
         <!-- Avatar -->
         <li class="nav-item dropdown">
@@ -144,7 +144,7 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" (click)="logout()">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 Đăng xuất
               </a>
@@ -164,20 +164,17 @@
           [draggable]="false" [resizable]="false">
   <div class="mb-3">
     <label for="change-old-pass" class="form-label">Mật khẩu cũ</label>
-    <input type="password" class="form-control" id="change-old-pass" [(ngModel)]="changePasswordRequest.oldPassword">
+    <input type="password" class="form-control" id="change-old-pass">
   </div>
   <div class="mb-3">
     <label for="change-new-pass" class="form-label">Mật khẩu mới</label>
-    <input type="password" class="form-control" id="change-new-pass" [(ngModel)]="changePasswordRequest.newPassword">
+    <input type="password" class="form-control" id="change-new-pass">
   </div>
   <div class="mb-3">
     <label for="change-re-pass" class="form-label">Nhập lại mật khẩu mới</label>
-    <input type="password" class="form-control" id="change-re-pass"  [(ngModel)]="changePasswordRequest.reEnterPassword">
+    <input type="password" class="form-control" id="change-re-pass">
   </div>
   <div class="mb-3 text-center">
-    <button class="root-btn" (mousedown)="changePassWord()">Gửi yêu cầu</button>
+    <button class="root-btn" (click)="changePassWord()">Gửi yêu cầu</button>
   </div>
 </p-dialog>
-<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"
-rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-<p-toast></p-toast>

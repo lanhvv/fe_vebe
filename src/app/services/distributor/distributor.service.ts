@@ -1,22 +1,43 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {CreateSupplier} from "../../shared/model/CreateSupplier";
+import {Filter} from "../../shared/model/Filter";
+import {TokenStorageService} from "../token-storage.service";
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class DistributorService {
-  api = "http://localhost:8080/vibee/api/v1/admin/supplier";
-  constructor(private httpClient: HttpClient ) { }
+  api = "http://localhost:1507/vibee/api/v1/admins/supplier";
+  constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
-  display(){
-    return this.httpClient.get(this.api+"/display");
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ` + this.tokenService.getToken()!,
+      'Access-Control-Allow-Origin': 'http://localhost:4200/',
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+    }),
+  };
+
+  display(nameSearch:string, language:string, filter:Filter, pageNumber:number, size:number){
+    return this.httpClient.get(this.api+"/display?nameSearch="+nameSearch+"&language="+language+"&"+filter.typeFilter+"="+filter.valueFilter+"&pageNumber="+pageNumber+"&size="+size, this.httpOptions);
   }
 
   pageAndSearch(numberPage:number, sizePage:number, nameSup:string) {
-    return this.httpClient.get(this.api+"?numberPage="+numberPage+"&sizePage="+sizePage+"&nameSup="+numberPage);
+    return this.httpClient.get(this.api+"?numberPage="+numberPage+"&sizePage="+sizePage+"&nameSup="+nameSup, this.httpOptions);
   }
 
   delete(id:number) {
-    return this.httpClient.get(this.api+"/delete?id="+id);
+    return this.httpClient.get(this.api+"/delete?id="+id, this.httpOptions);
+  }
+
+  save(supplier:CreateSupplier) {
+    return this.httpClient.post(this.api+"/create", supplier, this.httpOptions);
+  }
+
+  update(supplier:CreateSupplier) {
+    return this.httpClient.post(this.api+"/update", supplier, this.httpOptions);
   }
 }
