@@ -11,7 +11,7 @@
         <span><p>Số người đang hoạt động: {{listAccountItems.countStatus}}</p></span>
       </div>
       <div class="col-4">
-        <a type="button" class="btn root-btn" routerLink="/admin/manage-add-account">Thêm tài khoản</a>
+        <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
       <div class="col-6">
         <div class="input-group mb-3">
@@ -29,10 +29,6 @@
     <!-- table -->
     <section class="table-account">
       <div class="table-all-order mt-4">
-
-        <p-table #dt [value]="listAccountItems.items" dataKey="id"
-                 styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true"> [filterDelay]="0" >
-
         <p-table #dt [value]="listAccountItems.items" dataKey="id" styleClass="p-datatable-getOrderResponse.totalPages">
           <ng-template pTemplate="header">
             <tr>
@@ -41,7 +37,6 @@
               <th scope="col">Email</th>
               <th scope="col">Số điện thoại</th>
               <th scope="col">Trạng thái</th>
-              <th scope="col">Creator</th>
               <th scope="col">Thao tác</th>
             </tr>
             <tr></tr>
@@ -53,7 +48,6 @@
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
               <td>{{item.statusName}}</td>
-              <td>{{item.creator}}</td>
               <td>
                 <button *ngIf="item.status==2" (mousedown)="unlockAccount(item.id)">
                   <i class="fa-solid fa-lock text-danger me-2"></i>
@@ -73,7 +67,7 @@
 
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="8">No customers found.</td>
+              <td colspan="8">Chưa có tài khoản nào, hãy thêm mới tài khoản.</td>
             </tr>
           </ng-template>
         </p-table>
@@ -283,3 +277,4 @@
     </div>
   </form>
 </p-dialog>
+
