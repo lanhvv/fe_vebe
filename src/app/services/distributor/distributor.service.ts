@@ -9,7 +9,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class DistributorService {
-  api = "http://localhost:1507/vibee/api/v1/admins/supplier";
+  api = AUTH_API + "admins/supplier";
   constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
   httpOptions = {
