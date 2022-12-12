@@ -12,6 +12,8 @@ import {RouterModule} from "@angular/router";
 import {HomeComponent} from "./home/home.component";
 import {TranslateModule} from "@ngx-translate/core";
 import { ManageOrderDetailComponent } from './manage-order-detail/manage-order-detail.component';
+import {TableModule} from 'primeng/table';
+import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -48,18 +50,15 @@ import {CardModule} from "primeng/card";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import {ImageModule} from 'primeng/image';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
-import {CellComponent} from "./share/cell.component";
+import {TreeSelectModule} from 'primeng/treeselect';
+import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
+import {PasswordModule} from "primeng/password";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
-import {PasswordModule} from "primeng/password";
-import {DropdownModule} from 'primeng/dropdown';
-import {TreeSelectModule} from 'primeng/treeselect';
-import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import {TableModule} from 'primeng/table';
-import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {CellComponent} from "./share/cell.component";
 
 @NgModule({
   declarations: [
@@ -83,53 +82,52 @@ import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     ReportProductComponent,
     ManageWarehouseComponent,
     ManageProfileComponent,
+    ManageUnitComponent,
+    ManagerWarehouseImportComponent,
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
-    ManageUnitComponent,
-    ManageUnitComponent,
-    ManagerWarehouseImportComponent
   ],
-  imports: [
-    CommonModule,
-    PaginatorModule,
-    TranslateModule,
-    MultiSelectModule,
-    DropdownModule,
-    HttpClientModule,
-    MatTableModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FileUploadModule,
-    RouterModule,
-    PanelModule,
-    SplitterModule,
-    ChartModule,
-    ToastModule,
-    TabViewModule,
-    RippleModule,
-    MessageModule,
-    ProgressBarModule,
-    ConfirmDialogModule,
-    CalendarModule,
-    RadioButtonModule,
-    InputTextModule,
-    DialogModule,
-    CardModule,
-    ImageModule,
-    QRCodeModule,
-    PasswordModule,
-    ZXingScannerModule,
-    ToolbarModule,
-    TreeSelectModule,
-    TableModule
+    imports: [
+        CommonModule,
+        TranslateModule,
+        PaginatorModule,
+        TableModule,
+        MultiSelectModule,
+        DropdownModule,
+        HttpClientModule,
+        MatTableModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PaginatorModule,
+        FileUploadModule,
+        RouterModule,
+        PanelModule,
+        SplitterModule,
+        ChartModule,
+        ToastModule,
+        TabViewModule,
+        RippleModule,
+        MessagesModule,
+        MessageModule,
+        ProgressBarModule,
+        ConfirmDialogModule,
+        CalendarModule,
+        RadioButtonModule,
+        InputTextModule,
+        DialogModule,
+        CardModule,
+        ImageModule,
+        TreeSelectModule,
+        PasswordModule,
+        ZXingScannerModule,
+        QRCodeModule,
+        ToolbarModule
+
     ],
   providers: [ConfirmationService, MessageService],
-  exports: [HomeComponent, SellPosComponent],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
+  exports: [HomeComponent, SellPosComponent]
 })
 export class AdminModule { }

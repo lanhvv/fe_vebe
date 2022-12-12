@@ -11,7 +11,7 @@ import {HeaderEmployeeComponent} from "./header/header.component";
 import {SidebarEmployeeComponent} from "./sidebar/sidebar.component";
 import {FooterEmployeeComponent} from "./footer/footer.component";
 import {NgxSpinnerModule} from "ngx-spinner";
-// import {InfiniteScrollModule} from "ngx-infinite-scroll";
+import {InfiniteScrollModule} from "ngx-infinite-scroll";
 import {RadioButtonModule} from "primeng/radiobutton";
 import { SellOfflineComponent } from './sell-offline/sell-offline.component';
 import { ReportComponent } from './report/report.component';
@@ -32,7 +32,6 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import { DebitComponent } from './debit/debit.component';
 import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {InfiniteScrollModule} from "ngx-infinite-scroll";
 @NgModule({
   declarations: [
     ListProductComponent,
@@ -44,37 +43,33 @@ import {InfiniteScrollModule} from "ngx-infinite-scroll";
     TypeProductComponent,
     ManageOrderComponent,
     ManageProfileComponent,
-    DebitComponent,
+    DebitComponent
   ],
-    imports: [
-        RouterModule.forChild(EmployeeRouting),
-        TranslateModule,
-        TableModule,
-        DropdownModule,
-        FormsModule,
-        CommonModule,
-        NgxSpinnerModule,
-
-        RadioButtonModule,
-        ButtonModule,
-        PaginatorModule,
-        CalendarModule,
-        MatDialogModule,
-        TreeTableModule,
-        ImageModule,
-        ConfirmDialogModule,
-        ToastModule,
-        DialogModule,
-        TreeSelectModule,
-        CardModule,
-        ZXingScannerModule,
-        InfiniteScrollModule,
-    ],
+  imports: [
+    RouterModule.forChild(EmployeeRouting),
+    TranslateModule,
+    TableModule,
+    DropdownModule,
+    FormsModule,
+    CommonModule,
+    NgxSpinnerModule,
+    InfiniteScrollModule,
+    RadioButtonModule,
+    ButtonModule,
+    PaginatorModule,
+    CalendarModule,
+    MatDialogModule,
+    TreeTableModule,
+    ImageModule,
+    ConfirmDialogModule,
+    ToastModule,
+    DialogModule,
+    TreeSelectModule,
+    CardModule,
+    ZXingScannerModule,
+  ],
   exports:[
     SellOfflineComponent
-  ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
+  ]
 })
 export class EmployeeModule { }

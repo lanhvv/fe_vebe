@@ -67,6 +67,14 @@ export const AdminRouting: Route[] = [
         component: SellPosComponent
       },
       {
+        path: 'detail-product'  ,
+        component: DetailProductComponent
+      },
+      {
+        path: 'update-product/:id',
+        component: UpdateProductComponent
+      },
+      {
         path: 'manage-order',
         component: ManageOrderComponent
       },
