@@ -12,7 +12,7 @@ const AUTH_API = environment.baseApi;
 })
 
 export class DashboardService{
-  api=AUTH_API + "admins/";
+  api = AUTH_API + "statistic/";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
