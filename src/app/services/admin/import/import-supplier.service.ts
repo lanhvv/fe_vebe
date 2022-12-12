@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { ImportInWarehouseRequest } from '../../../shared/model/request/importInWarehouseRequest';
 import { ListImportWarehouseInRedis } from '../../../shared/model/response/ListImportWarehouseInRedis';
 import { ImportInWarehouseInRedis } from '../../../shared/model/response/ImportInWarehouseInRedis';
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
