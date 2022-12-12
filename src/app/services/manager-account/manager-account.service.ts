@@ -13,7 +13,7 @@ const AUTH_API = environment.baseApi;
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"admins/account/";
+  readonly URL = AUTH_API+"vibee/api/v1/admins/account/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {

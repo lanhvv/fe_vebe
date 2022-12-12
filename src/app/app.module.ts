@@ -26,7 +26,6 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import { ProfileComponent } from './layout/profile/profile.component';
 import {DialogModule} from 'primeng/dialog';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldControl, MatFormFieldModule} from '@angular/material/form-field';
 import {ScanComponent} from "./layout/scan/scan.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatListModule} from "@angular/material/list";
@@ -70,7 +69,6 @@ export function tokenGetter() {
         MatTableModule,
         HttpClientModule,
         MatButtonModule,
-        MatFormFieldModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

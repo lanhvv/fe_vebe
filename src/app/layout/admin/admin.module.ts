@@ -12,8 +12,6 @@ import {RouterModule} from "@angular/router";
 import {HomeComponent} from "./home/home.component";
 import {TranslateModule} from "@ngx-translate/core";
 import { ManageOrderDetailComponent } from './manage-order-detail/manage-order-detail.component';
-import {TableModule} from 'primeng/table';
-import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -56,7 +54,12 @@ import { QRCodeModule } from 'angularx-qrcode';
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
 import {PasswordModule} from "primeng/password";
-import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {DropdownModule} from 'primeng/dropdown';
+import {TreeSelectModule} from 'primeng/treeselect';
+import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import {TableModule} from 'primeng/table';
+import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -83,12 +86,14 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
-    ManageUnitComponent
+    ManageUnitComponent,
+    ManageUnitComponent,
+    ManagerWarehouseImportComponent
   ],
   imports: [
     CommonModule,
+    PaginatorModule,
     TranslateModule,
-    TableModule,
     MultiSelectModule,
     DropdownModule,
     HttpClientModule,
@@ -97,7 +102,6 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    PaginatorModule,
     FileUploadModule,
     RouterModule,
     PanelModule,
@@ -106,7 +110,6 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
     ToastModule,
     TabViewModule,
     RippleModule,
-    MessagesModule,
     MessageModule,
     ProgressBarModule,
     ConfirmDialogModule,
@@ -119,9 +122,14 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
     QRCodeModule,
     PasswordModule,
     ZXingScannerModule,
-    ToolbarModule
+    ToolbarModule,
+    TreeSelectModule,
+    TableModule
     ],
   providers: [ConfirmationService, MessageService],
-  exports: [HomeComponent, SellPosComponent]
+  exports: [HomeComponent, SellPosComponent],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
 })
 export class AdminModule { }
