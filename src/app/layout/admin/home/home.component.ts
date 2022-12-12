@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   today = new Date();
   lastDay = new Date();
   totalSumPriceOnDay = 0;
+  interestRate = 0;
   statusSumPrice = "";
   maxDateValue = new Date();
 
@@ -65,9 +66,10 @@ export class HomeComponent implements OnInit {
     this.maxDate = today;
   }
 
+
   getReportSumProduct(){
     this.dashboardService.reportSumProduct().subscribe((data: any) =>{
-      console.log(data);
+      console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
       this.blockProduct = data.block_product;
       this.soldOutProduct = data.sold_out;
     });
@@ -75,17 +77,19 @@ export class HomeComponent implements OnInit {
 
   getReportSumOrder(){
     this.dashboardService.reportSumOrder().subscribe((data: any) =>{
-      console.log("getReportSumOrder"+data.sumOrderUnConfimred);
       this.sumUnconfimred = data.sumOrderUnConfimred;
       this.sumPacking = data.sumOrderPacking;
       this.sumShipping = data.sumOrderShipping;
       this.sumCancel = data.sumOrderCancel;
+      console.log(this.sumUnconfimred+"/"+this.sumPacking+"/"+this.sumShipping+"/"+this.sumCancel);
     })
   }
 
+  //done - chẳng biết có tác dụng gì
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;
+      console.log(this.products);
     })
   }
 
@@ -109,14 +113,22 @@ export class HomeComponent implements OnInit {
     this.invalidDates = [today,invalidDate];
   }
 
+  statusInterestRateOfDay = ""
+  percentSumPrice = 0
+  percentInterestRate = 0;
   getSumPriceOnDay(){
     let dateNow = this.datePipe.transform(this.today, 'yyyy-MM-dd');
     let lastDay = this.datePipe.transform(Date.now() + -1*24*3600*1000, 'yyyy-MM-dd');
 
     this.dashboardService.reportSumPriceOnDay(dateNow, lastDay).subscribe((data: any) =>{
-      console.log(data);
-      this.totalSumPriceOnDay = data.sumPriceOnDay;
-      this.statusSumPrice = data.statusPrice;
+      // console.log(data.totalPriceOfDay);
+      this.totalSumPriceOnDay = data.totalPriceOfDay;
+      this.interestRate = data.interestRateOfDay;
+      this.statusSumPrice = data.statusTotalPriceOfDay;
+      this.statusInterestRateOfDay = data.statusInterestRateOfDay;
+      this.percentSumPrice = data.percentTotalPriceOfDay;
+      this.percentInterestRate = data.percentInterestRateOfDay;
+      console.log(this.percentInterestRate +"/"+ this.percentSumPrice);
     })
   }
 
