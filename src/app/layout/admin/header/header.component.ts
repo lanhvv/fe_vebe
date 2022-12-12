@@ -18,11 +18,10 @@ export class HeaderAdminComponent implements OnInit {
 
   isDialogChangePass: boolean = false;
   constructor(private translate: TranslateConfigService, private messageService: MessageService,
-    private profileService:ProfileService, private router: Router) {
-      this.baseResponse = new BaseResponse();
-      // @ts-ignore
+              private profileService:ProfileService,private router: Router) {
+    this.baseResponse = new BaseResponse();
     this.changePasswordRequest = new ChangePasswordRequest()
-    }
+  }
 
   @Input() Status: number | undefined;
 
@@ -30,25 +29,25 @@ export class HeaderAdminComponent implements OnInit {
   }
 
   changePassWord(){
-  //  hàm xử lý, nếu pass thì chạy lệnh này
-  this.profileService.changPassword(this.changePasswordRequest).subscribe(response=> {
-  this.baseResponse = response as BaseResponse
-  if(this.baseResponse.status.status=="1"){
-    this.messageService.add({severity:'success', summary: 'Successful', detail:  this.baseResponse.status.message, life: 3000});
+    //  hàm xử lý, nếu pass thì chạy lệnh này
+    this.profileService.changPassword(this.changePasswordRequest).subscribe(response=> {
+      this.baseResponse = response as BaseResponse
+      if(this.baseResponse.status.status=="1"){
+        this.messageService.add({severity:'success', summary: 'Successful', detail:  this.baseResponse.status.message, life: 3000});
         this.isDialogChangePass = false;
         this.changePasswordRequest.oldPassword="";
         this.changePasswordRequest.newPassword="";
         this.changePasswordRequest.reEnterPassword="";
-  }
-  else{
-    this.messageService.add({severity:'error', summary: 'Successful', detail: this.baseResponse.status.message, life: 3000});
+      }
+      else{
+        this.messageService.add({severity:'error', summary: 'Successful', detail: this.baseResponse.status.message, life: 3000});
         // this.isDialogChangePass = false;
         this.changePasswordRequest.newPassword="";
         this.changePasswordRequest.reEnterPassword="";
-  }
-  })
-  }
+      }
+    })
 
+  }
   logout(){
     sessionStorage.removeItem('auth-user');
     sessionStorage.removeItem('Authorization');

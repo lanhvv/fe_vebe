@@ -4,7 +4,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {TypeProductService} from "../../../services/type-product/type-product.service";
 import {ResponseProducts} from "../../../shared/model/response/ResponseProducts";
 import {ResponseTypeProducts} from "../../../shared/model/response/ResponseTypeProduct";
-import {ProductService} from "../../../services/product/product.service";
 import {TypeProduct} from "../../../shared/model/TypeProduct";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
 import {StallServiceService} from "../../../services/employee/stall/stall-service.service";
@@ -12,6 +11,7 @@ import {Filter} from "../../../shared/model/Filter";
 import {GetProductsRequest} from "../../../shared/model/request/GetProductsRequest";
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {ViewStallResponse} from "../../../shared/response/product/ViewStallResponse";
+import { ProductService } from 'src/app/services/Product/product.service';
 
 
 
