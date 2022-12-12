@@ -5,7 +5,7 @@ import {DropdownFilterOptions} from 'primeng/dropdown';
 import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
 import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
 import { CreateProductRequest } from 'src/app/shared/model/request/CreateProductRequest';
-// import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
+import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
 import { Unit } from 'src/app/shared/model/Unit';
 import { InfoUnitItem } from 'src/app/shared/model/InfoUnitItem';
 import { UnitService } from 'src/app/services/unit/unit.service';
@@ -24,7 +24,7 @@ export class DetailProductComponent implements OnInit {
   getInforCreateProductResponse!:GetInfoCreateProdResponse;
   selectedCategory: Category =new Category();
   filterValue = '';
-  // selectedSupplier: GetSupplierItem=new GetSupplierItem();
+  selectedSupplier: GetSupplierItem=new GetSupplierItem();
   selectedUnitParent: InfoUnitItem=new InfoUnitItem();
   selectedUnitChilds: InfoUnitItem[]=[];
   uploadedFiles: any[] = [];
