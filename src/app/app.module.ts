@@ -26,12 +26,12 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import { ProfileComponent } from './layout/profile/profile.component';
 import {DialogModule} from 'primeng/dialog';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldControl, MatFormFieldModule} from '@angular/material/form-field';
 import {ScanComponent} from "./layout/scan/scan.component";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatListModule} from "@angular/material/list";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import {MatIconModule} from "@angular/material/icon";
+import {LoadingComponent} from "./layout/loading/loading.component";
 
 export function rootLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, "assets/i18n/", ".json");
@@ -53,7 +53,8 @@ export function tokenGetter() {
         RegisterComponent,
         ForgotPasswordComponent,
         ProfileComponent,
-        ScanComponent
+        ScanComponent,
+        LoadingComponent
     ],
     imports: [
         BrowserModule,
@@ -68,7 +69,6 @@ export function tokenGetter() {
         MatTableModule,
         HttpClientModule,
         MatButtonModule,
-        MatFormFieldModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

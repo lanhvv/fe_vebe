@@ -24,31 +24,31 @@
       <div class="col-3">
         <div class="mb-3">
           <label for="show-fullname" class="form-label">Họ và tên</label>
-          <input type="text" class="form-control" id="show-fullname" [ngModel]="fullname" disabled>
+          <input type="text" class="form-control" id="show-fullname" [(ngModel)]="response.fullname" disabled>
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
-          <label class="form-label">Ngày sinh</label>
-          <p-calendar inputId="basic" [(ngModel)]="date" styleClass="input-dob" dateFormat="dd/mm/yy" disabled></p-calendar>
+          <label for="show-numberPhone" class="form-label">Số điện thoại</label>
+          <input class="form-control" id="show-numberPhone" rows="3" [(ngModel)]="response.numberPhone" disabled>
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="show-email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="show-email" [ngModel]="email" disabled>
+          <input type="email" class="form-control" id="show-email" [(ngModel)]="response.email" disabled>
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="show-cccd" class="form-label">Căn cước công dân</label>
-          <input type="text" class="form-control" id="show-cccd" [ngModel]="cccd" disabled>
+          <input type="text" class="form-control" id="show-cccd" [(ngModel)]="response.cccd" disabled>
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="show-address" class="form-label">Địa chỉ</label>
-          <textarea class="form-control" id="show-address" rows="3" [ngModel]="address" disabled></textarea>
+          <textarea class="form-control" id="show-address" rows="3" [(ngModel)]="response.address" disabled></textarea>
         </div>
       </div>
       <div class="row">
@@ -61,39 +61,41 @@
       <div class="col-3">
         <div class="mb-3">
           <label for="edit-fullname" class="form-label">Họ và tên</label>
-          <input type="text" class="form-control" id="edit-fullname" [ngModel]="fullname">
+          <input type="text" class="form-control" id="edit-fullname" [ngModel]="response.fullname">
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
-          <label class="form-label">Ngày sinh</label>
-          <p-calendar inputId="basic" [(ngModel)]="date" styleClass="input-dob" dateFormat="dd/mm/yy"></p-calendar>
+          <label for="edit-phone" class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" id="edit-numberPhone" [ngModel]="response.numberPhone">
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="edit-email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="edit-email" [ngModel]="email">
+          <input type="email" class="form-control" id="edit-email" [ngModel]="response.email">
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="edit-cccd" class="form-label">Căn cước công dân</label>
-          <input type="text" class="form-control" id="edit-cccd" [ngModel]="cccd">
+          <input type="text" class="form-control" id="edit-cccd" [ngModel]="response.cccd">
         </div>
       </div>
       <div class="col-3">
         <div class="mb-3">
           <label for="edit-address" class="form-label">Địa chỉ</label>
-          <textarea class="form-control" id="edit-address" rows="3" [ngModel]="address"></textarea>
+          <textarea class="form-control" id="edit-address" rows="3" [(ngModel)]="response.address"></textarea>
         </div>
       </div>
       <div class="row">
-        <button class="root-btn ms-2" (click)="editProfile()">Hoàn thành</button>
+        <button class="root-btn ms-2" (mousedown)="editProfile()">Hoàn thành</button>
       </div>
     </div>
   </div>
-
+  <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"
+                   rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+  <p-toast></p-toast>
   <admin-footer></admin-footer>
 </main>
 <!--Main layout-->

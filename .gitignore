@@ -41,3 +41,11 @@ testem.log
 .DS_Store
 Thumbs.db
 /package-lock.json
+/package.json
+/karma.conf.js
+/tsconfig.app.json
+/tsconfig.json
+/tsconfig.spec.json
+/.browserslistrc
+/.editorconfig
+/angular.json

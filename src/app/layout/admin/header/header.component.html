@@ -60,34 +60,34 @@
       <!-- Right links -->
       <ul class="navbar-nav ms-auto d-flex flex-row">
         <!-- Notification dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#"
-             id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">
-            <i class="fas fa-bell fs-3"></i>
-            <span class="badge rounded-circle badge-notification bg-danger p-1">1</span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">
-            <li>
-              <a class="dropdown-item" routerLink="/admin/manage-profile">
-                <i class="fa-solid fa-user"></i>
-                Tài khoản của tôi
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" (click)="isDialogChangePass = true">
-                <i class="fa-solid fa-gear"></i>
-                Đổi mật khẩu
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Đăng xuất
-              </a>
-            </li>
-          </ul>
-        </li>
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#"-->
+<!--             id="navbarDropdownNotification" role="button" data-bs-toggle="dropdown"-->
+<!--             aria-expanded="false">-->
+<!--            <i class="fas fa-bell fs-3"></i>-->
+<!--            <span class="badge rounded-circle badge-notification bg-danger p-1">1</span>-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu dropdown-menu-end dropdown-profile p-3" aria-labelledby="navbarDropdownNotification" style="padding: .5rem 0; margin: 0;">-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" routerLink="/admin/manage-profile">-->
+<!--                <i class="fa-solid fa-user"></i>-->
+<!--                Tài khoản của tôi-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" (click)="isDialogChangePass = true">-->
+<!--                <i class="fa-solid fa-gear"></i>-->
+<!--                Đổi mật khẩu-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <i class="fa-solid fa-right-from-bracket"></i>-->
+<!--                Đăng xuất-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </li>-->
 
         <!-- Icon
         <li class="nav-item">
@@ -97,30 +97,30 @@
         </li>-->
 
         <!-- Icon dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="./assets/image/united-states.png" alt="">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" href="#">
-                <img src="./assets/image/united-states.png" alt="">
-                English
-                <i class="fa fa-check text-success ms-2"></i>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <img src="./assets/image/vietnam.png" alt="">
-                Vietnamese
-              </a>
-            </li>
-          </ul>
-        </li>
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown"-->
+<!--             role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            <img src="./assets/image/united-states.png" alt="">-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <img src="./assets/image/united-states.png" alt="">-->
+<!--                English-->
+<!--                <i class="fa fa-check text-success ms-2"></i>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <hr class="dropdown-divider" />-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a class="dropdown-item" href="#">-->
+<!--                <img src="./assets/image/vietnam.png" alt="">-->
+<!--                Vietnamese-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </li>-->
 
         <!-- Avatar -->
         <li class="nav-item dropdown">
@@ -144,7 +144,7 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" (click)="logout()">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 Đăng xuất
               </a>

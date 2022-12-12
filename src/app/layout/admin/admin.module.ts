@@ -50,13 +50,15 @@ import {CardModule} from "primeng/card";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import {ImageModule} from 'primeng/image';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
-import {CellComponent} from "./share/cell.component";
+import {TreeSelectModule} from 'primeng/treeselect';
+import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
+import {PasswordModule} from "primeng/password";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { PrintBarcodeComponent } from './manage-product/print-barcode/print-barcode.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel.component";
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
-import {PasswordModule} from "primeng/password";
-import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {CellComponent} from "./share/cell.component";
 
 @NgModule({
   declarations: [
@@ -80,46 +82,50 @@ import {ZXingScannerModule} from "@zxing/ngx-scanner";
     ReportProductComponent,
     ManageWarehouseComponent,
     ManageProfileComponent,
+    ManageUnitComponent,
+    ManagerWarehouseImportComponent,
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
-    ManageUnitComponent
   ],
-  imports: [
-    CommonModule,
-    TranslateModule,
-    TableModule,
-    MultiSelectModule,
-    DropdownModule,
-    HttpClientModule,
-    MatTableModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PaginatorModule,
-    FileUploadModule,
-    RouterModule,
-    PanelModule,
-    SplitterModule,
-    ChartModule,
-    ToastModule,
-    TabViewModule,
-    RippleModule,
-    MessagesModule,
-    MessageModule,
-    ProgressBarModule,
-    ConfirmDialogModule,
-    CalendarModule,
-    RadioButtonModule,
-    InputTextModule,
-    DialogModule,
-    CardModule,
-    ImageModule,
-    QRCodeModule,
-    PasswordModule,
-    ZXingScannerModule,
-    ToolbarModule
+    imports: [
+        CommonModule,
+        TranslateModule,
+        PaginatorModule,
+        TableModule,
+        MultiSelectModule,
+        DropdownModule,
+        HttpClientModule,
+        MatTableModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PaginatorModule,
+        FileUploadModule,
+        RouterModule,
+        PanelModule,
+        SplitterModule,
+        ChartModule,
+        ToastModule,
+        TabViewModule,
+        RippleModule,
+        MessagesModule,
+        MessageModule,
+        ProgressBarModule,
+        ConfirmDialogModule,
+        CalendarModule,
+        RadioButtonModule,
+        InputTextModule,
+        DialogModule,
+        CardModule,
+        ImageModule,
+        TreeSelectModule,
+        PasswordModule,
+        ZXingScannerModule,
+        QRCodeModule,
+        ToolbarModule
+
     ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

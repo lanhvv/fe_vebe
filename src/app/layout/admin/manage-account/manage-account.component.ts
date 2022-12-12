@@ -58,8 +58,8 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountResponse = new CreateAccountResponse();
     this.createAccountRequest = new CreateAccountRequest();
     this.roleAccount = [
-      {id: 1, role: 'Admin'},
-      {id: 2, role: 'Staff'}
+      {id: 1, role: 'Chủ cửa hàng'},
+      {id: 2, role: 'Nhân viên'}
     ];
     this.formAccount();
   }
@@ -79,7 +79,7 @@ export class ManageAccountComponent implements OnInit {
       phoneNumber: new FormControl('', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)]),
       email: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.pattern(this.regexEmail)]),
       address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
-      role: new FormControl('', [Validators.required])
+      // role: new FormControl('', [Validators.required])
     })
   }
 
@@ -180,6 +180,16 @@ export class ManageAccountComponent implements OnInit {
   }
 
   checkAccount() {
+
+    const value = this.accountForm.value;
+    this.createAccountRequest.fullname = value.fullName
+    this.createAccountRequest.address = value.address
+    this.createAccountRequest.cccd = value.cccd
+    this.createAccountRequest.email = value.email
+    this.createAccountRequest.cccd = value.cccd
+    this.createAccountRequest.numberPhone = value.phoneNumber
+    this.createAccountRequest.username = value.userName
+
     this.managerAccountService.checkAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status == "username" && this.createAccountRequest.username != null) {
@@ -210,6 +220,16 @@ export class ManageAccountComponent implements OnInit {
   }
 
   createAccount() {
+
+    const value = this.accountForm.value;
+    this.createAccountRequest.fullname = value.fullName
+    this.createAccountRequest.address = value.address
+    this.createAccountRequest.cccd = value.cccd
+    this.createAccountRequest.email = value.email
+    this.createAccountRequest.cccd = value.cccd
+    this.createAccountRequest.numberPhone = value.phoneNumber
+    this.createAccountRequest.username = value.userName
+
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if(this.createAccountResponse.status.status='1'){
@@ -218,6 +238,7 @@ export class ManageAccountComponent implements OnInit {
         this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account failse', life: 3000});
       }
     })
+    this.ngOnInit();
     this.isDialogAccount=false;
   }
 }

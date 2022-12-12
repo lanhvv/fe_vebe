@@ -19,6 +19,15 @@
   padding: 10px;
 }
 
+>>> .dropdown_category{
+  width: 100%;
+  height: 40px;
+}
+
+>>> .dropdown_category span{
+  line-height: 10px;
+}
+
 .box-product a{
   text-decoration: none;
   color: black;

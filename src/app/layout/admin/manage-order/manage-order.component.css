@@ -36,8 +36,7 @@ main {
   height: 60px;
   border-radius: 10px;
 }
-
->>> .inputRoot {
+.inputRoot {
   width: 250px !important;
   height: 40px;
 }
@@ -84,8 +83,7 @@ main {
   width: 30px;
   text-align: center;
 }
-
->>> .dropdown-unit-product {
+.dropdown-unit-product {
   height: 40px !important;
   width: 100%;
 }
