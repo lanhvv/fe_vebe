@@ -30,6 +30,7 @@ import { ManageOrderComponent } from './manage-order/manage-order.component';
 import {CardModule} from "primeng/card";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
+import { DebitComponent } from './debit/debit.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ManageProfileComponent } from './manage-profile/manage-profile.componen
     TypeProductComponent,
     ManageOrderComponent,
     ManageProfileComponent,
+    DebitComponent
   ],
   imports: [
     RouterModule.forChild(EmployeeRouting),

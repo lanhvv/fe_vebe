@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {UpdateAccountRequest} from "../../shared/model/request/updateAccountRequest";
 import {EditAccountRequest} from "../../shared/model/request/editAccountRequest";
-const AUTH_API = environment.baseApi;
+const AUTH_API = environment.base;
 @Injectable({
   providedIn: 'root'
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"admins/account/";
+  readonly URL = AUTH_API+"vibee/api/v1/auth/user/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {
@@ -29,7 +29,7 @@ export class ManagerAccountService {
     private tokenService: TokenStorageService) { }
 
   getAll(request: GetAccountItemsRequest) {
-    return this.httpClient.get(this.URL + "getAll?pagenumber=" + request.page + "&pagesize=" + request.pageSize +
+    return this.httpClient.get(this.URL + "getAll-user?pagenumber=" + request.page + "&pagesize=" + request.pageSize +
       "&language=" + request.language + "&search=" + request.searchText, this.httpOptions)
 
   }

@@ -118,7 +118,6 @@ export class ImportExcelComponent implements OnInit {
   }
 
   importWarehouse(request:any){
-    console.log(request);
     this.warehouseService.importWarehouse(this.language!,this.selectedSupplier.supplierId,request.currentFiles[0]).subscribe(response=>{
       this.productResponse=response as ImportWarehouseResponse;
       if(this.productResponse.status.status=== '1'){

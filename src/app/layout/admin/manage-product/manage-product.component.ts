@@ -102,11 +102,11 @@ export class ManageProductComponent implements OnInit {
   }
 
   update(id:number){
-    this.router.navigate(['/admin/update-product',id])  ;
+    this.router.navigate(['/update-product',id])  ;
   }
 
   create(){
-    this.router.navigate(['/admin/detail-product'])
+    this.router.navigate(['/detail-product'])
   }
 
   onReject(){

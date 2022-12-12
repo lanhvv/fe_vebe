@@ -48,14 +48,12 @@ export class TypeProductComponent implements OnInit {
   updateTypeProductResponse: UpdateTypeProductResponse
 
   cols!: any[];
-  id: any;
-
-  status: number = 0;
+  id: any
 
   constructor(private typeProductService: TypeProductService, private router: Router, private confirmationService: ConfirmationService,
               private messageService: MessageService, private activatedRoute: ActivatedRoute) {
     this.files = new TypeProductItemsResponse(),
-      this.typeResponse = new CreateResponse();
+    this.typeResponse = new CreateResponse();
     this.typeItemsResponse = new TypeItemsResponse()
     this.typeRequest = new CreateTypeProductRequest();
     this.category = new SelectionTypeProductItems()
@@ -68,7 +66,6 @@ export class TypeProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.status = 6;
     this.getall();
     this.typeProductService.getFilesystem().subscribe((response) =>
       this.filesType = response as SelectionTypeProductItemsResponse
@@ -92,9 +89,11 @@ export class TypeProductComponent implements OnInit {
       "language": "vi",
       searchText: this.searchText
     };
+
     this.typeProductService.getAllTypeProduct(this.getOrderRequest).subscribe(response => {
       this.files = response as TypeProductItemsResponse
       console.log(this.files)
+      console.log(this.category.id +" dòng 96")
     });
   }
 
@@ -216,9 +215,11 @@ export class TypeProductComponent implements OnInit {
       this.typeResponse = response as CreateResponse;
       if(this.typeResponse.status.status=='1'){
         this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
+
       }else {
         this.messageService.add({severity:'error', summary: 'Error', detail: 'Add Account failse', life: 3000});
       }
+      this.ngOnInit();
     })
 
   }
@@ -243,6 +244,7 @@ export class TypeProductComponent implements OnInit {
       this.typeResponse = response as CreateResponse;
       if(this.typeResponse.status.status=='1'){
         this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
+
       }else {
         this.messageService.add({severity:'error', summary: 'Error', detail: 'Add Account failse', life: 3000});
       }

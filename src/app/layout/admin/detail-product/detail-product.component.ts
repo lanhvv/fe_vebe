@@ -61,9 +61,9 @@ export class DetailProductComponent implements OnInit {
     if(this.selectedCategory!=null){
     this.createProductRequest.categoryId=this.selectedCategory.id as number;
     }
-    if(this.selectedSupplier!=null){
-      this.createProductRequest.supplierId=this.selectedSupplier.id as number;
-    }
+    // if(this.selectedSupplier!=null){
+    //   this.createProductRequest.supplierId=this.selectedSupplier.id as number;
+    // }
     if(this.selectedUnitParent!=null){
       this.createProductRequest.unitId=this.selectedUnitParent.unitId as number;
       this.createProductRequest.unit=this.selectedUnitParent.unitName as string;

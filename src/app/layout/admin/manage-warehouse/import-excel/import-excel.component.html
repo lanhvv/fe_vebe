@@ -18,11 +18,11 @@
     </div>
     <div class="row">
       <div class="col-2"></div>
-      <div class="col-8">
+      <div class="col-7">
         <div class="note">
           <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status=='1'">
-            <label class="form-label">Chọn nhà cung cấp</label>
-            <p-dropdown [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" [showClear]="true" placeholder="chọn nhà cung cấp" (ngModelChange)="chooseSupplier()">
+            <label>Lựa chọn nhà cung cấp</label> <br>
+            <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
               <ng-template pTemplate="selectedItem">
                 <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
                   <div>{{selectedSupplier.supplierName}}</div>
@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="col-2"></div>
+      <div class="col-3"></div>
     </div>
     <div class="row mb-3">
       <div class="float-end">
@@ -48,36 +48,36 @@
     <div class="card">
       <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
-          <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-          <button pButton pRipple label="xóa" icon="pi pi-trash" class="p-button-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+<!--          <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>-->
+          <button pButton pRipple label="Xóa sản phẩm" icon="pi pi-trash" class="p-button-danger root-btn-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
         </ng-template>
         <ng-template pTemplate="right">
-          <p-fileUpload (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Import" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()" [disabled]="!selectedSupplier"></p-fileUpload>
-          <button pButton pRipple label="Hoàn thành"  icon="pi pi-upload" class="p-button-help" [disabled]="!productResponse || !productResponse.products.length" (mousedown)="import()" ></button>
+          <p-fileUpload styleClass="root-btn-upload" (onSelect)="importWarehouse($event)"  mode="basic" chooseLabel="Nhập file" accept=".xlsx" [showCancelButton]="true" [showUploadButton]="false" (onRemove)="clear()" [disabled]="!selectedSupplier"></p-fileUpload>
+          <button pButton pRipple label="Hoàn thành" class="root-btn ms-3" [disabled]="!productResponse || !productResponse.products.length" (mousedown)="import()" ></button>
         </ng-template>
       </p-toolbar>
-      <div class="text-note" *ngIf="this.productResponse==null || this.productResponse.status.status=='1'">
+      <div class="ps-5" *ngIf="this.productResponse==null">
         <p>Chú ý:</p>
         <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
         <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
       </div>
-      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" [tableStyle]="{'min-width': '75rem'}"
-               [(selection)]="selectedProducts" [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
+               [(selection)]="selectedProducts" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 4rem">
+            <th class="th-table" style="width: 4rem">
             </th>
-            <th style="width: 4rem">
+            <th class="th-table" style="width: 4rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="productName">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
-            <th pSortableColumn="BarCode">mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
-            <th pSortableColumn="categury">loại sản phẩm <p-sortIcon field="categury"></p-sortIcon></th>
-            <th pSortableColumn="rangeDate">ngày hết hạn <p-sortIcon field="rangeDate"></p-sortIcon></th>
-            <th pSortableColumn="inAmount">số lượng <p-sortIcon field="inAmount"></p-sortIcon></th>
-            <th>đơn vị</th>
-            <th pSortableColumn="inPrice">tổng tiền <p-sortIcon field="inPrice"></p-sortIcon></th>
-            <th>thao tác</th>
+            <th class="th-table" pSortableColumn="productName">Tên sản phẩm <p-sortIcon field="productName"></p-sortIcon></th>
+            <th class="th-table" pSortableColumn="BarCode">Mã vạch <p-sortIcon field="BarCode"></p-sortIcon></th>
+            <th class="th-table">Loại sản phẩm</th>
+            <th class="th-table">Ngày hết hạn</th>
+            <th class="th-table" pSortableColumn="inAmount">Số lượng <p-sortIcon field="inAmount"></p-sortIcon></th>
+            <th class="th-table">Đơn vị</th>
+            <th class="th-table" pSortableColumn="inPrice">Tổng tiền <p-sortIcon field="inPrice"></p-sortIcon></th>
+            <th class="th-table">Thao tác</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product let-expanded="expanded">
@@ -102,7 +102,7 @@
                   {{product.barcode}}
             </td>
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
-              <p-dropdown [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Category" (ngModelChange)="saveProducts()">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
                     <div>{{this.product.typeProduct.name}}</div>
@@ -113,7 +113,8 @@
                     <div>{{category.name}}</div>
                   </div>
                 </ng-template>
-              </p-dropdown></td>
+              </p-dropdown>
+            </td>
             <td pEditableColumn>
               <p-cellEditor>
                 <ng-template pTemplate="input">
@@ -135,7 +136,7 @@
               </p-cellEditor>
             </td>
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
-              <p-dropdown [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Unit" (ngModelChange)="selectUnit(product)">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -158,28 +159,32 @@
               </p-cellEditor>
             </td>
               <td>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteProduct(product)"></button>
               </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-product>
           <tr>
-            <td colspan="7">
+            <td colspan="10">
               <div class="p-3">
                 <table>
                   <thead>
-                    <th>đơn vị</th>
-                    <th>giá nhập</th>
-                    <th>giá bán</th>
-                    <th>thao tác</th>
+                    <th>Đơn vị</th>
+                    <th>Giá nhập</th>
+                    <th>Giá bán</th>
+                    <th>Thao tác</th>
                   </thead>
                   <tbody>
                     <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
-                      <td><input type="number" [(ngModel)]="export.inPrice" id="in-price" (ngModelChange)="saveProducts()"></td>
-                      <td><input type="number" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()"></td>
                       <td>
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteExport(export,product)"></button>
+                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.inPrice" id="in-price" (ngModelChange)="saveProducts()">
+                      </td>
+                      <td>
+                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">
+                      </td>
+                      <td>
+                        <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteExport(export,product)"></button>
                       </td>
                     </tr>
                   </tbody>
@@ -197,4 +202,4 @@
   </div>
 </div>
 </div>
-  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
