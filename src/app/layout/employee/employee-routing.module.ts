@@ -44,6 +44,10 @@ export const EmployeeRouting: Route[] = [
         path: 'debit',
         component: DebitComponent
       },
+      {
+        path: 'user-debit',
+        component: DebitComponent
+      }
     ]
   }
 ]

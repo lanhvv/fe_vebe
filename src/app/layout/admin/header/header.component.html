@@ -36,6 +36,10 @@
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-warehouse fw-bold me-2"></i> sidebar.management.warehouse</span>
         </a>
+        <a routerLink="/admin/manage-unit" [ngClass]="{'active': Status === 9 }"
+           class="list-group-item list-group-item-action py-2 ripple">
+          <span translate><i class="fa-solid fa-network-wired fw-bold me-2"></i> sidebar.management.unit</span>
+        </a>
       </div>
     </div>
   </nav>

@@ -82,7 +82,7 @@ input[type=file] {
 }
 
 .inputRoot {
-  width: 300px !important;
+  width: 90% !important;
   height: 40px;
 }
 

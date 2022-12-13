@@ -12,10 +12,11 @@ import {CreateAccountRequest} from "../../../shared/model/request/createAccountR
 import { UpdateAccountRequest } from '../../../shared/model/request/updateAccountRequest';
 import { EditAccountRequest } from '../../../shared/model/request/editAccountRequest';
 
-class roleAccount{
+class roleAccount {
   id!: number;
   role!: string;
 }
+
 @Component({
   selector: 'admin-manage-account',
   templateUrl: './manage-account.component.html',
@@ -48,13 +49,14 @@ export class ManageAccountComponent implements OnInit {
   isDialogAccount: boolean = false;
   isUpdateAccount: boolean= true;
   accountForm!: FormGroup;
-  updateForm!: FormGroup
-  roleAccount: roleAccount[];
+  updateForm!: FormGroup;
   regexFullName = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
   regexPassWord = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
   regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
   regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(?!domain\.web\b)((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  checked_true: boolean = true;
+  checked_false: boolean = false;
 
   constructor(private router: Router,
               private managerAccountService: ManagerAccountService,
@@ -66,10 +68,10 @@ export class ManageAccountComponent implements OnInit {
     this.deleteAccountResponse = new DeleteAccountResponse();
     this.createAccountResponse = new CreateAccountResponse();
     this.createAccountRequest = new CreateAccountRequest();
-    this.roleAccount = [
-      {id: 1, role: 'Chủ cửa hàng'},
-      {id: 2, role: 'Nhân viên'}
-    ];
+    // this.roleAccount = [
+    //   {id: 1, role: 'Chủ cửa hàng'},
+    //   {id: 2, role: 'Nhân viên'}
+    // ];
     this.formAccount();
   }
 
@@ -79,8 +81,7 @@ export class ManageAccountComponent implements OnInit {
     this.getall();
   }
 
-
-  formAccount(){
+  formAccount() {
     this.accountForm = this.fb.group({
       fullName: new FormControl('', [Validators.minLength(5), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexFullName)]),
       userName: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.required]),
@@ -198,6 +199,7 @@ export class ManageAccountComponent implements OnInit {
     });
     this.getall()
   }
+
   lockAccount(request: number) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',
@@ -231,7 +233,7 @@ export class ManageAccountComponent implements OnInit {
   Pageable(event: any) {
     this.page = event.page;
     this.pageSize = event.rows;
-    this.getall()
+    this.getall();
   }
 
   searchByUsername(request: string) {
@@ -264,23 +266,17 @@ export class ManageAccountComponent implements OnInit {
         this.messageUsername = this.createAccountResponse.status.message;
       } else if (this.createAccountResponse.status.status == "cccd" && this.createAccountRequest.cccd != null) {
         this.messageCccd = this.createAccountResponse.status.message;
-      }
-      else if (this.createAccountResponse.status.status == "email" && this.createAccountRequest.email != null) {
+      } else if (this.createAccountResponse.status.status == "email" && this.createAccountRequest.email != null) {
         this.messageEmail = this.createAccountResponse.status.message;
-      }
-      else if (this.createAccountResponse.status.status == "phone" && this.createAccountRequest.numberPhone != null) {
+      } else if (this.createAccountResponse.status.status == "phone" && this.createAccountRequest.numberPhone != null) {
         this.messagePhone = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.createAccountRequest.numberPhone != null){
+      } else if (this.createAccountResponse.status.status == "" && this.createAccountRequest.numberPhone != null) {
         this.messagePhone = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.createAccountRequest.email != null){
+      } else if (this.createAccountResponse.status.status == "" && this.createAccountRequest.email != null) {
         this.messageEmail = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.createAccountRequest.cccd != null){
+      } else if (this.createAccountResponse.status.status == "" && this.createAccountRequest.cccd != null) {
         this.messageCccd = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.createAccountRequest.username != null){
+      } else if (this.createAccountResponse.status.status == "" && this.createAccountRequest.username != null) {
         this.messageUsername = this.createAccountResponse.status.message;
       }
 

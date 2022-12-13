@@ -88,12 +88,12 @@ export const AdminRouting: Route[] = [
           {
             path: 'print-barcode',
             component: PrintBarcodeComponent
+          },
+          {
+            path: 'upload-file',
+            component: ImportExcelComponent
           }
         ]
-      },
-      {
-        path: 'manage-warehouse/upload-file',
-        component: ImportExcelComponent
       },
       {
         path: 'manage-order-detail/:id',

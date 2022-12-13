@@ -13,8 +13,13 @@
           product.create
         </button>
       </div>
-      <div class="col-8">
-        <form>
+      <div class="col-2">
+        <select class="form-select" aria-label="Default select example">
+          <option value="1">Tất cả</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <form style="width: 100%">
           <div class="input-group mb-3">
             <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #search
                    placeholder='{{inventory | translate}}' aria-label="{inventory | translate}">

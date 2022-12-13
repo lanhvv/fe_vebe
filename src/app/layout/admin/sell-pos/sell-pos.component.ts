@@ -102,7 +102,6 @@ export class SellPosComponent implements OnInit, OnDestroy {
     this.cartItem.cartCode=this.cartCode;
     this.status = 7;
     this.language = this.translateService.getLanguage()!;
-    this.toltal = 0;
     // this.getTotal();
     if (this.listCart.length === 0) {
       this.checkList = true;
