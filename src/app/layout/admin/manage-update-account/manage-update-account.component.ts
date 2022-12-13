@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreateAccountResponse} from "../../../shared/model/response/createAccountResponse";
 import {UpdateAccountRequest} from "../../../shared/model/request/updateAccountRequest";
@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ManagerAccountService} from "../../../services/manager-account/manager-account.service";
 import {EditAccountRequest} from "../../../shared/model/request/editAccountRequest";
 import {MessageService} from "primeng/api";
+import { TranslateConfigService } from 'src/app/services/translate-config.service';
 
 @Component({
   selector: 'app-manage-update-account',
@@ -21,17 +22,16 @@ export class ManageUpdateAccountComponent implements OnInit {
   messageUsername: any;
   messageEmail: any;
   messageCccd: any;
+  language: any;
   messagePhone: any;
-
-  status: number = 0;
-
-  constructor(private formBuilder: FormBuilder, private router: Router,
-              private activatedRoute: ActivatedRoute, private managerAccountService: ManagerAccountService, private messageService: MessageService) {
+  constructor(private formBuilder: FormBuilder, private router: Router,private translateService: TranslateConfigService,
+              private activatedRoute: ActivatedRoute, private managerAccountService: ManagerAccountService,private  messageService: MessageService) {
     this.createAccountResponse = new CreateAccountResponse();
   }
 
   ngOnInit(): void {
-    this.status = 3;
+
+    this.language = this.translateService.getLanguage();
     this.updateAccount = new FormGroup<any>({
       fullname: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
@@ -46,7 +46,7 @@ export class ManageUpdateAccountComponent implements OnInit {
       role: new FormControl('', [Validators.required]),
     });
     this.id = this.activatedRoute.snapshot.params['id'];
-    this.managerAccountService.editAccount(this.id).subscribe(response => {
+    this.managerAccountService.editAccount(this.id,this.language ).subscribe(response => {
       this.updateAccount.patchValue({
         fullname: response.fullname,
         username: response.username,
@@ -54,34 +54,29 @@ export class ManageUpdateAccountComponent implements OnInit {
         email: response.email,
         role: response.role,
         address: response.address,
-        cccd: response.cccd,
+        cccd:  response.cccd,
       });
     });
-  }
 
-  update() {
+  }
+  update(){
     this.id = this.activatedRoute.snapshot.params['id'];
     const value = this.updateAccount.value;
-    this.updateAccountRequest = new UpdateAccountRequest(this.id, value.username, value.fullname, value.password, value.cccd, value.address,
+    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
       value.numberPhone, value.email, value.role, 1);
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
-      if (this.createAccountResponse.status.status == "1") {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Add Account success',
-          life: 3000
-        });
-      } else if (this.createAccountResponse.status.status == "0") {
-        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Add Account failse', life: 3000});
+      if(this.createAccountResponse.status.status=="1"){
+        this.messageService.add({severity:'success', summary: 'Successful', detail:this.createAccountResponse.status.message , life: 3000});
+      }
+      else if(this.createAccountResponse.status.status=="0") {
+        this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
       }
     })
   }
-
-  checkError() {
+  checkError(){
     const value = this.updateAccount.value;
-    this.updateAccountRequest = new UpdateAccountRequest(this.id, value.username, value.fullname, value.password, value.cccd, value.address,
+    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
       value.numberPhone, value.email, value.role, 1);
     this.managerAccountService.checkAccountUpdate(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
@@ -89,17 +84,23 @@ export class ManageUpdateAccountComponent implements OnInit {
         this.messageUsername = this.createAccountResponse.status.message;
       } else if (this.createAccountResponse.status.status == "cccd" && this.updateAccountRequest.cccd != null) {
         this.messageCccd = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "email" && this.updateAccountRequest.email != null) {
+      }
+      else if (this.createAccountResponse.status.status == "email" && this.updateAccountRequest.email != null) {
         this.messageEmail = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "phone" && this.updateAccountRequest.numberPhone != null) {
+      }
+      else if (this.createAccountResponse.status.status == "phone" && this.updateAccountRequest.numberPhone != null) {
         this.messagePhone = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.numberPhone != null) {
+      }
+      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.numberPhone != null){
         this.messagePhone = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.email != null) {
+      }
+      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.email != null){
         this.messageEmail = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.cccd != null) {
+      }
+      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.cccd != null){
         this.messageCccd = this.createAccountResponse.status.message;
-      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.username != null) {
+      }
+      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.username != null){
         this.messageUsername = this.createAccountResponse.status.message;
       }
 

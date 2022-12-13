@@ -59,6 +59,8 @@ export class ManagerWarehouseImportComponent implements OnInit {
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
 
+  units:Unit[]=[];
+
 
   constructor(private messageService: MessageService ,
     private prodService:ProductService,
@@ -90,8 +92,6 @@ export class ManagerWarehouseImportComponent implements OnInit {
   getAllImportInWarehouse(id: any){
     this.importService.getImportInWarehouse(id).subscribe(response => {
       this.data = response as ImportInWarehouseInRedis[];
-
-      console.log(this.data +" dòng 71");
     });
   }
   doneImpport(){
@@ -201,7 +201,6 @@ export class ManagerWarehouseImportComponent implements OnInit {
       }else{
         this.failed(this.createProductResponse.status.message);
       }
-      this.ngOnInit()
     });
 
   }
@@ -214,14 +213,17 @@ export class ManagerWarehouseImportComponent implements OnInit {
 
   }
   getUnitChild(){
-    this.unitService.getChild(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-      this.getUnitChileResponse = response as GetUnitChildResponse;
-      if(this.getUnitChileResponse.status.status=== '0'){
-        this.failed(this.getUnitChileResponse.status.message);
-      }else{
-        this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
-        this.createProductRequest.units.push(this.unit);
-      }
+    // this.unitService.getChild(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
+    //   this.getUnitChileResponse = response as GetUnitChildResponse;
+    //   if(this.getUnitChileResponse.status.status=== '0'){
+    //     this.failed(this.getUnitChileResponse.status.message);
+    //   }else{
+    //     this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
+    //     this.createProductRequest.units.push(this.unit);
+    //   }
+    // })
+    this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
+      this.createProductRequest.units = response as Unit[]
     })
 
   }

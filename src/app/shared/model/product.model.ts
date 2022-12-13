@@ -1,6 +1,6 @@
 export class Product{
   id?: number;
-  name_product?: string;
+  productName?: string;
   qr_code ?: string;
   status ?: string;
   id_supplier ?: number;

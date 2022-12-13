@@ -9,7 +9,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class DistributorService {
-  api = AUTH_API + "admins/supplier";
+  api = AUTH_API+"supplier";
   constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
   httpOptions = {
@@ -21,12 +21,16 @@ export class DistributorService {
     }),
   };
 
-  display(nameSearch:string, language:string, filter:Filter, pageNumber:number, size:number){
-    return this.httpClient.get(this.api+"/display?nameSearch="+nameSearch+"&language="+language+"&"+filter.typeFilter+"="+filter.valueFilter+"&pageNumber="+pageNumber+"&size="+size, this.httpOptions);
+  display(status:number,nameSearch:string, language:string, filter:Filter, pageNumber:number, size:number){
+    return this.httpClient.get(this.api+"/display?nameSearch="+nameSearch+"&language="+language+"&"+filter.typeFilter+"="+filter.valueFilter+"&pageNumber="+pageNumber+"&size="+size+"&status="+status, this.httpOptions);
   }
 
-  pageAndSearch(numberPage:number, sizePage:number, nameSup:string) {
-    return this.httpClient.get(this.api+"?numberPage="+numberPage+"&sizePage="+sizePage+"&nameSup="+nameSup, this.httpOptions);
+  pageAndSearch(status: number , numberPage:number, sizePage:number, nameSup:string) {
+    return this.httpClient.get(this.api+"?numberPage="+numberPage+"&sizePage="+sizePage+"&nameSup="+nameSup+"&status="+status, this.httpOptions);
+  }
+
+  lock_unlock(id:number) {
+    return this.httpClient.get(this.api+"/lock-unlock?id="+id, this.httpOptions);
   }
 
   delete(id:number) {

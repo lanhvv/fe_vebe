@@ -11,13 +11,10 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class ImportSupplierService {
-  readonly URL = AUTH_API + "auth";
-
-  constructor(private httpClient: HttpClient) {
-  }
-
-  getAllUnit(language: string) {
-    return this.httpClient.get<any>(this.URL + '/unit?language=' + language)
+  readonly URL = AUTH_API+"/import-warehouse";
+  constructor(private httpClient: HttpClient ) { }
+  getAllUnit(language:string) {
+    return this.httpClient.get<any>(this.URL+'/unit?language='+language)
   }
 
   getAllType() {
@@ -44,8 +41,8 @@ export class ImportSupplierService {
     return this.httpClient.post(this.URL + "/create-importWarehouse", request);
   }
 
-  findByUnitId(id: any) {
-    return this.httpClient.get<any>(this.URL + '/findByUnitId/' + id)
+  findByUnitId(parent:any, language:string){
+    return this.httpClient.get<any>(this.URL+'/unitId-parent/'+parent+'?language='+language)
   }
 
   getImportInWarehouse(id: any) {

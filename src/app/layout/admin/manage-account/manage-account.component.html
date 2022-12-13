@@ -139,7 +139,7 @@
         <label class="form-label">Tên đăng nhập</label>
         <input type="text"
                class="form-control"
-               (change)="checkAccount()"
+               (ngModelChange)="checkAccount()"
                formControlName="userName"
                placeholder="Nhập tên đăng nhập"
                minlength="5"
@@ -186,7 +186,7 @@
         <label class="form-label">Số thẻ căn cước công dân</label>
         <input type="text"
                class="form-control"
-               (change)="checkAccount()"
+               (ngModelChange)="checkAccount()"
                placeholder="Nhập căn cước công dân"
                formControlName="cccd"
                minlength="9"
@@ -234,7 +234,7 @@
         <label class="form-label">Email</label>
         <input type="email"
                class="form-control"
-               (change)="checkAccount()"
+               (ngModelChange)="checkAccount()"
                placeholder="Nhập email"
                formControlName="email"
                [pattern]="regexEmail"
@@ -279,4 +279,72 @@
     </div>
   </form>
 </p-dialog>
+
+<!-- Update -->
+
+<!-- <p-dialog header="Cập nhật tài khoản" [(visible)]="isUpdateAccount" [modal]="true" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+          <form class="row g-3 was-validated"  [formGroup]="updateAccount" >
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="fullname" class="form-label">Tên Nhân Viên: </label>
+                <input type="text" class="form-control" id="fullname" formControlName="fullname" name="fullname"
+                       placeholder="Nhập tên nhân viên"
+                       required>
+              </div>
+              <div class="mb-3 col-md-6">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" class="form-control" id="username"
+                formControlName="username" name="username"
+                       placeholder="Nhập username nhân viên"
+                       required>
+
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label">Số Chứng Minh Thư: </label>
+                <input type="text" class="form-control"
+                 formControlName="cccd"
+                       placeholder="Nhập chứng minh thư" name="cccd" required>
+
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label">Số Điện Thoại: </label>
+                <input type="text" class="form-control"
+                 formControlName="numberPhone"
+                       placeholder="Nhập số điện thoại" required>
+
+              </div>
+
+              <div class="mb-3 col-md-6">
+                <label class="form-label">Email: </label>
+                <input type="text" class="form-control"
+                 formControlName="email" name="email"
+                       placeholder="Nhập email" required>
+
+              </div>
+              <div class="mb-3 col-md-6">
+                <label class="form-label">Địa chỉ: </label>
+                <input type="text" class="form-control" formControlName="address" name="address"
+                       placeholder="Nhập địa chỉ" required>
+              </div>
+
+              <div class="col-md-3 mb-3"></div>
+              <div class="col-md-3 mb-3">
+                <button (click)="update()"  type="submit" class="btn btn-success"
+                >Thêm Nhân Viên
+                </button>
+              </div>
+              <div class="col-md-3 mb-3">
+                <button type="submit" class="btn btn-success"
+                >Hủy
+                </button>
+              </div>
+              <div class="col-md-3 mb-3"></div>
+            </div>
+            <div class="row">
+
+            </div>
+
+          </form>
+</p-dialog> -->
 

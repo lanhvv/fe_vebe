@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;
-      console.log(this.products);
+      console.log(data.items[1].productName);
     })
   }
 
