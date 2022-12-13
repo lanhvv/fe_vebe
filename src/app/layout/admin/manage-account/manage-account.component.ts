@@ -199,6 +199,7 @@ export class ManageAccountComponent implements OnInit {
     });
     this.getall()
   }
+
   lockAccount(request: number) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',

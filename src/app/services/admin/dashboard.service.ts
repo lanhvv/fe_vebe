@@ -45,8 +45,6 @@ export class DashboardService{
     return this.http.get(this.api + '?startDate='+start + '&endDate='+end, this.httpOptions);
   }
 
-
-
   reportSumPriceOnDay(dateNow: any, lastDate: any): any{
     // return this.http.post(this.api + 'report-sum-price?date=' + dateNow + '&last=' + lastDate, this.httpOptions);
     return this.http.get(this.api + 'total-price-of-day', this.httpOptions);

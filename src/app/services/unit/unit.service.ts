@@ -11,7 +11,7 @@ const AUTH_API = environment.baseApi;
 export class UnitService {
   api=AUTH_API+"catalog";
 
-  apiAdmin = AUTH_API+"admins/unit";
+  apiAdmin = AUTH_API+"unit";
   constructor(private client:HttpClient,
               private tokenService: TokenStorageService) {
 
@@ -40,7 +40,7 @@ export class UnitService {
   }
 
   update(unit : UnitRequest) {
-    return this.client.put(this.apiAdmin, unit, this.httpOptions);
+    return this.client.post(this.apiAdmin+"/update", unit, this.httpOptions);
   }
 
   delete(id:number) {

@@ -128,7 +128,7 @@ export class ProductService {
   //   return this.httpClient.get(this.api+"/create/info?language=vi",this.httpOptions);
   // }
   getInforCreateProduct(){
-    return this.httpClient.get("http://localhost:1507/vibee/api/v1/auth/admins/product/create/info?language=vi",this.httpOptions);
+    return this.httpClient.get(this.api+"/create/info?language=vi",this.httpOptions);
   }
 
   detail(id:number,language:string){
