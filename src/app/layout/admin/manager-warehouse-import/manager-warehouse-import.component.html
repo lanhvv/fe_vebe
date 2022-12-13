@@ -87,7 +87,7 @@
       </p-table>
     </div>
     <button class="btn btn-danger" (mousedown)="doneImpport()">
-      xóa
+     Hoàn tất
     </button>
   </div>
 </main>
@@ -125,7 +125,7 @@
       </p-dropdown> <br>
         <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
       </div>
-      <div *ngIf="selectedUnitParent !=null && selectedUnitParent.unitId!=null && getUnitChileResponse!=null && getUnitChileResponse.unitItems!=null">
+      <!-- <div *ngIf="selectedUnitParent !=null && selectedUnitParent.unitId!=null && getUnitChileResponse!=null && getUnitChileResponse.unitItems!=null">
         <div *ngFor="let item of unitLayouts;let i=index ">
           <div class="row unit">
             <div class="field col-12 md:col-4">
@@ -160,6 +160,23 @@
               </button>
               </div>
           </div>
+        </div>
+      </div> -->
+      <p>Thêm đơn vị sản phẩm</p>
+      <div *ngFor="let i of createProductRequest.units">
+        <div class="row mb-3">
+          <div class="col">
+            <input type="text" class="form-control" [(ngModel)]="i.unitName" placeholder="Đơn vị" name="nameunit_{{i}}">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" [(ngModel)]="i.inPrice" placeholder="Đơn giá" name="price_{{i}}">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" [(ngModel)]="i.outPrice" placeholder="Thành tiền" name="cost_{{i}}">
+          </div>
+          <!-- <div class="col">
+            <button type="button" class="btn btn-danger" (click)="removeUnit(i)">Xóa</button>
+          </div> -->
         </div>
       </div>
 

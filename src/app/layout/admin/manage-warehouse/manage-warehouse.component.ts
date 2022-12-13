@@ -3,6 +3,16 @@ import {MessageService} from "primeng/api";
 import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
+import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
+import { ImportSupplierService } from 'src/app/services/admin/import/import-supplier.service';
+import { ImportInWarehouseInRedis } from 'src/app/shared/model/response/ImportInWarehouseInRedis';
+import { BaseResponse } from 'src/app/shared/response/BaseResponse';
+import { SelectionTypeProductItems } from 'src/app/shared/model/selectionTypeProductItems';
+import { InfoUnitItem } from 'src/app/shared/model/InfoUnitItem';
+import { ProductService } from 'src/app/services/Product/product.service';
+import { TranslateConfigService } from 'src/app/services/translate-config.service';
+import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -23,18 +33,59 @@ export class ManageWarehouseComponent implements OnInit {
   excelForm!: FormGroup;
   url: string | ArrayBuffer | null = '';
   enableImage: boolean = false;
+  language!:string;
 
-  constructor(private messageService: MessageService, private fb: FormBuilder, private http: HttpClient) {
+
+  getInforCreateProductResponse!:GetInfoCreateProdResponse;
+  selectedSupplier: GetSupplierItem=new GetSupplierItem();
+  items: ImportInWarehouseInRedis[]=[]
+  baseResponse: BaseResponse = new BaseResponse()
+  category: SelectionTypeProductItems = new SelectionTypeProductItems()
+  selectedUnitChilds: InfoUnitItem[]=[];
+  createProductResponse!:CreateProductResponse;
+
+  constructor(private messageService: MessageService,
+    private importService: ImportSupplierService,
+    private prodService:ProductService,
+    private translateService:TranslateConfigService,
+    private fb: FormBuilder, private http: HttpClient) {
   }
 
   ngOnInit(): void {
+    this.language=this.translateService.getLanguage()!;
     this.status = 8;
+    this.getInformations();
   }
 
   data: AOV = [
     [1, 2],
     [3, 4]
   ];
+
+  getAllImportInWarehouse(id: any){
+    this.importService.getImportInWarehouse(id).subscribe(response => {
+      this.items = response as ImportInWarehouseInRedis[];
+    });
+  }
+  deleteById(key:number, redisId: string){
+    this.importService.deleteById(key, redisId, this.language).subscribe(response => {
+      this.baseResponse = response as BaseResponse;
+      if(this.baseResponse.status.status=='1'){
+        this.success(this.createProductResponse.status.message);
+      }else{
+        this.failed(this.createProductResponse.status.message);
+      }
+    });
+    this.ngOnInit()
+  }
+
+  getInformations(){
+    console.log("liên nè")
+    this.prodService.getInforCreateProduct().subscribe(response => {
+      this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
+      console.log(this.getInforCreateProductResponse.unitItems);
+    });
+  }
 
   showDialog() {
     this.display = true;
@@ -110,5 +161,12 @@ export class ManageWarehouseComponent implements OnInit {
   changeImage(){
     this.url = '';
     this.enableImage = false;
+  }
+  success(message: string) {
+    this.messageService.add({severity:'success', summary: this.translateService.getvalue("message.success"), detail: message});
+  }
+
+  failed(message: string) {
+    this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 }
