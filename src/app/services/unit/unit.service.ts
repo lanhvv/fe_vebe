@@ -28,23 +28,23 @@ export class UnitService {
 
 
   getChild(id:number,language:string){
-    return this.client.get(this.api+`/unit/getchild/${id}?language=${language}`);
+    return this.client.get(this.api+`/unit/getchild/${id}?language=${language}`, this.httpOptions);
   }
 
   getUnit(nameSearch:string, page:number, record:number) {
-    return this.client.get(this.apiAdmin+"?nameSearch="+nameSearch+"&page="+page+"&record="+record);
+    return this.client.get(this.apiAdmin+"?nameSearch="+nameSearch+"&page="+page+"&record="+record, this.httpOptions);
   }
 
   save(unit : UnitRequest) {
-    return this.client.post(this.apiAdmin, unit);
+    return this.client.post(this.apiAdmin, unit, this.httpOptions);
   }
 
   update(unit : UnitRequest) {
-    return this.client.put(this.apiAdmin, unit);
+    return this.client.put(this.apiAdmin, unit, this.httpOptions);
   }
 
   delete(id:number) {
-    return this.client.delete(this.apiAdmin+"/"+id);
+    return this.client.delete(this.apiAdmin+"/"+id, this.httpOptions);
   }
 
   requestUnit : RequestUnit = new RequestUnit();
@@ -61,11 +61,11 @@ export class UnitService {
     }
     this.requestUnit.listEdit = listUnitEdit;
     console.log(this.requestUnit);
-    return this.client.post(this.apiAdmin+"/delete", this.requestUnit);
+    return this.client.post(this.apiAdmin+"/delete", this.requestUnit, this.httpOptions);
   }
 
   getUnits(language:string){
-    return this.client.get(this.api+`/unit/get-all?language=${language}`);
+    return this.client.get(this.api+`/unit/get-all?language=${language}`, this.httpOptions);
   }
 
   getUnitsByUnitSelected(language:string, id:number){
@@ -77,7 +77,6 @@ export class UnitItemEdit {
   id !: number;
   amount !: number;
 }
-
 
 // @ts-ignore
 export class RequestUnit {

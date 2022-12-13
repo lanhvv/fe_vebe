@@ -13,15 +13,7 @@ import {Unit} from "../../../shared/model/Unit";
   styleUrls: ['./manage-unit.component.css']
 })
 export class ManageUnitComponent implements OnInit {
-  constructor(private unitService : UnitService,
-              private confirmationService: ConfirmationService,
-              private messageService: MessageService) {
-  }
 
-  ngOnInit(): void {
-    this.unit.amount = 1;
-    this.load();
-  }
   feature = "";
   idUnit : number = 0;
   idUnitParent : number = 0;
@@ -33,6 +25,19 @@ export class ManageUnitComponent implements OnInit {
   showCategory : boolean = false;
   totalItems = 0;
   nameSearch = "";
+
+  status: number = 0;
+
+  constructor(private unitService : UnitService,
+              private confirmationService: ConfirmationService,
+              private messageService: MessageService) {
+  }
+
+  ngOnInit(): void {
+    this.status = 9;
+    this.unit.amount = 1;
+    this.load();
+  }
 
   hideDialog() {
     this.unitDialog = false;

@@ -10,12 +10,19 @@
       <div class="col-2">
         <span><p>Số người đang hoạt động: {{listAccountItems.countStatus}}</p></span>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
-      <div class="col-6">
+      <div class="col-2">
+        <select class="form-select" aria-label="Default select example">
+          <option value="1">Tất cả</option>
+          <option value="2">Đang hoạt động</option>
+          <option value="3">Không hoạt động</option>
+        </select>
+      </div>
+      <div class="col-5">
         <div class="input-group mb-3">
-          <form>
+          <form style="width: 100%">
             <div class="input-group mb-3">
               <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #username
                      placeholder="Nhập tên nhân viên...">
@@ -32,6 +39,7 @@
         <p-table #dt [value]="listAccountItems.items" dataKey="id" styleClass="p-datatable-getOrderResponse.totalPages">
           <ng-template pTemplate="header">
             <tr>
+              <th scope="col">Mở/Khóa</th>
               <th scope="col">Mã nhân viên</th>
               <th scope="col">Họ và tên</th>
               <th scope="col">Email</th>
@@ -43,20 +51,32 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
+              <td *ngIf="item.status == 1">
+                <p-inputSwitch [(ngModel)]="checked_true" (click)="unlockAccount(item.id)"></p-inputSwitch>
+              </td>
+              <td *ngIf="item.status == 2">
+                <p-inputSwitch [(ngModel)]="checked_false" (click)="lockAccount(item.id)"></p-inputSwitch>
+              </td>
               <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
-              <td>{{item.statusName}}</td>
               <td>
-                <button *ngIf="item.status==2" (mousedown)="unlockAccount(item.id)">
-                  <i class="fa-solid fa-lock text-danger me-2"></i>
-                </button>
-
-                <button (click)="getId(item.id)">
+                <div *ngIf="item.statusName === 'Active'" class="active">
+                  <p>{{item.statusName === 'Active' ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
+                <div *ngIf="!(item.statusName === 'Active')" class="in-active">
+                  <p>{{item.statusName === 'Active' ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
+              </td>
+              <td>
+<!--                <button *ngIf="item.status==1" (mousedown)="unlockAccount(item.id)">-->
+<!--                  <i class="fa-solid fa-lock text-danger me-2"></i>-->
+<!--                </button>-->
+                <button (click)="getId(item.id)" class="buttonRoot m-1" style="width: 45px">
                   <i class="fa-solid fa-file-pen me-2"></i>
                 </button>
-                <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)">
+                <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
                   <i class="fa-solid fa-trash"></i>
                 </button>
 
@@ -235,24 +255,6 @@
           </div>
         </div>
       </div>
-<!--      <div class="mb-3 col-md-6">-->
-<!--        <label class="form-label">Chức vụ</label>-->
-<!--        &lt;!&ndash;          <select class="form-control" [(ngModel)]="createAccountRequest.role" [ngModelOptions]="{standalone: true}">&ndash;&gt;-->
-<!--        &lt;!&ndash;            <option [value]="1">Admin</option>&ndash;&gt;-->
-<!--        &lt;!&ndash;            <option [value]="2">Staff</option>&ndash;&gt;-->
-<!--        &lt;!&ndash;            <option [value]="3">User</option>&ndash;&gt;-->
-<!--        &lt;!&ndash;          </select>&ndash;&gt;-->
-<!--        <p-dropdown [options]="roleAccount"-->
-<!--                    formControlName="role"-->
-<!--                    optionLabel="name"-->
-<!--                    [required]="true">-->
-<!--        </p-dropdown>-->
-<!--        <div *ngIf="accountForm.controls['role'].invalid && (accountForm.controls['role'].dirty || accountForm.controls['role'].touched)">-->
-<!--          <div *ngIf="accountForm.controls['role'].errors?.required">-->
-<!--            <span class="text-danger" >Chức vụ không được để trống</span>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="mb-3">
         <label class="form-label">Địa chỉ</label>
         <textarea class="form-control"

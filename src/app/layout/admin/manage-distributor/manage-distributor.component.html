@@ -10,11 +10,18 @@
       <div class="col-2">
         <span><p>Số nhà phân phối đang hoạt động: {{suppliersActive}}</p></span>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         <button class="root-btn" (click)="openNew()">Thêm nhà phân phối</button>
       </div>
-      <div class="col-6">
-        <form (ngSubmit)="onSearch()">
+      <div class="col-2">
+        <select class="form-select" aria-label="Default select example">
+          <option value="1">Tất cả</option>
+          <option value="2">Còn hợp tác</option>
+          <option value="3">Ngừng hợp tác</option>
+        </select>
+      </div>
+      <div class="col-5">
+        <form (ngSubmit)="onSearch()" style="width: 100%">
           <div class="input-group mb-3">
             <input type="text" [(ngModel)]="search" name="name" class="form-control inputRoot" pInputText ngModel #username
                    placeholder="Nhập tên nhà phân phối...">
@@ -44,7 +51,15 @@
             <td>{{distributor.email}}</td>
             <td>{{distributor.address}}</td>
             <td>{{distributor.createdDate | date}}</td>
-            <td>{{distributor.statusName}}</td>
+            <td>
+<!--              <div *ngIf="distributor.statusName === 'Avtive'" class="active">-->
+<!--                <p>{{distributor.statusName}}</p>-->
+<!--              </div>-->
+<!--              <div *ngIf="!(distributor.statusName === 'Avtive')" class="in-active">-->
+<!--                <p>{{distributor.statusName}}</p>-->
+<!--              </div>-->
+              <p>{{distributor.statusName}}</p>
+            </td>
             <td>
               <i (click)="openUpdate(distributor.id)"  class="fa-solid fa-file-pen me-2"></i>
               <i (click)="delete(distributor.id)"  *ngIf="distributor.status == 1" class="fa-solid fa-trash"></i>

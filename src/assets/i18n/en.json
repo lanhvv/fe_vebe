@@ -8,7 +8,8 @@
       "distributor": "Management Distributor",
       "product": "Management Product",
       "sell": "Sell",
-      "warehouse": "Management Warehouse"
+      "warehouse": "Management Warehouse",
+      "unit": "Management Unit Product"
     }
   },
   "login": {

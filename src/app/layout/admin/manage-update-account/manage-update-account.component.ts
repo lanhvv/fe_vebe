@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreateAccountResponse} from "../../../shared/model/response/createAccountResponse";
 import {UpdateAccountRequest} from "../../../shared/model/request/updateAccountRequest";
@@ -22,13 +22,16 @@ export class ManageUpdateAccountComponent implements OnInit {
   messageEmail: any;
   messageCccd: any;
   messagePhone: any;
+
+  status: number = 0;
+
   constructor(private formBuilder: FormBuilder, private router: Router,
-              private activatedRoute: ActivatedRoute, private managerAccountService: ManagerAccountService,private  messageService: MessageService) {
+              private activatedRoute: ActivatedRoute, private managerAccountService: ManagerAccountService, private messageService: MessageService) {
     this.createAccountResponse = new CreateAccountResponse();
   }
 
   ngOnInit(): void {
-    // @ts-ignore
+    this.status = 3;
     this.updateAccount = new FormGroup<any>({
       fullname: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
@@ -51,29 +54,34 @@ export class ManageUpdateAccountComponent implements OnInit {
         email: response.email,
         role: response.role,
         address: response.address,
-        cccd:  response.cccd,
+        cccd: response.cccd,
       });
     });
-
   }
-  update(){
+
+  update() {
     this.id = this.activatedRoute.snapshot.params['id'];
     const value = this.updateAccount.value;
-    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
+    this.updateAccountRequest = new UpdateAccountRequest(this.id, value.username, value.fullname, value.password, value.cccd, value.address,
       value.numberPhone, value.email, value.role, 1);
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
-      if(this.createAccountResponse.status.status=="1"){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
-      }
-      else if(this.createAccountResponse.status.status=="0") {
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account failse', life: 3000});
+      if (this.createAccountResponse.status.status == "1") {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Add Account success',
+          life: 3000
+        });
+      } else if (this.createAccountResponse.status.status == "0") {
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Add Account failse', life: 3000});
       }
     })
   }
-  checkError(){
+
+  checkError() {
     const value = this.updateAccount.value;
-    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
+    this.updateAccountRequest = new UpdateAccountRequest(this.id, value.username, value.fullname, value.password, value.cccd, value.address,
       value.numberPhone, value.email, value.role, 1);
     this.managerAccountService.checkAccountUpdate(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
@@ -81,23 +89,17 @@ export class ManageUpdateAccountComponent implements OnInit {
         this.messageUsername = this.createAccountResponse.status.message;
       } else if (this.createAccountResponse.status.status == "cccd" && this.updateAccountRequest.cccd != null) {
         this.messageCccd = this.createAccountResponse.status.message;
-      }
-      else if (this.createAccountResponse.status.status == "email" && this.updateAccountRequest.email != null) {
+      } else if (this.createAccountResponse.status.status == "email" && this.updateAccountRequest.email != null) {
         this.messageEmail = this.createAccountResponse.status.message;
-      }
-      else if (this.createAccountResponse.status.status == "phone" && this.updateAccountRequest.numberPhone != null) {
+      } else if (this.createAccountResponse.status.status == "phone" && this.updateAccountRequest.numberPhone != null) {
         this.messagePhone = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.numberPhone != null){
+      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.numberPhone != null) {
         this.messagePhone = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.email != null){
+      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.email != null) {
         this.messageEmail = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.cccd != null){
+      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.cccd != null) {
         this.messageCccd = this.createAccountResponse.status.message;
-      }
-      else if(this.createAccountResponse.status.status == ""&& this.updateAccountRequest.username != null){
+      } else if (this.createAccountResponse.status.status == "" && this.updateAccountRequest.username != null) {
         this.messageUsername = this.createAccountResponse.status.message;
       }
 
