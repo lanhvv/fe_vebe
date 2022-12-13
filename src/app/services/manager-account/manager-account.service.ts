@@ -13,7 +13,7 @@ const AUTH_API = environment.baseApi;
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"vibee/api/v1/auth/user/";
+  readonly URL = AUTH_API+"/user/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {
@@ -39,18 +39,17 @@ export class ManagerAccountService {
   updateAccount(request: UpdateAccountRequest):Observable<any>{
     return this.httpClient.post<any>(this.URL+'update', request,this.httpOptions);
   }
-  editAccount(request: number):Observable<any> {
-    return this.httpClient.get(this.URL+'edit/'+request,this.httpOptions);
+  editAccount(request: number,language:string):Observable<any> {
+    return this.httpClient.get(this.URL+'edit/'+request+'?language='+language,this.httpOptions);
   }
-  deleteAccount(request: number):Observable<any>{
-    this.editAccountRequest=new EditAccountRequest();
-    this.editAccountRequest.idUserRole=request;
-    return this.httpClient.post<any>(this.URL+'delete',this.editAccountRequest,this.httpOptions);
+  deleteAccount(request: number,language:string):Observable<any>{
+    return this.httpClient.post<any>(this.URL+'delete/'+request+'?language='+language,this.httpOptions);
   }
-  unlockAccount(request: number):Observable<any>{
-    this.editAccountRequest=new EditAccountRequest();
-    this.editAccountRequest.idUserRole=request;
-    return this.httpClient.post<any>(this.URL+'unlock',this.editAccountRequest,this.httpOptions);
+  unlockAccount(request: number,language:string):Observable<any>{
+    return this.httpClient.post<any>(this.URL+'unlock/'+request+'?language='+language,this.httpOptions);
+  }
+  lockAccount(request: number,language:string):Observable<any>{
+    return this.httpClient.post<any>(this.URL+'lock/'+request+'?language='+language,this.httpOptions);
   }
   checkAccount(request: CreateAccountRequest):Observable<any>{
     return this.httpClient.post<any>(this.URL+'checkAccount', request,this.httpOptions);

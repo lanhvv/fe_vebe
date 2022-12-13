@@ -15,30 +15,32 @@
           Nhập file hàng
         </a>
       </div>
-      <div class="col">
-        <span class="p-input-icon-right">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text"
-                 pInputText
-                 [(ngModel)]="nameSupplier"
-                 placeholder="Nhập tên nhà cung cấp">
-        </span>
-      </div>
-      <div class="col">
-        <p-calendar
-          inputId="basic"
-          [(ngModel)]="date"
-          id="date-order-all"
-          inputStyleClass="inputRoot"
-          placeholder="dd/MM/yyyy"></p-calendar>
+      <div class="col" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.items!=null">
+        <label class="form-label-supplier" translate>product.supplier.name</label> <br>
+        <p-dropdown [options]="getInforCreateProductResponse.items" [(ngModel)]="selectedSupplier" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier" (onChange)="getAllImportInWarehouse(selectedSupplier.id)">
+          <ng-template pTemplate="selectedItem">
+              <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                  <div>{{selectedSupplier.name}}</div>
+              </div>
+          </ng-template>
+          <ng-template let-supplier pTemplate="supplieritem">
+              <div class="supplier-item">
+                  <div>{{supplier.name}}</div>
+              </div>
+          </ng-template>
+      </p-dropdown><br>
+        <a class="text-category mt-3 text-decoration-none" translate>product.supplier.create</a>
       </div>
     </div>
     <div class="row">
-      <p-table>
+      <p-table [value]="items">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="qrcode">QR code
-              <p-sortIcon field="qrcode"></p-sortIcon>
+            <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="stt">STT
+              <p-sortIcon field="stt"></p-sortIcon>
             </th>
             <th pSortableColumn="code">Mã sản phẩm
               <p-sortIcon field="code"></p-sortIcon>
@@ -52,8 +54,11 @@
             <th pSortableColumn="price">Giá nhập
               <p-sortIcon field="price"></p-sortIcon>
             </th>
-            <th pSortableColumn="unit">Đơn vị
-              <p-sortIcon field="unit"></p-sortIcon>
+            <th pSortableColumn="price">Hạn dùng
+              <p-sortIcon field="price"></p-sortIcon>
+            </th>
+            <th pSortableColumn="price">Nhà cung cấp
+              <p-sortIcon field="price"></p-sortIcon>
             </th>
             <th>Hành động</th>
           </tr>
@@ -62,15 +67,13 @@
           <tr>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <button class="root-btn-table">
-                <i class="fa-solid fa-download"></i>
-              </button>
-            </td>
+            <td>{{product.barcode}}</td>
+            <td>{{product.productName}}</td>
+            <td>{{product.inAmount}}</td>
+            <td>{{product.inPrice | currency: 'USD' }}</td>
+            <td>{{product.rangeDates }}</td>
+            <td>{{product.supplierName }}</td>
+            <td>  <button class="btn btn-danger" (mousedown)="deleteById(product.supplierId,product.id )"></button></td>
           </tr>
         </ng-template>
       </p-table>
