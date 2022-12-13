@@ -43,16 +43,16 @@
           <h3>Tổng tiền bán hàng trong ngày</h3>
           <div class="row">
             <div class="col-10">
-              <h1 class="text-primary fw-bold">{{totalSumPriceOnDay | currency: "VND"}} VNĐ</h1>
+              <h1 class="text-primary fw-bold">{{totalSumPriceOnDay | number}} VNĐ</h1>
             </div>
             <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'equal'">
-              <img src="assets/image/equals-symbol.png">
+              {{percentSumPrice}}% <img src="assets/image/equals-symbol.png">
             </div>
             <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'less'">
-              <img src="assets/image/up-arrow%20(1).png">
+              {{percentSumPrice}}% <img src="assets/image/up-arrow%20(1).png">
             </div>
             <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'more'">
-              <img src="assets/image/up-arrow.png">
+              {{percentSumPrice}}% <img src="assets/image/up-arrow.png">
             </div>
           </div>
         </div>
@@ -61,16 +61,16 @@
           <h3>Tổng tiền thực lãi trong ngày</h3>
           <div class="row">
             <div class="col-10">
-              <h1 class="text-primary fw-bold">900.000 VNĐ</h1>
+              <h1 class="text-primary fw-bold">{{interestRate | number}} VNĐ</h1>
             </div>
-            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'equal'">
-              <img src="assets/image/equals-symbol.png">
+            <div class="col-2 text-center pt-3" *ngIf="statusInterestRateOfDay == 'equal'">
+              {{percentInterestRate}}%<img src="assets/image/equals-symbol.png">
             </div>
-            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'less'">
-              <img src="assets/image/up-arrow%20(1).png">
+            <div class="col-2 text-center pt-3" *ngIf="statusInterestRateOfDay == 'less'">
+              {{percentInterestRate}}%<img src="assets/image/up-arrow%20(1).png">
             </div>
-            <div class="col-2 text-center pt-3" *ngIf="statusSumPrice == 'more'">
-              <img src="assets/image/up-arrow.png">
+            <div class="col-2 text-center pt-3" *ngIf="statusInterestRateOfDay == 'more'">
+              {{percentInterestRate}}%<img src="assets/image/up-arrow.png">
             </div>
           </div>
         </div>
@@ -113,6 +113,7 @@
           <!-- top 5 product -->
           <div class="col-2" *ngFor="let product of products">
             <div class="myproduct-top_item">
+              <img src="{{product.name_product}}" alt="">
               <img src="{{product.img}}" alt="">
             </div>
           </div>

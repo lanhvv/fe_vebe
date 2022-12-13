@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ManagerAccountService} from "../../../services/manager-account/manager-account.service";
 import {EditAccountRequest} from "../../../shared/model/request/editAccountRequest";
 import {MessageService} from "primeng/api";
+import { TranslateConfigService } from 'src/app/services/translate-config.service';
 
 @Component({
   selector: 'app-manage-update-account',
@@ -21,14 +22,16 @@ export class ManageUpdateAccountComponent implements OnInit {
   messageUsername: any;
   messageEmail: any;
   messageCccd: any;
+  language: any;
   messagePhone: any;
-  constructor(private formBuilder: FormBuilder, private router: Router,
+  constructor(private formBuilder: FormBuilder, private router: Router,private translateService: TranslateConfigService,
               private activatedRoute: ActivatedRoute, private managerAccountService: ManagerAccountService,private  messageService: MessageService) {
     this.createAccountResponse = new CreateAccountResponse();
   }
 
   ngOnInit(): void {
-    // @ts-ignore
+
+    this.language = this.translateService.getLanguage();
     this.updateAccount = new FormGroup<any>({
       fullname: new FormControl('', [Validators.required]),
       username: new FormControl('', [Validators.required]),
@@ -43,7 +46,7 @@ export class ManageUpdateAccountComponent implements OnInit {
       role: new FormControl('', [Validators.required]),
     });
     this.id = this.activatedRoute.snapshot.params['id'];
-    this.managerAccountService.editAccount(this.id).subscribe(response => {
+    this.managerAccountService.editAccount(this.id,this.language ).subscribe(response => {
       this.updateAccount.patchValue({
         fullname: response.fullname,
         username: response.username,
@@ -64,10 +67,10 @@ export class ManageUpdateAccountComponent implements OnInit {
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if(this.createAccountResponse.status.status=="1"){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Successful', detail:this.createAccountResponse.status.message , life: 3000});
       }
       else if(this.createAccountResponse.status.status=="0") {
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account failse', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
       }
     })
   }

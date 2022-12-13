@@ -4,12 +4,12 @@ import { environment } from 'src/environments/environment';
 import { ImportInWarehouseRequest } from '../../../shared/model/request/importInWarehouseRequest';
 import { ListImportWarehouseInRedis } from '../../../shared/model/response/ListImportWarehouseInRedis';
 import { ImportInWarehouseInRedis } from '../../../shared/model/response/ImportInWarehouseInRedis';
-const AUTH_API = environment.base;
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class ImportSupplierService {
-  readonly URL = AUTH_API+"vibee/api/v1/auth";
+  readonly URL = AUTH_API+"/import-warehouse";
   constructor(private httpClient: HttpClient ) { }
   getAllUnit(language:string) {
     return this.httpClient.get<any>(this.URL+'/unit?language='+language)
@@ -32,8 +32,8 @@ export class ImportSupplierService {
   createImportWarehouse(request:ImportInWarehouseRequest){
     return this.httpClient.post(this.URL+"/create-importWarehouse",request);
   }
-  findByUnitId(id:any){
-    return this.httpClient.get<any>(this.URL+'/findByUnitId/'+id)
+  findByUnitId(parent:any, language:string){
+    return this.httpClient.get<any>(this.URL+'/unitId-parent/'+parent+'?language='+language)
   }
   getImportInWarehouse(id: any){
     return this.httpClient.get<any>(this.URL+'/getAllRedis-importWarehouse/'+id)

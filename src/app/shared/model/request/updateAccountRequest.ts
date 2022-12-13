@@ -10,10 +10,10 @@ export class UpdateAccountRequest {
   email: string;
   role: number;
   status: number;
-  idUserRole: number;
-  constructor(idUserRole: number,username:string, fullname: string, password: string, cccd: string, address: string, numberPhone: string, email: string,
+  idUser: number;
+  constructor(idUser: number,username:string, fullname: string, password: string, cccd: string, address: string, numberPhone: string, email: string,
               role: number, status: number){
-    this.idUserRole =idUserRole;
+    this.idUser =idUser;
     this.username= username
     this.fullname= fullname;
     this.password = password;
