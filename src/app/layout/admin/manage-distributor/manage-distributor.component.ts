@@ -43,6 +43,12 @@ export class ManageDistributorComponent implements OnInit {
   page = 0;
   row = 10;
 
+  statuses = [
+    {id:0, name: "Tất cả"},
+    {id:1, name: "Hoạt động"},
+    {id:2, name: "Không hoạt động"}];
+  selectedStatus = 0;
+
   constructor(private modalService: NgbModal,
               private distributorService:DistributorService,
               private messageService : MessageService,
@@ -72,7 +78,7 @@ export class ManageDistributorComponent implements OnInit {
   }
 
   loadInit() {
-    this.distributorService.display(this.search, "", this.filter, this.page, this.row).subscribe(data => {
+    this.distributorService.display(this.selectedStatus ,this.search, "", this.filter, this.page, this.row).subscribe(data => {
       this.supplierResponse = data as SupplierResponse;
       this.totalItems = this.supplierResponse.totalItems;
       this.suppliersActive = this.supplierResponse.supplierActive;
@@ -99,25 +105,33 @@ export class ManageDistributorComponent implements OnInit {
     }
   }
 
-  edit(id:number) {
-    console.log("edit nef "+id);
-  }
 
-  save() {
-    console.log("nane: "+this.supplier.nameSup);
-  }
-
-  delete(id:number) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to unlock the selected distributer?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.distributorService.delete(id).subscribe(data => {
-          this.loadInit();
-        });
-      }
-    });
+  delete(id:number, status:number) {
+    if (status === 1) {
+      this.confirmationService.confirm({
+        message: 'Bạn muốn ngừng hợp đồng với nhà phân phối này?',
+        header: 'Confirm',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.distributorService.delete(id).subscribe(data => {
+            this.showSuccess("Đã ngừng hợp đồng với nhà phân phối");
+            this.loadInit();
+          });
+        }
+      });
+    } else {
+      this.confirmationService.confirm({
+        message: 'Bạn muốn tiếp tục hợp đồng với nhà phân phối này?',
+        header: 'Confirm',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.distributorService.delete(id).subscribe(data => {
+            this.showSuccess("Tiếp tục hợp đồng với nhà phân phối");
+            this.loadInit();
+          });
+        }
+      });
+    }
   }
 
   hideDialog() {
@@ -133,9 +147,10 @@ export class ManageDistributorComponent implements OnInit {
           this.createSupplierResponse = data as CreateSupplierResponse;
           // @ts-ignore
           if (this.createSupplierResponse.status.status==1) {
-            this.showSuccess("Saved");
             this.submitted = false;
             this.supplierDialog =false;
+            this.showSuccess("Thêm thành công")
+            this.loadInit();
           } else {
             this.showError(this.createSupplierResponse.status.message);
           }
@@ -145,7 +160,7 @@ export class ManageDistributorComponent implements OnInit {
           this.createSupplierResponse = data as CreateSupplierResponse;
           // @ts-ignore
           if (this.createSupplierResponse.status.status==1) {
-            this.showSuccess("Updated");
+            this.showSuccess("Cập nhập thành công");
             this.loadInit();
             this.submitted = false;
             this.supplierDialog =false;
@@ -217,4 +232,6 @@ export class ManageDistributorComponent implements OnInit {
   onSearch() {
     this.loadInit();
   }
+
+
 }

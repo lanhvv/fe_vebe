@@ -1,28 +1,38 @@
 <!--Main Navigation-->
-<admin-header [Status]=status></admin-header>
+<admin-header></admin-header>
 <!--Main Navigation-->
 
 <!--Main layout-->
 <main>
-  <h5>Quản lý nhà phân phối</h5>
   <div class="container pt-4 main-layout">
     <div class="row">
-      <div class="col-2">
-        <span><p>Số nhà phân phối đang hoạt động: {{suppliersActive}}</p></span>
+      <div class="col">
+        <h2>Quản lý nhà phân phối</h2>
       </div>
-      <div class="col-4">
-        <button class="root-btn" (click)="openNew()">Thêm nhà phân phối</button>
-      </div>
-      <div class="col-6">
-        <form (ngSubmit)="onSearch()">
-          <div class="input-group mb-3">
-            <input type="text" [(ngModel)]="search" name="name" class="form-control inputRoot" pInputText ngModel #username
-                   placeholder="Nhập tên nhà phân phối...">
-            <button class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
-          </div>
-        </form>
+      <div class="col">
+        <button class="btn btn-outline-primary float-end" (click)="openNew()">Thêm nhà phân phối</button>
+        <p-dropdown [options]="statuses" [(ngModel)]="selectedStatus" optionLabel="name" optionValue="id" (onClick)="onSearch()"></p-dropdown>
       </div>
     </div>
+    <!-- pre-table-->
+    <section class="pre-table">
+      <div class="row">
+        <div class="col">
+          <span><p>Số nhà phân phối đang hoạt động: {{suppliersActive}}</p></span>
+        </div>
+        <div class="col-3">
+          <div class="input-group mb-3">
+            <form (ngSubmit)="onSearch()">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                      <input type="text" pInputText class="form-control" [(ngModel)]="search" name="name" style="width:290px;"
+                             placeholder="Tên nhà cung cấp">
+                </span>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- table -->
     <section class="table-account">
       <p-table class="table"  [value]="supplierResponse.supplierItems">
@@ -47,7 +57,8 @@
             <td>{{distributor.statusName}}</td>
             <td>
               <i (click)="openUpdate(distributor.id)"  class="fa-solid fa-file-pen me-2"></i>
-              <i (click)="delete(distributor.id)"  *ngIf="distributor.status == 1" class="fa-solid fa-trash"></i>
+              <i (click)="delete(distributor.id, distributor.status)"  *ngIf="distributor.status == 1" class="fa-solid pi pi-lock"></i>
+              <i (click)="delete(distributor.id, distributor.status)"  *ngIf="distributor.status == 2" class="fa-solid pi pi-lock-open"></i>
             </td>
           </tr>
         </ng-template>
@@ -55,39 +66,37 @@
       <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]" (onPageChange)="paginate($event)" ></p-paginator>
     </section>
   </div>
+  <p-dialog [(visible)]="supplierDialog" [style]="{width: '550px'}" header="Distributor" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" pInputText id="name" [(ngModel)]="form.nameSup" required  />
+        <small class="p-error" *ngIf="submitted && !form.nameSup">Name is required.</small>
+      </div>
+      <div class="field">
+        <label for="name">Number phone</label>
+        <input type="text" pInputText id="numberphone" [(ngModel)]="form.numberPhone" required  />
+        <small class="p-error" *ngIf="submitted && !form.numberPhone">Number phone is required.</small>
+      </div>
+      <div class="field">
+        <label for="Email">Email</label>
+        <input type="text" pInputText id="email" [(ngModel)]="form.email" required  />
+        <small class="p-error" *ngIf="submitted && !form.email">Email is required.</small>
+      </div>
+      <div class="field">
+        <label for="address">Address</label>
+        <textarea id="address" pInputTextarea [(ngModel)]="form.address" required rows="3" cols="20"></textarea>
+        <small class="p-error" *ngIf="submitted && !form.address">Address is required.</small>
+      </div>
+    </ng-template>
 
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSupplier()"></button>
+    </ng-template>
+  </p-dialog>
   <p-toast position="top-right"></p-toast>
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
   <admin-footer></admin-footer>
 </main>
 <!--Main layout-->
-
-<p-dialog [(visible)]="supplierDialog" [style]="{width: '50vw'}" header="Thêm mới nhà cung cấp" [modal]="true" styleClass="p-fluid">
-  <ng-template pTemplate="content">
-    <div class="field mt-3">
-      <label for="name">Name</label>
-      <input type="text" pInputText id="name" [(ngModel)]="form.nameSup" required />
-      <small class="p-error" *ngIf="submitted && !form.nameSup">Name is required.</small>
-    </div>
-    <div class="field mt-3">
-      <label for="name">Number phone</label>
-      <input type="text" pInputText id="numberphone" [(ngModel)]="form.numberPhone" required />
-      <small class="p-error" *ngIf="submitted && !form.numberPhone">Number phone is required.</small>
-    </div>
-    <div class="field mt-3">
-      <label for="Email">Email</label>
-      <input type="text" pInputText id="email" [(ngModel)]="form.email" required />
-      <small class="p-error" *ngIf="submitted && !form.email">Email is required.</small>
-    </div>
-    <div class="field mt-3">
-      <label for="address" class="form-label">Địa chỉ</label>
-      <textarea class="form-control" id="address" pInputTextarea [(ngModel)]="form.address" required rows="3"></textarea>
-      <small class="p-error" *ngIf="submitted && !form.address">Address is required.</small>
-    </div>
-
-    <div class="mt-3 float-end">
-      <button class="root-btn" (click)="saveSupplier()">Thêm mới</button>
-    </div>
-  </ng-template>
-</p-dialog>
-
