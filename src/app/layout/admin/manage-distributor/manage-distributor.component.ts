@@ -46,7 +46,8 @@ export class ManageDistributorComponent implements OnInit {
   statuses = [
     {id:0, name: "Tất cả"},
     {id:1, name: "Hoạt động"},
-    {id:2, name: "Không hoạt động"}];
+    {id:2, name: "Không hoạt động"},
+    {id:3, name: "Đã xóa"}];
   selectedStatus = 0;
 
   constructor(private modalService: NgbModal,
@@ -106,14 +107,14 @@ export class ManageDistributorComponent implements OnInit {
   }
 
 
-  delete(id:number, status:number) {
+  lock_unlock(id:number, status:number) {
     if (status === 1) {
       this.confirmationService.confirm({
         message: 'Bạn muốn ngừng hợp đồng với nhà phân phối này?',
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.distributorService.delete(id).subscribe(data => {
+          this.distributorService.lock_unlock(id).subscribe(data => {
             this.showSuccess("Đã ngừng hợp đồng với nhà phân phối");
             this.loadInit();
           });
@@ -125,13 +126,27 @@ export class ManageDistributorComponent implements OnInit {
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this.distributorService.delete(id).subscribe(data => {
+          this.distributorService.lock_unlock(id).subscribe(data => {
             this.showSuccess("Tiếp tục hợp đồng với nhà phân phối");
             this.loadInit();
           });
         }
       });
     }
+  }
+
+  delete(id:number) {
+    this.confirmationService.confirm({
+      message: 'Bạn muốn xóa nhà phân phối này?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.distributorService.delete(id).subscribe(data => {
+          this.showSuccess("Xóa thành công");
+          this.loadInit();
+        });
+      }
+    });
   }
 
   hideDialog() {

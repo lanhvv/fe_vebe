@@ -56,9 +56,10 @@
             <td>{{distributor.createdDate | date}}</td>
             <td>{{distributor.statusName}}</td>
             <td>
-              <i (click)="openUpdate(distributor.id)"  class="fa-solid fa-file-pen me-2"></i>
-              <i (click)="delete(distributor.id, distributor.status)"  *ngIf="distributor.status == 1" class="fa-solid pi pi-lock"></i>
-              <i (click)="delete(distributor.id, distributor.status)"  *ngIf="distributor.status == 2" class="fa-solid pi pi-lock-open"></i>
+              <i (click)="openUpdate(distributor.id)" *ngIf="distributor.status != 3" class="fa-solid fa-file-pen me-2"></i>
+              <i (click)="lock_unlock(distributor.id, distributor.status)"  *ngIf="distributor.status === 1" class="fa-solid pi pi-lock me-2"></i>
+              <i (click)="lock_unlock(distributor.id, distributor.status)"  *ngIf="distributor.status === 2" class="fa-solid pi pi-lock-open me-2"></i>
+              <i (click)="delete(distributor.id)" *ngIf="distributor.status != 3"  class="fa-solid pi pi-trash"></i>
             </td>
           </tr>
         </ng-template>

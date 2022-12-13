@@ -9,7 +9,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class DistributorService {
-  api = "http://localhost:1507/vibee/api/v1/supplier";
+  api = AUTH_API+"supplier";
   constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
   httpOptions = {
@@ -27,6 +27,10 @@ export class DistributorService {
 
   pageAndSearch(status: number , numberPage:number, sizePage:number, nameSup:string) {
     return this.httpClient.get(this.api+"?numberPage="+numberPage+"&sizePage="+sizePage+"&nameSup="+nameSup+"&status="+status, this.httpOptions);
+  }
+
+  lock_unlock(id:number) {
+    return this.httpClient.get(this.api+"/lock-unlock?id="+id, this.httpOptions);
   }
 
   delete(id:number) {
