@@ -10,6 +10,7 @@ import {Filter} from "../../../shared/model/Filter";
 import {CreateSupplierResponse} from "../../../shared/response/suppplier/CreateSupplierResponse";
 import {CreateSupplier} from "../../../shared/model/CreateSupplier";
 import {ConfirmationService, MessageService} from "primeng/api";
+import {DatePipe} from "@angular/common";
 
 interface StatusSupplier {
   name: string,
@@ -19,7 +20,8 @@ interface StatusSupplier {
 @Component({
   selector: 'app-manage-distributor',
   templateUrl: './manage-distributor.component.html',
-  styleUrls: ['./manage-distributor.component.css']
+  styleUrls: ['./manage-distributor.component.css'],
+  providers: [DatePipe]
 })
 export class ManageDistributorComponent implements OnInit {
   regexPhone = /((\+84|0[1|3|5|7|8|9])(\s|)+([0-9]+(\s|){8,9})\b)/;
@@ -45,17 +47,21 @@ export class ManageDistributorComponent implements OnInit {
 
   statuses = [
     {id:0, name: "Tất cả"},
-    {id:1, name: "Hoạt động"},
-    {id:2, name: "Không hoạt động"},
+    {id:1, name: "Còn hợp tác"},
+    {id:2, name: "Không hợp tác"},
     {id:3, name: "Đã xóa"}];
+
   selectedStatus = 0;
+
+  titleDialog: string = '';
 
   constructor(private modalService: NgbModal,
               private distributorService:DistributorService,
               private messageService : MessageService,
               private confirmationService : ConfirmationService,
               private translateService: TranslateConfigService,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder,
+              private datePipe: DatePipe) {
   }
 
   ngOnInit(): void {
@@ -117,6 +123,10 @@ export class ManageDistributorComponent implements OnInit {
           this.distributorService.lock_unlock(id).subscribe(data => {
             this.showSuccess("Đã ngừng hợp đồng với nhà phân phối");
             this.loadInit();
+            const currentItem = this.supplierResponse.supplierItems.find(item => item.id === id);
+            if (currentItem) {
+              currentItem.status = 2;
+            }
           });
         }
       });
@@ -129,6 +139,10 @@ export class ManageDistributorComponent implements OnInit {
           this.distributorService.lock_unlock(id).subscribe(data => {
             this.showSuccess("Tiếp tục hợp đồng với nhà phân phối");
             this.loadInit();
+            const currentItem = this.supplierResponse.supplierItems.find(item => item.id === id);
+            if (currentItem) {
+              currentItem.status = 1;
+            }
           });
         }
       });
@@ -187,14 +201,16 @@ export class ManageDistributorComponent implements OnInit {
     }
   }
 
-  openNew() {
+  openNew(status: string) {
     this.form = new CreateSupplier();
     this.submitted = false;
     this.supplierDialog = true;
+    this.titleDialog = status;
   }
 
-  openUpdate(id:number) {
+  openUpdate(id:number, status: string) {
     this.submitted = false;
+    this.titleDialog = status;
     for (let i = 0; i < this.supplierResponse.supplierItems.length; i++){
       let item :  Supplier = this.supplierResponse.supplierItems[i];
       if (id === item.id) {
