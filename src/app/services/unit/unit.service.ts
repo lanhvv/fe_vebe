@@ -60,7 +60,7 @@ export class UnitService {
       listUnitEdit.push(unitItemEdit);
     }
     this.requestUnit.listEdit = listUnitEdit;
-    console.log(this.requestUnit);
+    // console.log(this.requestUnit);
     return this.client.post(this.apiAdmin+"/delete", this.requestUnit);
   }
 
