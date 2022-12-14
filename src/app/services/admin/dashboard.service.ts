@@ -12,7 +12,7 @@ const AUTH_API = environment.baseApi;
 })
 
 export class DashboardService{
-  api=AUTH_API + "admins/statistic/";
+  api = AUTH_API + "statistic/";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -44,8 +44,6 @@ export class DashboardService{
   reportLineChart(start: string, end: string): any{
     return this.http.get(this.api + '?startDate='+start + '&endDate='+end, this.httpOptions);
   }
-
-
 
   reportSumPriceOnDay(dateNow: any, lastDate: any): any{
     // return this.http.post(this.api + 'report-sum-price?date=' + dateNow + '&last=' + lastDate, this.httpOptions);

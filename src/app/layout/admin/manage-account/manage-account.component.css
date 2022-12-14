@@ -27,7 +27,7 @@ main {
 }
 
 .inputRoot {
-  width: 500px !important;
+  width: 90% !important;
   height: 40px;
 }
 
@@ -35,7 +35,23 @@ main {
   color: white;
   background-color: #0061C1;
   height: 40px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
 }
+
+.buttonRoot-delete {
+  width: 45px;
+  color: white;
+  background-color: #dc3545;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}
+
 .p-datatable .p-datatable-thead > tr > th {
   background: #E5EFF9 !important;
   border-radius: 5px;
@@ -44,4 +60,28 @@ main {
 .p-dropdown{
   width: 100% !important;
   height: 40px !important;
+}
+
+.active{
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  background-color: rgba(33, 150, 83, 0.1);
+  text-align: center;
+}
+
+.active p{
+  color: #219653;
+}
+
+.in-active{
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  background-color: rgba(235, 87, 87, 1);
+  text-align: center;
+}
+
+.in-active p{
+  color: #EB5757;
 }

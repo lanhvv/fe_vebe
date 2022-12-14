@@ -14,6 +14,7 @@ import { TranslateConfigService } from 'src/app/services/translate-config.servic
   styleUrls: ['./manage-update-account.component.css']
 })
 export class ManageUpdateAccountComponent implements OnInit {
+  status: number = 0;
   id: any;
   updateAccountRequest!: UpdateAccountRequest;
   edit!: EditAccountRequest;
@@ -30,7 +31,7 @@ export class ManageUpdateAccountComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.status = 3;
     this.language = this.translateService.getLanguage();
     this.updateAccount = new FormGroup<any>({
       fullname: new FormControl('', [Validators.required]),

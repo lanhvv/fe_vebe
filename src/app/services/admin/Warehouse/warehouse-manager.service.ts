@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { GetWarehouseRequest } from 'src/app/shared/model/request/GetWarehouseRequest';
 import { TokenStorageService } from '../../token-storage.service';
+import {environment} from "../../../../environments/environment";
 
+const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
 export class WarehouseManagerService {
-  api="http://localhost:1507/vibee/api/v1/warehouse";
+  api= AUTH_API+"warehouse";
   constructor(private httpClient: HttpClient,private route: Router,private tokenService: TokenStorageService) {
 
   }
