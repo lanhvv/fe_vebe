@@ -52,10 +52,10 @@
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
               <td *ngIf="item.status == 1">
-                <p-inputSwitch [(ngModel)]="checked_true" (click)="unlockAccount(item.id)"></p-inputSwitch>
+                <p-inputSwitch [ngModel]="item.status === 1" (click)="unlockAccount(item.id)"></p-inputSwitch>
               </td>
               <td *ngIf="item.status == 2">
-                <p-inputSwitch [(ngModel)]="checked_false" (click)="lockAccount(item.id)"></p-inputSwitch>
+                <p-inputSwitch [ngModel]="item.status === 2" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
               <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
