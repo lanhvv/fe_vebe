@@ -8,7 +8,7 @@
   <div class="container pt-4 main-layout">
     <div class="row">
       <div class="col-6">
-        <button class="root-btn" (click)="openNew(0, 0)">Thêm mới</button>
+        <button class="btn btn-outline-primary" (click)="openNew(0, 0)">Thêm mới đơn vị</button>
       </div>
       <div class="col-6">
         <div class="input-group mb-3 float-end">
@@ -52,7 +52,7 @@
               <td>{{rowIndex + 1}}</td>
               <td>{{unit.unitName}}</td>
               <td>{{unit.amount}}</td>
-              <td>{{unit.createdDate | date}}</td>
+              <td>{{unit.createdDate | date: 'dd/MM/yyyy'}}</td>
               <td>
                 <button class="buttonRoot me-1" (click)="openNew(unit.id, 0)">
                   <i class="pi pi-plus-circle"></i>
@@ -70,7 +70,7 @@
               <td class="border-danger">{{i + 1}}</td>
               <td>{{item.unitName}}</td>
               <td>{{item.amount}}</td>
-              <td>{{item.createdDate | date}}</td>
+              <td>{{item.createdDate | date: 'dd/MM/yyyy'}}</td>
               <td>
                 <button class="buttonRoot me-1" (click)="openUpdate(item.id, item.parent)">
                   <i class="pi pi-pencil"></i>

@@ -177,12 +177,18 @@ export class ManageAccountComponent implements OnInit {
       accept: () => {
         this.managerAccountService.unlockAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
-          if (this.deleteAccountResponse.status.status === '1') {
+          if (this.deleteAccountResponse.status.status === '2') {
             this.ngOnInit();
+            const currentItem = this.listAccountItems.items.find(item => item.id === request);
+            if (currentItem) {
+              currentItem.status = 2;
+            }
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Unlock success'});
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Unlock failse'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Unlock false'});
           }
+        }, (err) => {
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
         });
 
       },
@@ -211,9 +217,15 @@ export class ManageAccountComponent implements OnInit {
           if (this.deleteAccountResponse.status.status == '1') {
             this.ngOnInit();
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Lock success'});
+            const currentItem = this.listAccountItems.items.find(item => item.id === request);
+            if (currentItem) {
+              currentItem.status = 1;
+            }
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock failse'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
           }
+        }, (err) => {
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
         });
 
       },
