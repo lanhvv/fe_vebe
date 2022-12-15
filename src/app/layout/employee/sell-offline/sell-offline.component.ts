@@ -175,7 +175,12 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   choosePayment() {
-    this.isPayment = this.selectedValue == 'money';
+    this.isPayment = this.selectedValue == 'money' || this.selectedValue == 'both';
+  }
+
+  chooseABoth(){
+    this.selectedValue = 'both';
+    this.choosePayment();
   }
 
   changeBill(index: number) {

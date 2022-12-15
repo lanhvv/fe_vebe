@@ -1,28 +1,23 @@
 main{
-  margin: 7% 0 0 17%;
+  margin: 6% 0 0 17%;
 }
 
-.add-product{
-  position: absolute;
-  width: 1179px;
-  height: 130%;
-  left: 260px;
-  top: 90px;
-  background: #FFFFFF;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.unit{
+.main-layout {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   border-radius: 10px;
-  border: 1px solid #D3D3D3;
-  padding: 10px;
-  margin-bottom: 10px;
-  float: left;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
 }
+
+>>> .dropdown_form{
+  width: 100%;
+  height: 40px;
+}
+
+>>> .dropdown_form span{
+  line-height: 11px;
+}
+
 .text-category{
   width: 202px;
   height: 21px;
@@ -86,4 +81,41 @@ main{
   left: 900px;
   top: 623px;
   border-radius: 10px;
+}
+
+.btn_form-primary{
+  width: auto;
+  height: 40px;
+  margin-top: 23px;
+  padding: 10px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn_form-delete{
+  width: auto;
+  height: 40px;
+  margin-top: 23px;
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.root-btn {
+  width: 183px;
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
 }

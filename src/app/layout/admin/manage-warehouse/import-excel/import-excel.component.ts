@@ -111,7 +111,6 @@ export class ImportExcelComponent implements OnInit {
     });
   }
 
-
   changeFile(){
     this.data = [];
     this.isShowData = false;
