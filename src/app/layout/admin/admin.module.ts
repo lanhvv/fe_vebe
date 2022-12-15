@@ -60,6 +60,8 @@ import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
 import {CellComponent} from "./share/cell.component";
 import {InputSwitchModule} from 'primeng/inputswitch';
+import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-supplier/import-of-statistic.component";
+import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
 
 @NgModule({
   declarations: [
@@ -88,6 +90,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
+    ImportOfStatisticComponent,
+    StatisticSupplierComponent
   ],
   imports: [
     CommonModule,

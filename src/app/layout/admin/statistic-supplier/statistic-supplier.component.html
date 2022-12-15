@@ -1,0 +1,38 @@
+<admin-header [Status]="status"></admin-header>
+<main>
+  <h5>Quản lý đơn vị sản phẩm</h5>
+  <div class="container pt-4 main-layout">
+    <div class="mt-2">
+      <div class="container-fluid">
+        <p-table [value]="response.list">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-1">STT</th>
+              <th class="col-1">Tên</th>
+              <th class="col-2">Ngày hợp tác</th>
+              <th class="col-2">Email</th>
+              <th class="col-2">Địa chỉ</th>
+              <th class="col-1">SĐT</th>
+              <th class="col-1">Số lần nhập</th>
+              <th class="col-1"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowIndex="rowIndex" let-item let-expanded="expanded">
+            <tr>
+              <td>{{rowIndex+1}}</td>
+              <td>{{item.nameSup}}</td>
+              <td>{{item.createdDate| date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.email}}</td>
+              <td>{{item.address}}</td>
+              <td>{{item.numberPhone}}</td>
+              <td>{{item.numberOfEntry}}</td>
+              <td><i class="pi pi-list" (click)="click(item.id)"></i></td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
+                     (onPageChange)="paginate($event)"></p-paginator>
+      </div>
+    </div>
+  </div>
+</main>
