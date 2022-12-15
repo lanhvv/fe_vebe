@@ -9,7 +9,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class ImportSupplierService {
-  readonly URL = AUTH_API+"/import-warehouse";
+  readonly URL = AUTH_API+"import-warehouse";
   constructor(private httpClient: HttpClient ) { }
   getAllUnit(language:string) {
     return this.httpClient.get<any>(this.URL+'/unit?language='+language)
