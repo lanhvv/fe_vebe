@@ -17,8 +17,8 @@ const AUTH_API = environment.baseApi;
 export class TypeProductService {
   api = "http://localhost:1507/vibee/api/v1/auth";
   apiCategory = AUTH_API+"catalog";
-  readonly URL = AUTH_API+"vibee/api/v1/auth";
-  readonly URLSELECTION = AUTH_API+"vibee/api/v1/auth/getAllSelectType";
+  readonly URL = AUTH_API+"auth";
+  readonly URLSELECTION = AUTH_API+"auth/getAllSelectType";
   deleteTypeProductRequest!: DeleteTypeProductRequest;
   constructor(private httpClient: HttpClient ,private tokenService: TokenStorageService) { }
   httpOptions = {

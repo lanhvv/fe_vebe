@@ -13,8 +13,13 @@
           product.create
         </button>
       </div>
-      <div class="col-8">
-        <form>
+      <div class="col-2">
+        <select class="form-select" aria-label="Default select example">
+          <option value="1">Tất cả</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <form style="width: 100%">
           <div class="input-group mb-3">
             <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #search
                    placeholder='{{inventory | translate}}' aria-label="{inventory | translate}">
@@ -31,7 +36,7 @@
                [filterDelay]="0">
         <ng-template pTemplate="header">
           <tr>
-            <th>Ảnh</th>
+            <th>Khóa/Mở</th>
             <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.name
               <p-sortIcon field="name-product"></p-sortIcon>
             </th>
@@ -53,9 +58,17 @@
 
         <ng-template pTemplate="body" let-item>
           <tr>
-            <td><img src="{{item.img}}" alt="" wight="75%" height="75%"></td>
-            <td><a [routerLink]="['/admin/manage-warehouse/', item.productCode]">{{item.productName}}</a></td>
-            <td>{{item.price}}/{{item.unitPrice}}</td>
+            <td>
+
+            </td>
+            <td>
+              <a
+                [routerLink]="['/admin/manage-warehouse/', item.productCode]"
+                class="text-dark">
+                {{item.productName}}
+              </a>
+            </td>
+            <td>{{item.price}}-{{item.unitPrice}}</td>
             <td>{{item.statusName}}</td>
             <td>{{item.supName}}</td>
             <td>{{item.inventory}} ({{item.unit}})</td>

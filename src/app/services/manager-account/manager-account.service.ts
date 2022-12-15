@@ -13,7 +13,7 @@ const AUTH_API = environment.baseApi;
 })
 
 export class ManagerAccountService {
-  readonly URL = AUTH_API+"/user/";
+  readonly URL = AUTH_API+"user/";
   editAccountRequest!: EditAccountRequest;
 
   httpOptions = {

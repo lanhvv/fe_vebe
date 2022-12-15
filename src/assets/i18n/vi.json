@@ -8,7 +8,9 @@
       "distributor": "Quản lý nhà phân phối",
       "product": "Quản lý sản phẩm",
       "sell": "Bán hàng tại quầy",
-      "warehouse": "Nhập kho hàng"
+      "warehouse": "Nhập kho hàng",
+      "unit": "Quản lý đơn vị",
+      "type": "Quản lý danh mục"
     }
   },
   "login": {

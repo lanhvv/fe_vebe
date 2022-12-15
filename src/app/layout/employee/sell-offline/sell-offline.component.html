@@ -93,11 +93,6 @@
                       data-bs-auto-close="true" aria-expanded="false">
                 Nhân viên
               </button>
-              <!--                <ul class="dropdown-menu" aria-labelledby="defaultDropdown">-->
-              <!--                  <li><a class="dropdown-item" href="#">Nhân viên A</a></li>-->
-              <!--                  <li><a class="dropdown-item" href="#">Nhân viên B</a></li>-->
-              <!--                  <li><a class="dropdown-item" href="#">Nhân viên C</a></li>-->
-              <!--                </ul>-->
             </div>
           </div>
           <div class="col">
@@ -135,14 +130,24 @@
                 </div>
               </td>
             </tr>
+            <tr *ngIf="selectedValue === 'both'">
+              <td class="fw-bold">Khách chuyển khoản</td>
+              <td>
+                <div class="col-8">
+                  <input type="text" class="form-control inputSale">
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
 
           <div style="display: flex;">
-            <p-radioButton class="me-3" (click)="choosePayment()" name="groupname" value="money"
-                           [(ngModel)]="selectedValue" label="Tiền mặt"></p-radioButton>
-            <p-radioButton (click)="showDialogPayment()" name="groupname" value="payment" [(ngModel)]="selectedValue"
+            <p-radioButton class="me-3" (click)="choosePayment()" name="groupname" value="money" [(ngModel)]="selectedValue"
+                           label="Tiền mặt"></p-radioButton>
+            <p-radioButton class="me-3" (click)="showDialogPayment()" name="groupname" value="payment" [(ngModel)]="selectedValue"
                            label="Quét mã"></p-radioButton>
+            <p-radioButton (click)="chooseABoth()" name="groupname" value="both" [(ngModel)]="selectedValue"
+                           label="Cả hai phương thức"></p-radioButton>
           </div>
         </div>
       </div>

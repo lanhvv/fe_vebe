@@ -1,5 +1,5 @@
 <!--Main Navigation-->
-<admin-header></admin-header>
+<admin-header [Status]="status"></admin-header>
 <!--Main Navigation-->
 
 <!--Main layout-->
@@ -22,29 +22,29 @@
                 </div>
                 <div class="mb-3 col-md-6">
                   <label for="username" class="form-label">Username:</label>
-                  <input type="text" class="form-control" id="username" (change)="checkError()" formControlName="username" name="username"
+                  <input type="text" class="form-control" id="username" formControlName="username" name="username"
                          placeholder="Nhập username nhân viên"
                          required>
 
                 </div>
                 <div class="mb-3 col-md-6">
                   <label class="form-label">Số Chứng Minh Thư: </label>
-                  <input type="text" class="form-control"  (change)="checkError()" formControlName="cccd"
+                  <input type="text" class="form-control" formControlName="cccd"
                          placeholder="Nhập chứng minh thư" name="cccd" required>
 
                 </div>
                 <div class="mb-3 col-md-6">
                   <label class="form-label">Số Điện Thoại: </label>
-                  <input type="text" class="form-control" (change)="checkError()" formControlName="numberPhone"
+                  <input type="text" class="form-control" formControlName="numberPhone"
                          placeholder="Nhập số điện thoại" required>
 
                 </div>
 
                 <div class="mb-3 col-md-6">
                   <label class="form-label">Email: </label>
-                  <input type="text" class="form-control" (change)="checkError()" formControlName="email" name="email"
+                  <input type="text" class="form-control" formControlName="email" name="email"
                          placeholder="Nhập email" required>
-         
+
                 </div>
                 <div class="mb-3 col-md-6">
                   <label class="form-label">Địa chỉ: </label>

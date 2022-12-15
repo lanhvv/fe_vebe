@@ -23,6 +23,7 @@ import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcod
 // import * as path from "path";
 // import * as path from "path";
 import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
+import {ManageTypeProductComponent} from "./manage-type-product/manage-type-product.component";
 
 
 export const AdminRouting: Route[] = [
@@ -88,12 +89,12 @@ export const AdminRouting: Route[] = [
           {
             path: 'print-barcode',
             component: PrintBarcodeComponent
+          },
+          {
+            path: 'upload-file',
+            component: ImportExcelComponent
           }
         ]
-      },
-      {
-        path: 'manage-warehouse/upload-file',
-        component: ImportExcelComponent
       },
       {
         path: 'manage-order-detail/:id',
@@ -139,6 +140,10 @@ export const AdminRouting: Route[] = [
       {
         path: 'manage-warehouse-import',
         component: ManagerWarehouseImportComponent
+      },
+      {
+        path: 'manage-type',
+        component: ManageTypeProductComponent
       },
     ]
   }

@@ -1,26 +1,30 @@
 <!--Main Navigation-->
-<admin-header [Status]=status></admin-header>
+<admin-header [Status]="status"></admin-header>
 <!--Main Navigation-->
 
 <!--Main layout-->
 <main>
-  <h5>Quản lý nhà phân phối</h5>
+  <h5>Quản lý nhà cung cấp</h5>
   <div class="container pt-4 main-layout">
     <div class="row">
       <div class="col-2">
-        <span><p>Số nhà phân phối đang hoạt động: {{suppliersActive}}</p></span>
+        <span><p>Số nhà cung cấp đang hoạt động: {{suppliersActive}}</p></span>
       </div>
-      <div class="col-4">
-        <button class="root-btn" (click)="openNew()">Thêm nhà phân phối</button>
+      <div class="col-3">
+        <button class="btn btn-outline-primary float-end" (click)="openNew('Thêm mới nhà cung cấp')">Thêm nhà cung cấp</button>
       </div>
-      <div class="col-6">
-        <form (ngSubmit)="onSearch()">
-          <div class="input-group mb-3">
-            <input type="text" [(ngModel)]="search" name="name" class="form-control inputRoot" pInputText ngModel #username
-                   placeholder="Nhập tên nhà phân phối...">
-            <button class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
-          </div>
-        </form>
+      <div class="col-2">
+        <p-dropdown styleClass="dropdown-select" [options]="statuses" [(ngModel)]="selectedStatus" optionLabel="name" optionValue="id" (onClick)="onSearch()"></p-dropdown>
+      </div>
+      <div class="col-5">
+        <div class="input-group mb-3">
+          <form style="width: 100%" (ngSubmit)="onSearch()">
+            <div class="input-group mb-3">
+              <input type="text" name="phonenumber" class="form-control inputRoot" placeholder="Nhập tên nhà cung cấp...">
+              <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
     <!-- table -->
@@ -28,26 +32,54 @@
       <p-table class="table"  [value]="supplierResponse.supplierItems">
         <ng-template pTemplate="header">
           <tr>
+            <th scope="col">Mở/Khóa</th>
             <th pSortableColumn="name-supplier" (mousedown)="sort('nameSup')">Tên <p-sortIcon field="name-supplier"></p-sortIcon></th>
-            <th pSortableColumn="phone-number" (mousedown)="sort('phoneNumber')">Số điện thoại <p-sortIcon field="phone-number"></p-sortIcon></th>
+            <th pSortableColumn="phone-number" (mousedown)="sort('phoneNumber')" style="width: 165px">Số điện thoại <p-sortIcon field="phone-number"></p-sortIcon></th>
             <th pSortableColumn="email" (mousedown)="sort('email')">Email <p-sortIcon field="email"></p-sortIcon></th>
             <th pSortableColumn="address" (mousedown)="sort('address')">Địa chỉ <p-sortIcon field="address"></p-sortIcon></th>
-            <th pSortableColumn="create-date" (mousedown)="sort('createdDate')">Ngày gia nhập <p-sortIcon field="create-date"></p-sortIcon></th>
             <th>Trạng thái</th>
             <th scope="col">Thao tác</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-distributor>
           <tr>
+            <td *ngIf="distributor.status == 1">
+              <p-inputSwitch [ngModel]="distributor.status === 1" (click)="lock_unlock(distributor.id, distributor.status)"></p-inputSwitch>
+            </td>
+            <td *ngIf="distributor.status == 2">
+              <p-inputSwitch [ngModel]="distributor.status === 2" (click)="lock_unlock(distributor.id, distributor.status)"></p-inputSwitch>
+            </td>
+            <td *ngIf="distributor.status == 3">
+              <p-inputSwitch [ngModel]="false" [disabled]="true"></p-inputSwitch>
+            </td>
             <td>{{distributor.nameSup}}</td>
             <td>{{distributor.numberPhone}}</td>
             <td>{{distributor.email}}</td>
             <td>{{distributor.address}}</td>
-            <td>{{distributor.createdDate | date}}</td>
-            <td>{{distributor.statusName}}</td>
             <td>
-              <i (click)="openUpdate(distributor.id)"  class="fa-solid fa-file-pen me-2"></i>
-              <i (click)="delete(distributor.id)"  *ngIf="distributor.status == 1" class="fa-solid fa-trash"></i>
+              <div *ngIf="distributor.statusName === 'Còn hợp tác'" class="active">
+                <p>{{distributor.statusName}}</p>
+              </div>
+              <div *ngIf="distributor.statusName === 'Ngừng hợp tác'" class="in-active">
+                <p>{{distributor.statusName}}</p>
+              </div>
+              <div *ngIf="distributor.statusName === 'Đã xóa'" class="delete">
+                <p>{{distributor.statusName}}</p>
+              </div>
+            </td>
+            <td>
+              <button (click)="openUpdate(distributor.id, 'Chỉnh sửa thông tin')" *ngIf="distributor.status != 3" class="btn-table-primary me-1">
+                <i class="fa-solid fa-file-pen"></i>
+              </button>
+<!--              <button (click)="lock_unlock(distributor.id, distributor.status)" *ngIf="distributor.status === 1" class="btn-table-lock me-1">-->
+<!--                <i class="fa-solid pi pi-lock"></i>-->
+<!--              </button>-->
+<!--              <button (click)="lock_unlock(distributor.id, distributor.status)" *ngIf="distributor.status === 2" class="btn-table-lock me-1">-->
+<!--                <i class="fa-solid pi pi-lock-open"></i>-->
+<!--              </button>-->
+              <button (click)="delete(distributor.id)" *ngIf="distributor.status != 3" class="btn-table-delete me-1">
+                <i class="fa-solid pi pi-trash"></i>
+              </button>
             </td>
           </tr>
         </ng-template>
@@ -55,39 +87,33 @@
       <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]" (onPageChange)="paginate($event)" ></p-paginator>
     </section>
   </div>
-
   <p-toast position="top-right"></p-toast>
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
   <admin-footer></admin-footer>
 </main>
 <!--Main layout-->
 
-<p-dialog [(visible)]="supplierDialog" [style]="{width: '50vw'}" header="Thêm mới nhà cung cấp" [modal]="true" styleClass="p-fluid">
+<!--thêm nhà cung cấp-->
+<p-dialog [(visible)]="supplierDialog" [style]="{width: '550px'}" header="{{titleDialog}}" [modal]="true" [draggable]="false"  styleClass="p-fluid">
   <ng-template pTemplate="content">
-    <div class="field mt-3">
-      <label for="name">Name</label>
-      <input type="text" pInputText id="name" [(ngModel)]="form.nameSup" required />
-      <small class="p-error" *ngIf="submitted && !form.nameSup">Name is required.</small>
+    <div class="mb-3">
+      <label for="name">Tên nhà cung cấp</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="form.nameSup" required placeholder="Nhập tên nhà cung cấp"/>
     </div>
-    <div class="field mt-3">
-      <label for="name">Number phone</label>
-      <input type="text" pInputText id="numberphone" [(ngModel)]="form.numberPhone" required />
-      <small class="p-error" *ngIf="submitted && !form.numberPhone">Number phone is required.</small>
+    <div class="mb-3">
+      <label for="numberphone">Số điện thoại</label>
+      <input type="text" class="form-control" id="numberphone" [(ngModel)]="form.numberPhone" required placeholder="Nhập số điện thoại cung cấp"/>
     </div>
-    <div class="field mt-3">
+    <div class="mb-3">
       <label for="Email">Email</label>
-      <input type="text" pInputText id="email" [(ngModel)]="form.email" required />
-      <small class="p-error" *ngIf="submitted && !form.email">Email is required.</small>
+      <input type="text" class="form-control" id="email" [(ngModel)]="form.email" required placeholder="Nhập số điện thoại cung cấp"/>
     </div>
-    <div class="field mt-3">
-      <label for="address" class="form-label">Địa chỉ</label>
-      <textarea class="form-control" id="address" pInputTextarea [(ngModel)]="form.address" required rows="3"></textarea>
-      <small class="p-error" *ngIf="submitted && !form.address">Address is required.</small>
+    <div class="mb-3">
+      <label for="address">Địa chỉ</label>
+      <textarea class="form-control" id="address" [(ngModel)]="form.address" required rows="3"></textarea>
     </div>
-
-    <div class="mt-3 float-end">
-      <button class="root-btn" (click)="saveSupplier()">Thêm mới</button>
+    <div class="mb-3 float-end">
+      <button class="root-btn" (click)="saveSupplier()">Hoàn thành</button>
     </div>
   </ng-template>
 </p-dialog>
-

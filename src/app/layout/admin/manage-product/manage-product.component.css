@@ -82,7 +82,7 @@ input[type=file] {
 }
 
 .inputRoot {
-  width: 300px !important;
+  width: 90% !important;
   height: 40px;
 }
 
@@ -95,4 +95,28 @@ input[type=file] {
 >>> .p-datatable .p-datatable-thead > tr > th {
   background: #E5EFF9 !important;
   border-radius: 5px;
+}
+
+.active{
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  background-color: rgba(33, 150, 83, 0.1);
+  text-align: center;
+}
+
+.active p{
+  color: #219653;
+}
+
+.in-active{
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  background-color: rgba(235, 87, 87, 1);
+  text-align: center;
+}
+
+.in-active p{
+  color: #EB5757;
 }

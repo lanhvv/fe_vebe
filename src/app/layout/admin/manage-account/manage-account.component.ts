@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { GetAccountItemsResponse } from '../../../shared/model/response/getAccountItemsResponse';
-import { GetAccountItemsRequest } from '../../../shared/model/request/getAccountItemsRequest';
-import { Router } from '@angular/router';
-import { ManagerAccountService } from '../../../services/manager-account/manager-account.service';
-import { DeleteAccountResponse } from "../../../shared/model/response/deleteAccountResponse";
-import { ConfirmationService, ConfirmEventType, Message, MessageService } from 'primeng/api';
-import { TranslateConfigService } from "../../../services/translate-config.service";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { CreateAccountResponse } from "../../../shared/model/response/createAccountResponse";
-import { CreateAccountRequest } from "../../../shared/model/request/createAccountRequest";
+import {Component, OnInit} from '@angular/core';
+import {GetAccountItemsResponse} from '../../../shared/model/response/getAccountItemsResponse';
+import {GetAccountItemsRequest} from '../../../shared/model/request/getAccountItemsRequest';
+import {Router} from '@angular/router';
+import {ManagerAccountService} from '../../../services/manager-account/manager-account.service';
+import {DeleteAccountResponse} from "../../../shared/model/response/deleteAccountResponse";
+import {ConfirmationService, ConfirmEventType, Message, MessageService} from 'primeng/api';
+import {TranslateConfigService} from "../../../services/translate-config.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {CreateAccountResponse} from "../../../shared/model/response/createAccountResponse";
+import {CreateAccountRequest} from "../../../shared/model/request/createAccountRequest";
 import { UpdateAccountRequest } from '../../../shared/model/request/updateAccountRequest';
 import { EditAccountRequest } from '../../../shared/model/request/editAccountRequest';
 
@@ -46,9 +46,8 @@ export class ManageAccountComponent implements OnInit {
   messagePhone: any;
   createAccountRequest: CreateAccountRequest;
   createAccountResponse: CreateAccountResponse;
-  editAccount: CreateAccountResponse;
   isDialogAccount: boolean = false;
-  isUpdateAccount: boolean = false;
+  isUpdateAccount: boolean= true;
   accountForm!: FormGroup;
   updateForm!: FormGroup;
   regexFullName = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
@@ -60,16 +59,15 @@ export class ManageAccountComponent implements OnInit {
   checked_false: boolean = false;
 
   constructor(private router: Router,
-    private managerAccountService: ManagerAccountService,
-    private confirmationService: ConfirmationService,
-    private translateService: TranslateConfigService,
-    private fb: FormBuilder,
-    private messageService: MessageService) {
+              private managerAccountService: ManagerAccountService,
+              private confirmationService: ConfirmationService,
+              private translateService: TranslateConfigService,
+              private fb: FormBuilder,
+              private messageService: MessageService) {
     this.listAccountItems = new GetAccountItemsResponse();
     this.deleteAccountResponse = new DeleteAccountResponse();
     this.createAccountResponse = new CreateAccountResponse();
     this.createAccountRequest = new CreateAccountRequest();
-    this.editAccount = new CreateAccountResponse();
     // this.roleAccount = [
     //   {id: 1, role: 'Chủ cửa hàng'},
     //   {id: 2, role: 'Nhân viên'}
@@ -81,15 +79,6 @@ export class ManageAccountComponent implements OnInit {
     this.status = 3;
     this.language = this.translateService.getLanguage();
     this.getall();
-    this.updateForm = this.fb.group({
-      fullName: new FormControl('', [Validators.minLength(5), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexFullName)]),
-      userName: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.required]),
-      passWord: new FormControl('', [Validators.minLength(8), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexPassWord)]),
-      cccd: new FormControl('', [Validators.minLength(9), Validators.maxLength(12)]),
-      phoneNumber: new FormControl('', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)]),
-      email: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.pattern(this.regexEmail)]),
-      address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
-    });
   }
 
   formAccount() {
@@ -103,7 +92,19 @@ export class ManageAccountComponent implements OnInit {
       address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
       // role: new FormControl('', [Validators.required])
     })
-
+    this.updateForm = new FormGroup<any>({
+      fullname: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+      cccd: new FormControl('', [Validators.required]),
+      numberPhone: new FormControl('', [Validators.required]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[A-Za-z_.0-9]+@+[a-z]+.[a-z]+.[a-z]+/),
+      ]),
+      address: new FormControl('', [Validators.required]),
+      role: new FormControl('', [Validators.required]),
+    });
   }
 
   getall() {
@@ -118,46 +119,24 @@ export class ManageAccountComponent implements OnInit {
     });
   }
 
-  // getId(request: number) {
-  //   this.router.navigate(['/admin/manage-update-account', request]);
-  // }
-
   getId(request: number) {
-
-    this.managerAccountService.editAccount(request, this.language).subscribe(response => {
-
-      // this.updateForm.patchValue({
-      //   fullName: response.fullname,
-      //   userName: response.username,
-      //   phoneNumber: response.phoneNumber,
-      //   email: response.email,
-      //   role: response.role,
-      //   address: response.address,
-      //   cccd:  response.cccd,
-      //   passWord: response.password,
-
-      // });
-      this.createAccountResponse = response as CreateAccountResponse
-    });
-    this.isUpdateAccount = true;
+    this.router.navigate(['/admin/manage-update-account', request]);
   }
-  update() {
-    this.updateAccountRequest = new UpdateAccountRequest(this.createAccountResponse.idUser,  this.createAccountResponse.username,
-      this.createAccountResponse.fullname, this.createAccountResponse.password, this.createAccountResponse.cccd, this.createAccountResponse.address,
-      this.createAccountResponse.phoneNumber, this.createAccountResponse.email);
-    this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
-      this.createAccountResponse = response as CreateAccountResponse;
-      if (this.createAccountResponse.status.status == "1") {
-        this.isDialogAccount = false;
-        this.getall()
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
-      }
-      else if (this.createAccountResponse.status.status == "0") {
-        this.isDialogAccount = true;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
-      }
-    })
-  }
+
+  // getId(request: number){
+
+  //   this.managerAccountService.editAccount(request,this.language ).subscribe(response => {
+  //     this.updateForm.patchValue({
+  //       fullname: response.fullname,
+  //       username: response.username,
+  //       numberPhone: response.phoneNumber,
+  //       email: response.email,
+  //       role: response.role,
+  //       address: response.address,
+  //       cccd:  response.cccd,
+  //     });
+  //   });
+  // }
 
   delete(request: number) {
     this.confirmationService.confirm({
@@ -168,9 +147,9 @@ export class ManageAccountComponent implements OnInit {
         this.managerAccountService.deleteAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status === '1') {
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Delete success' });
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Delete success'});
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Delete failse' });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Delete failse'});
           }
         });
 
@@ -178,10 +157,10 @@ export class ManageAccountComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
@@ -204,22 +183,22 @@ export class ManageAccountComponent implements OnInit {
             if (currentItem) {
               currentItem.status = 2;
             }
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Unlock success' });
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Unlock success'});
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Unlock false' });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Unlock false'});
           }
         }, (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
         });
 
       },
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
@@ -237,26 +216,26 @@ export class ManageAccountComponent implements OnInit {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status == '1') {
             this.ngOnInit();
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Lock success' });
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Lock success'});
             const currentItem = this.listAccountItems.items.find(item => item.id === request);
             if (currentItem) {
               currentItem.status = 1;
             }
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
           }
         }, (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
         });
 
       },
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
@@ -292,7 +271,7 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountRequest.cccd = value.cccd
     this.createAccountRequest.numberPhone = value.phoneNumber
     this.createAccountRequest.username = value.userName
-    this.createAccountRequest.password = value.passWord
+
     this.managerAccountService.checkAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status == "username" && this.createAccountRequest.username != null) {
@@ -329,20 +308,32 @@ export class ManageAccountComponent implements OnInit {
 
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
-      if (this.createAccountResponse.status.status = "1") {
-        this.isDialogAccount = false;
+      if(this.createAccountResponse.status.status="1"){
+        this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
+        this.isDialogAccount=true;
         this.getall()
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
-
-      } else {
-        this.isDialogAccount = true;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
-
+      }else {
+        this.messageService.add({severity:'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000});
+        this.isDialogAccount=true;
       }
 
     })
 
 
   }
-
+  update(){
+    // this.id = this.activatedRoute.snapshot.params['id'];
+    const value = this.updateAccount.value;
+    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
+      value.numberPhone, value.email, value.role, 1);
+    this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
+      this.createAccountResponse = response as CreateAccountResponse;
+      if(this.createAccountResponse.status.status=="1"){
+        this.messageService.add({severity:'success', summary: 'Successful', detail:this.createAccountResponse.status.message , life: 3000});
+      }
+      else if(this.createAccountResponse.status.status=="0") {
+        this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
+      }
+    })
+  }
 }
