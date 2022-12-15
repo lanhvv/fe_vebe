@@ -63,8 +63,14 @@
                 <ng-template pTemplate="output">{{rowData.description}}</ng-template>
               </p-treeTableCellEditor>
             </td>
-            <td *ngIf="rowData.status==1">Active</td>
-            <td *ngIf="rowData.status==2">Inactive</td>
+            <td>
+              <div *ngIf="rowData.status == 1" class="active">
+                <p>{{rowData.status == 1 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+              </div>
+              <div *ngIf="!(rowData.status == 1)" class="in-active">
+                <p>{{rowData.status == 2 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+              </div>
+            </td>
             <td>{{rowData.amountProduct}}</td>
             <td ttEditableColumn>{{rowData.creator}}</td>
             <td>
