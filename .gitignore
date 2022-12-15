@@ -49,3 +49,4 @@ Thumbs.db
 /.browserslistrc
 /.editorconfig
 /angular.json
+/src/app/layout/admin/manager-warehouse-import/manager-warehouse-import.component.ts
