@@ -4,6 +4,8 @@ import {DashboardService} from "../../../services/admin/dashboard.service";
 import {AdminDashboard} from "../../../shared/response/AdminDashboard";
 import {Product} from "../../../shared/model/product.model";
 import { DatePipe } from '@angular/common';
+import {ValidateLoginService} from "../../../services/validate-login.service";
+import {TokenStorageService} from "../../../services/token-storage.service";
 
 @Component({
   selector: 'admin-home',
@@ -41,11 +43,16 @@ export class HomeComponent implements OnInit {
   startDate?: any;
   endDate?: any;
 
+  author: string | null = this.tokenStorage.getToken();
 
   constructor(
     private translate: TranslateConfigService,
     private dashboardService: DashboardService,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe,
+    private checkRole: ValidateLoginService,
+    private tokenStorage: TokenStorageService) {
+    this.checkRole.checkToken(this.author);
+  }
 
   ngOnInit(): void {
     this.status = 1;
@@ -85,7 +92,6 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  //done - chẳng biết có tác dụng gì
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;

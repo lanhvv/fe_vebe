@@ -296,7 +296,6 @@ export class ManageAccountComponent implements OnInit {
   }
 
   createAccount() {
-
     const value = this.accountForm.value;
     this.createAccountRequest.fullname = value.fullName
     this.createAccountRequest.address = value.address
@@ -311,15 +310,12 @@ export class ManageAccountComponent implements OnInit {
       if(this.createAccountResponse.status.status="1"){
         this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
         this.isDialogAccount=true;
-        this.getall()
+        this.getall();
       }else {
         this.messageService.add({severity:'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000});
         this.isDialogAccount=true;
       }
-
     })
-
-
   }
   update(){
     // this.id = this.activatedRoute.snapshot.params['id'];

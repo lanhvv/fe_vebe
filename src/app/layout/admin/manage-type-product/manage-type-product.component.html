@@ -31,10 +31,6 @@
                 Tên danh mục
                 <p-treeTableSortIcon field="name"></p-treeTableSortIcon>
               </th>
-              <th ttSortableColumn="description" (mousedown)="sort('description')">
-                Mô tả
-                <p-treeTableSortIcon field="description"></p-treeTableSortIcon>
-              </th>
               <th ttSortableColumn="statusName" (mousedown)="sort('statusName')">
                 Trạng thái
                 <p-treeTableSortIcon field="statusName"></p-treeTableSortIcon>
@@ -58,16 +54,14 @@
                 <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
                 {{rowData.name}}
               </td>
-              <td ttEditableColumn>
-                <p-treeTableCellEditor>
-                  <ng-template pTemplate="input">
-                    <input pInputText type="text" >
-                  </ng-template>
-                  <ng-template pTemplate="output">{{rowData.description}}</ng-template>
-                </p-treeTableCellEditor>
+              <td>
+                <div *ngIf="rowData.status==1" class="active">
+                  <p>{{rowData.status == 1 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
+                <div *ngIf="!(rowData.status == 1)" class="in-active">
+                  <p>{{rowData.status == 2 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
               </td>
-              <td *ngIf="rowData.status==1">Active</td>
-              <td *ngIf="rowData.status==2">Inactive</td>
               <td>{{rowData.amountProduct}}</td>
               <td ttEditableColumn>{{rowData.creator}}</td>
               <td>
