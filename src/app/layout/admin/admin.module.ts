@@ -60,6 +60,8 @@ import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
 import {CellComponent} from "./share/cell.component";
 import {InputSwitchModule} from 'primeng/inputswitch';
+import { ManageTypeProductComponent } from './manage-type-product/manage-type-product.component';
+import {TreeTableModule} from "primeng/treetable";
 
 @NgModule({
   declarations: [
@@ -88,6 +90,7 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
+    ManageTypeProductComponent,
   ],
   imports: [
     CommonModule,
@@ -126,7 +129,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     ZXingScannerModule,
     QRCodeModule,
     ToolbarModule,
-    InputSwitchModule
+    InputSwitchModule,
+    TreeTableModule
   ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

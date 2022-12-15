@@ -1,18 +1,20 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Category} from "../../../shared/model/category.model";
 // @ts-ignore
 import {DropdownFilterOptions} from 'primeng/dropdown';
-import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
-import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
-import { CreateProductRequest } from 'src/app/shared/model/request/CreateProductRequest';
-import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
-import { Unit } from 'src/app/shared/model/Unit';
-import { InfoUnitItem } from 'src/app/shared/model/InfoUnitItem';
-import { UnitService } from 'src/app/services/unit/unit.service';
-import { TranslateConfigService } from 'src/app/services/translate-config.service';
-import { GetUnitChildResponse } from 'src/app/shared/model/response/GetUnitChildResponse';
-import { MessageService } from 'primeng/api';
+import {GetInfoCreateProdResponse} from 'src/app/shared/model/response/GetInfoCreateProdResponse';
+import {CreateProductResponse} from 'src/app/shared/model/response/CreateProductResponse';
+import {CreateProductRequest} from 'src/app/shared/model/request/CreateProductRequest';
+import {GetSupplierItem} from 'src/app/shared/model/response/GetSupplieritem';
+import {Unit} from 'src/app/shared/model/Unit';
+import {InfoUnitItem} from 'src/app/shared/model/InfoUnitItem';
+import {UnitService} from 'src/app/services/unit/unit.service';
+import {TranslateConfigService} from 'src/app/services/translate-config.service';
+import {GetUnitChildResponse} from 'src/app/shared/model/response/GetUnitChildResponse';
+import {MessageService} from 'primeng/api';
 import {ProductService} from "../../../services/admin/product/product.service";
+import {BehaviorSubject} from "rxjs";
+import {BarcodeFormat} from "@zxing/library";
 
 @Component({
   selector: 'app-detail-product',
@@ -21,35 +23,56 @@ import {ProductService} from "../../../services/admin/product/product.service";
   providers: [MessageService]
 })
 export class DetailProductComponent implements OnInit {
-  getInforCreateProductResponse!:GetInfoCreateProdResponse;
-  selectedCategory: Category =new Category();
+  getInforCreateProductResponse!: GetInfoCreateProdResponse;
+  selectedCategory: Category = new Category();
   filterValue = '';
-  selectedSupplier: GetSupplierItem=new GetSupplierItem();
-  selectedUnitParent: InfoUnitItem=new InfoUnitItem();
-  selectedUnitChilds: InfoUnitItem[]=[];
+  selectedSupplier: GetSupplierItem = new GetSupplierItem();
+  selectedUnitParent: InfoUnitItem = new InfoUnitItem();
+  selectedUnitChilds: InfoUnitItem[] = [];
   uploadedFiles: any[] = [];
-  createProductRequest:CreateProductRequest;
-  createProductResponse!:CreateProductResponse;
-  unitLayouts:any[]=[];
-  unitLayout!:any;
-  unit!:Unit;
-  image!:any;
-  img!:File;
-  language!:string;
-  getUnitChileResponse!:GetUnitChildResponse;
-  fileId=0;
+  createProductRequest: CreateProductRequest;
+  createProductResponse!: CreateProductResponse;
+  unitLayouts: any[] = [];
+  unitLayout!: any;
+  unit!: Unit;
+  image!: any;
+  img!: File;
+  language!: string;
+  getUnitChileResponse!: GetUnitChildResponse;
+  fileId = 0;
+
+  status: number = 0;
+  availableDevices !: MediaDeviceInfo[];
+  qrResultString !: string;
+  dialogScanQR: boolean = false;
+  currentDevice !: MediaDeviceInfo | undefined;
+  torchEnabled = false;
+  tryHarder = false;
+  hasPermission !: boolean;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  enable : boolean = true;
+  enableCameraState : boolean = false;
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
+
   constructor(
-    private prodService:ProductService,
-              private unitService:UnitService,
-              private messageService: MessageService,
-              private translateService:TranslateConfigService) {
-    this.createProductRequest=new CreateProductRequest();
+    private prodService: ProductService,
+    private unitService: UnitService,
+    private messageService: MessageService,
+    private translateService: TranslateConfigService) {
+    this.createProductRequest = new CreateProductRequest();
   }
 
   ngOnInit(): void {
-    this.language=this.translateService.getLanguage()!;
+    this.status = 6;
+    this.language = this.translateService.getLanguage()!;
     this.getInformations();
     this.getUnitLayouts();
+    this.enableCamera();
   }
 
   myResetFunction(options: DropdownFilterOptions) {
@@ -57,100 +80,152 @@ export class DetailProductComponent implements OnInit {
     this.filterValue = '';
   }
 
-  create(){
-    if(this.selectedCategory!=null){
-    this.createProductRequest.categoryId=this.selectedCategory.id as number;
+  create() {
+    if (this.selectedCategory != null) {
+      this.createProductRequest.categoryId = this.selectedCategory.id as number;
     }
     // if(this.selectedSupplier!=null){
     //   this.createProductRequest.supplierId=this.selectedSupplier.id as number;
     // }
-    if(this.selectedUnitParent!=null){
-      this.createProductRequest.unitId=this.selectedUnitParent.unitId as number;
-      this.createProductRequest.unit=this.selectedUnitParent.unitName as string;
+    if (this.selectedUnitParent != null) {
+      this.createProductRequest.unitId = this.selectedUnitParent.unitId as number;
+      this.createProductRequest.unit = this.selectedUnitParent.unitName as string;
     }
-    this.createProductRequest.fileId=this.fileId;
+    this.createProductRequest.fileId = this.fileId;
     this.prodService.create(this.createProductRequest).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
-      if(this.createProductResponse.status.status=== '1'){
+      if (this.createProductResponse.status.status === '1') {
         this.success(this.createProductResponse.status.message);
-      }else{
+      } else {
         this.failed(this.createProductResponse.status.message);
       }
     });
   }
 
-  back(){
-    window.history.back();
-  }
-
-  getInformations(){
+  getInformations() {
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
       console.log(this.getInforCreateProductResponse.unitItems);
     });
   }
 
+  getUnitLayouts() {
+    this.unitLayout = 1;
+    this.unitLayouts.push(1);
+  }
 
-getUnitLayouts(){
-  this.unitLayout=1;
-  this.unitLayouts.push(1);
-}
+  createUnitLayout() {
+    this.unitLayout = this.unitLayouts.length + 1;
+    this.unitLayouts.push(this.unitLayout);
+    this.unit = this.unit = {"unitName": "", "inPrice": 0, "outPrice": 0, "parentId": 0, "unitId": 0};
+    this.createProductRequest.units.push(this.unit);
+  }
 
-createUnitLayout(){
-  this.unitLayout=this.unitLayouts.length+1;
-  this.unitLayouts.push(this.unitLayout);
-  this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
-  this.createProductRequest.units.push(this.unit);
-}
+  deleteUnitLayout(index: number) {
+    this.unitLayouts.splice(index, 1);
+    this.createProductRequest.units.splice(index, 1);
+  }
 
-deleteUnitLayout(index:number){
-  this.unitLayouts.splice(index,1);
-  this.createProductRequest.units.splice(index,1);
-}
-onUpload(event:Event){
-  console.log(event)
-  this.image=event;
-  console.log("abc:"+this.image.currentFiles[0])
-  console.log(this.image.currentFiles[0]);
-  this.prodService.pushFileToStorage(this.image.currentFiles[0],this.language).subscribe(result=>{
-    this.createProductResponse=result as CreateProductResponse;
-    if(this.createProductResponse.status.status=== '1'){
-      this.fileId=this.createProductResponse.id;
-      this.success(this.createProductResponse.status.message);
-    }else{
-      this.failed(this.createProductResponse.status.message);
-    }
-  });
-}
+  onUpload(event: Event) {
+    console.log(event)
+    this.image = event;
+    console.log("abc:" + this.image.currentFiles[0])
+    console.log(this.image.currentFiles[0]);
+    this.prodService.pushFileToStorage(this.image.currentFiles[0], this.language).subscribe(result => {
+      this.createProductResponse = result as CreateProductResponse;
+      if (this.createProductResponse.status.status === '1') {
+        this.fileId = this.createProductResponse.id;
+        this.success(this.createProductResponse.status.message);
+      } else {
+        this.failed(this.createProductResponse.status.message);
+      }
+    });
+  }
 
-  onRemove(){
-    console.log("remote: "+this.fileId);
-    this.fileId=0;
+  onRemove() {
+    console.log("remote: " + this.fileId);
+    this.fileId = 0;
 
   }
-getUnitChild(){
-  this.unitService.getChild(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-    this.getUnitChileResponse = response as GetUnitChildResponse;
-    if(this.getUnitChileResponse.status.status=== '0'){
-      this.failed(this.getUnitChileResponse.status.message);
-    }else{
-      this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
-      this.createProductRequest.units.push(this.unit);
+
+  getUnitChild() {
+    this.unitService.getChild(this.selectedUnitParent.unitId, this.language).subscribe(response => {
+      this.getUnitChileResponse = response as GetUnitChildResponse;
+      if (this.getUnitChileResponse.status.status === '0') {
+        this.failed(this.getUnitChileResponse.status.message);
+      } else {
+        this.unit = this.unit = {"unitName": "", "inPrice": 0, "outPrice": 0, "parentId": 0, "unitId": 0};
+        this.createProductRequest.units.push(this.unit);
+      }
+    })
+
+  }
+
+  craeteUnit(id: number) {
+    this.unit = {
+      "unitName": this.selectedUnitChilds[id].unitName,
+      "inPrice": 0,
+      "outPrice": 0,
+      "parentId": this.selectedUnitChilds[id].parentId,
+      "unitId": this.selectedUnitChilds[id].unitId
+    };
+    this.createProductRequest.units[id] = this.unit;
+  }
+
+  success(message: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: this.translateService.getvalue("message.success"),
+      detail: message
+    });
+  }
+
+  failed(message: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: this.translateService.getvalue("message.failed"),
+      detail: message
+    });
+  }
+
+//  camera
+  openDialogScan(){
+    this.enableCamera();
+    setTimeout(() => {
+      this.dialogScanQR = true;
+    });
+  }
+
+  enableCamera() {
+    this.enableCameraState = !this.enableCameraState;
+    if (this.enableCameraState) {
+      this.enable = true;
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
+      this.currentDevice = device;
+      console.log(this.currentDevice);
+    } else {
+      this.enable = false;
+      this.currentDevice = undefined;
     }
-  })
+  }
 
-}
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+  }
 
-craeteUnit(id:number){
-  this.unit={"unitName":this.selectedUnitChilds[id].unitName,"inPrice":0,"outPrice":0,"parentId":this.selectedUnitChilds[id].parentId,"unitId":this.selectedUnitChilds[id].unitId};
-  this.createProductRequest.units[id]=this.unit;
-}
+  // get value
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    this.dialogScanQR = false;
+    this.currentDevice = undefined;
+    console.log(this.qrResultString);
+  }
 
-success(message: string) {
-  this.messageService.add({severity:'success', summary: this.translateService.getvalue("message.success"), detail: message});
-}
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
 
-failed(message: string) {
-  this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
-}
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
 }
