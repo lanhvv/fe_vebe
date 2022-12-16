@@ -62,6 +62,7 @@ import {CellComponent} from "./share/cell.component";
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { ManageTypeProductComponent } from './manage-type-product/manage-type-product.component';
 import {TreeTableModule} from "primeng/treetable";
+import {SidebarModule} from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -130,7 +131,8 @@ import {TreeTableModule} from "primeng/treetable";
     QRCodeModule,
     ToolbarModule,
     InputSwitchModule,
-    TreeTableModule
+    TreeTableModule,
+    SidebarModule
   ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
