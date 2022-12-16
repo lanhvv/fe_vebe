@@ -23,4 +23,7 @@ export class ImportOfSupplierService {
     return  this.httpClient.get(this.api+"/"+idSupplier+"?&page="+page+"&record="+row, this.httpOptions);
   }
 
+  getImportsOfSupplierLineChart(year : number, id : number) {
+    return  this.httpClient.get(this.api+"/linechart/"+id+"?&year="+year, this.httpOptions);
+  }
 }
