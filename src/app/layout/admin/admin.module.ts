@@ -64,6 +64,7 @@ import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-suppli
 import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
 import { ManageTypeProductComponent } from './manage-type-product/manage-type-product.component';
 import {TreeTableModule} from "primeng/treetable";
+import {SidebarModule} from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import {TreeTableModule} from "primeng/treetable";
     QRCodeModule,
     ToolbarModule,
     InputSwitchModule,
-    TreeTableModule
+    TreeTableModule,
+    SidebarModule
   ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]
