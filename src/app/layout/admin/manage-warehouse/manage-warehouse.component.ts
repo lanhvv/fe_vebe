@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MessageService} from "primeng/api";
+import { MessageService, ConfirmEventType, ConfirmationService } from 'primeng/api';
 import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {ProductService} from "../../../services/admin/product/product.service";
@@ -20,6 +20,7 @@ import { Unit } from 'src/app/shared/model/Unit';
 import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListImportWarehouseInRedis';
 import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
 import { UnitService } from 'src/app/services/unit/unit.service';
+import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -66,6 +67,8 @@ export class ManageWarehouseComponent implements OnInit {
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
 
+  importWarehouseResponse: ImportWarehouseResponse[]=[]
+
   updateWarehouse!: FormGroup;
 
   units:Unit[]=[];
@@ -75,6 +78,7 @@ export class ManageWarehouseComponent implements OnInit {
               private prodService:ProductService,
               private unitService:UnitService,
               private translateService:TranslateConfigService,private fb: FormBuilder,
+              private confirmationService: ConfirmationService,
               private importService: ImportSupplierService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
@@ -118,23 +122,44 @@ export class ManageWarehouseComponent implements OnInit {
       if(this.createProductResponse.status.status=== '1'){
         this.getAllImportInWarehouse(this.edit.supplierId);
         this.success(this.createProductResponse.status.message);
+        this.updateDisplay = false;
       }else{
         this.failed(this.createProductResponse.status.message);
+           this.updateDisplay = true;
       }
 
     });
 
   }
   deleteById(key:number, redisId: string){
-    this.importService.deleteById(key, redisId, this.language).subscribe(response => {
-      this.baseResponse = response as BaseResponse;
-      if(this.baseResponse.status.status=='1'){
-        this.success(this.createProductResponse.status.message);
-      }else{
-        this.failed(this.createProductResponse.status.message);
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this account?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.importService.deleteById(key, redisId, this.language).subscribe(response => {
+          this.baseResponse = response as BaseResponse;
+          if (this.baseResponse.status.status === '1') {
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.getAllImportInWarehouse(key);
+          } else {
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+          }
+        });
+
+      },
+      reject: (type: any) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            break;
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            break;
+        }
       }
     });
-    this.getAllImportInWarehouse(key);
+
 
   }
   getById(key:number, redisId: string){
@@ -146,26 +171,62 @@ export class ManageWarehouseComponent implements OnInit {
   }
   doneImpport(){
     this.importService.add(this.items).subscribe(response => {
-      // this.createProductResponse = response as CreateProductResponse;
-      // if(this.createProductResponse.status.status=== '1'){
-      //   this.success(this.createProductResponse.status.message);
-      // }else{
-      //   this.failed(this.createProductResponse.status.message);
-      // }
+      this.importWarehouseResponse = response as ImportWarehouseResponse[];
+      for (const iterator of  this.importWarehouseResponse) {
+        if(iterator.status.status=== '1'){
+          this.success(iterator.status.message);
+
+        }else{
+          this.failed(iterator.status.message);
+        }
+      }
+
     });
-    this.ngOnInit()
+
   }
+
+  deleteAll(key: any){
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this account?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.importService.deleteAll(key,this.language).subscribe(response => {
+          this.baseResponse = response as BaseResponse;
+          if (this.baseResponse.status.status === '1') {
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.getAllImportInWarehouse(key);
+          } else {
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+          }
+        });
+
+      },
+      reject: (type: any) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            break;
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            break;
+        }
+      }
+    });
+
+  }
+
   getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.unitItems);
+      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
     });
   }
   create(){
-    console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
+
     if(this.selectedCategory!=null){
       this.createProductRequest.categoryId=this.selectedCategory.id ;
-      console.log(this.createProductRequest.categoryId+" dòng 186"+ this.createProductRequest.inPrice)
+          console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -181,18 +242,20 @@ export class ManageWarehouseComponent implements OnInit {
       this.createProductResponse = response as CreateProductResponse;
       if(this.createProductResponse.status.status=== '1'){
         this.success(this.createProductResponse.status.message);
+        this.getAllImportInWarehouse( this.createProductRequest.supplierId);
+        this.display = false;
       }else{
         this.failed(this.createProductResponse.status.message);
+        this.display = true;
       }
     });
-    this.getAllImportInWarehouse( this.createProductRequest.supplierId);
 
   }
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
-      this.createProductRequest.nameProd =response.productName
-      this.selectedCategory.id = response.category.id
-      this.createProductRequest.description = response.desciption
+      // this.createProductRequest.nameProd =response.productName
+      // this.selectedCategory.id = response.category.id
+      // this.createProductRequest.description = response.desciption
     })
   }
 
