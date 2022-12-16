@@ -54,7 +54,7 @@
         <ng-template pTemplate="right">
           <p-fileUpload
             styleClass="root-btn-upload"
-            (onUpload)="importWarehouse($event)"
+            (onSelect)="importWarehouse($event)"
             chooseLabel="Nhập file"
             mode="basic"
             accept=".xlsx"
@@ -67,7 +67,7 @@
             pButton pRipple
             label="Hoàn thành"
             class="root-btn ms-3"
-            [disabled]="!productResponse || !productResponse.products.length"
+            [disabled]="!productResponse"
             (mousedown)="import()" ></button>
         </ng-template>
       </p-toolbar>
@@ -76,8 +76,8 @@
         <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
         <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
       </div>
-      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
-               [(selection)]="selectedProducts" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true"
+               [(selection)]="selectedProducts" dataKey="id" [showCurrentPageReport]="true">
         <ng-template pTemplate="header">
           <tr>
             <th class="th-table" style="width: 4rem">
@@ -208,13 +208,39 @@
             </td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="summary">
-          <div class="flex align-items-center justify-content-between">
-            In total there are {{this.productResponse.products ? productResponse.products.length : 0 }} products.
-          </div>
-        </ng-template>
       </p-table>
   </div>
 </div>
 </div>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<!--preview after import-->
+<p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
+  <h5>Xuất thông tin sản phẩm</h5>
+  <p-table [tableStyle]="{'min-width': '50rem'}">
+    <ng-template [value]="importResponse" pTemplate="header">
+      <tr>
+        <th>Tên sản phẩm</th>
+        <th>Mã sản phẩm</th>
+        <th>QR code</th>
+        <th>Hạn sử dụng</th>
+        <th>Giá nhập</th>
+        <th>Số lượng</th>
+        <th>Thao tác</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.productName}}</td>
+        <td>{{product.productCode}}</td>
+        <td>{{product.qrCode}}</td>
+        <td>{{product.rangeDate}}</td>
+        <td>{{product.inPrice}}</td>
+        <td>{{product.amount}}</td>
+        <td>
+          <button class="root-btn">Xuất mã vạch</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-sidebar>

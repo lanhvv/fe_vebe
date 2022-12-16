@@ -92,3 +92,7 @@ input[type="file"] {
 .th-table{
   background-color: #E5EFF9 !important;
 }
+
+>>>.p-element .p-sidebar-right{
+  width: 81rem !important;
+}

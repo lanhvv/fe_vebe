@@ -50,7 +50,11 @@ export class ImportExcelComponent implements OnInit {
   submitted!: boolean;
   productDialog!: boolean;
   getExportsByUnitSelectedResponse!: GetExportsByUnitSelectResponse;
-  importResponse!: ImportWarehouseItemsResponse;
+  importResponse: ImportWarehouseItemsResponse;
+
+  //after import
+  isSidebarDialog: boolean = false;
+
   constructor(private fb: FormBuilder,
               private supplierService:SupplierService,
               private messageService: MessageService,
@@ -61,6 +65,7 @@ export class ImportExcelComponent implements OnInit {
               private unitService: UnitService,
               private importService: ImportService) {
     // this.getSuppliersResponse = new GetSuppliersResponse();
+    this.importResponse = new ImportWarehouseItemsResponse();
   }
 
   ngOnInit(): void {
@@ -127,6 +132,7 @@ export class ImportExcelComponent implements OnInit {
       }
     });
   }
+
   getFormGroup(control: AbstractControl) {
     return control as FormGroup;
   }
@@ -217,7 +223,7 @@ export class ImportExcelComponent implements OnInit {
 
   import(){
     this.warehouseService.save(this.language!,this.selectedSupplier.supplierId).subscribe(response=>{
-      this.importResponse=response as ImportWarehouseItemsResponse;
+      this.importResponse = response as ImportWarehouseItemsResponse;
       if(this.importResponse.status.status=== '1'){
         this.productResponse=new ImportWarehouseResponse();
         this.success(this.productResponse.status.message);
@@ -225,6 +231,10 @@ export class ImportExcelComponent implements OnInit {
         this.failed(this.productResponse.status.message);
       }
     });
+    this.isSidebarDialog = true;
   }
 
+  exportQRCode(){
+
+  }
 }
