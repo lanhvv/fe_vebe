@@ -1,5 +1,5 @@
 main {
-  margin: 7% 0 0 17%;
+  margin: 6% 0 0 17%;
 }
 
 .main-layout {
@@ -78,7 +78,7 @@ main {
   width: auto;
   height: auto;
   border-radius: 5px;
-  background-color: rgba(235, 87, 87, 1);
+  background-color: rgba(235, 87, 87, 0.1);
   text-align: center;
 }
 

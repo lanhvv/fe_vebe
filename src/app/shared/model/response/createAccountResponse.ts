@@ -11,4 +11,5 @@ export class CreateAccountResponse extends BaseResponse{
      cccd!: string;
      idUser!: number;
      address!:string;
+     password!: string
 }

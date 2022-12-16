@@ -1,13 +1,10 @@
-<employee-header xmlns="http://www.w3.org/1999/html" ></employee-header>
+<employee-header xmlns="http://www.w3.org/1999/html" [Status]="status"></employee-header>
 
 <main>
   <div class="container-fluid pt-4 main-layout">
     <div class="row">
-      <h5>Quản lý loại sản phẩm</h5>
-    </div>
-    <div class="row">
       <div class="col float-start">
-        <button type="button" class="root-btn" (click)="showDialog()" label="Show">Thêm mới</button>
+        <button type="button" class="root-btn" (click)="showDialog()" label="Show">Thêm mới danh mục</button>
       </div>
       <div class="col">
         <form>
@@ -66,8 +63,14 @@
                 <ng-template pTemplate="output">{{rowData.description}}</ng-template>
               </p-treeTableCellEditor>
             </td>
-            <td *ngIf="rowData.status==1">Active</td>
-            <td *ngIf="rowData.status==2">Inactive</td>
+            <td>
+              <div *ngIf="rowData.status == 1" class="active">
+                <p>{{rowData.status == 1 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+              </div>
+              <div *ngIf="!(rowData.status == 1)" class="in-active">
+                <p>{{rowData.status == 2 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+              </div>
+            </td>
             <td>{{rowData.amountProduct}}</td>
             <td ttEditableColumn>{{rowData.creator}}</td>
             <td>
@@ -95,7 +98,7 @@
   <employee-footer></employee-footer>
 </main>
 
-<p-dialog header="Thêm mới danh mục" [(visible)]="display" [modal]="true" [style]="{width: '50vw'}">
+<p-dialog header="Thêm mới danh mục" [(visible)]="display" [modal]="true" [style]="{width: '500px'}">
   <form>
     <div class="row">
       <div class="mb-3">
@@ -104,17 +107,12 @@
                class="form-control" id="name-category">
       </div>
       <div class="mb-3">
-        <label for="description-category" class="form-label">Mô tả</label>
-        <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
-                  class="form-control" id="description-category" rows="3"></textarea>
-      </div>
-      <div class="mb-3" style="width: 300px;">
         <label class="form-label">Danh mục chính</label>
         <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
                     optionLabel="name" [filter]="true" filterBy="name" styleClass="dropdown-select">
           <ng-template pTemplate="selectedItem">
             <div class="country-item country-item-value" *ngIf="category">
-              <div>{{category.name}}</div>
+              <p>{{category.name}}</p>
             </div>
           </ng-template>
           <ng-template let-category pTemplate="item">
@@ -123,6 +121,11 @@
             </div>
           </ng-template>
         </p-dropdown>
+      </div>
+      <div class="mb-3">
+        <label for="description-category" class="form-label">Mô tả</label>
+        <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
+                  class="form-control" id="description-category" rows="3"></textarea>
       </div>
 
       <div class="row text-center">

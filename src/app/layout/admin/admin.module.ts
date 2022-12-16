@@ -62,6 +62,8 @@ import {CellComponent} from "./share/cell.component";
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-supplier/import-of-statistic.component";
 import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
+import { ManageTypeProductComponent } from './manage-type-product/manage-type-product.component';
+import {TreeTableModule} from "primeng/treetable";
 
 @NgModule({
   declarations: [
@@ -91,7 +93,8 @@ import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplie
     CellComponent,
     PrintBarcodeComponent,
     ImportOfStatisticComponent,
-    StatisticSupplierComponent
+    StatisticSupplierComponent,
+    ManageTypeProductComponent,
   ],
   imports: [
     CommonModule,
@@ -130,7 +133,8 @@ import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplie
     ZXingScannerModule,
     QRCodeModule,
     ToolbarModule,
-    InputSwitchModule
+    InputSwitchModule,
+    TreeTableModule
   ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

@@ -1,9 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {ConfirmationService, ConfirmEventType, MessageService, TreeNode} from "primeng/api";
-import {TypeProductService} from "../../../services/type-product/type-product.service";
+import { Component, OnInit } from '@angular/core';
 import {TypeProductItemsResponse} from "../../../shared/model/response/typeProductItemsResponse";
 import {CreateResponse} from "../../../shared/model/response/createTypeProductResponse";
-import {ActivatedRoute, Router} from "@angular/router";
 import {UpdateTypeProductRequest} from "../../../shared/model/request/updateTypeProductRequest";
 import {Filter} from "../../../shared/model/Filter";
 import {GetOrderRequest} from "../../../shared/model/request/getOrderRequest";
@@ -14,13 +11,17 @@ import {CreateTypeProductRequest} from "../../../shared/model/request/createType
 import {CreateTypeProductDetailRequest} from "../../../shared/model/request/createTypeProductDetailRequest";
 import {TypeProductItems} from "../../../shared/model/typeProductItems";
 import {UpdateTypeProductResponse} from "../../../shared/model/response/updateTypeProductResponse";
+import {TypeProductService} from "../../../services/type-product/type-product.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api";
 
 @Component({
-  selector: 'app-type-product',
-  templateUrl: './type-product.component.html',
-  styleUrls: ['./type-product.component.css']
+  selector: 'app-manage-type-product',
+  templateUrl: './manage-type-product.component.html',
+  styleUrls: ['./manage-type-product.component.css']
 })
-export class TypeProductComponent implements OnInit {
+export class ManageTypeProductComponent implements OnInit {
+
   files: TypeProductItemsResponse;
   typeResponse: CreateResponse;
   updateTypeProductRequest!: UpdateTypeProductRequest;
@@ -54,26 +55,24 @@ export class TypeProductComponent implements OnInit {
 
   constructor(private typeProductService: TypeProductService, private router: Router, private confirmationService: ConfirmationService,
               private messageService: MessageService, private activatedRoute: ActivatedRoute) {
-    this.files = new TypeProductItemsResponse(),
+    this.files = new TypeProductItemsResponse();
     this.typeResponse = new CreateResponse();
     this.typeItemsResponse = new TypeItemsResponse()
     this.typeRequest = new CreateTypeProductRequest();
-    this.category = new SelectionTypeProductItems()
-    this.filesType = new SelectionTypeProductItemsResponse()
-    this.selectionTypeProductItems = new SelectionTypeProductItems()
-    this.typeDetailRequest = new CreateTypeProductDetailRequest()
-    this.typeProductItems = new TypeProductItems()
-    this.updateTypeProductResponse = new UpdateTypeProductResponse()
-
+    this.category = new SelectionTypeProductItems();
+    this.filesType = new SelectionTypeProductItemsResponse();
+    this.selectionTypeProductItems = new SelectionTypeProductItems();
+    this.typeDetailRequest = new CreateTypeProductDetailRequest();
+    this.typeProductItems = new TypeProductItems();
+    this.updateTypeProductResponse = new UpdateTypeProductResponse();
   }
 
   ngOnInit(): void {
-    this.status = 6;
+    this.status = 10;
     this.getall();
     this.typeProductService.getFilesystem().subscribe((response) =>
       this.filesType = response as SelectionTypeProductItemsResponse
     );
-
     this.cols = [
       {field: 'name', header: 'Name'},
       {field: 'description', header: 'Description'},
@@ -96,7 +95,7 @@ export class TypeProductComponent implements OnInit {
     this.typeProductService.getAllTypeProduct(this.getOrderRequest).subscribe(response => {
       this.files = response as TypeProductItemsResponse
       console.log(this.files)
-      console.log(this.category.id +" dòng 96")
+      console.log(this.category.id +" dòng 96");
     });
   }
 

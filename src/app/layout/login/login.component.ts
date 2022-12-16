@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private translateService:TranslateConfigService,
     private managerEmailService:ManagerEmailService ,
-    private  messageService: MessageService,
+    private messageService: MessageService,
     private loadingService: LoadingService,
   ) {
     this.forgotPasswordRequest = new ForgotPasswordRequest()
@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.language=this.translateService.getLanguage()!;
     if(this.authService.isLoggedIn()){
-      if(this.authService.getRolesFromToken(this.tokenStorage.getToken())){
-      }
+      // if(this.authService.getRolesFromToken(this.tokenStorage.getToken())){
+      // }
       this.router.navigate(['/admin']);
     } else {
       this.router.navigate(['/login']);

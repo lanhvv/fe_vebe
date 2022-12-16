@@ -183,6 +183,7 @@ export class ManagerWarehouseImportComponent implements OnInit {
   create(){
     if(this.selectedCategory!=null){
     this.createProductRequest.categoryId=this.selectedCategory.id as number;
+    console.log(this.createProductRequest.categoryId+" dòng 186"+ this.createProductRequest.inPrice)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -194,6 +195,7 @@ export class ManagerWarehouseImportComponent implements OnInit {
     }
 
     this.createProductRequest.fileId=this.fileId;
+
     this.importService.createImportWarehouse(this.createProductRequest).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
       if(this.createProductResponse.status.status=== '1'){

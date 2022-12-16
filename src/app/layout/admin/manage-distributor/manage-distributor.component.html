@@ -47,7 +47,7 @@
               <p-inputSwitch [ngModel]="distributor.status === 1" (click)="lock_unlock(distributor.id, distributor.status)"></p-inputSwitch>
             </td>
             <td *ngIf="distributor.status == 2">
-              <p-inputSwitch [ngModel]="distributor.status === 2" (click)="lock_unlock(distributor.id, distributor.status)"></p-inputSwitch>
+              <p-inputSwitch [ngModel]="!(distributor.status === 2)" (click)="lock_unlock(distributor.id, distributor.status)"></p-inputSwitch>
             </td>
             <td *ngIf="distributor.status == 3">
               <p-inputSwitch [ngModel]="false" [disabled]="true"></p-inputSwitch>

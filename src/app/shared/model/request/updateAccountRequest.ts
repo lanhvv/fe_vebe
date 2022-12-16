@@ -8,11 +8,8 @@ export class UpdateAccountRequest {
   address: string;
   numberPhone : string;
   email: string;
-  role: number;
-  status: number;
   idUser: number;
-  constructor(idUser: number,username:string, fullname: string, password: string, cccd: string, address: string, numberPhone: string, email: string,
-              role: number, status: number){
+  constructor(idUser: number,username:string, fullname: string, password: string, cccd: string, address: string, numberPhone: string, email: string){
     this.idUser =idUser;
     this.username= username
     this.fullname= fullname;
@@ -21,8 +18,6 @@ export class UpdateAccountRequest {
     this.address= address;
     this.numberPhone = numberPhone;
     this.email = email;
-    this.role = role;
-    this.status = status
 
   }
 }
