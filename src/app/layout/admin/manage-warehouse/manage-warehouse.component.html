@@ -19,16 +19,16 @@
         <label class="form-label-supplier" translate>product.supplier.name</label> <br>
         <p-dropdown [options]="getInforCreateProductResponse.items" [(ngModel)]="selectedSupplier" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a supplier" (onChange)="getAllImportInWarehouse(selectedSupplier.id)">
           <ng-template pTemplate="selectedItem">
-              <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
-                  <div>{{selectedSupplier.name}}</div>
-              </div>
+            <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+              <div>{{selectedSupplier.name}}</div>
+            </div>
           </ng-template>
           <ng-template let-supplier pTemplate="supplieritem">
-              <div class="supplier-item">
-                  <div>{{supplier.name}}</div>
-              </div>
+            <div class="supplier-item">
+              <div>{{supplier.name}}</div>
+            </div>
           </ng-template>
-      </p-dropdown><br>
+        </p-dropdown><br>
         <a class="text-category mt-3 text-decoration-none" translate>product.supplier.create</a>
       </div>
     </div>
@@ -54,7 +54,7 @@
             <th pSortableColumn="price">Giá nhập
               <p-sortIcon field="price"></p-sortIcon>
             </th>
-            <th pSortableColumn="price">Hạn sử dụng
+            <th pSortableColumn="price">Hạn dùng
               <p-sortIcon field="price"></p-sortIcon>
             </th>
             <th pSortableColumn="price">Nhà cung cấp
@@ -79,6 +79,9 @@
         </ng-template>
       </p-table>
     </div>
+    <button class="btn btn-danger" (mousedown)="doneImpport()">
+      Hoàn tất
+     </button>
   </div>
 </main>
 
@@ -120,11 +123,11 @@
             <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
 
               <ng-template let-category pTemplate="selectedItem">
-                  <div class="category-item">
-                      <div>{{category.name}}</div>
-                  </div>
+                <div class="category-item">
+                  <div>{{category.name}}</div>
+                </div>
               </ng-template>
-          </p-dropdown> <br>
+            </p-dropdown> <br>
             <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
           </div>
         </div>
@@ -132,16 +135,16 @@
           <div class="mb-3">
             <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
-                  <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
-                      <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
-                  </div>
+                <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
+                  <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
+                </div>
               </ng-template>
               <ng-template let-unitItem pTemplate="unititem">
-                  <div class="unit-Item">
-                      <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
-                  </div>
+                <div class="unit-Item">
+                  <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
+                </div>
               </ng-template>
-          </p-dropdown>
+            </p-dropdown>
           </div>
           <div class="mb-3">
             <label for="in-price" class="form-label">Số lượng</label>
@@ -172,13 +175,13 @@
         </div> -->
         <div class="mb-3">
           <p-fileUpload name="demo[]" url="./upload.php"
-             accept="image/*" [previewWidth]='100' [showUploadButton]="false" [maxFileSize]="1000000" (onSelect)="onUpload($event)" (onRemove)="onRemove()">
+                        accept="image/*" [previewWidth]='100' [showUploadButton]="false" [maxFileSize]="1000000" (onSelect)="onUpload($event)" (onRemove)="onRemove()">
             <ng-template pTemplate="content">
-                <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles"> </li>
-                </ul>
+              <ul *ngIf="uploadedFiles.length">
+                <li *ngFor="let file of uploadedFiles"> </li>
+              </ul>
             </ng-template>
-      </p-fileUpload>
+          </p-fileUpload>
         </div>
       </div>
       <div class="row">
@@ -223,19 +226,19 @@
           </div>
           <div class="mb-3">
             <label for="name" class="form-label">Tên sản phẩm</label>
-            <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control" id="name">
+            <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control">
           </div>
           <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
             <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
-            optionLabel="name" optionValue="id" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
-            <ng-template let-country pTemplate="selectedItem" >
-              <div class="country-item">
-                <div >{{country.name}}</div>
-              </div>
-            </ng-template>
+                        optionLabel="name" optionValue="id" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
+              <ng-template let-country pTemplate="selectedItem" >
+                <div class="country-item">
+                  <div >{{country.name}}</div>
+                </div>
+              </ng-template>
 
-          </p-dropdown> <br>
+            </p-dropdown> <br>
 
             <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
           </div>
@@ -244,29 +247,29 @@
           <div class="mb-3">
             <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
-                  <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
-                      <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
-                  </div>
+                <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
+                  <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
+                </div>
               </ng-template>
               <ng-template let-unitItem pTemplate="unititem">
-                  <div class="unit-Item">
-                      <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
-                  </div>
+                <div class="unit-Item">
+                  <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
+                </div>
               </ng-template>
-          </p-dropdown>
+            </p-dropdown>
           </div>
           <div class="mb-3">
             <label for="in-price" class="form-label">Số lượng nè </label>
-            <input type="text" [(ngModel)]="edit.amount"  [ngModelOptions]="{standalone: true}" class="form-control" id="in-price">
+            <input type="text" [(ngModel)]="edit.amount"  [ngModelOptions]="{standalone: true}" class="form-control">
           </div>
           <div class="mb-3">
             <label for="out-price" class="form-label">Giá nhập</label>
-            <input type="text"  [(ngModel)]="edit.inPrice"  [ngModelOptions]="{standalone: true}" class="form-control" id="out-price">
+            <input type="text"  [(ngModel)]="edit.inPrice"  [ngModelOptions]="{standalone: true}" class="form-control" >
           </div>
           <div class="mb-3">
             <label [for]="date" class="form-label">Hạn sử dụng</label> <br>
             <p-calendar
-            [(ngModel)]="edit.rangeDates" [ngModelOptions]="{standalone: true}" [locale]="es"
+              [(ngModel)]="edit.rangeDates" [ngModelOptions]="{standalone: true}" [locale]="es"
               selectionMode="range"
               styleClass="inputCalendar"
               dateFormat="dd/mm/yy"
