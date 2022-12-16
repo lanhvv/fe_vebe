@@ -1,26 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { MessageService, ConfirmEventType, ConfirmationService } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {MessageService, ConfirmEventType, ConfirmationService} from 'primeng/api';
 import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {ProductService} from "../../../services/admin/product/product.service";
 import {HttpClient} from "@angular/common/http";
-import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
-import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
-import { ImportSupplierService } from 'src/app/services/admin/import/import-supplier.service';
-import { ImportInWarehouseInRedis } from 'src/app/shared/model/response/ImportInWarehouseInRedis';
-import { BaseResponse } from 'src/app/shared/response/BaseResponse';
-import { SelectionTypeProductItems } from 'src/app/shared/model/selectionTypeProductItems';
-import { InfoUnitItem } from 'src/app/shared/model/InfoUnitItem';
-import { TranslateConfigService } from 'src/app/services/translate-config.service';
-import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
-import { ImportInWarehouseRequest } from 'src/app/shared/model/request/importInWarehouseRequest';
-import { Category } from 'src/app/shared/model/category.model';
-import { GetUnitChildResponse } from 'src/app/shared/model/response/GetUnitChildResponse';
-import { Unit } from 'src/app/shared/model/Unit';
-import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListImportWarehouseInRedis';
-import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
-import { UnitService } from 'src/app/services/unit/unit.service';
-import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
+import {GetInfoCreateProdResponse} from 'src/app/shared/model/response/GetInfoCreateProdResponse';
+import {GetSupplierItem} from 'src/app/shared/model/response/GetSupplieritem';
+import {ImportSupplierService} from 'src/app/services/admin/import/import-supplier.service';
+import {ImportInWarehouseInRedis} from 'src/app/shared/model/response/ImportInWarehouseInRedis';
+import {BaseResponse} from 'src/app/shared/response/BaseResponse';
+import {SelectionTypeProductItems} from 'src/app/shared/model/selectionTypeProductItems';
+import {InfoUnitItem} from 'src/app/shared/model/InfoUnitItem';
+import {TranslateConfigService} from 'src/app/services/translate-config.service';
+import {CreateProductResponse} from 'src/app/shared/model/response/CreateProductResponse';
+import {ImportInWarehouseRequest} from 'src/app/shared/model/request/importInWarehouseRequest';
+import {Category} from 'src/app/shared/model/category.model';
+import {GetUnitChildResponse} from 'src/app/shared/model/response/GetUnitChildResponse';
+import {Unit} from 'src/app/shared/model/Unit';
+import {ListImportWarehouseInRedis} from 'src/app/shared/model/response/ListImportWarehouseInRedis';
+import {EditImportWarehouseResponse} from 'src/app/shared/model/response/editImportWarehouseResponse';
+import {UnitService} from 'src/app/services/unit/unit.service';
+import {ImportWarehouseResponse} from '../../../shared/model/response/ImportWarehouseResponse';
+
 type AOV = any[][];
 
 @Component({
@@ -52,7 +53,6 @@ export class ManageWarehouseComponent implements OnInit {
   currentFile?: File;
   selectedFiles?: FileList;
 
-
   createProductRequest: ImportInWarehouseRequest;
   getInforCreateProductResponse!: GetInfoCreateProdResponse;
   createProductResponse!: CreateProductResponse;
@@ -68,17 +68,16 @@ export class ManageWarehouseComponent implements OnInit {
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
 
-  importWarehouseResponse: ImportWarehouseResponse[]=[]
+  importWarehouseResponse: ImportWarehouseResponse[] = []
 
   updateWarehouse!: FormGroup;
 
   units: Unit[] = [];
 
-
-  constructor(private messageService: MessageService ,
-              private prodService:ProductService,
-              private unitService:UnitService,
-              private translateService:TranslateConfigService,private fb: FormBuilder,
+  constructor(private messageService: MessageService,
+              private prodService: ProductService,
+              private unitService: UnitService,
+              private translateService: TranslateConfigService, private fb: FormBuilder,
               private confirmationService: ConfirmationService,
               private importService: ImportSupplierService) {
     this.createProductRequest = new ImportInWarehouseRequest();
@@ -122,15 +121,16 @@ export class ManageWarehouseComponent implements OnInit {
         this.getAllImportInWarehouse(this.edit.supplierId);
         this.success(this.createProductResponse.status.message);
         this.updateDisplay = false;
-      }else{
+      } else {
         this.failed(this.createProductResponse.status.message);
-           this.updateDisplay = true;
+        this.updateDisplay = true;
       }
 
     });
 
   }
-  deleteById(key:number, redisId: string){
+
+  deleteById(key: number, redisId: string) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',
       header: 'Confirmation',
@@ -142,7 +142,11 @@ export class ManageWarehouseComponent implements OnInit {
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Confirmed',
+              detail: this.baseResponse.status.message
+            });
           }
         });
 
@@ -173,11 +177,11 @@ export class ManageWarehouseComponent implements OnInit {
   doneImpport() {
     this.importService.add(this.items).subscribe(response => {
       this.importWarehouseResponse = response as ImportWarehouseResponse[];
-      for (const iterator of  this.importWarehouseResponse) {
-        if(iterator.status.status=== '1'){
+      for (const iterator of this.importWarehouseResponse) {
+        if (iterator.status.status === '1') {
           this.success(iterator.status.message);
 
-        }else{
+        } else {
           this.failed(iterator.status.message);
         }
       }
@@ -186,19 +190,23 @@ export class ManageWarehouseComponent implements OnInit {
 
   }
 
-  deleteAll(key: any){
+  deleteAll(key: any) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.importService.deleteAll(key,this.language).subscribe(response => {
+        this.importService.deleteAll(key, this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Confirmed',
+              detail: this.baseResponse.status.message
+            });
           }
         });
 
@@ -217,10 +225,10 @@ export class ManageWarehouseComponent implements OnInit {
 
   }
 
-  getInformations(){
+  getInformations() {
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
+      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id);
     });
   }
 
@@ -244,9 +252,9 @@ export class ManageWarehouseComponent implements OnInit {
       this.createProductResponse = response as CreateProductResponse;
       if (this.createProductResponse.status.status === '1') {
         this.success(this.createProductResponse.status.message);
-        this.getAllImportInWarehouse( this.createProductRequest.supplierId);
+        this.getAllImportInWarehouse(this.createProductRequest.supplierId);
         this.display = false;
-      }else{
+      } else {
         this.failed(this.createProductResponse.status.message);
         this.display = true;
       }
@@ -267,24 +275,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.display = true;
   }
 
-  // onUpload(){
-
-  //   if (this.selectedFiles) {
-  //     const file: File | null = this.selectedFiles.item(0);
-
-  //     if (file) {
-  //       this.currentFile = file;
-  //       this.prodService.pushFileToStorage(this.currentFile,this.language).subscribe(result=>{
-  //         this.createProductResponse=result as CreateProductResponse;
-  //         if(this.createProductResponse.status.status=== '1'){
-  //           this.fileId=this.createProductResponse.id;
-  //         }else{
-  //         }
-  //       });
-  //     }
-  //   }
-
-  // }
   onUpload(event: Event) {
     console.log(event)
     this.image = event;
@@ -300,15 +290,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getUnitChild() {
-    // this.unitService.getChild(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-    //   this.getUnitChileResponse = response as GetUnitChildResponse;
-    //   if(this.getUnitChileResponse.status.status=== '0'){
-    //     this.failed(this.getUnitChileResponse.status.message);
-    //   }else{
-    //     this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
-    //     this.createProductRequest.units.push(this.unit);
-    //   }
-    // })
     this.importService.findByUnitId(this.selectedUnitParent.unitId, this.language).subscribe(response => {
       this.createProductRequest.units = response as Unit[]
     })
@@ -363,7 +344,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onFileSelectedImage(event: any) {
-
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.onload = (event: ProgressEvent) => {
@@ -382,7 +362,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.fileId = 0;
 
   }
-
 
   changeImage() {
     this.url = '';
