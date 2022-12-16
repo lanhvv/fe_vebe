@@ -19,6 +19,7 @@ import {ExportResult} from "../../../../shared/result/v_export/ExportResult";
 import {ImportService} from "../../../../services/v_import/import.service";
 import {BaseResponse} from "../../../../shared/response/BaseResponse";
 import {ImportWarehouseItemsResponse} from "../../../../shared/response/v_import/ImportWarehouseItemsResponse";
+import {ExportService} from "../../../../services/exportPDF/export.service";
 type AOV = any[][];
 
 @Component({
@@ -50,7 +51,7 @@ export class ImportExcelComponent implements OnInit {
   submitted!: boolean;
   productDialog!: boolean;
   getExportsByUnitSelectedResponse!: GetExportsByUnitSelectResponse;
-  importResponse: ImportWarehouseItemsResponse;
+  importResponse: ImportWarehouseItemsResponse[] = [];
 
   //after import
   isSidebarDialog: boolean = false;
@@ -63,9 +64,9 @@ export class ImportExcelComponent implements OnInit {
               private warehouseService:WarehouseService,
               private typeProductService: TypeProductService,
               private unitService: UnitService,
-              private importService: ImportService) {
+              private importService: ImportService,
+              private exportQR: ExportService) {
     // this.getSuppliersResponse = new GetSuppliersResponse();
-    this.importResponse = new ImportWarehouseItemsResponse();
   }
 
   ngOnInit(): void {
@@ -223,18 +224,19 @@ export class ImportExcelComponent implements OnInit {
 
   import(){
     this.warehouseService.save(this.language!,this.selectedSupplier.supplierId).subscribe(response=>{
-      this.importResponse = response as ImportWarehouseItemsResponse;
-      if(this.importResponse.status.status=== '1'){
-        this.productResponse=new ImportWarehouseResponse();
-        this.success(this.productResponse.status.message);
-      }else{
-        this.failed(this.productResponse.status.message);
-      }
+      const importResponse = response as ImportWarehouseItemsResponse;
+      this.importResponse = [importResponse];
+      // if(importResponse.status.status=== '1'){
+      //   this.productResponse=new ImportWarehouseResponse();
+      //   this.success(this.productResponse.status.message);
+      // }else{
+      //   this.failed(this.productResponse.status.message);
+      // }
     });
     this.isSidebarDialog = true;
   }
 
-  exportQRCode(){
-
+  exportQRCode(code: string, amount: number){
+    this.exportQR.export(code, amount, "vi");
   }
 }

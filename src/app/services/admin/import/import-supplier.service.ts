@@ -71,7 +71,7 @@ export class ImportSupplierService {
     return this.httpClient.get<any>(this.URL + '/edit-import/' + key + '/' + redisId + '?language=' + language, this.httpOptions)
   }
 
-  deleteAll(key: number, redisId: string, language: string) {
+  deleteAll(key: number, language: string) {
     return this.httpClient.get<any>(this.URL + '/deleteAll-importWarehouse/' + key + '?language=' + language, this.httpOptions)
   }
 

@@ -217,16 +217,16 @@
 <!--preview after import-->
 <p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
   <h5>Xuất thông tin sản phẩm</h5>
-  <p-table [tableStyle]="{'min-width': '50rem'}">
-    <ng-template [value]="importResponse" pTemplate="header">
+  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse">
+    <ng-template pTemplate="header">
       <tr>
-        <th>Tên sản phẩm</th>
-        <th>Mã sản phẩm</th>
-        <th>QR code</th>
-        <th>Hạn sử dụng</th>
-        <th>Giá nhập</th>
-        <th>Số lượng</th>
-        <th>Thao tác</th>
+        <th class="th-table">Tên sản phẩm</th>
+        <th class="th-table">Mã sản phẩm</th>
+        <th class="th-table">QR code</th>
+        <th class="th-table">Hạn sử dụng</th>
+        <th class="th-table">Giá nhập</th>
+        <th class="th-table">Số lượng</th>
+        <th class="th-table">Thao tác</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-product>
@@ -234,11 +234,11 @@
         <td>{{product.productName}}</td>
         <td>{{product.productCode}}</td>
         <td>{{product.qrCode}}</td>
-        <td>{{product.rangeDate}}</td>
+        <td>{{product.rangeDate | date: "dd/MM/yyyy"}}</td>
         <td>{{product.inPrice}}</td>
         <td>{{product.amount}}</td>
         <td>
-          <button class="root-btn">Xuất mã vạch</button>
+          <button class="root-btn" (click)="exportQRCode(product.qrCode, product.amount)">Xuất mã vạch</button>
         </td>
       </tr>
     </ng-template>
