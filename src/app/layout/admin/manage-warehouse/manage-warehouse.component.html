@@ -71,7 +71,7 @@
             <td>{{product.productName}}</td>
             <td>{{product.inAmount}}</td>
             <td>{{product.inPrice | currency: 'USD' }}</td>
-            <td>{{product.rangeDates }}</td>
+            <td>{{product.rangeDate }}</td>
             <td>{{product.supplierName }}</td>
             <td>  <button class="btn btn-danger" (mousedown)="deleteById(product.supplierId,product.id )">del</button></td>
             <td>  <button class="btn btn-danger" (mousedown)="getById(product.supplierId,product.id )">update</button></td>
@@ -87,6 +87,9 @@
   </div>
 </main>
 
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"
+rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast></p-toast>
 <!--dialog nhập kho-->
 <p-dialog header="Nhập kho" [(visible)]="display" [modal]="true" [style]="{width: '1034px', height: '630px'}"
           [draggable]="false" [resizable]="false">
@@ -106,36 +109,26 @@
             <label for="name_product_create" class="form-label">Tên sản phẩm</label>
             <input type="text" [(ngModel)]="createProductRequest.nameProd" [ngModelOptions]="{standalone: true}" class="form-control" id="name_product_create">
           </div>
-          <!-- <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
+
+          <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
             <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
-            optionLabel="name" optionValue="id" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
-            <ng-template let-country pTemplate="selectedItem" >
-              <div class="country-item">
-                <div >{{country.name}}</div>
-              </div>
-            </ng-template>
-
-          </p-dropdown> <br>
-
-            <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
-          </div> -->
-          <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
-            <label class="form-label" label="category_create" translate>product.category.name</label>
-            <p-dropdown id="category_create" styleClass="dropdown_warehouse" [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" optionLabel="name" [filter]="true" filterBy="name" placeholder="Lựa chọn loại sản phẩm">
+             optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
               <ng-template let-category pTemplate="selectedItem">
-                <div class="category-item">
-                  <p>{{category.name}}</p>
-                </div>
+                  <div class="category-item">
+                      <div>{{category.name}}</div>
+                  </div>
               </ng-template>
-            </p-dropdown> <br>
+          </p-dropdown> <br>
             <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
           </div>
+
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <label class="form-label-category mb-2" label="unit_product_create">Đơn vị sản phẩm</label>
-            <p-dropdown id="unit_product_create" styleClass="dropdown_warehouse" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" placeholder="Lựa chọn đơn vị" (onChange)="getUnitChild()">
+            <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
+            [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false"
+            filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
                 <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
                   <p>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</p>
