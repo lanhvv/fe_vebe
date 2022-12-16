@@ -325,7 +325,7 @@ export class ManageAccountComponent implements OnInit {
     // this.id = this.activatedRoute.snapshot.params['id'];
     const value = this.updateAccount.value;
     this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
-      value.numberPhone, value.email, value.role, 1);
+      value.numberPhone, value.email);
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if(this.createAccountResponse.status.status=="1"){

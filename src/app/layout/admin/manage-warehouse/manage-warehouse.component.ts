@@ -72,10 +72,10 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   constructor(private messageService: MessageService ,
-    private prodService:ProductService,
-    private unitService:UnitService,
-    private translateService:TranslateConfigService,private fb: FormBuilder,
-    private importService: ImportSupplierService) {
+              private prodService:ProductService,
+              private unitService:UnitService,
+              private translateService:TranslateConfigService,private fb: FormBuilder,
+              private importService: ImportSupplierService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
   }
@@ -101,7 +101,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
   update(){
     if(this.selectedCategory!=null){
-    this.edit.categoryId=this.selectedCategory.id as number;
+      this.edit.categoryId=this.selectedCategory.id as number;
     }
     if(this.selectedSupplier!=null){
       this.edit.supplierId=this.selectedSupplier.id as number;
@@ -139,10 +139,21 @@ export class ManageWarehouseComponent implements OnInit {
   }
   getById(key:number, redisId: string){
     this.importService.edit(key, redisId, this.language).subscribe(response => {
-     this.edit = response as EditImportWarehouseResponse
-     this.updateDisplay= true
+      this.edit = response as EditImportWarehouseResponse
+      this.updateDisplay= true
     });
 
+  }
+  doneImpport(){
+    this.importService.add(this.items).subscribe(response => {
+      // this.createProductResponse = response as CreateProductResponse;
+      // if(this.createProductResponse.status.status=== '1'){
+      //   this.success(this.createProductResponse.status.message);
+      // }else{
+      //   this.failed(this.createProductResponse.status.message);
+      // }
+    });
+    this.ngOnInit()
   }
   getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
@@ -153,8 +164,8 @@ export class ManageWarehouseComponent implements OnInit {
   create(){
     console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     if(this.selectedCategory!=null){
-    this.createProductRequest.categoryId=this.selectedCategory.id ;
-    console.log(this.createProductRequest.categoryId+" dòng 186"+ this.createProductRequest.inPrice)
+      this.createProductRequest.categoryId=this.selectedCategory.id ;
+      console.log(this.createProductRequest.categoryId+" dòng 186"+ this.createProductRequest.inPrice)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -179,9 +190,9 @@ export class ManageWarehouseComponent implements OnInit {
   }
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
-     this.createProductRequest.nameProd =response.productName
-     this.selectedCategory.id = response.category.id
-     this.createProductRequest.description = response.desciption
+      this.createProductRequest.nameProd =response.productName
+      this.selectedCategory.id = response.category.id
+      this.createProductRequest.description = response.desciption
     })
   }
 
