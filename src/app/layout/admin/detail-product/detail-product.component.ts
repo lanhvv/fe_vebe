@@ -218,6 +218,7 @@ export class DetailProductComponent implements OnInit {
     this.qrResultString = resultString;
     this.dialogScanQR = false;
     this.currentDevice = undefined;
+    this.createProductRequest.barCode = this.qrResultString;
     console.log(this.qrResultString);
   }
 

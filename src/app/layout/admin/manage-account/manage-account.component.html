@@ -52,21 +52,21 @@
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
               <td *ngIf="item.status == 1">
-                <p-inputSwitch [ngModel]="item.status === 1" (click)="unlockAccount(item.id)"></p-inputSwitch>
+                <p-inputSwitch [ngModel]="item.status === 1" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
               <td *ngIf="item.status == 2">
-                <p-inputSwitch [ngModel]="item.status === 2" (click)="lockAccount(item.id)"></p-inputSwitch>
+                <p-inputSwitch [ngModel]="!(item.status === 2)" (click)="unlockAccount(item.id)"></p-inputSwitch>
               </td>
               <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
               <td>
-                <div *ngIf="item.statusName === 'Active'" class="active">
-                  <p>{{item.statusName === 'Active' ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                <div *ngIf="item.statusName === 'Hoạt động'" class="active">
+                  <p>{{item.statusName}}</p>
                 </div>
-                <div *ngIf="!(item.statusName === 'Active')" class="in-active">
-                  <p>{{item.statusName === 'Active' ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                <div *ngIf="item.statusName === 'Không hoạt động'" class="in-active">
+                  <p>{{item.statusName}}</p>
                 </div>
               </td>
               <td>
@@ -286,30 +286,30 @@
   <form class="row mt-2">
     <div class="row">
       <div class="mb-3 col-md-6">
-        <label for="fullname" class="form-label">Tên Nhân Viên: </label>
+        <label for="fullname" class="form-label">Họ và tên: </label>
         <input type="text" class="form-control" id="fullname" [(ngModel)]="createAccountResponse.fullname" name="fullname"
                placeholder="Nhập tên nhân viên"
                required>
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Username:</label>
+        <label for="username" class="form-label">Tên tài khoản:</label>
         <input type="text" class="form-control" id="username" [(ngModel)]="createAccountResponse.username" name="username"
                placeholder="Nhập username nhân viên"
                required>
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Password:</label>
+        <label for="username" class="form-label">Mật khẩu:</label>
         <input type="text" class="form-control" id="password" [(ngModel)]="createAccountResponse.password" name="password"
                placeholder="Nhập username nhân viên"
                required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Số Chứng Minh Thư: </label>
+        <label class="form-label">Số chứng minh thư: </label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.cccd"
                placeholder="Nhập chứng minh thư" name="cccd" required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Số Điện Thoại: </label>
+        <label class="form-label">Số điện thoại: </label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.phoneNumber" name="phoneNumber"
                placeholder="Nhập số điện thoại" required>
       </div>

@@ -17,3 +17,20 @@
     }
 }
 
+.content{
+  width: 100%;
+  min-height: 800px;
+  height: 100%;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.root-btn {
+  width: 150px;
+  height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}

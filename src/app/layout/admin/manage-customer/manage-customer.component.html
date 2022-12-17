@@ -28,7 +28,6 @@
       <p-table [value]="customers.customers" responsiveLayout="scroll">
         <ng-template pTemplate="header">
           <tr>
-            <th></th>
             <th pSortableColumn="fullname" (mousedown)="sort('fullname')">Name<p-sortIcon field="fullname"></p-sortIcon></th>
             <th pSortableColumn="address" (mousedown)="sort('address')">Address<p-sortIcon field="address"></p-sortIcon></th>
             <th pSortableColumn="numberphone" (mousedown)="sort('numberphone')">Number phone<p-sortIcon field="numberphone"></p-sortIcon></th>
@@ -58,7 +57,7 @@
     </section>
   </div>
 
-  <p-dialog [(visible)]="customerDialog" [style]="{width: '550px'}" header="Customer" [modal]="true" styleClass="p-fluid">
+  <p-dialog [(visible)]="customerDialog" [style]="{width: '550px'}" header="Thêm mới tài khoản" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
       <div class="field">
         <label for="name">Username</label>
