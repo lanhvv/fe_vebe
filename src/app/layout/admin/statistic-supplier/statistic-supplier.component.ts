@@ -3,14 +3,7 @@ import {StatisticSupplierService} from "../../../services/statistic-supplier/sta
 import {StatisticSupplierResponse} from "../../../shared/model/response/StatisticSupplierResponse";
 import {AppRoutingModule} from "../../../app-routing.module";
 import {
-  ActivatedRoute,
-  Route, Router,
-  RouterEvent,
-  RouterLink,
-  RouterLinkWithHref,
-  RouterModule,
-  RouterState,
-  Routes
+   Router
 } from "@angular/router";
 
 @Component({
@@ -50,4 +43,9 @@ export class StatisticSupplierComponent implements OnInit {
   click(id:number) {
     this.route.navigate(['admin/import',id])  ;
   }
+
+  onSearch() {
+    this.getAll(this.name, this.page, this.row)
+  }
+
 }

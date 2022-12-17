@@ -4,6 +4,7 @@ import {
 } from "../../../../services/statistic-supplier/import-of-supplier/import-of-supplier.service";
 import {ActivatedRoute, Router, RouterLinkActive} from "@angular/router";
 import {ImportOfSupplieResponse} from "../../../../shared/model/response/ImportOfSupplieResponse";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-manage-unit',
@@ -14,9 +15,11 @@ export class ImportOfStatisticComponent implements OnInit {
   idSupplier = 0;
 
   multiAxisData : any;
-
+  showButtonBar = true;
   multiAxisOptions : any;
-  date10 = new Date();
+  year = new Date();
+  startDate !: Date;
+  endDate !: Date;
   page = 0;
   row = 10;
   status: number = 0;
@@ -24,22 +27,23 @@ export class ImportOfStatisticComponent implements OnInit {
   totalItems = 0;
 
   ngOnInit(): void {
-    this.idSupplier = this.route.snapshot.params['id'];
-    this.getImportsOfSupplier(this.idSupplier, this.page, this.row);
-    this.showLineChart(this.date10.getFullYear(), this.idSupplier);
+    console.log(this.startDate)
+    this.idSupplier = this.activeRoute.snapshot.params['id'];
+    this.getImportsOfSupplier(this.idSupplier, this.page, this.row, this.startDate, this.endDate, this.nameSearch);
+    this.showLineChart(this.year.getFullYear(), this.idSupplier);
   }
-
-
 
   constructor(private importOfSupplierService : ImportOfSupplierService,
-              private route:ActivatedRoute) {
+              private activeRoute:ActivatedRoute,
+              private route : Router,
+              private messageService: MessageService) {
   }
 
-  getImportsOfSupplier(id:number, page:number, row:number) {
-    this.importOfSupplierService.getImportsOfSupplier(id, page, row).subscribe(data => {
+  getImportsOfSupplier(id:number, page:number, row:number, startDate:Date, endDate:Date, nameProduct:string) {
+    this.importOfSupplierService.getImportsOfSupplier(id, page, row, startDate, endDate, nameProduct).subscribe(data => {
       this.importOfSupplieResponse = data as ImportOfSupplieResponse;
+      console.log(this.importOfSupplieResponse)
       this.totalItems = this.importOfSupplieResponse.totalItems;
-
     })
   }
 
@@ -55,7 +59,7 @@ export class ImportOfStatisticComponent implements OnInit {
   paginate(event:any) {
     this.page = event.page;
     this.row = event.rows;
-    this.getImportsOfSupplier(this.idSupplier, this.page, this.row);
+    this.getImportsOfSupplier(this.idSupplier, this.page, this.row, this.startDate, this.endDate, this.nameSearch);
   }
 
   setUpLineChart(data:number[]){
@@ -119,8 +123,28 @@ export class ImportOfStatisticComponent implements OnInit {
   }
 
   selectedYear() {
-    if (this.date10 !== undefined) {
-      this.showLineChart(this.date10.getFullYear(), this.idSupplier);
+    if (this.year !== undefined) {
+      this.showLineChart(this.year.getFullYear(), this.idSupplier);
     }
+  }
+
+
+  nameSearch = "";
+  onSearch() {
+    if (this.startDate != undefined && this.endDate != undefined) {
+      if (this.startDate < this.endDate) {
+        this.getImportsOfSupplier(this.idSupplier, this.page, this.row, this.startDate, this.endDate, this.nameSearch);
+      } else {
+
+        console.log("ádasasdasd")
+        this.messageService.add({severity:'error', summary: 'Error', detail: 'Khoảng ngày giá trị bắt đầu phải nhỏ hơn giá trị kết thúc', life: 3000});
+      }
+    } else {
+      this.getImportsOfSupplier(this.idSupplier, this.page, this.row, this.startDate, this.endDate, this.nameSearch);
+    }
+  }
+
+  backWindow() {
+    this.route.navigate(['admin/statistic-supplier'])  ;
   }
 }

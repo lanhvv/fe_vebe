@@ -19,8 +19,22 @@ export class ImportOfSupplierService {
     }),
   };
 
-  getImportsOfSupplier(idSupplier : number, page : number, row : number) {
-    return  this.httpClient.get(this.api+"/"+idSupplier+"?&page="+page+"&record="+row, this.httpOptions);
+  getImportsOfSupplier(idSupplier : number, page : number, row : number, startDate:Date, endDate:Date, productName:string) {
+    let link = this.api+"/"+idSupplier+"?&page="+page+"&record="+row+"&nameProduct="+productName;
+    if (startDate === undefined && endDate === undefined) {
+
+    } else if (startDate !== undefined && endDate !== undefined) {
+      let start = startDate.getFullYear()+"/"+(startDate.getMonth()+1)+"/"+startDate.getDate();
+      let end = endDate.getFullYear()+"/"+(endDate.getMonth()+1)+"/"+endDate.getDate();
+      link = link+"&startDate="+start+"&endDate="+end;
+    } else if (startDate === undefined) {
+      let end = endDate.getFullYear()+"/"+(endDate.getMonth()+1)+"/"+endDate.getDate();
+      link = link+"&endDate="+end;
+    } else if (endDate === undefined) {
+      let start = startDate.getFullYear()+"/"+(startDate.getMonth()+1)+"/"+startDate.getDate();
+      link = link+"&startDate="+start;
+    }
+    return  this.httpClient.get(link, this.httpOptions);
   }
 
   getImportsOfSupplierLineChart(year : number, id : number) {

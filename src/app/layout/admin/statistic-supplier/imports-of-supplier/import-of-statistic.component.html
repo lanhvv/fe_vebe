@@ -4,7 +4,8 @@
               box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
     <div class="mt-2">
       <div class="container-fluid">
-        <h5>Nhà phân phối: {{importOfSupplieResponse.supplier}}</h5>
+        <a href="admin/statistic-supplier"  class="text-blue">Quay lại</a>
+        <h5 style="display: inline; margin-left: 300px">Nhà phân phối: {{importOfSupplieResponse.supplier}}</h5>
         <div class="row">
           <div class="col-9">
             <div class="card">
@@ -46,7 +47,7 @@
                       <div class="card-body">
                         <h5 class="card-title h6"><label for="yearpicker">Chọn Năm</label></h5>
                         <div>
-                          <p-calendar [(ngModel)]="date10" view="year" dateFormat="yy" inputId="yearpicker" (click)="selectedYear()"></p-calendar>
+                          <p-calendar [(ngModel)]="year" view="year" dateFormat="yy" inputId="yearpicker"  (click)="selectedYear()"></p-calendar>
                         </div>
                       </div>
                     </div>
@@ -60,20 +61,35 @@
     </div>
   </div>
 
-  <div class="container pt-4 main-layout">
-<!--    <div class="row">-->
-<!--      <div class="col-6">-->
-<!--        <div class="input-group mb-3 float-end">-->
-<!--          <form style="width: 100%" (ngSubmit)="onSearch()">-->
-<!--            <div class="input-group mb-3">-->
-<!--              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"-->
-<!--                     placeholder="Nhập tên đơn vị...">-->
-<!--              <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+  <div class="container pt-4 card pb-4 mb-4" style="border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+    <div class="row">
+      <div class="col-6">
+        <div class="input-group mb-3 float-end">
+          <div class="field col-4 md:col-4 ms-2">
+            <span class="p-float-label">
+                <p-calendar id="float-input1" (click)="onSearch()" [(ngModel)]="startDate" inputId="buttonbar"></p-calendar>
+                <label for="float-input1">Ngày bắt đầu</label>
+            </span>
+          </div>
+          <div class="field col-4 md:col-4 ms-2">
+            <span class="p-float-label">
+                <p-calendar id="float-input2" (click)="onSearch()" [(ngModel)]="endDate" inputId="buttonbar"></p-calendar>
+                <label for="float-input2">Ngày kết thúc</label>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <form style="width: 100%" (ngSubmit)="onSearch()" class="float-end me-1">
+          <div class="input-group mb-3">
+            <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"
+                   placeholder="Nhập tên sản phẩm ...">
+            <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+    </div>
+    </div>
 
     <div class="mt-2">
       <div class="container-fluid">
@@ -112,4 +128,5 @@
       </div>
     </div>
   </div>
+  <p-toast></p-toast>
 </main>
