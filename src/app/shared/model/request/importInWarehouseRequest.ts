@@ -1,6 +1,6 @@
 import { Unit } from '../Unit';
 export class ImportInWarehouseRequest {
-   nameProd!:string;
+    nameProd!:string;
     unit!:string;
     description!:string;
     categoryId!:number;

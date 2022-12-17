@@ -120,3 +120,8 @@ label.file-upload-btn {
 >>> .p-fileupload .p-fileupload-buttonbar .p-button{
   width: 120px;
 }
+
+>>> .dropdown_unit_warehouse .dropdown_unit_warehouse{
+  width: 100%;
+  height: 40px;
+}

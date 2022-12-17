@@ -47,7 +47,7 @@ export class ManageAccountComponent implements OnInit {
   createAccountRequest: CreateAccountRequest;
   createAccountResponse: CreateAccountResponse;
   isDialogAccount: boolean = false;
-  isUpdateAccount: boolean= true;
+  isUpdateAccount: boolean= false;
   accountForm!: FormGroup;
   updateForm!: FormGroup;
   regexFullName = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
@@ -208,26 +208,25 @@ export class ManageAccountComponent implements OnInit {
 
   lockAccount(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Khóa tài khoản sẽ gây ảnh hưởng tới việc sử dụng hệ thống, bạn có muốn khóa không?',
+      header: 'Cảnh báo',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.lockAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status == '1') {
             this.ngOnInit();
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Lock success'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Khóa tài khoản thành công!'});
             const currentItem = this.listAccountItems.items.find(item => item.id === request);
             if (currentItem) {
               currentItem.status = 1;
             }
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Khóa tài khoản thất bại!'});
           }
         }, (err) => {
-          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Khóa tài khoản thất bại!'});
         });
-
       },
       reject: (type: any) => {
         switch (type) {
@@ -240,8 +239,9 @@ export class ManageAccountComponent implements OnInit {
         }
       }
     });
-    this.getall()
+    this.getall();
   }
+
   Pageable(event: any) {
     this.page = event.page;
     this.pageSize = event.rows;

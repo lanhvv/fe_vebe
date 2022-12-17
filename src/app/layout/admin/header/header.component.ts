@@ -15,6 +15,7 @@ export class HeaderAdminComponent implements OnInit {
   changePasswordRequest!:ChangePasswordRequest
   baseResponse: BaseResponse;
 
+  showMenuWarehouse: boolean = false;
 
   isDialogChangePass: boolean = false;
   constructor(private translate: TranslateConfigService, private messageService: MessageService,

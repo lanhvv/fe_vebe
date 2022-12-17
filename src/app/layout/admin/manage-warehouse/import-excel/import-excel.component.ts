@@ -239,4 +239,8 @@ export class ImportExcelComponent implements OnInit {
   exportQRCode(code: string, amount: number){
     this.exportQR.export(code, amount, "vi");
   }
+
+  back(){
+    window.history.back();
+  }
 }
