@@ -51,3 +51,7 @@ main {
   background: #E5EFF9 !important;
   border-radius: 5px;
 }
+
+>>>.p-element .p-sidebar-right{
+  width: 81rem !important;
+}

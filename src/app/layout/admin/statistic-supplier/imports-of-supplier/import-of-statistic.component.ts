@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {
   ImportOfSupplierService
 } from "../../../../services/statistic-supplier/import-of-supplier/import-of-supplier.service";
@@ -7,7 +7,7 @@ import {ImportOfSupplieResponse} from "../../../../shared/model/response/ImportO
 import {MessageService} from "primeng/api";
 
 @Component({
-  selector: 'app-manage-unit',
+  selector: 'import-of-statistic',
   templateUrl: './import-of-statistic.component.html',
   styleUrls: ['./import-of-statistic.component.css']
 })
@@ -27,7 +27,7 @@ export class ImportOfStatisticComponent implements OnInit {
   totalItems = 0;
 
   ngOnInit(): void {
-    console.log(this.startDate)
+    this.status = 11;
     this.idSupplier = this.activeRoute.snapshot.params['id'];
     this.getImportsOfSupplier(this.idSupplier, this.page, this.row, this.startDate, this.endDate, this.nameSearch);
     this.showLineChart(this.year.getFullYear(), this.idSupplier);
