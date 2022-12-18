@@ -22,10 +22,11 @@
             <tr>
               <th class="col-1">STT</th>
               <th class="col-1">Tên</th>
-              <th class="col-2">Ngày hợp tác</th>
+              <th class="col-1">Ngày hợp tác</th>
               <th class="col-2">Email</th>
-              <th class="col-2">Địa chỉ</th>
+              <th class="col-1">Địa chỉ</th>
               <th class="col-1">SĐT</th>
+              <th class="col-2">Trạng thái</th>
               <th class="col-1">Số lần nhập</th>
               <th class="col-1"></th>
             </tr>
@@ -38,6 +39,17 @@
               <td>{{item.email}}</td>
               <td>{{item.address}}</td>
               <td>{{item.numberPhone}}</td>
+              <td>
+                <div *ngIf="item.status === 1" class="active">
+                  <p>{{item.statusName}}</p>
+                </div>
+                <div *ngIf="item.status === 2" class="in-active">
+                  <p>{{item.statusName}}</p>
+                </div>
+                <div *ngIf="item.status === 3" class="delete">
+                  <p>{{item.statusName}}</p>
+                </div>
+              </td>
               <td>{{item.numberOfEntry}}</td>
               <td><i class="pi pi-list" (click)="click(item.id)"></i></td>
             </tr>
