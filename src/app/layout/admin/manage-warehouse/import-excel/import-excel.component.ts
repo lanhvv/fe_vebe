@@ -20,6 +20,10 @@ import {ImportService} from "../../../../services/v_import/import.service";
 import {BaseResponse} from "../../../../shared/response/BaseResponse";
 import {ImportWarehouseItemsResponse} from "../../../../shared/response/v_import/ImportWarehouseItemsResponse";
 import {ExportService} from "../../../../services/exportPDF/export.service";
+import {UploadFileService} from "../../../../services/upload_file/upload-file.service";
+import {GetUnitResult} from "../../../../shared/result/v_unit/GetUnitResult";
+
+
 type AOV = any[][];
 
 @Component({
@@ -51,7 +55,7 @@ export class ImportExcelComponent implements OnInit {
   submitted!: boolean;
   productDialog!: boolean;
   getExportsByUnitSelectedResponse!: GetExportsByUnitSelectResponse;
-  importResponse: ImportWarehouseItemsResponse[] = [];
+  importResponse!: ImportWarehouseItemsResponse;
 
   //after import
   isSidebarDialog: boolean = false;
@@ -65,7 +69,8 @@ export class ImportExcelComponent implements OnInit {
               private typeProductService: TypeProductService,
               private unitService: UnitService,
               private importService: ImportService,
-              private exportQR: ExportService) {
+              private exportQR: ExportService,
+              private uploadFileService: UploadFileService) {
     // this.getSuppliersResponse = new GetSuppliersResponse();
   }
 
@@ -183,8 +188,10 @@ export class ImportExcelComponent implements OnInit {
   }
 
   deleteExport(req:ExportResult,request:ImportProductResult){
+    console.log(req);
+    console.log(this.productResponse.products.filter(value => value.id === request.id)[0].exports);
+    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unitId === req.unitId);
     this.saveProducts();
-    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unit !== req.unit);
   }
 
   clear(){
@@ -224,19 +231,50 @@ export class ImportExcelComponent implements OnInit {
 
   import(){
     this.warehouseService.save(this.language!,this.selectedSupplier.supplierId).subscribe(response=>{
-      const importResponse = response as ImportWarehouseItemsResponse;
-      this.importResponse = [importResponse];
-      // if(importResponse.status.status=== '1'){
-      //   this.productResponse=new ImportWarehouseResponse();
-      //   this.success(this.productResponse.status.message);
-      // }else{
-      //   this.failed(this.productResponse.status.message);
-      // }
+      this.importResponse=response as ImportWarehouseItemsResponse;
+      if(this.importResponse.status.status=== '1'){
+        this.productResponse.products = [];
+        this.isSidebarDialog = true;
+        this.success(this.importResponse.status.message);
+      }else {
+        this.failed(this.importResponse.status.message);
+      }
     });
-    this.isSidebarDialog = true;
+
   }
 
   exportQRCode(code: string, amount: number){
-    this.exportQR.export(code, amount, "vi");
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+          const doc = new jsPDF.jsPDF(response);
+          doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+
+  getExportByUnitSelected(unitId: number){
+    const getUnitsResults=[];
+    for (let i = 0; i < this.getUnitResponse.results.length; i++) {
+      if (this.getUnitResponse.results[i].id === unitId){
+        if (this.getUnitResponse.results[i].parentId !== 0){
+          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
+            if (this.getUnitResponse.results[j].id===this.getUnitResponse.results[i].parentId || this.getUnitResponse.results[i].parentId === this.getUnitResponse.results[i].parentId){
+              getUnitsResults.push(this.getUnitResponse.results[j]);
+            }
+          }
+        }else{
+          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
+            if (this.getUnitResponse.results[j].parentId===this.getUnitResponse.results[i].id || this.getUnitResponse.results[i].id === this.getUnitResponse.results[i].id){
+              getUnitsResults.push(this.getUnitResponse.results[j]);
+            }
+          }
+        }
+      }
+    }
+    return getUnitsResults;
   }
 }
