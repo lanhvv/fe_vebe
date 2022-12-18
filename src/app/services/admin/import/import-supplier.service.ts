@@ -59,8 +59,8 @@ export class ImportSupplierService {
     return this.httpClient.get<any>(this.URL + '/getAllRedis-importWarehouse/' + id, this.httpOptions)
   }
 
-  add(request: ImportInWarehouseInRedis[]) {
-    return this.httpClient.post(this.URL + '/done-import', request, this.httpOptions)
+  add(request: ImportInWarehouseInRedis[],language:string) {
+    return this.httpClient.post(this.URL + '/done-import'+'?language='+language, request, this.httpOptions)
   }
 
   deleteById(key: number, redisId: string, language: string) {

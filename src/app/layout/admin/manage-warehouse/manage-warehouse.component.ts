@@ -1,32 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {MessageService, ConfirmEventType, ConfirmationService} from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { MessageService, ConfirmEventType, ConfirmationService } from 'primeng/api';
 import * as XLSX from 'xlsx';
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {ProductService} from "../../../services/admin/product/product.service";
 import {HttpClient} from "@angular/common/http";
-import {GetInfoCreateProdResponse} from 'src/app/shared/model/response/GetInfoCreateProdResponse';
-import {GetSupplierItem} from 'src/app/shared/model/response/GetSupplieritem';
-import {ImportSupplierService} from 'src/app/services/admin/import/import-supplier.service';
-import {ImportInWarehouseInRedis} from 'src/app/shared/model/response/ImportInWarehouseInRedis';
-import {BaseResponse} from 'src/app/shared/response/BaseResponse';
-import {SelectionTypeProductItems} from 'src/app/shared/model/selectionTypeProductItems';
-import {InfoUnitItem} from 'src/app/shared/model/InfoUnitItem';
-import {TranslateConfigService} from 'src/app/services/translate-config.service';
-import {CreateProductResponse} from 'src/app/shared/model/response/CreateProductResponse';
-import {ImportInWarehouseRequest} from 'src/app/shared/model/request/importInWarehouseRequest';
-import {Category} from 'src/app/shared/model/category.model';
-import {GetUnitChildResponse} from 'src/app/shared/model/response/GetUnitChildResponse';
-import {Unit} from 'src/app/shared/model/Unit';
-import {ListImportWarehouseInRedis} from 'src/app/shared/model/response/ListImportWarehouseInRedis';
-import {EditImportWarehouseResponse} from 'src/app/shared/model/response/editImportWarehouseResponse';
-import {UnitService} from 'src/app/services/unit/unit.service';
-import {ImportWarehouseResponse} from '../../../shared/model/response/ImportWarehouseResponse';
-import {BehaviorSubject} from "rxjs";
-import {ZXingScannerComponent} from "@zxing/ngx-scanner";
-import {BarcodeFormat} from "@zxing/library";
-
+import { GetInfoCreateProdResponse } from 'src/app/shared/model/response/GetInfoCreateProdResponse';
+import { GetSupplierItem } from 'src/app/shared/model/response/GetSupplieritem';
+import { ImportSupplierService } from 'src/app/services/admin/import/import-supplier.service';
+import { ImportInWarehouseInRedis } from 'src/app/shared/model/response/ImportInWarehouseInRedis';
+import { BaseResponse } from 'src/app/shared/response/BaseResponse';
+import { SelectionTypeProductItems } from 'src/app/shared/model/selectionTypeProductItems';
+import { InfoUnitItem } from 'src/app/shared/model/InfoUnitItem';
+import { TranslateConfigService } from 'src/app/services/translate-config.service';
+import { CreateProductResponse } from 'src/app/shared/model/response/CreateProductResponse';
+import { ImportInWarehouseRequest } from 'src/app/shared/model/request/importInWarehouseRequest';
+import { Category } from 'src/app/shared/model/category.model';
+import { GetUnitChildResponse } from 'src/app/shared/model/response/GetUnitChildResponse';
+import { Unit } from 'src/app/shared/model/Unit';
+import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListImportWarehouseInRedis';
+import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
+import { UnitService } from 'src/app/services/unit/unit.service';
+import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
 type AOV = any[][];
-
 @Component({
   selector: 'app-manage-warehouse',
   templateUrl: './manage-warehouse.component.html',
@@ -42,71 +37,55 @@ export class ManageWarehouseComponent implements OnInit {
   uploadedFiles: any[] = [];
   listUnit: number[] = [];
   rangeDates?: Date[];
-  wopts: XLSX.WritingOptions = {bookType: 'xlsx', type: 'array'};
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'SheetJS.xlsx';
   excelForm!: FormGroup;
   url: string | ArrayBuffer | null = '';
   enableImage: boolean = false;
-  language!: string;
-  fileId = 0;
+  language!:string;
+  fileId=0;
   id!: number
-  image!: any;
+  image!:any;
   es: any;
 
   currentFile?: File;
   selectedFiles?: FileList;
 
-  createProductRequest: ImportInWarehouseRequest;
-  getInforCreateProductResponse!: GetInfoCreateProdResponse;
-  createProductResponse!: CreateProductResponse;
-  selectedCategory: Category = new Category();
-  selectedSupplier: GetSupplierItem = new GetSupplierItem();
-  selectedUnitParent: InfoUnitItem = new InfoUnitItem();
-  selectedUnitChilds: InfoUnitItem[] = [];
-  unit!: Unit;
-  getUnitChileResponse!: GetUnitChildResponse;
+
+  createProductRequest:ImportInWarehouseRequest;
+  getInforCreateProductResponse!:GetInfoCreateProdResponse;
+  createProductResponse!:CreateProductResponse;
+  selectedCategory: Category =new Category();
+  selectedSupplier: GetSupplierItem=new GetSupplierItem();
+  selectedUnitParent: InfoUnitItem=new InfoUnitItem();
+  selectedUnitChilds: InfoUnitItem[]=[];
+  unit!:Unit;
+  getUnitChileResponse!:GetUnitChildResponse;
   importInWarehouse!: ListImportWarehouseInRedis
-  items: ImportInWarehouseInRedis[] = []
+  items: ImportInWarehouseInRedis[]=[]
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
 
-  importWarehouseResponse: ImportWarehouseResponse[] = []
+  importWarehouseResponse: ImportWarehouseResponse[]=[]
 
   updateWarehouse!: FormGroup;
 
-  units: Unit[] = [];
+  units:Unit[]=[];
 
-  //camera
-  dialogScanQR: boolean = false;
-  enable : boolean = true;
-  hasPermission !: boolean;
-  torchEnabled = false;
-  tryHarder = false;
-  torchAvailable$ = new BehaviorSubject<boolean>(false);
-  scanner !: ZXingScannerComponent;
-  availableDevices !: MediaDeviceInfo[];
-  currentDevice !: MediaDeviceInfo | undefined;
-  enableCameraState : boolean = false;
-  formatsEnabled: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.QR_CODE,
-  ];
 
-  constructor(private messageService: MessageService,
-              private prodService: ProductService,
-              private unitService: UnitService,
-              private translateService: TranslateConfigService, private fb: FormBuilder,
+  constructor(private messageService: MessageService ,
+              private prodService:ProductService,
+              private unitService:UnitService,
+              private translateService:TranslateConfigService,private fb: FormBuilder,
               private confirmationService: ConfirmationService,
               private importService: ImportSupplierService) {
-    this.createProductRequest = new ImportInWarehouseRequest();
-    this.importInWarehouse = new ListImportWarehouseInRedis();
+    this.createProductRequest=new ImportInWarehouseRequest();
+    this.importInWarehouse= new ListImportWarehouseInRedis();
   }
 
   ngOnInit(): void {
-    this.language = this.translateService.getLanguage()!;
+    this.language=this.translateService.getLanguage()!;
     this.status = 8;
     this.getInformations();
   }
@@ -116,42 +95,43 @@ export class ManageWarehouseComponent implements OnInit {
     [3, 4]
   ];
 
-  getAllImportInWarehouse(id: any) {
+  getAllImportInWarehouse(id: any){
     this.importService.getImportInWarehouse(id).subscribe(response => {
       this.items = response as ImportInWarehouseInRedis[];
     });
   }
+  back(){
+    window.history.back();
+  }
+  update(){
+    if(this.selectedCategory!=null){
+      this.edit.categoryId=this.selectedCategory.id as number;
+    }
+    if(this.selectedSupplier!=null){
+      this.edit.supplierId=this.selectedSupplier.id as number;
+      this.edit.supplierName=this.selectedSupplier.name as string;
+    }
+    if(this.selectedUnitParent!=null){
+      this.edit.unitId=this.selectedUnitParent.unitId as number;
+      this.edit.unit=this.selectedUnitParent.unitName as string;
+    }
 
-  update() {
-    if (this.selectedCategory != null) {
-      this.edit.categoryId = this.selectedCategory.id as number;
-    }
-    if (this.selectedSupplier != null) {
-      this.edit.supplierId = this.selectedSupplier.id as number;
-      this.edit.supplierName = this.selectedSupplier.name as string;
-    }
-    if (this.selectedUnitParent != null) {
-      this.edit.unitId = this.selectedUnitParent.unitId as number;
-      this.edit.unit = this.selectedUnitParent.unitName as string;
-    }
-
-    this.edit.fileId = this.fileId;
-    this.importService.update(this.edit, this.edit.supplierId, this.edit.id).subscribe(response => {
+    this.edit.fileId=this.fileId;
+    this.importService.update(this.edit,this.edit.supplierId, this.edit.id).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
-      if (this.createProductResponse.status.status === '1') {
+      if(this.createProductResponse.status.status=== '1'){
         this.getAllImportInWarehouse(this.edit.supplierId);
         this.success(this.createProductResponse.status.message);
         this.updateDisplay = false;
-      } else {
+      }else{
         this.failed(this.createProductResponse.status.message);
-        this.updateDisplay = true;
+           this.updateDisplay = true;
       }
 
     });
 
   }
-
-  deleteById(key: number, redisId: string) {
+  deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',
       header: 'Confirmation',
@@ -163,11 +143,7 @@ export class ManageWarehouseComponent implements OnInit {
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Confirmed',
-              detail: this.baseResponse.status.message
-            });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -186,23 +162,24 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
-
-  getById(key: number, redisId: string) {
+  getById(key:number, redisId: string){
     this.importService.edit(key, redisId, this.language).subscribe(response => {
+      this.selectedCategory = response.category
+      console.log( this.selectedCategory.id,response.categoryId)
       this.edit = response as EditImportWarehouseResponse
-      this.updateDisplay = true
+      this.updateDisplay= true
     });
 
   }
-
-  doneImpport() {
-    this.importService.add(this.items).subscribe(response => {
+  doneImpport(){
+    this.importService.add(this.items, this.language).subscribe(response => {
       this.importWarehouseResponse = response as ImportWarehouseResponse[];
-      for (const iterator of this.importWarehouseResponse) {
-        if (iterator.status.status === '1') {
+      for (const iterator of  this.importWarehouseResponse) {
+        if(iterator.status.status=== '1'){
           this.success(iterator.status.message);
+          this.deleteAll(this.selectedSupplier.id)
 
-        } else {
+        }else{
           this.failed(iterator.status.message);
         }
       }
@@ -211,23 +188,19 @@ export class ManageWarehouseComponent implements OnInit {
 
   }
 
-  deleteAll(key: any) {
+  deleteAll(key: any){
     this.confirmationService.confirm({
       message: 'Do you want to delete this account?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.importService.deleteAll(key, this.language).subscribe(response => {
+        this.importService.deleteAll(key,this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
             this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Confirmed',
-              detail: this.baseResponse.status.message
-            });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -246,49 +219,46 @@ export class ManageWarehouseComponent implements OnInit {
 
   }
 
-  getInformations() {
+  getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id);
+      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
     });
   }
+  create(){
 
-  create() {
-    console.log(this.selectedCategory.id + " dòng 116" + this.createProductRequest.amount)
-    if (this.selectedCategory != null) {
-      this.createProductRequest.categoryId = this.selectedCategory.id;
-      console.log(this.createProductRequest.categoryId + " dòng 186" + this.createProductRequest.inPrice)
+    if(this.selectedCategory!=null){
+      this.createProductRequest.categoryId=this.selectedCategory.id ;
+          console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     }
-    if (this.selectedSupplier != null) {
-      this.createProductRequest.supplierId = this.selectedSupplier.id as number;
-      this.createProductRequest.supplierName = this.selectedSupplier.name as string;
+    if(this.selectedSupplier!=null){
+      this.createProductRequest.supplierId=this.selectedSupplier.id as number;
+      this.createProductRequest.supplierName=this.selectedSupplier.name as string;
     }
-    if (this.selectedUnitParent != null) {
-      this.createProductRequest.unitId = this.selectedUnitParent.unitId as number;
-      this.createProductRequest.unit = this.selectedUnitParent.unitName as string;
+    if(this.selectedUnitParent!=null){
+      this.createProductRequest.unitId=this.selectedUnitParent.unitId as number;
+      this.createProductRequest.unit=this.selectedUnitParent.unitName as string;
     }
 
-    this.createProductRequest.fileId = this.fileId;
+    this.createProductRequest.fileId=this.fileId;
     this.importService.createImportWarehouse(this.createProductRequest).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
-      if (this.createProductResponse.status.status === '1') {
+      if(this.createProductResponse.status.status=== '1'){
         this.success(this.createProductResponse.status.message);
-        this.getAllImportInWarehouse(this.createProductRequest.supplierId);
+        this.getAllImportInWarehouse( this.createProductRequest.supplierId);
         this.display = false;
-      } else {
+      }else{
         this.failed(this.createProductResponse.status.message);
         this.display = true;
       }
     });
-    this.getAllImportInWarehouse(this.createProductRequest.supplierId);
 
   }
-
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
-      // this.createProductRequest.nameProd =response.productName
-      // this.selectedCategory.id = response.category.id
-      // this.createProductRequest.description = response.desciption
+      this.createProductRequest.nameProd =response.productName
+      this.selectedCategory = response.category
+      this.createProductRequest.description = response.desciption
     })
   }
 
@@ -296,27 +266,27 @@ export class ManageWarehouseComponent implements OnInit {
     this.display = true;
   }
 
-  onUpload(event: Event) {
+
+  onUpload(event:Event){
     console.log(event)
-    this.image = event;
-    this.prodService.pushFileToStorage(this.image.currentFiles[0], this.language).subscribe(result => {
-      this.createProductResponse = result as CreateProductResponse;
-      if (this.createProductResponse.status.status === '1') {
-        this.fileId = this.createProductResponse.id;
+    this.image=event;
+    this.prodService.pushFileToStorage(this.image.currentFiles[0],this.language).subscribe(result=>{
+      this.createProductResponse=result as CreateProductResponse;
+      if(this.createProductResponse.status.status=== '1'){
+        this.fileId=this.createProductResponse.id;
         this.success(this.createProductResponse.status.message);
-      } else {
+      }else{
         this.failed(this.createProductResponse.status.message);
       }
     });
   }
+  getUnitChild(){
 
-  getUnitChild() {
-    this.importService.findByUnitId(this.selectedUnitParent.unitId, this.language).subscribe(response => {
+    this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
       this.createProductRequest.units = response as Unit[]
     })
 
   }
-
   pushUnit() {
     if (this.listUnit.length == 0) {
       this.listUnit.push(1);
@@ -331,7 +301,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
 //  upload file excel
-  onFileChange(evt: any) {
+  onFileChange(evt: any){
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>evt.target;
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');
@@ -339,14 +309,14 @@ export class ManageWarehouseComponent implements OnInit {
     reader.onload = (e: any) => {
       /* read workbook */
       const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
 
       /* grab first sheet */
       const wsname: string = wb.SheetNames[0];
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       /* save data */
-      this.data = <AOV>XLSX.utils.sheet_to_json(ws, {header: 1});
+      this.data = <AOV>XLSX.utils.sheet_to_json(ws, { header: 1 });
       console.log(this.data);
       this.excelForm = this.fb.group({
         data: this.fb.array([]),
@@ -364,7 +334,8 @@ export class ManageWarehouseComponent implements OnInit {
     reader.readAsBinaryString(target.files[0]);
   }
 
-  onFileSelectedImage(event: any) {
+  onFileSelectedImage(event: any){
+
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.onload = (event: ProgressEvent) => {
@@ -377,74 +348,22 @@ export class ManageWarehouseComponent implements OnInit {
     }
 
   }
-
-  onRemove() {
-    console.log("remote: " + this.fileId);
-    this.fileId = 0;
+  onRemove(){
+    console.log("remote: "+this.fileId);
+    this.fileId=0;
 
   }
 
-  changeImage() {
+
+  changeImage(){
     this.url = '';
     this.enableImage = false;
   }
-
   success(message: string) {
-    this.messageService.add({
-      severity: 'success',
-      summary: this.translateService.getvalue("message.success"),
-      detail: message
-    });
+    this.messageService.add({severity:'success', summary: this.translateService.getvalue("message.success"), detail: message});
   }
 
   failed(message: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: this.translateService.getvalue("message.failed"),
-      detail: message
-    });
-  }
-
-//  camera
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
-    this.availableDevices = devices;
-  }
-
-  onHasPermission(has: boolean) {
-    this.hasPermission = has;
-  }
-
-  onTorchCompatible(isCompatible: boolean): void {
-    this.torchAvailable$.next(isCompatible || false);
-  }
-
-  //get value scan
-  qrResultString !: string;
-  onCodeResult(resultString: string) {
-    this.qrResultString = resultString;
-    this.dialogScanQR = false;
-    this.currentDevice = undefined;
-    this.createProductRequest.barCode = this.qrResultString;
-    console.log(this.qrResultString);
-  }
-
-  enableCamera() {
-    this.enableCameraState = !this.enableCameraState;
-    if (this.enableCameraState) {
-      this.enable = true;
-      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
-      this.currentDevice = device;
-      console.log(this.currentDevice);
-    } else {
-      this.enable = false;
-      this.currentDevice = undefined;
-    }
-  }
-
-  openDialogScan(){
-    this.enableCamera();
-    setTimeout(() => {
-      this.dialogScanQR = true;
-    });
+    this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 }

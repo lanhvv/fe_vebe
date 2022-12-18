@@ -7,7 +7,8 @@ export class UpdateDebitRequest {
   billId!: number
   address!: string
   typeOfDebtor!: number
-  expectedDateOfPaymentOfDebt!: Date
-  debitItems!: DetailDebitItems[]
+  description!: string
   inPrice!: number;
+  createDate!: Date;
+  total!: number;
 }

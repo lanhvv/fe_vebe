@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {StatisticSupplierService} from "../../../services/statistic-supplier/statistic-supplier.service";
 import {StatisticSupplierResponse} from "../../../shared/model/response/StatisticSupplierResponse";
 import {AppRoutingModule} from "../../../app-routing.module";
@@ -23,6 +23,7 @@ export class StatisticSupplierComponent implements OnInit {
               private route:Router) {}
 
   ngOnInit(): void {
+    this.status = 11;
     this.getAll(this.name, this.page, this.row);
   }
 
@@ -41,7 +42,7 @@ export class StatisticSupplierComponent implements OnInit {
 
 
   click(id:number) {
-    this.route.navigate(['admin/import',id])  ;
+    this.route.navigate(['admin/import',id]);
   }
 
   onSearch() {

@@ -31,7 +31,9 @@ import {CardModule} from "primeng/card";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { ManageProfileComponent } from './manage-profile/manage-profile.component';
 import { DebitComponent } from './debit/debit.component';
-import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {InputTextModule} from 'primeng/inputtext';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import { FormGroup, FormControl, Validators ,ReactiveFormsModule } from '@angular/forms'
 @NgModule({
   declarations: [
     ListProductComponent,
@@ -67,6 +69,9 @@ import {CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     TreeSelectModule,
     CardModule,
     ZXingScannerModule,
+    InputTextModule,
+    InputTextareaModule,
+    ReactiveFormsModule
   ],
   exports:[
     SellOfflineComponent

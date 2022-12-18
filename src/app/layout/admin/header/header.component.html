@@ -8,10 +8,10 @@
            class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
           <span translate><i class="fa-solid fa-house fw-bold me-2"></i> sidebar.home</span>
         </a>
-        <a routerLink="/admin/manage-order" [ngClass]="{'active': Status === 2 }"
-           class="list-group-item list-group-item-action py-2 ripple">
-          <span translate><i class="fa-solid fa-clipboard-list fw-bold me-2"></i> sidebar.management.order</span>
-        </a>
+<!--        <a routerLink="/admin/manage-order" [ngClass]="{'active': Status === 2 }"-->
+<!--           class="list-group-item list-group-item-action py-2 ripple">-->
+<!--          <span translate><i class="fa-solid fa-clipboard-list fw-bold me-2"></i> sidebar.management.order</span>-->
+<!--        </a>-->
         <a routerLink="/admin/manage-account" [ngClass]="{'active': Status === 3 }"
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-circle-user fw-bold me-2"></i> sidebar.management.account</span>
@@ -20,10 +20,26 @@
 <!--           class="list-group-item list-group-item-action py-2 ripple">-->
 <!--          <span translate><i class="fa-solid fa-handshake-simple fw-bold me-2"></i> sidebar.management.customer</span>-->
 <!--        </a>-->
-        <a routerLink="/admin/manage-distributor" [ngClass]="{'active': Status === 5 }"
-           class="list-group-item list-group-item-action py-2 ripple">
-          <span translate><i class="fa-solid fa-users fw-bold me-2"></i> sidebar.management.distributor</span>
+        <a (click)="showMenuDistributor = !showMenuDistributor" class="list-group-item list-group-item-action py-2 ripple">
+          <span>
+            <i class="fa-solid fa-users fw-bold me-2"></i>
+            Nhà cung cấp
+            <i class="fa-solid fa-chevron-right float-end me-1 mt-1" *ngIf="!showMenuDistributor"></i>
+            <i class="fa-solid fa-chevron-down float-end me-1 mt-1" *ngIf="showMenuDistributor"></i>
+          </span>
         </a>
+        <div class="toggle_menu_warehouse" *ngIf="showMenuDistributor">
+          <a routerLink="/admin/manage-distributor" [ngClass]="{'active': Status === 5 }" class="list-group-item list-group-item-action py-2 ripple cursor-pointer">
+            <span>
+              Quản lý nhà cung cấp
+            </span>
+          </a>
+          <a routerLink="/admin/statistic-supplier" [ngClass]="{'active': Status === 11 }" class="list-group-item list-group-item-action py-2 ripple cursor-pointer">
+            <span>
+              Báo cáo thống kê
+            </span>
+          </a>
+        </div>
         <a routerLink="/admin/manage-product" [ngClass]="{'active': Status === 6 }"
            class="list-group-item list-group-item-action py-2 ripple">
           <span translate><i class="fa-solid fa-box-archive fw-bold me-2"></i> sidebar.management.product</span>

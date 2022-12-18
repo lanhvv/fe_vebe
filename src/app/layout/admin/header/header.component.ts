@@ -16,6 +16,7 @@ export class HeaderAdminComponent implements OnInit {
   baseResponse: BaseResponse;
 
   showMenuWarehouse: boolean = false;
+  showMenuDistributor: boolean = false;
 
   isDialogChangePass: boolean = false;
   constructor(private translate: TranslateConfigService, private messageService: MessageService,

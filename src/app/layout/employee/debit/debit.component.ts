@@ -16,6 +16,9 @@ import { UpdateDebitRequest } from '../../../shared/model/request/updateDebitReq
 import { PayRequest } from '../../../shared/model/request/PayRequest';
 import { ListPayRequest } from '../../../shared/model/request/ListPayRequest';
 import { DebitUserItemsResponse } from '../../../shared/model/response/debitUserItemsResponse';
+import { BillItems } from '../../../shared/model/billItems';
+import { ListBillItems } from '../../../shared/model/response/ListBillItems';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-debit',
@@ -32,6 +35,7 @@ export class DebitComponent implements OnInit {
   display: boolean = false;
   uploadedFiles: any[] = [];
   toltal: number = 0;
+  updateDebt!: FormGroup;
 
   listUnit: number[] = [];
   getUnitChileResponse!: GetUnitChildResponse;
@@ -41,7 +45,7 @@ export class DebitComponent implements OnInit {
   debitItems: DebitDetailItems[] = []
   payRequest!: PayRequest
   payRequests: ListPayRequest
-  value!: Date
+
 
   debitUserItemsResponse: DebitUserItemsResponse;
 
@@ -49,6 +53,8 @@ export class DebitComponent implements OnInit {
   debitItemsResponses: DebitItemsResponse[] = [];
   debitItemsResponse: DebitItemsResponse;
   getOrderRequest!: GetOrderRequest;
+  billItems:  ListBillItems
+  billItem:  BillItems
   page: number = 0;
   pageSize: number = 10;
   filter!: Filter;
@@ -76,45 +82,42 @@ export class DebitComponent implements OnInit {
     this.payRequests = new ListPayRequest()
     this.debitUserItemsResponse = new DebitUserItemsResponse();
     this.editDebitRequest = new UpdateDebitRequest()
+    this.billItems = new ListBillItems()
+    this.billItem = new BillItems()
+
   }
 
   ngOnInit(): void {
     this.getallListUser()
-  this.value= new Date("Wed Dec 14 2022 00:00:00 GMT+0700 (Indochina Time)")
-  }
-  // convert() {
-  //   var date = new Date(this.updateDebitRequest.expectedDateOfPaymentOfDebt),
-  //     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-  //     day = ("0" + date.getDate()).slice(-2);
-  //   return [date.getFullYear(), mnth, day].join("-");
-  // }
+    this.getTop10()
 
-  gettotal(request: number) {
-    let sum = 0;
-    // for (let index = 0; index < this.createDebitRequest.debitItems.length-1; index++) {
-    //  if(this.createDebitRequest.debitItems[index].inPrice== null || this.createDebitRequest.debitItems[index].inPrice ==0){
-    //   this.createDebitRequest.debitItems[index].inPrice==0
-    //  }
-    this.toltal += Number(request) as number
-    console.log(request + " dòng76" + this.toltal)
-    this.createDebitRequest.totalAmountOwed = this.toltal as number
-    // var arrInputs = document.getElementsByTagName("input");
-    // for (var i = 0; i < arrInputs.length; i++) {
-    //     var oCurInput = arrInputs[i];
-    //     if (oCurInput.type == "text")
-    //         oCurInput.value = oCurInput.defaultValue;
-    // }
-    // console.log(this.createDebitRequest.debitItems.length +" dòng76" + this.toltal)
-    // console.log(this.createDebitRequest.totalAmountOwed +" dòng97" + this.toltal)
+  }
+
+  searchByName(request: string) {
+    this.searchText = request;
+    this.filter = {"typeFilter": "none", "valueFilter": "none"}
+    this.getOrderRequest = {
+      "page": this.page,
+      "pageSize": this.pageSize,
+      "filter": this.filter,
+      "language": "vi",
+      searchText: this.searchText
+    };
+    this.debitService.listUserDebit(this.getOrderRequest).subscribe((response) => {
+      this.debitUserItemsResponse = response as DebitUserItemsResponse;
+      console.log(response);
+    });
   }
   update(id: number){
+    this.updateDebitRequest.billId = this.billItem.id as number
     this.debitService.update(id,this.updateDebitRequest).subscribe(response => {
       this.debitResponse = response as DebitResponse
       if (this.debitResponse.status.status == '1') {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Add Account success', life: 3000 });
+        this.getallListUser()
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.debitResponse.status.message, life: 3000 });
       }
       else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Add Account failse', life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail:this.debitResponse.status.message, life: 3000 });
       }
     })
   }
@@ -148,24 +151,31 @@ export class DebitComponent implements OnInit {
     });
     this.dialogVisible = true;
   }
-  //  debitItems!: DetailDebitItems[]
-  getById(request: number) {
-    this.debitService.getById(request).subscribe((response) => {
-      this.updateDebitRequest = response as UpdateDebitRequest;
 
-      this.updateDialog = true;
-    });
-  }
-  getByUpdate(request: number) {
-    this.debitService.getById(request).subscribe((response) => {
-      this.updateDebitRequest = response as UpdateDebitRequest;
+  getById(request: number) {
+    this.debitService.getById(request).subscribe(data => {
+      this.billItem.id = data.billId as number
+      this.billItem.createDate = data.createDate as Date
+      this.billItem.total = data.total
+      this.updateDebitRequest = data as UpdateDebitRequest;
 
       this.payDialog = true;
     });
   }
-  getDetailBill() {
-    this.debitService.getDetailBill(this.createDebitRequest.billId).subscribe((response) => {
-      this.createDebitRequest.debitItems = response as DetailDebitItems[];
+  getByUpdate(request: number) {
+    this.debitService.getById(request).subscribe((data) => {
+
+      this.billItem.id = data.billId as number
+      this.billItem.createDate = data.createDate as Date
+      this.billItem.total = data.total
+      this.updateDebitRequest = data as UpdateDebitRequest;
+
+      this.updateDialog = true;
+    });
+  }
+  getTop10(){
+    this.debitService.getTop10().subscribe((response) => {
+      this.billItems = response as ListBillItems;
     });
   }
   pay() {
@@ -173,22 +183,27 @@ export class DebitComponent implements OnInit {
     this.debitService.pay(this.updateDebitRequest.idDebit, this.payRequest).subscribe(response => {
       this.debitResponse = response as DebitResponse
       if (this.debitResponse.status.status == '1') {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Add Account success', life: 3000 });
+         this.getallListUser()
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.debitResponse.status.message, life: 3000 });
       }
       else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Add Account failse', life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail:  this.debitResponse.status.message, life: 3000 });
       }
     })
 
   }
   create() {
+    this.createDebitRequest.billId = this.billItem.id as number
+    console.log(this.createDebitRequest.billId)
     this.debitService.create(this.createDebitRequest).subscribe(response => {
+
       this.debitResponse = response as DebitResponse
       if (this.debitResponse.status.status == '1') {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Add Account success', life: 3000 });
+        this.getallListUser()
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail:  this.debitResponse.status.message, life: 3000 });
       }
       else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Add Account failse', life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail:  this.debitResponse.status.message, life: 3000 });
       }
     })
   }

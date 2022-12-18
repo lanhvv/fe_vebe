@@ -43,13 +43,13 @@ export class ManagerAccountService {
     return this.httpClient.get(this.URL+'edit/'+request+'?language='+language,this.httpOptions);
   }
   deleteAccount(request: number,language:string):Observable<any>{
-    return this.httpClient.post<any>(this.URL+'delete/'+request+'?language='+language,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'delete/'+request+'?language='+language,null,this.httpOptions);
   }
   unlockAccount(request: number,language:string):Observable<any>{
-    return this.httpClient.post<any>(this.URL+'unlock/'+request+'?language='+language,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'unlock/'+request+'?language='+language,null,this.httpOptions);
   }
   lockAccount(request: number,language:string):Observable<any>{
-    return this.httpClient.post<any>(this.URL+'lock/'+request+'?language='+language,this.httpOptions);
+    return this.httpClient.post<any>(this.URL+'lock/'+request+'?language='+language,null,this.httpOptions);
   }
   checkAccount(request: CreateAccountRequest):Observable<any>{
     return this.httpClient.post<any>(this.URL+'checkAccount', request,this.httpOptions);
