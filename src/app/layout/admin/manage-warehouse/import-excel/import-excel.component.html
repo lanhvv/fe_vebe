@@ -150,8 +150,21 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
               <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                    <div>{{product.unit.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-unit pTemplate="item">
+                  <div class="unit" >
+                    <div>{{unit.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit!=null">
+              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -217,7 +230,7 @@
 <!--preview after import-->
 <p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
   <h5>Xuất thông tin sản phẩm</h5>
-  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse">
+  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse.items" *ngIf="this.importResponse!=null && this.importResponse.status.status==='1'">
     <ng-template pTemplate="header">
       <tr>
         <th class="th-table">Tên sản phẩm</th>
@@ -238,7 +251,7 @@
         <td>{{product.inPrice}}</td>
         <td>{{product.amount}}</td>
         <td>
-          <button class="root-btn" (click)="exportQRCode(product.qrCode, product.amount)">Xuất mã vạch</button>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
         </td>
       </tr>
     </ng-template>
