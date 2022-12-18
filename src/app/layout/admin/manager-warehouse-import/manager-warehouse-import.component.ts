@@ -95,7 +95,7 @@ export class ManagerWarehouseImportComponent implements OnInit {
     });
   }
   doneImpport(){
-    this.importService.add(this.data).subscribe(response => {
+    this.importService.add(this.data, this.language).subscribe(response => {
       // this.createProductResponse = response as CreateProductResponse;
       // if(this.createProductResponse.status.status=== '1'){
       //   this.success(this.createProductResponse.status.message);

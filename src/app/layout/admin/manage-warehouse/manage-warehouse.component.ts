@@ -164,17 +164,20 @@ export class ManageWarehouseComponent implements OnInit {
   }
   getById(key:number, redisId: string){
     this.importService.edit(key, redisId, this.language).subscribe(response => {
+      this.selectedCategory = response.category
+      console.log( this.selectedCategory.id,response.categoryId)
       this.edit = response as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
   }
   doneImpport(){
-    this.importService.add(this.items).subscribe(response => {
+    this.importService.add(this.items, this.language).subscribe(response => {
       this.importWarehouseResponse = response as ImportWarehouseResponse[];
       for (const iterator of  this.importWarehouseResponse) {
         if(iterator.status.status=== '1'){
           this.success(iterator.status.message);
+          this.deleteAll(this.selectedSupplier.id)
 
         }else{
           this.failed(iterator.status.message);
@@ -253,9 +256,9 @@ export class ManageWarehouseComponent implements OnInit {
   }
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
-      // this.createProductRequest.nameProd =response.productName
-      // this.selectedCategory.id = response.category.id
-      // this.createProductRequest.description = response.desciption
+      this.createProductRequest.nameProd =response.productName
+      this.selectedCategory = response.category
+      this.createProductRequest.description = response.desciption
     })
   }
 
@@ -263,24 +266,7 @@ export class ManageWarehouseComponent implements OnInit {
     this.display = true;
   }
 
-  // onUpload(){
 
-  //   if (this.selectedFiles) {
-  //     const file: File | null = this.selectedFiles.item(0);
-
-  //     if (file) {
-  //       this.currentFile = file;
-  //       this.prodService.pushFileToStorage(this.currentFile,this.language).subscribe(result=>{
-  //         this.createProductResponse=result as CreateProductResponse;
-  //         if(this.createProductResponse.status.status=== '1'){
-  //           this.fileId=this.createProductResponse.id;
-  //         }else{
-  //         }
-  //       });
-  //     }
-  //   }
-
-  // }
   onUpload(event:Event){
     console.log(event)
     this.image=event;
@@ -295,15 +281,7 @@ export class ManageWarehouseComponent implements OnInit {
     });
   }
   getUnitChild(){
-    // this.unitService.getChild(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-    //   this.getUnitChileResponse = response as GetUnitChildResponse;
-    //   if(this.getUnitChileResponse.status.status=== '0'){
-    //     this.failed(this.getUnitChileResponse.status.message);
-    //   }else{
-    //     this.unit=this.unit={"unitName":"","inPrice":0,"outPrice":0,"parentId":0,"unitId":0};
-    //     this.createProductRequest.units.push(this.unit);
-    //   }
-    // })
+
     this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
       this.createProductRequest.units = response as Unit[]
     })

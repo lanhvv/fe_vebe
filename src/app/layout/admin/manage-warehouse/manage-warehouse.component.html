@@ -36,26 +36,23 @@
       <p-table [value]="items">
         <ng-template pTemplate="header">
           <tr>
-            <th>
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
             <th pSortableColumn="stt">STT
               <p-sortIcon field="stt"></p-sortIcon>
             </th>
-            <th pSortableColumn="code">Mã sản phẩm
-              <p-sortIcon field="code"></p-sortIcon>
+            <th pSortableColumn="barcode">Mã sản phẩm
+              <p-sortIcon field="barcode"></p-sortIcon>
             </th>
-            <th pSortableColumn="name">Tên sản phẩm
-              <p-sortIcon field="name"></p-sortIcon>
+            <th pSortableColumn="productName">Tên sản phẩm
+              <p-sortIcon field="productName"></p-sortIcon>
             </th>
-            <th pSortableColumn="quantity">Số lượng
-              <p-sortIcon field="quantity"></p-sortIcon>
+            <th pSortableColumn="inAmount">Số lượng
+              <p-sortIcon field="inAmount"></p-sortIcon>
             </th>
-            <th pSortableColumn="price">Giá nhập
-              <p-sortIcon field="price"></p-sortIcon>
+            <th pSortableColumn="inPrice">Giá nhập
+              <p-sortIcon field="inPrice"></p-sortIcon>
             </th>
-            <th pSortableColumn="price">Hạn dùng
-              <p-sortIcon field="price"></p-sortIcon>
+            <th pSortableColumn="rangeDate">Hạn dùng
+              <p-sortIcon field="rangeDate"></p-sortIcon>
             </th>
             <th pSortableColumn="price">Nhà cung cấp
               <p-sortIcon field="price"></p-sortIcon>
@@ -65,7 +62,6 @@
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
-            <td></td>
             <td></td>
             <td>{{product.barcode}}</td>
             <td>{{product.productName}}</td>
@@ -101,7 +97,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
           </div>
           <div class="mb-3">
             <label for="code" class="form-label">Barcode</label>
-            <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}" (change)="getProductByBarcode()"  class="form-control" id="code">
+            <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}"  (ngModelChange)="getProductByBarcode()"  class="form-control" id="code">
           </div>
           <div class="mb-3">
             <label for="name" class="form-label">Tên sản phẩm</label>
@@ -110,7 +106,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
           <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
-            <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
+            <p-dropdown  dataKey="id" [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
              optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
               <ng-template let-category pTemplate="selectedItem">
                   <div class="category-item">
@@ -124,7 +120,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
+            <p-dropdown  dataKey="unitId" inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
             [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false"
             filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
@@ -215,30 +211,30 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
           </div>
           <div class="mb-3">
             <label for="code" class="form-label">Barcode</label>
-            <input type="text" [(ngModel)]="edit.barCode" [ngModelOptions]="{standalone: true}" (change)="getProductByBarcode()"  class="form-control" id="code">
+            <input type="text" [(ngModel)]="edit.barCode" [ngModelOptions]="{standalone: true}" (ngModelChange)="getProductByBarcode()"  class="form-control" id="code">
           </div>
           <div class="mb-3">
             <label for="name" class="form-label">Tên sản phẩm</label>
             <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control">
           </div>
+
           <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
-            <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
-                        optionLabel="name" optionValue="id" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
-              <ng-template let-country pTemplate="selectedItem" >
-                <div class="country-item">
-                  <div >{{country.name}}</div>
-                </div>
+            <p-dropdown  dataKey="id" [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory"
+             optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
+              <ng-template let-category pTemplate="selectedItem">
+                  <div class="category-item">
+                      <div>{{category.name}}</div>
+                  </div>
               </ng-template>
-
-            </p-dropdown> <br>
-
+          </p-dropdown> <br>
             <a class="text-category mt-3 text-decoration-none" translate>product.category.create</a>
           </div>
+
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
+            <p-dropdown  dataKey="unitId" inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
                 <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
                   <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>

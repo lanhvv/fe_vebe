@@ -9,7 +9,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class ProductService {
-  api=AUTH_API+"/product";
+  api=AUTH_API+"product";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
