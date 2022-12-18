@@ -3,7 +3,7 @@
   <div class="content">
     <div class="row">
       <div class="float-start mb-3">
-        <a type="button" routerLink="/admin/manage-warehouse" class="root-btn text-center text-decoration-none p-2 me-4">
+        <a type="button" (click)="back()" class="root-btn text-center text-decoration-none p-2 me-4">
           <i class="fa-solid fa-arrow-left me-3"></i>
           Quay lại
         </a>
@@ -54,7 +54,7 @@
         <ng-template pTemplate="right">
           <p-fileUpload
             styleClass="root-btn-upload"
-            (onUpload)="importWarehouse($event)"
+            (onSelect)="importWarehouse($event)"
             chooseLabel="Nhập file"
             mode="basic"
             accept=".xlsx"
@@ -67,7 +67,7 @@
             pButton pRipple
             label="Hoàn thành"
             class="root-btn ms-3"
-            [disabled]="!productResponse || !productResponse.products.length"
+            [disabled]="!productResponse"
             (mousedown)="import()" ></button>
         </ng-template>
       </p-toolbar>
@@ -76,8 +76,8 @@
         <p>Chuyển đổi file nhập dưới dạng .xlsx hoặc .xls trước khi tải lên.</p>
         <p>File nhập có dung lượng tối đa 200MB và 500 bản ghi.</p>
       </div>
-      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']"
-               [(selection)]="selectedProducts" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <p-table id="base" *ngIf="this.productResponse!=null && this.productResponse.status.status=='1'" #dt [value]="this.productResponse.products" [rows]="10" [paginator]="true"
+               [(selection)]="selectedProducts" dataKey="id" [showCurrentPageReport]="true">
         <ng-template pTemplate="header">
           <tr>
             <th class="th-table" style="width: 4rem">
@@ -150,8 +150,21 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1'">
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
               <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                    <div>{{product.unit.name}}</div>
+                  </div>
+                </ng-template>
+                <ng-template let-unit pTemplate="item">
+                  <div class="unit" >
+                    <div>{{unit.name}}</div>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit!=null">
+              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -208,13 +221,39 @@
             </td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="summary">
-          <div class="flex align-items-center justify-content-between">
-            In total there are {{this.productResponse.products ? productResponse.products.length : 0 }} products.
-          </div>
-        </ng-template>
       </p-table>
   </div>
 </div>
 </div>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<!--preview after import-->
+<p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
+  <h5>Xuất thông tin sản phẩm</h5>
+  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse.items" *ngIf="this.importResponse!=null && this.importResponse.status.status==='1'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="th-table">Tên sản phẩm</th>
+        <th class="th-table">Mã sản phẩm</th>
+        <th class="th-table">QR code</th>
+        <th class="th-table">Hạn sử dụng</th>
+        <th class="th-table">Giá nhập</th>
+        <th class="th-table">Số lượng</th>
+        <th class="th-table">Thao tác</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.productName}}</td>
+        <td>{{product.productCode}}</td>
+        <td>{{product.qrCode}}</td>
+        <td>{{product.rangeDate | date: "dd/MM/yyyy"}}</td>
+        <td>{{product.inPrice}}</td>
+        <td>{{product.amount}}</td>
+        <td>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-sidebar>

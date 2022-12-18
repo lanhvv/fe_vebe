@@ -36,23 +36,26 @@
       <p-table [value]="items">
         <ng-template pTemplate="header">
           <tr>
+            <th>
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
             <th pSortableColumn="stt">STT
               <p-sortIcon field="stt"></p-sortIcon>
             </th>
-            <th pSortableColumn="barcode">Mã sản phẩm
-              <p-sortIcon field="barcode"></p-sortIcon>
+            <th pSortableColumn="code">Mã sản phẩm
+              <p-sortIcon field="code"></p-sortIcon>
             </th>
-            <th pSortableColumn="productName">Tên sản phẩm
-              <p-sortIcon field="productName"></p-sortIcon>
+            <th pSortableColumn="name">Tên sản phẩm
+              <p-sortIcon field="name"></p-sortIcon>
             </th>
-            <th pSortableColumn="inAmount">Số lượng
-              <p-sortIcon field="inAmount"></p-sortIcon>
+            <th pSortableColumn="quantity">Số lượng
+              <p-sortIcon field="quantity"></p-sortIcon>
             </th>
-            <th pSortableColumn="inPrice">Giá nhập
-              <p-sortIcon field="inPrice"></p-sortIcon>
+            <th pSortableColumn="price">Giá nhập
+              <p-sortIcon field="price"></p-sortIcon>
             </th>
-            <th pSortableColumn="rangeDate">Hạn dùng
-              <p-sortIcon field="rangeDate"></p-sortIcon>
+            <th pSortableColumn="price">Hạn dùng
+              <p-sortIcon field="price"></p-sortIcon>
             </th>
             <th pSortableColumn="price">Nhà cung cấp
               <p-sortIcon field="price"></p-sortIcon>
@@ -62,6 +65,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
+            <td></td>
             <td></td>
             <td>{{product.barcode}}</td>
             <td>{{product.productName}}</td>
@@ -97,7 +101,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
           </div>
           <div class="mb-3">
             <label for="code" class="form-label">Barcode</label>
-            <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}"  (ngModelChange)="getProductByBarcode()"  class="form-control" id="code">
+            <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}" (change)="getProductByBarcode()"  class="form-control" id="code">
           </div>
           <div class="mb-3">
             <label for="name" class="form-label">Tên sản phẩm</label>
@@ -106,7 +110,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
           <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
-            <p-dropdown  dataKey="id" [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
+            <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
              optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a category">
               <ng-template let-category pTemplate="selectedItem">
                   <div class="category-item">
@@ -120,7 +124,7 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <p-dropdown  dataKey="unitId" inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
+            <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
             [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false"
             filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
@@ -202,20 +206,23 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 <p-dialog header="Nhập kho" [(visible)]="updateDisplay" [modal]="true" [style]="{width: '1034px', height: '630px'}"
           [draggable]="false" [resizable]="false">
   <div class="container-fluid">
-    <form >
+    <form>
       <div class="row">
         <div class="col-6" style="margin-right: auto">
           <div class="mb-3">
-            <label for="code" class="form-label">Nhà Cung Cấp</label>
-            <input type="text" [(ngModel)]="edit.supplierName" [ngModelOptions]="{standalone: true}" class="form-control" id="ncc">
+            <label for="distributor_update" class="form-label">Nhà cung cấp</label>
+            <input type="text" [(ngModel)]="edit.supplierName" [ngModelOptions]="{standalone: true}"
+                   class="form-control" id="distributor_update">
           </div>
           <div class="mb-3">
-            <label for="code" class="form-label">Barcode</label>
-            <input type="text" [(ngModel)]="edit.barCode" [ngModelOptions]="{standalone: true}" (ngModelChange)="getProductByBarcode()"  class="form-control" id="code">
+            <label for="barcode_product_update" class="form-label">Mã sản phẩm</label>
+            <input type="text" [(ngModel)]="edit.barCode" [ngModelOptions]="{standalone: true}"
+                   (change)="getProductByBarcode()" class="form-control" id="barcode_product_update">
           </div>
           <div class="mb-3">
-            <label for="name" class="form-label">Tên sản phẩm</label>
-            <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control">
+            <label for="name_product_update" class="form-label">Tên sản phẩm</label>
+            <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control"
+                   id="name_product_update">
           </div>
 
           <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
@@ -234,30 +241,38 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
         </div>
         <div class="col-6">
           <div class="mb-3">
-            <p-dropdown  dataKey="unitId" inputId="dropdown" [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent" [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name" [showClear]="true" placeholder="Select a unit" (onChange)="getUnitChild()">
+            <label class="form-label-category" label="unit_product_update">Đơn vị sản phẩm</label>
+            <p-dropdown styleClass="dropdown_warehouse" id="unit_product_update"
+                        [options]="getInforCreateProductResponse.unitItems" [(ngModel)]="selectedUnitParent"
+                        [ngModelOptions]="{standalone: true}" optionLabel="unitName" [filter]="false" filterBy="name"
+                        placeholder="Lựa chọn đơn vị" (onChange)="getUnitChild()">
               <ng-template pTemplate="selectedItem">
                 <div class="unit-item unit-item-value" *ngIf="selectedUnitParent">
-                  <div>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</div>
+                  <p>{{selectedUnitParent.unitName}} - {{selectedUnitParent.description}}</p>
                 </div>
               </ng-template>
               <ng-template let-unitItem pTemplate="unititem">
                 <div class="unit-Item">
-                  <div>{{unitItem.unitName}} - {{unitItem.description}}</div>
+                  <p>{{unitItem.unitName}} - {{unitItem.description}}</p>
                 </div>
               </ng-template>
             </p-dropdown>
           </div>
           <div class="mb-3">
-            <label for="in-price" class="form-label">Số lượng nè </label>
-            <input type="text" [(ngModel)]="edit.amount"  [ngModelOptions]="{standalone: true}" class="form-control">
+            <label for="amount_update" class="form-label">Số lượng</label>
+            <input type="text" id="amount_update" [(ngModel)]="edit.amount" [ngModelOptions]="{standalone: true}"
+                   class="form-control">
           </div>
           <div class="mb-3">
-            <label for="out-price" class="form-label">Giá nhập</label>
-            <input type="text"  [(ngModel)]="edit.inPrice"  [ngModelOptions]="{standalone: true}" class="form-control" >
+            <label for="in_price_update" class="form-label">Giá nhập</label>
+            <input type="text" id="in_price_update" [(ngModel)]="edit.inPrice" [ngModelOptions]="{standalone: true}"
+                   class="form-control">
           </div>
           <div class="mb-3">
-            <label [for]="date" class="form-label">Hạn sử dụng</label> <br>
+            <label for="hsd_update" class="form-label">Hạn sử dụng</label> <br>
             <p-calendar
+              id="hsd_update"
+              styleClass="dropdown_warehouse"
               [(ngModel)]="edit.rangeDates" [ngModelOptions]="{standalone: true}" [locale]="es"
               selectionMode="range"
               styleClass="inputCalendar"
@@ -304,4 +319,20 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
       </div>
     </form>
   </div>
+</p-dialog>
+
+<!--scan mã vạch-->
+<p-dialog header="" [(visible)]="dialogScanQR" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
+  <!--  <button (click)="enableCamera()">Camera</button>-->
+  <zxing-scanner
+    (camerasFound)="onCamerasFound($event)"
+    (scanSuccess)="onCodeResult($event)"
+    [torch]="torchEnabled"
+    [tryHarder]="tryHarder"
+    (permissionResponse)="onHasPermission($event)"
+    [(device)]="currentDevice"
+    (torchCompatible)="onTorchCompatible($event)"
+    [enable] = "enable"
+    [formats]="formatsEnabled"
+  ></zxing-scanner>
 </p-dialog>

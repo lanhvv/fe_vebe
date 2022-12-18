@@ -31,10 +31,10 @@ export class ManageUnitComponent implements OnInit {
   constructor(private unitService : UnitService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService) {
+    this.status = 9;
   }
 
   ngOnInit(): void {
-    this.status = 9;
     this.unit.amount = 1;
     this.load();
   }
@@ -332,7 +332,7 @@ export class ManageUnitComponent implements OnInit {
       }
     }
 
-    console.log(flag);
+    // console.log(flag);
 
     if (flag == true) {
       this.editUnitParentDialog = false;

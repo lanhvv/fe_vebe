@@ -51,6 +51,7 @@ label.file-upload-btn {
 input[type="file"] {
   display: none;
 }
+
 .custom-file-upload {
   border: 1px solid #ccc;
   display: inline-block;
@@ -91,4 +92,8 @@ input[type="file"] {
 
 .th-table{
   background-color: #E5EFF9 !important;
+}
+
+>>>.p-element .p-sidebar-right{
+  width: 81rem !important;
 }

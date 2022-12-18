@@ -60,8 +60,11 @@ import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel
 import {Toolbar, ToolbarModule} from "primeng/toolbar";
 import {CellComponent} from "./share/cell.component";
 import {InputSwitchModule} from 'primeng/inputswitch';
+import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-supplier/import-of-statistic.component";
+import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
 import { ManageTypeProductComponent } from './manage-type-product/manage-type-product.component';
 import {TreeTableModule} from "primeng/treetable";
+import {SidebarModule} from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -90,6 +93,8 @@ import {TreeTableModule} from "primeng/treetable";
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
+    ImportOfStatisticComponent,
+    StatisticSupplierComponent,
     ManageTypeProductComponent,
   ],
   imports: [
@@ -130,7 +135,8 @@ import {TreeTableModule} from "primeng/treetable";
     QRCodeModule,
     ToolbarModule,
     InputSwitchModule,
-    TreeTableModule
+    TreeTableModule,
+    SidebarModule
   ],
   providers: [ConfirmationService, MessageService],
   exports: [HomeComponent, SellPosComponent]

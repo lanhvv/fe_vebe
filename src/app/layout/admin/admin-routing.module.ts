@@ -23,6 +23,8 @@ import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcod
 // import * as path from "path";
 // import * as path from "path";
 import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
+import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-supplier/import-of-statistic.component";
+import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
 import {ManageTypeProductComponent} from "./manage-type-product/manage-type-product.component";
 
 
@@ -145,6 +147,14 @@ export const AdminRouting: Route[] = [
         path: 'manage-type',
         component: ManageTypeProductComponent
       },
+      {
+        path: 'statistic-supplier',
+        component: StatisticSupplierComponent
+      },
+      {
+        path: 'import/:id',
+        component: ImportOfStatisticComponent
+      }
     ]
   }
 ]

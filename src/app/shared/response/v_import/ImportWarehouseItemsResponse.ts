@@ -1,11 +1,6 @@
 import {BaseResponse} from "../BaseResponse";
+import {ImportWarehouseItems} from "../../item/v_import/ImportWarehouseItems";
 
-export class ImportWarehouseItemsResponse extends BaseResponse{
-  importId!:number
-   productCode!:String
-   qrCode!:String
-   unitName!:String
-   amount!:number
-   inPrice!:number
-   rangeDate!:String
+export class ImportWarehouseItemsResponse extends BaseResponse {
+  items!: ImportWarehouseItems[];
 }

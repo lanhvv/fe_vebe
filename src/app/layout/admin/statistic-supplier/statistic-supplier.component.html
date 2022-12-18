@@ -1,0 +1,51 @@
+<admin-header [Status]="status"></admin-header>
+<main>
+  <h5>Thống kê nhà cung cấp</h5>
+  <div class="container pt-4 card pb-4 mb-4" style="border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-6 float-end">
+        <form style="width: 100%" (ngSubmit)="onSearch()" class="float-end me-1">
+          <div class="input-group mb-3">
+            <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="name"
+                   placeholder="Nhập tên nhà cung cấp ...">
+            <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="mt-2">
+      <div class="container-fluid">
+        <p-table [value]="response.list">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-1">STT</th>
+              <th class="col-3">Tên</th>
+              <th class="col-3">Ngày hợp tác</th>
+              <th class="col-1">SĐT</th>
+              <th class="col-2">Số lần nhập</th>
+              <th>Thao tác</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowIndex="rowIndex" let-item let-expanded="expanded">
+            <tr>
+              <td>{{rowIndex+1}}</td>
+              <td>{{item.nameSup}}</td>
+              <td>{{item.createdDate| date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.numberPhone}}</td>
+              <td>{{item.numberOfEntry}}</td>
+              <td>
+                <button class="buttonRoot" (click)="click(item.id)">
+                  <i class="fa-solid fa-arrow-trend-up"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
+                     (onPageChange)="paginate($event)"></p-paginator>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,5 +1,5 @@
 main {
-  margin: 7% 0 0 17%;
+  margin: 6% 0 0 17%;
 }
 
 .main-layout {
@@ -25,6 +25,7 @@ main {
   border-radius: 5px;
 }
 
+>>> .p-fileupload-choose,
 .root-btn-outline {
   width: 183px;
   height: 40px;
@@ -104,4 +105,23 @@ label.file-upload-btn {
   background-position: center center;
   background-origin: border-box;
   background-repeat: no-repeat;
+}
+
+>>> .dropdown_warehouse p,
+>>> .dropdown_warehouse span{
+  line-height: 10px;
+}
+
+>>> .dropdown_warehouse{
+  width: 100%;
+  height: 40px;
+}
+
+>>> .p-fileupload .p-fileupload-buttonbar .p-button{
+  width: 120px;
+}
+
+>>> .dropdown_unit_warehouse .dropdown_unit_warehouse{
+  width: 100%;
+  height: 40px;
 }

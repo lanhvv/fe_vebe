@@ -4,6 +4,8 @@ import {DashboardService} from "../../../services/admin/dashboard.service";
 import {AdminDashboard} from "../../../shared/response/AdminDashboard";
 import {Product} from "../../../shared/model/product.model";
 import { DatePipe } from '@angular/common';
+import {ValidateLoginService} from "../../../services/validate-login.service";
+import {TokenStorageService} from "../../../services/token-storage.service";
 
 @Component({
   selector: 'admin-home',
@@ -41,11 +43,16 @@ export class HomeComponent implements OnInit {
   startDate?: any;
   endDate?: any;
 
+  author: string | null = this.tokenStorage.getToken();
 
   constructor(
     private translate: TranslateConfigService,
     private dashboardService: DashboardService,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe,
+    private checkRole: ValidateLoginService,
+    private tokenStorage: TokenStorageService) {
+    this.checkRole.checkToken(this.author);
+  }
 
   ngOnInit(): void {
     this.status = 1;
@@ -85,11 +92,10 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  //done - chẳng biết có tác dụng gì
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;
-      console.log(data.items[1].productName);
+      console.log(data.items);
     })
   }
 
@@ -132,7 +138,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  setUpLineChart(dates: string[]){
+  setUpLineChart(dates: string[], amounts: number[], sales: number[]){
     this.multiAxisData = {
       labels: dates,
       // labels: ["12-10-22","13-10-22", "14-10-22", "15-10-22", "16-10-22", "17-10-22","18-10-22"],
@@ -142,14 +148,14 @@ export class HomeComponent implements OnInit {
         borderColor: '#42A5F5',
         yAxisID: 'y',
         tension: .4,
-        data: [65, 59, 80, 81, 56, 55, 10]
+        data: sales
       }, {
         label: 'Sản phẩm bán được',
         fill: false,
         borderColor: '#00bb7e',
         yAxisID: 'y1',
         tension: .4,
-        data: [28, 48, 40, 19, 86, 27, 90]
+        data: amounts
       }]
     };
 
@@ -204,18 +210,27 @@ export class HomeComponent implements OnInit {
     this.endDate = this.datePipe.transform(this.maxDate,"yyyy-MM-dd");
   }
 
+  amounts = [];
+  sales = [];
   changeObject(startDate: string, endDate: string){
     this.dashboardService.reportLineChart(startDate, endDate).subscribe((data: any) =>{
       console.log(data.statisticOfDay);
       let item = '';
+      let amount = 0;
+      let sale = 0;
       for(let i = 0; i < data.statisticOfDay.length; i++){
         item = <string> this.datePipe.transform(data.statisticOfDay[i].date, "dd-MM-yy");
+        amount = <number> data.statisticOfDay[i].amount;
+        sale = <number> data.statisticOfDay[i].sales;
         // @ts-ignore
         this.listDate.push(item);
+        // @ts-ignore
+        this.amounts.push(amount);
+        // @ts-ignore
+        this.sales.push(sale);
       }
+      this.setUpLineChart(this.listDate, this.amounts, this.sales);
     })
-    this.setUpLineChart(this.listDate);
-    console.log(this.listDate);
   }
 
   getCurrentDate(sd: any, ed: any){

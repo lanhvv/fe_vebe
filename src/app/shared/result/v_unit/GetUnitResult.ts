@@ -3,6 +3,6 @@ export class GetUnitResult{
   name!: string;
   statusCode!: number;
   statusName!: string;
-  parentUnitId!: number;
+  parentId!: number;
   description!: string;
 }

@@ -55,17 +55,16 @@ export class ManageTypeProductComponent implements OnInit {
 
   constructor(private typeProductService: TypeProductService, private router: Router, private confirmationService: ConfirmationService,
               private messageService: MessageService, private activatedRoute: ActivatedRoute) {
-    this.files = new TypeProductItemsResponse(),
-      this.typeResponse = new CreateResponse();
+    this.files = new TypeProductItemsResponse();
+    this.typeResponse = new CreateResponse();
     this.typeItemsResponse = new TypeItemsResponse()
     this.typeRequest = new CreateTypeProductRequest();
-    this.category = new SelectionTypeProductItems()
-    this.filesType = new SelectionTypeProductItemsResponse()
-    this.selectionTypeProductItems = new SelectionTypeProductItems()
-    this.typeDetailRequest = new CreateTypeProductDetailRequest()
-    this.typeProductItems = new TypeProductItems()
-    this.updateTypeProductResponse = new UpdateTypeProductResponse()
-
+    this.category = new SelectionTypeProductItems();
+    this.filesType = new SelectionTypeProductItemsResponse();
+    this.selectionTypeProductItems = new SelectionTypeProductItems();
+    this.typeDetailRequest = new CreateTypeProductDetailRequest();
+    this.typeProductItems = new TypeProductItems();
+    this.updateTypeProductResponse = new UpdateTypeProductResponse();
   }
 
   ngOnInit(): void {
