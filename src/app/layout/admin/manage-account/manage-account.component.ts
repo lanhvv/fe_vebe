@@ -303,6 +303,7 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountRequest.cccd = value.cccd
     this.createAccountRequest.numberPhone = value.phoneNumber
     this.createAccountRequest.username = value.userName
+    this.createAccountRequest.password = value.passWord
 
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;

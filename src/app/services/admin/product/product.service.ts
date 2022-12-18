@@ -19,7 +19,7 @@ const AUTH_API = environment.baseApi;
 export class ProductService {
   // api="http://localhost:8080/vibee/api/v1/admins/product";
   // api="http://localhost:1507/vibee/api/v1/product";
-  api = AUTH_API+"product";
+  api = AUTH_API+"admins/product";
 
   message="";
   constructor(private httpClient: HttpClient,private route: Router,private tokenService: TokenStorageService) {
