@@ -32,6 +32,7 @@ export class WereHouseManagerComponent implements OnInit {
   language!:string;
   retio=0;
   deleteWarehouseResponse!:DeleteWarehouseResponse;
+  status: number = 0;
   constructor(private router:ActivatedRoute,
                               private route:Router,
                               private warehouseManagerService:WarehouseManagerService,
@@ -44,6 +45,7 @@ export class WereHouseManagerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.status = 6;
     this.id = this.router.snapshot.params['id'];
     this.language=this.translateService.getLanguage()!;
     this.getall();
@@ -170,5 +172,9 @@ export class WereHouseManagerComponent implements OnInit {
 
   failed(message: string) {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
+  }
+
+  back(){
+    window.history.back();
   }
 }

@@ -332,7 +332,7 @@ export class ManageUnitComponent implements OnInit {
       }
     }
 
-    console.log(flag);
+    // console.log(flag);
 
     if (flag == true) {
       this.editUnitParentDialog = false;

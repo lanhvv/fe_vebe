@@ -21,6 +21,9 @@ import {ListImportWarehouseInRedis} from 'src/app/shared/model/response/ListImpo
 import {EditImportWarehouseResponse} from 'src/app/shared/model/response/editImportWarehouseResponse';
 import {UnitService} from 'src/app/services/unit/unit.service';
 import {ImportWarehouseResponse} from '../../../shared/model/response/ImportWarehouseResponse';
+import {BehaviorSubject} from "rxjs";
+import {ZXingScannerComponent} from "@zxing/ngx-scanner";
+import {BarcodeFormat} from "@zxing/library";
 
 type AOV = any[][];
 
@@ -73,6 +76,24 @@ export class ManageWarehouseComponent implements OnInit {
   updateWarehouse!: FormGroup;
 
   units: Unit[] = [];
+
+  //camera
+  dialogScanQR: boolean = false;
+  enable : boolean = true;
+  hasPermission !: boolean;
+  torchEnabled = false;
+  tryHarder = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  scanner !: ZXingScannerComponent;
+  availableDevices !: MediaDeviceInfo[];
+  currentDevice !: MediaDeviceInfo | undefined;
+  enableCameraState : boolean = false;
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
 
   constructor(private messageService: MessageService,
               private prodService: ProductService,
@@ -381,6 +402,49 @@ export class ManageWarehouseComponent implements OnInit {
       severity: 'error',
       summary: this.translateService.getvalue("message.failed"),
       detail: message
+    });
+  }
+
+//  camera
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
+
+  //get value scan
+  qrResultString !: string;
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    this.dialogScanQR = false;
+    this.currentDevice = undefined;
+    this.createProductRequest.barCode = this.qrResultString;
+    console.log(this.qrResultString);
+  }
+
+  enableCamera() {
+    this.enableCameraState = !this.enableCameraState;
+    if (this.enableCameraState) {
+      this.enable = true;
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
+      this.currentDevice = device;
+      console.log(this.currentDevice);
+    } else {
+      this.enable = false;
+      this.currentDevice = undefined;
+    }
+  }
+
+  openDialogScan(){
+    this.enableCamera();
+    setTimeout(() => {
+      this.dialogScanQR = true;
     });
   }
 }

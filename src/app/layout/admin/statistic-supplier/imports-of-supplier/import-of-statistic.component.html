@@ -1,40 +1,132 @@
 <admin-header [Status]="status"></admin-header>
 <main>
-  <h5>Quản lý đơn vị sản phẩm</h5>
-  <div class="container pt-4 main-layout">
-<!--    <div class="row">-->
-<!--      <div class="col-6">-->
-<!--        <div class="input-group mb-3 float-end">-->
-<!--          <form style="width: 100%" (ngSubmit)="onSearch()">-->
-<!--            <div class="input-group mb-3">-->
-<!--              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"-->
-<!--                     placeholder="Nhập tên đơn vị...">-->
-<!--              <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+  <div class="container pt-2 card pb-4 mb-4" style="border-radius: 10px;
+              box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+    <div class="mt-2">
+      <div class="container-fluid">
+        <a href="admin/statistic-supplier"  class="text-blue">Quay lại</a>
+        <h5 style="display: inline; margin-left: 300px">Nhà phân phối: {{importOfSupplieResponse.supplier}}</h5>
+        <div class="row">
+          <div class="col-9">
+            <div class="card">
+              <p-chart  type="line" [data]="multiAxisData" [options]="multiAxisOptions"></p-chart>
+            </div>
+          </div>
+          <div class="col-3 ">
+            <div class="row">
+              <div class="col-12 ">
+                <div class="row">
+                  <div class="col-12 mb-2">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title h6">Tổng số lần nhập: {{importOfSupplieResponseLineChart.totalOfEntries | number}}</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mb-2">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title h6">Tổng chi phí: {{importOfSupplieResponseLineChart.totalOfPays | number}}đ</h5>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mb-2">
+                    <div class="card">
+                      <div class="card-body">
+                        <h4 class="card-title h6">5 sản phẩm nhập nhiều nhất</h4>
+                        <div class="card-text">
+                          <h6 *ngFor="let item of importOfSupplieResponseLineChart.productName, index as i">
+                            {{i+1}}. {{item}}
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 mb-2">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title h6"><label for="yearpicker">Chọn Năm</label></h5>
+                        <div>
+                          <p-calendar [(ngModel)]="year" view="year" dateFormat="yy" inputId="yearpicker"  (click)="selectedYear()"></p-calendar>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pt-4 card pb-4 mb-4" style="border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+    <div class="row">
+      <div class="col-6">
+        <div class="input-group mb-3 float-end">
+          <div class="field col-4 md:col-4 ms-2">
+            <span class="p-float-label">
+                <p-calendar id="float-input1" (click)="onSearch()" [(ngModel)]="startDate" inputId="buttonbar"></p-calendar>
+                <label for="float-input1">Ngày bắt đầu</label>
+            </span>
+          </div>
+          <div class="field col-4 md:col-4 ms-2">
+            <span class="p-float-label">
+                <p-calendar id="float-input2" (click)="onSearch()" [(ngModel)]="endDate" inputId="buttonbar"></p-calendar>
+                <label for="float-input2">Ngày kết thúc</label>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <form style="width: 100%" (ngSubmit)="onSearch()" class="float-end me-1">
+          <div class="input-group mb-3">
+            <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"
+                   placeholder="Nhập tên sản phẩm ...">
+            <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+          </div>
+        </form>
+    </div>
+    </div>
 
     <div class="mt-2">
       <div class="container-fluid">
-        <p-table >
+        <p-table [value]="importOfSupplieResponse.importsOfSupplier">
           <ng-template pTemplate="header">
             <tr>
               <th class="col-1">STT</th>
               <th class="col-1">Sản phẩm</th>
               <th class="col-1">Mã sp</th>
-              <th class="col-2">Ngày nhập</th>
-              <th class="col-2">Ngày hết hạn</th>
+              <th class="col-1">Ngày nhập</th>
+              <th class="col-1">Ngày hết hạn</th>
+              <th class="col-2">Người nhập</th>
               <th class="col-1">SL nhập</th>
               <th class="col-1">Giá nhập</th>
               <th class="col-1">Đơn vị</th>
-              <th class="col-1">Tổng tiền</th>
+              <th class="col-2">Tổng tiền</th>
             </tr>
           </ng-template>
-
+          <ng-template  pTemplate="body" let-rowIndex="rowIndex" let-item let-expanded="expanded">
+            <tr>
+              <td>{{rowIndex+1}}</td>
+              <td>{{item.productName}}</td>
+              <td>{{item.productCode}}</td>
+              <td>{{item.createdDate| date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.expiredDate| date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.creator}}</td>
+              <td>{{item.inAmount | number}}</td>
+              <td>{{item.inMoney | number}}đ</td>
+              <td>{{item.unitName}}</td>
+              <td>{{item.totalPurchasePrice | number}}đ</td>
+            </tr>
+          </ng-template>
         </p-table>
+        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
+                     (onPageChange)="paginate($event)"></p-paginator>
       </div>
     </div>
   </div>
+  <p-toast></p-toast>
 </main>

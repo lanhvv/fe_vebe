@@ -277,4 +277,8 @@ export class ImportExcelComponent implements OnInit {
     }
     return getUnitsResults;
   }
+
+  back(){
+    window.history.back();
+  }
 }
