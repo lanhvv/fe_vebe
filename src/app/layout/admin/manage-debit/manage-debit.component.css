@@ -21,7 +21,7 @@ main {
 }
 
 .inputRoot {
-  width: 90% !important;
+  width: 70%;
   height: 40px;
 }
 
@@ -29,25 +29,18 @@ main {
   color: white;
   background-color: #0061C1;
   height: 40px;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  text-align: center;
-  width: 50px;
 }
 
-.buttonRoot-delte {
-  color: white;
-  background-color: #dc3545;
+>>> .root-dropdown,
+.root-input{
   height: 40px;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  text-align: center;
-  width: 50px;
 }
 
->>> .p-datatable-table .p-datatable-thead tr th{
+>>> .root-dropdown span{
+  line-height: 11px;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
   background: #E5EFF9 !important;
   border-radius: 5px;
 }

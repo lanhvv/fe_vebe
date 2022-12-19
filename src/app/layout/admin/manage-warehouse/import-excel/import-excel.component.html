@@ -16,42 +16,10 @@
         </a>
       </div>
     </div>
-    <div class="row">
-      <div class="col-2"></div>
-      <div class="col-7">
-        <div class="note">
-          <div class="mb-3" *ngIf="this.getSuppliersResponse!=null && this.getSuppliersResponse.status.status=='1'">
-            <label>Lựa chọn nhà cung cấp</label> <br>
-            <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
-              <ng-template pTemplate="selectedItem">
-                <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
-                  <div>{{selectedSupplier.supplierName}}</div>
-                </div>
-              </ng-template>
-              <ng-template let-supplier pTemplate="item">
-                <div class="supplier">
-                  <div>{{supplier.supplierName}}</div>
-                </div>
-              </ng-template>
-            </p-dropdown>
-          </div>
-        </div>
-      </div>
-      <div class="col-3"></div>
-    </div>
-    <div class="row mb-3">
-      <div class="float-end">
-        <button class="root-btn" (click)="changeFile()" *ngIf="data.length > 0">Sửa đổi file</button>
-      </div>
-    </div>
 
     <div class="card">
       <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
-<!--          <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>-->
-          <button pButton pRipple label="Xóa sản phẩm" icon="pi pi-trash" class="p-button-danger root-btn-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
-        </ng-template>
-        <ng-template pTemplate="right">
           <p-fileUpload
             styleClass="root-btn-upload"
             (onSelect)="importWarehouse($event)"
@@ -69,6 +37,23 @@
             class="root-btn ms-3"
             [disabled]="!productResponse"
             (mousedown)="import()" ></button>
+        </ng-template>
+        <div style="width: 64%">
+          <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
+            <ng-template pTemplate="selectedItem">
+              <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
+                <div>{{selectedSupplier.supplierName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-supplier pTemplate="item">
+              <div class="supplier">
+                <div>{{supplier.supplierName}}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Xóa sản phẩm" icon="pi pi-trash" class="p-button-danger root-btn-danger" (mousedown)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
         </ng-template>
       </p-toolbar>
       <div class="ps-5" *ngIf="this.productResponse==null">

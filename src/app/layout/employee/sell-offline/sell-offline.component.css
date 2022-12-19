@@ -34,7 +34,7 @@
   width: 100%;
   height: auto;
   border-radius: 10px;
-  box-shadow: -4px -4px 40px 0px rgb(0 0 0 / 25%);
+  box-shadow: 12px 15px 28px -11px rgb(0 0 0 / 25%);
   background-color: white;
   padding: 10px;
 }
@@ -148,4 +148,27 @@
   text-align: center;
   width: auto;
   padding: 10px;
+}
+
+table thead{
+  background-color: #E5EFF9;
+  border-radius: 5px;
+}
+
+.p-table{
+  margin-top: 10px;
+}
+
+>>>.dropdown_root{
+  width: 100%;
+  height: 40px;
+}
+
+>>>.dropdown_root p,
+>>>.dropdown_root span{
+  line-height: 10px;
+}
+
+>>>.p-inputnumber-input{
+  height: 40px !important;
 }
