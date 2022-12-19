@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     private datePipe: DatePipe,
     private checkRole: ValidateLoginService,
     private tokenStorage: TokenStorageService) {
-    this.checkRole.checkToken(this.author);
+    // this.checkRole.checkToken(this.author);
   }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
 
   getReportSumProduct(){
     this.dashboardService.reportSumProduct().subscribe((data: any) =>{
-      console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
+      // console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
       this.blockProduct = data.block_product;
       this.soldOutProduct = data.sold_out;
     });
@@ -88,14 +88,14 @@ export class HomeComponent implements OnInit {
       this.sumPacking = data.sumOrderPacking;
       this.sumShipping = data.sumOrderShipping;
       this.sumCancel = data.sumOrderCancel;
-      console.log(this.sumUnconfimred+"/"+this.sumPacking+"/"+this.sumShipping+"/"+this.sumCancel);
+      // console.log(this.sumUnconfimred+"/"+this.sumPacking+"/"+this.sumShipping+"/"+this.sumCancel);
     })
   }
 
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;
-      console.log(data.items);
+      // console.log(data.items);
     })
   }
 
@@ -134,11 +134,13 @@ export class HomeComponent implements OnInit {
       this.statusInterestRateOfDay = data.statusInterestRateOfDay;
       this.percentSumPrice = data.percentTotalPriceOfDay;
       this.percentInterestRate = data.percentInterestRateOfDay;
-      console.log(this.percentInterestRate +"/"+ this.percentSumPrice);
+      // console.log(this.percentInterestRate +"/"+ this.percentSumPrice);
     })
   }
 
   setUpLineChart(dates: string[], amounts: number[], sales: number[]){
+    console.log(amounts);
+    console.log(sales);
     this.multiAxisData = {
       labels: dates,
       // labels: ["12-10-22","13-10-22", "14-10-22", "15-10-22", "16-10-22", "17-10-22","18-10-22"],
@@ -214,7 +216,7 @@ export class HomeComponent implements OnInit {
   sales = [];
   changeObject(startDate: string, endDate: string){
     this.dashboardService.reportLineChart(startDate, endDate).subscribe((data: any) =>{
-      console.log(data.statisticOfDay);
+      // console.log(data.statisticOfDay);
       let item = '';
       let amount = 0;
       let sale = 0;
