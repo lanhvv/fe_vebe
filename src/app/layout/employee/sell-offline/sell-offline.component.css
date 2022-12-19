@@ -36,6 +36,7 @@
   border-radius: 10px;
   box-shadow: -4px -4px 40px 0px rgb(0 0 0 / 25%);
   background-color: white;
+  padding: 10px;
 }
 
 .sell-list_product-body--item input {
@@ -99,7 +100,7 @@
 }
 
 >>> .searchProduct{
-  width: 300px;
+  width: 70%;
 }
 
 >>> .elementUnitProduct{
@@ -135,4 +136,16 @@
   text-decoration: none;
   text-align: center;
   width: 161px;
+}
+
+.btn-camera{
+  height: 40px;
+  background-color: white;
+  color: #0061C1;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  width: auto;
+  padding: 10px;
 }

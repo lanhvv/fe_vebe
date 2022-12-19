@@ -37,9 +37,9 @@ export class DashboardService{
   }
 
   //done
-  reportSumOrder(): any{
-    return this.http.get(this.api + 'report-sum-order', this.httpOptions);
-  }
+  // reportSumOrder(): any{
+  //   return this.http.get(this.api + 'report-sum-order', this.httpOptions);
+  // }
 
   reportLineChart(start: string, end: string): any{
     return this.http.get(this.api + '?startDate='+start + '&endDate='+end, this.httpOptions);

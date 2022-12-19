@@ -10,7 +10,7 @@ const AUTH_API = environment.baseApi;
   providedIn: 'root'
 })
 export class BillService {
-  api=AUTH_API+"/bill";
+  api=AUTH_API+"bill";
   constructor(private httpClient: HttpClient,private route: Router, private tokenService: TokenStorageService) { }
   httpOptions = {
     headers: new HttpHeaders({

@@ -315,6 +315,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.qrResultString = resultString;
     this.dialogScanQR = false;
     this.currentDevice = undefined;
+    this.selectProduct(this.qrResultString);
     console.log(this.qrResultString);
   }
 
