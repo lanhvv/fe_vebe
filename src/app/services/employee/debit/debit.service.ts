@@ -32,7 +32,7 @@ export class DebitService {
     return this.httpClient.get(this.URL+"findAll/"+idUser+"?pagenumber="+request.page+"&pagesize="+request.pageSize+
     "&valuefilter="+request.filter.valueFilter+"&typefilter="+request.filter.typeFilter+"&language="+request.language+"&search="+request.searchText, this.httpOptions);
   }
-  getById(request:number){
+  getById(request:number):Observable<any>{
     return this.httpClient.get(this.URL+"findById/"+request, this.httpOptions);
   }
   create(request: CreateDebitRequest):Observable<any>{
@@ -53,6 +53,10 @@ export class DebitService {
   }
   update(idDebit: number,request: UpdateDebitRequest):Observable<any>{
     return this.httpClient.post<any>(this.URL+'updateDebit/'+idDebit, request,this.httpOptions);
+  }
+
+  getTop10(){
+    return this.httpClient.get(this.URL+"topTen-bill/", this.httpOptions);
   }
 
 }

@@ -1,5 +1,4 @@
 import { BaseRequest } from './BaseRequest';
-import { DetailDebitItems } from './DetailDebitItems';
 export class CreateDebitRequest extends BaseRequest{
   fullName!: string
   phoneNumber!: string
@@ -7,6 +6,5 @@ export class CreateDebitRequest extends BaseRequest{
   billId!: number
   address!: string
   typeOfDebtor!: number
-  expectedDateOfPaymentOfDebt!: Date
-  debitItems!: DetailDebitItems[]
+  description!: string
 }

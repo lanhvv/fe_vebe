@@ -1,3 +1,4 @@
+import { PayItems } from './payItems';
 export interface DebitUserItems {
     id?: number
     fullName?: string
@@ -6,4 +7,9 @@ export interface DebitUserItems {
     statusCode?: string
     address?: string
     amountUserDebit?: number
+    debtDate?: Date
+    creator?: string
+    idBill?: number
+    typeDebt?: string
+    payItems?: PayItems[]
 }

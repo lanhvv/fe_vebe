@@ -15,7 +15,7 @@
         <div class="col"></div>
         <div class="col">
           <form>
-            <!-- <div class="input-group mb-3">
+            <div class="input-group mb-3">
               <input type="text" class="form-control" (change)="searchByName(name.value)" ngModel #name name="name"
                      placeholder="Nhập name category" aria-label="Nhập name category"
                      aria-describedby="button-search-account">
@@ -23,77 +23,95 @@
                       (mousedown)="searchByName(name.value)">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
-            </div> -->
+            </div>
           </form>
         </div>
       </div>
     </section>
     <!-- table -->
-
     <div class="table-all-order mt-4">
-      <p-table #dt [value]="debitUserItemsResponse.items" dataKey="id" styleClass="p-datatable-getOrderResponse.totalPages"
-        [rowHover]="true">
-        [filterDelay]="0" >
-
+      <p-table [value]="debitUserItemsResponse.items" dataKey="id" [tableStyle]="{'min-width': '60rem'}">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="fullName" (mousedown)="sort('fullName')">
-              Tên người nợ <p-sortIcon field="fullName"></p-sortIcon>
-            </th>
-            <th pSortableColumn="phone" (mousedown)="sort('phone')">
-              Số điện thoại người nợ
-              <p-sortIcon field="phone"></p-sortIcon>
-            </th>
-            <th pSortableColumn="total" (mousedown)="sort('total')">
-              Tổng số tiền nợ <p-sortIcon field="total"></p-sortIcon>
-            </th>
-            <th pSortableColumn="address" (mousedown)="sort('address')">
-              Địa chỉ<p-sortIcon field="address"></p-sortIcon>
-            </th>
-
-            <th pSortableColumn="amountUserDebit" (mousedown)="sort('amountUserDebit')">
-              Loại người nợ <p-sortIcon field="amountUserDebit"></p-sortIcon>
-            </th>
-            <th pSortableColumn="status" (mousedown)="sort('status')">
-              Tình trạng <p-sortIcon field="status"></p-sortIcon>
-            </th>
-            <th pSortableColumn="action">Hành động</th>
+            <th style="width: 3rem"></th>
+            <th pSortableColumn="fullName" (mousedown)="sort('fullName')">Tên người nợ </th>
+            <th pSortableColumn="phoneNumber" (mousedown)="sort('phoneNumber')"> Số điện thoại</th>
+            <th pSortableColumn="creator" (mousedown)="sort('creator')">Người ghi nợ</th>
+            <th pSortableColumn="total" (mousedown)="sort('total')">Tổng tiền nợ</th>
+            <th pSortableColumn="typeDebt" (mousedown)="sort('typeDebt')">Loại người nợ</th>
+            <th pSortableColumn="debtDate" (mousedown)="sort('debtDate')">Ngày nợ</th>
+            <th pSortableColumn="statusCode" (mousedown)="sort('statusCode')">Trạng thái</th>
+            <th>Hành động</th>
           </tr>
-          <tr></tr>
         </ng-template>
-        <ng-template pTemplate="body" let-bill>
-          <tr class="p-selectable-row">
-            <td>{{ bill.fullName}}</td>
-            <td>{{ bill.phoneNumber }}</td>
-            <td>{{ bill.total | currency: "VND" }}</td>
-            <td>{{ bill.address}}</td>
-            <td>{{ bill.amountUserDebit }}</td>
-            <td>{{ bill.statusCode }}</td>
+        <ng-template pTemplate="body" let-product let-expanded="expanded">
+          <tr>
             <td>
-              <button class="  border-0 btn  btn-outline-info" (click)=" getall(bill.id)">
+              <button type="button" pButton pRipple [pRowToggler]="product"
+                class="p-button-text p-button-rounded p-button-plain"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td>{{product.fullName}}</td>
+            <td>{{product.phoneNumber}}</td>
+            <td>{{product.creator}}</td>
+            <td>{{product.total | currency:'USD'}}</td>
+            <td>{{product.typeDebt}}</td>
+            <td>{{product.debtDate| date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td><span [class]="'product-badge status-' + product.statusCode.toLowerCase()">{{product.statusCode}}</span>
+            </td>
+            <td>
+              <button class="  border-0 btn  btn-outline-info" (click)=" getById(product.id)">
                 <i class="fas fa-pencil-alt"></i></button>
-
-              <!-- <button type="button" class=" border-0 btn btn-outline-danger" data-bs-toggle="modal"
-              data-bs-target="#exampleModalDelete" (click)="delete(list.id.ordersId)"
-      ><i class="fas fa-trash-alt"></i></button> -->
+              <button class="  border-0 btn  btn-outline-info" (click)=" getByUpdate(product.id)">
+                <i class="fas fa-pencil-alt"></i>update</button>
             </td>
           </tr>
         </ng-template>
-
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td colspan="7">
+              <div class="p-3">
+                <p-table [value]="product.payItems" dataKey="id">
+                  <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="inPrice">Tiền người dùng trả <p-sortIcon field="inPrice"></p-sortIcon></th>
+            <th pSortableColumn="price">Tiền còn lại<p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="creator">Người ghi nợ<p-sortIcon field="creator"></p-sortIcon></th>
+            <th pSortableColumn="numberOfPayOuts">Số lần trả <p-sortIcon field="numberOfPayOuts"></p-sortIcon></th>
+            <th pSortableColumn="datePayment">Ngày trả <p-sortIcon field="datePayment"></p-sortIcon></th>
+            <th pSortableColumn="stats">Trạng thái <p-sortIcon field="status"></p-sortIcon></th>
+            <th style="width: 4rem"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-debt>
+          <tr>
+            <td>{{debt.inPrice | currency:'VND'}}</td>
+            <td>{{debt.price | currency:'VND'}}</td>
+            <td>{{debt.creator}}</td>
+            <td>{{debt.numberOfPayOuts}}</td>
+            <td>{{debt.datePayment | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td><span [class]="'order-badge order-' + debt.statusCode.toLowerCase()">{{debt.statusCode}}</span></td>
+            <td><p-button type="button" icon="pi pi-search"></p-button></td>
+          </tr>
+        </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="8">No customers found.</td>
+            <td colspan="6"></td>
           </tr>
         </ng-template>
       </p-table>
-
-      <p-paginator [rows]="10" [totalRecords]="debitUserItemsResponse.totalItems" [rowsPerPageOptions]="[10, 25, 50]"
-        currentPageReportTemplate="Showing {{
-            debitUserItemsResponse.totalPages
-        }} to {{ debitUserItemsResponse.totalPages }} of {{
-            debitUserItemsResponse.totalItems
-        }} entries" (onPageChange)="Pageable($event)"></p-paginator>
     </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+    <p-paginator [rows]="10" [totalRecords]="debitUserItemsResponse.totalItems" [rowsPerPageOptions]="[2, 10, 25, 50]"
+      currentPageReportTemplate="Showing {{
+      debitUserItemsResponse.totalPages
+  }} to {{ debitUserItemsResponse.totalPages }} of {{
+      debitUserItemsResponse.totalItems
+  }} entries" (onPageChange)="Pageable($event)"></p-paginator>
+  </div>
   </div>
   <p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
   </p-confirmDialog>
@@ -117,29 +135,10 @@
 
       </div>
       <!-- pre-table-->
-      <section class="pre-table">
-        <div class="row">
-          <div class="col"></div>
-          <div class="col">
-            <form>
-              <!-- <div class="input-group mb-3">
-                <input type="text" class="form-control" (change)="searchByName(name.value)" ngModel #name name="name"
-                       placeholder="Nhập name category" aria-label="Nhập name category"
-                       aria-describedby="button-search-account">
-                <button class="btn btn-outline-success" type="button" id="button-search-account"
-                        (mousedown)="searchByName(name.value)">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-              </div> -->
-            </form>
-          </div>
-        </div>
-      </section>
-      <!-- table -->
 
       <div class="table-all-order mt-4">
-        <p-table #dt [value]="debitItemsResponse.items" dataKey="id" styleClass="p-datatable-getOrderResponse.totalPages"
-          [rowHover]="true">
+        <p-table #dt [value]="debitItemsResponse.items" dataKey="id"
+          styleClass="p-datatable-getOrderResponse.totalPages" [rowHover]="true">
           [filterDelay]="0" >
 
           <ng-template pTemplate="header">
@@ -153,9 +152,9 @@
               <th pSortableColumn="fullName" (mousedown)="sort('fullName')">
                 Tên người nợ <p-sortIcon field="fullName"></p-sortIcon>
               </th>
-              <th pSortableColumn="phoneNumber" (mousedown)="sort('phoneNumber')">
+              <th pSortableColumn="phone" (mousedown)="sort('phone')">
                 Số điện thoại người nợ
-                <p-sortIcon field="phoneNumber"></p-sortIcon>
+                <p-sortIcon field="phone"></p-sortIcon>
               </th>
               <th pSortableColumn="totalAmountOwed" (mousedown)="sort('totalAmountOwed')">
                 Tổng số tiền nợ <p-sortIcon field="totalAmountOwed"></p-sortIcon>
@@ -198,12 +197,9 @@
               <td>
                 <button class="  border-0 btn  btn-outline-info" (click)=" getById(bill.id)">
                   <i class="fas fa-pencil-alt"></i></button>
-                  <button class="  border-0 btn  btn-outline-info" (click)=" getByUpdate(bill.id)">
-                    <i class="fas fa-pencil-alt"></i>update</button>
+                <button class="  border-0 btn  btn-outline-info" (click)=" getByUpdate(bill.id)">
+                  <i class="fas fa-pencil-alt"></i>update</button>
 
-                <!-- <button type="button" class=" border-0 btn btn-outline-danger" data-bs-toggle="modal"
-                data-bs-target="#exampleModalDelete" (click)="delete(list.id.ordersId)"
-        ><i class="fas fa-trash-alt"></i></button> -->
               </td>
             </tr>
           </ng-template>
@@ -230,267 +226,197 @@
 </div>
 
 
-<div class="card">
-  <p-dialog header="Header" [modal]="true" [maximizable]="true" appendTo="body" [resizable]="false"
-    [(visible)]="createDialog" [style]="{width: '70vw'}" [baseZIndex]="10000" [contentStyle]="{height: '300px'}">
-    <div class="row justify-content-center align-items-center g-2 py-3">
-      Add
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="createDebitRequest.fullName" placeholder="Full name"
-          aria-label="Full name">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="createDebitRequest.phoneNumber" placeholder="Phone number"
-          aria-label="Phone number">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="createDebitRequest.address" placeholder="Address"
-          aria-label="Address">
-      </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="createDebitRequest.totalAmountOwed"
-          placeholder="Total amount owed" aria-label="Total amount owed">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="createDebitRequest.billId" (change)="getDetailBill()"
-          placeholder="Id Bill" aria-label="Id Bill">
-      </div>
-
-      <div class="p-field p-col-12 p-md-4">
-        <label for="spanish">Expacted Date</label>
-        <p-calendar [(ngModel)]="createDebitRequest.expectedDateOfPaymentOfDebt" [locale]="es" dateFormat="dd/mm/yy"
-          inputId="spanish"></p-calendar>
-      </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="createDebitRequest.typeOfDebtor" id="inlineRadio1" value="1">
-          <label class="form-check-label" for="inlineRadio1">Mua buôn </label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="createDebitRequest.typeOfDebtor" id="inlineRadio2" value="2">
-          <label class="form-check-label" for="inlineRadio2">Mua lẻ</label>
-        </div>
-      </div>
+<p-dialog [(visible)]="createDialog" [style]="{width: '550px'}" header="Tạo đơn nợ" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="field">
+      <label for="name">Tên người nợ </label>
+      <input type="text" pInputText id="name" [(ngModel)]="createDebitRequest.fullName" required autofocus />
+      <!-- <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small> -->
     </div>
 
-    <div class="row">
-      <p-table [value]="createDebitRequest.debitItems" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Product name</th>
-                <th>Quantity</th>
-                <th>Đơn vị</th>
-                <th>Price</th>
-                <th>In Price</th>
-            </tr>
+    <div class="field">
+      <label for="address">Địa chỉ</label>
+      <textarea id="address" pInputTextarea [(ngModel)]="createDebitRequest.address" required rows="3"
+        cols="20"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="form-label-category" translate>Hóa đơn</label> <br>
+      <p-dropdown inputId="dropdown" [options]="billItems.items" [(ngModel)]="billItem"
+        [ngModelOptions]="{standalone: true}" optionLabel="id" [filter]="true" filterBy="id" filterBy="id"
+        [showClear]="true" placeholder="Select a unit">
+        <ng-template pTemplate="selectedItem">
+          <div class="unit-item unit-item-value" *ngIf="billItem">
+            <div>HD{{billItem.id}} - {{billItem.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{billItem.total |
+              currency:'VND'}}</div>
+          </div>
         </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.productName" placeholder="Product name" aria-label="Product name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.amount" placeholder="Amount" aria-label="Amount"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.unitName" placeholder="Unit name" aria-label="Unit name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.price" placeholder="Price" aria-label="Price"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.inPrice"  placeholder="Price" aria-label="In Price"></td>
-            </tr>
+        <ng-template let-items pTemplate="items">
+          <div class="unit-Item">
+            <div>HD{{items.id}} - {{items.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{items.total | currency:'VND'}}
+            </div>
+          </div>
         </ng-template>
-
-    </p-table>
-
+      </p-dropdown>
     </div>
-    <button type="button" pButton pRipple icon="pi pi-times" (click)="create()" label="Thêm"
-      class="p-button-text"></button>
 
-    <ng-template pTemplate="footer">
-      <button type="button" pButton pRipple icon="pi pi-times" (click)="createDialog=false" label="Dismiss"
-        class="p-button-text"></button>
-    </ng-template>
-  </p-dialog>
-</div>
+    <div class="field">
+      <label for="phone">Số điện thoại</label>
+      <input type="text" pInputText id="phone" [(ngModel)]="createDebitRequest.phoneNumber" required autofocus />
+    </div>
+
+    <div class="field">
+      <label for="description">Ghi chú</label>
+      <textarea id="description" pInputTextarea [(ngModel)]="createDebitRequest.description" required rows="3"
+        cols="20"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="totalAmountOwed">Tổng tiền nợ</label>
+      <p-inputNumber id="price" [(ngModel)]="createDebitRequest.totalAmountOwed"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+      (click)="createDialog=false"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="create()"></button>
+  </ng-template>
+</p-dialog>
 
 <!-- pay -->
 
-<div class="card">
-  <p-dialog header="Header" [modal]="true" [maximizable]="true" appendTo="body" [resizable]="false"
-    [(visible)]="updateDialog" [style]="{width: '70vw'}" [baseZIndex]="10000" [contentStyle]="{height: '300px'}">
-    <div class="row justify-content-center align-items-center g-2 py-3">
-      Add
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.fullName" placeholder="Full name"
-          aria-label="Full name">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.phoneNumber" placeholder="Phone number"
-          aria-label="Phone number">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.address" placeholder="Address"
-          aria-label="Address">
-      </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.totalAmountOwed"
-          placeholder="Total amount owed" aria-label="Total amount owed">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="payRequest.inPrice"
-          placeholder="Total amount owed" aria-label="In price">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.billId" (change)="getDetailBill()"
-          placeholder="Id Bill" aria-label="Id Bill">
+<p-dialog [(visible)]="payDialog" [style]="{width: '550px'}" header="Tạo đơn nợ" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+
+      <div class="field">
+        <label for="name">Tên người nợ </label>
+        <input type="text" pInputText id="name" [(ngModel)]="updateDebitRequest.fullName" required autofocus />
+        <!-- <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small> -->
       </div>
 
-      <div class="p-field p-col-12 p-md-4">
-        <label for="spanish">Expacted Date</label>
-        <p-calendar [(ngModel)]="value" [locale]="es" dateFormat="dd/mm/yy"
-          inputId="spanish"></p-calendar>
-          <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.expectedDateOfPaymentOfDebt"
-          placeholder="Id Bill" aria-label="Id Bill">
+      <div class="field">
+        <label for="address">Địa chỉ</label>
+        <textarea id="address" pInputTextarea [(ngModel)]="updateDebitRequest.address" required rows="3"
+          cols="20"></textarea>
       </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="updateDebitRequest.typeOfDebtor" id="inlineRadio1" value="1">
-          <label class="form-check-label" for="inlineRadio1">Mua buôn </label>
+
+      <div class="field">
+        <label class="form-label-category" translate>Hóa đơn</label> <br>
+        <p-dropdown inputId="dropdown" dataKey="id" [options]="billItems.items" [(ngModel)]="billItem"
+          [ngModelOptions]="{standalone: true}" optionLabel="id" [filter]="true" filterBy="id" filterBy="id"
+          [showClear]="true" placeholder="Select a unit">
+          <ng-template pTemplate="selectedItem">
+            <div class="unit-item unit-item-value" *ngIf="billItem">
+              <div>HD{{billItem.id}} - {{billItem.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{billItem.total |
+                currency:'VND'}}</div>
+            </div>
+          </ng-template>
+          <ng-template let-items pTemplate="items">
+            <div class="unit-Item">
+              <div>HD{{items.id}} - {{items.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{items.total |
+                currency:'VND'}}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="phone">Số điện thoại</label>
+        <input type="text" pInputText id="phone" [(ngModel)]="updateDebitRequest.phoneNumber" required autofocus />
+      </div>
+
+      <div class="field">
+        <label for="description">Ghi chú</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="updateDebitRequest.description" required rows="3"
+          cols="20"></textarea>
+      </div>
+
+      <div class="formgrid grid">
+        <div class="field col">
+            <label for="price">Tổng tiền nợ</label>
+            <p-inputNumber id="price" [(ngModel)]="updateDebitRequest.totalAmountOwed"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="updateDebitRequest.typeOfDebtor" id="inlineRadio2" value="2">
-          <label class="form-check-label" for="inlineRadio2">Mua lẻ</label>
+        <div class="field col">
+            <label for="inPrice">Tiền trả nợ</label>
+            <p-inputNumber id="inPrice" [(ngModel)]="payRequest.inPrice"></p-inputNumber>
         </div>
-      </div>
     </div>
 
-    <div class="row">
-      <p-table [value]="updateDebitRequest.debitItems" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
-        <ng-template pTemplate="header">
-            <tr>
-              <th>Product name</th>
-              <th>Quantity</th>
-              <th>Đơn vị</th>
-              <th>Price</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.productName" placeholder="Product name" aria-label="Product name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.amount" placeholder="Amount" aria-label="Amount"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.unitName" placeholder="Unit name" aria-label="Unit name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.price" placeholder="Price" aria-label="Price"></td>
-            </tr>
-        </ng-template>
-    </p-table>
+  </ng-template>
 
-    </div>
-    <button type="button" pButton pRipple icon="pi pi-times" (click)="pay()" label="Dismiss"
-      class="p-button-text"></button>
-
-    <ng-template pTemplate="footer">
-      <button type="button" pButton pRipple icon="pi pi-times" (click)="updateDialog=false" label="Dismiss"
-        class="p-button-text"></button>
-    </ng-template>
-  </p-dialog>
-</div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+      (click)="payDialog=false"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="pay()"></button>
+  </ng-template>
+</p-dialog>
 
 
 <!-- update -->
-<div class="card">
-  <p-dialog header="Header" [modal]="true" [maximizable]="true" appendTo="body" [resizable]="false"
-    [(visible)]="payDialog" [style]="{width: '70vw'}" [baseZIndex]="10000" [contentStyle]="{height: '300px'}">
-    <div class="row justify-content-center align-items-center g-2 py-3">
-      Add
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.fullName" placeholder="Full name"
-          aria-label="Full name">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.phoneNumber" placeholder="Phone number"
-          aria-label="Phone number">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.address" placeholder="Address"
-          aria-label="Address">
-      </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.totalAmountOwed"
-          placeholder="Total amount owed" aria-label="Total amount owed">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="payRequest.inPrice"
-          placeholder="Total amount owed" aria-label="In price">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.billId" (change)="getDetailBill()"
-          placeholder="Id Bill" aria-label="Id Bill">
+<p-dialog [(visible)]="updateDialog" [style]="{width: '550px'}" header="Tạo đơn nợ" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+
+      <div class="field">
+        <label for="name">Tên người nợ </label>
+        <input type="text" pInputText id="name" [(ngModel)]="updateDebitRequest.fullName" required autofocus />
+        <!-- <small class="p-error" *ngIf="submitted && !product.name">Name is required.</small> -->
       </div>
 
-      <div class="p-field p-col-12 p-md-4">
-        <label for="spanish">Expacted Date</label>
-        <p-calendar [(ngModel)]="value" [locale]="es" dateFormat="dd/mm/yy"
-          inputId="spanish"></p-calendar>
-          <input type="text" class="form-control" [(ngModel)]="updateDebitRequest.expectedDateOfPaymentOfDebt"
-          placeholder="Id Bill" aria-label="Id Bill">
+      <div class="field">
+        <label for="address">Địa chỉ</label>
+        <textarea id="address" pInputTextarea [(ngModel)]="updateDebitRequest.address" required rows="3"
+          cols="20"></textarea>
       </div>
-    </div>
-    <div class="row py-3">
-      <div class="col">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="updateDebitRequest.typeOfDebtor" id="inlineRadio1" value="1">
-          <label class="form-check-label" for="inlineRadio1">Mua buôn </label>
+
+      <div class="field">
+        <label class="form-label-category" translate>Hóa đơn</label> <br>
+        <p-dropdown inputId="dropdown" dataKey="id" [options]="billItems.items" [(ngModel)]="billItem"
+          [ngModelOptions]="{standalone: true}" optionLabel="id" [filter]="true" filterBy="id" filterBy="id"
+          [showClear]="true" placeholder="Select a unit">
+          <ng-template pTemplate="selectedItem">
+            <div class="unit-item unit-item-value" *ngIf="billItem">
+              <div>HD{{billItem.id}} - {{billItem.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{billItem.total |
+                currency:'VND'}}</div>
+            </div>
+          </ng-template>
+          <ng-template let-items pTemplate="items">
+            <div class="unit-Item">
+              <div>HD{{items.id}} - {{items.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{items.total |
+                currency:'VND'}}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="phone">Số điện thoại</label>
+        <input type="text" pInputText id="phone" [(ngModel)]="updateDebitRequest.phoneNumber" required autofocus />
+      </div>
+
+      <div class="field">
+        <label for="description">Ghi chú</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="updateDebitRequest.description" required rows="3"
+          cols="20"></textarea>
+      </div>
+
+      <div class="formgrid grid">
+        <div class="field col">
+            <label for="price">Tổng tiền nợ</label>
+            <p-inputNumber id="price" [(ngModel)]="updateDebitRequest.totalAmountOwed"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions"
-            [(ngModel)]="updateDebitRequest.typeOfDebtor" id="inlineRadio2" value="2">
-          <label class="form-check-label" for="inlineRadio2">Mua lẻ</label>
-        </div>
-      </div>
     </div>
 
-    <div class="row">
-      <p-table [value]="updateDebitRequest.debitItems" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
-        <ng-template pTemplate="header">
-            <tr>
-              <th>Product name</th>
-              <th>Quantity</th>
-              <th>Đơn vị</th>
-              <th>Price</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-            <tr>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.productName" placeholder="Product name" aria-label="Product name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.amount" placeholder="Amount" aria-label="Amount"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.unitName" placeholder="Unit name" aria-label="Unit name"></td>
-              <td> <input type="text" class="form-control" [(ngModel)]="product.price" placeholder="Price" aria-label="Price"></td>
-            </tr>
-        </ng-template>
-    </p-table>
+  </ng-template>
 
-    </div>
-    <button type="button" pButton pRipple icon="pi pi-times" (click)="update(updateDebitRequest.idDebit)" label="Dismiss"
-      class="p-button-text"></button>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+      (click)="updateDialog=false"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"  (click)="update(updateDebitRequest.idDebit)"></button>
+  </ng-template>
+</p-dialog>
 
-    <ng-template pTemplate="footer">
-      <button type="button" pButton pRipple icon="pi pi-times" (click)="payDialog=false" label="Dismiss"
-        class="p-button-text"></button>
-    </ng-template>
-  </p-dialog>
-</div>
+
+
+

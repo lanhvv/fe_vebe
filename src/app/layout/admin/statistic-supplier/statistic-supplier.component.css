@@ -52,38 +52,6 @@ main {
   border-radius: 5px;
 }
 
-.active{
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  background-color: rgba(33, 150, 83, 0.1);
-  text-align: center;
-}
-
-.active p{
-  color: #219653;
-}
-
-.in-active{
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  background-color: rgba(235, 87, 87, 0.1);
-  text-align: center;
-}
-
-.in-active p{
-  color: #EB5757;
-}
-
-.delete{
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  background-color: rgba(242, 153, 74, 0.1);
-  text-align: center;
-}
-
-.delete p{
-  color: #F2994A;
+>>>.p-element .p-sidebar-right{
+  width: 81rem !important;
 }

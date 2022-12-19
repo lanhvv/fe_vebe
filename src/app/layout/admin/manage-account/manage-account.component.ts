@@ -171,26 +171,25 @@ export class ManageAccountComponent implements OnInit {
 
   unlockAccount(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có muốn mở khóa tài khoản này không?',
+      header: 'Cảnh báo',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.unlockAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
-          if (this.deleteAccountResponse.status.status === '2') {
+          if (this.deleteAccountResponse.status.status == '2') {
             this.ngOnInit();
             const currentItem = this.listAccountItems.items.find(item => item.id === request);
             if (currentItem) {
               currentItem.status = 2;
             }
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Unlock success'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Mở khóa tài khoản thành công!'});
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Unlock false'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Mở khóa lỗi, vui lòng thử lại!'});
           }
         }, (err) => {
-          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Lock false'});
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Mở khóa lỗi, vui lòng thử lại!'});
         });
-
       },
       reject: (type: any) => {
         switch (type) {
@@ -304,6 +303,7 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountRequest.cccd = value.cccd
     this.createAccountRequest.numberPhone = value.phoneNumber
     this.createAccountRequest.username = value.userName
+    this.createAccountRequest.password = value.passWord
 
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
@@ -317,6 +317,7 @@ export class ManageAccountComponent implements OnInit {
       }
     })
   }
+
   update(){
     // this.id = this.activatedRoute.snapshot.params['id'];
     const value = this.updateAccount.value;
