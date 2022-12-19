@@ -5,39 +5,8 @@
 <!--Main layout-->
 <main style="margin-top: 58px;">
   <div class="container pt-4">
-    <!-- danh sách cần làm -->
-    <div class="todolist p-3 rounded">
-      <h2>Danh sách cần làm</h2>
-      <p>Những việc bạn sẽ phải làm</p>
-      <div class="row">
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{sumUnconfimred}}</p>
-          <p>Chờ xác nhận</p>
-        </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{sumPacking}}</p>
-          <p>Chờ đóng gói</p>
-        </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{sumShipping}}</p>
-          <p>Đang vận chuyển</p>
-        </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{sumCancel}}</p>
-          <p>Đơn hủy</p>
-        </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{blockProduct}}</p>
-          <p>Sản phẩm tạm khóa</p>
-        </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">{{soldOutProduct}}</p>
-          <p>Sản phẩm hết hàng</p>
-        </div>
-      </div>
-    </div>
     <!--  báo cáo tiền bán hàng  -->
-    <div class="container mt-3">
+    <div class="container">
       <div class="row">
         <div class="col me-1 report-money p-3 rounded">
           <h3>Tổng tiền bán hàng trong ngày</h3>
@@ -101,6 +70,31 @@
       </div>
       <div class="card">
         <p-chart  type="line" [data]="multiAxisData" [options]="multiAxisOptions"></p-chart>
+      </div>
+    </div>
+    <!-- danh sách cần làm -->
+    <div class="todolist p-3 rounded mt-3">
+      <div class="row">
+        <div class="col-3 text-center">
+          <p class="text-primary fs-2 fw-bold">45</p>
+          <p>Sản phẩm sắp hết hạn</p>
+        </div>
+        <div class="col-3 text-center">
+          <p class="text-primary fs-2 fw-bold">65</p>
+          <p>Sản phẩm đã hết hạn</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">54</p>
+          <p>Sản phẩm tiêu hủy</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{blockProduct}}</p>
+          <p>Sản phẩm tạm khóa</p>
+        </div>
+        <div class="col-2 text-center">
+          <p class="text-primary fs-2 fw-bold">{{soldOutProduct}}</p>
+          <p>Sản phẩm hết hàng</p>
+        </div>
       </div>
     </div>
     <!-- sản phẩm của tôi -->

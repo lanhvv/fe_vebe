@@ -16,10 +16,10 @@ import {TokenStorageService} from "../../../services/token-storage.service";
 export class HomeComponent implements OnInit {
   status: number | undefined;
 
-  sumUnconfimred = 0;
-  sumPacking = 0;
-  sumShipping = 0;
-  sumCancel = 0;
+  // sumUnconfimred = 0;
+  // sumPacking = 0;
+  // sumShipping = 0;
+  // sumCancel = 0;
   blockProduct: number | undefined = 0;
   soldOutProduct: number | undefined = 0;
   today = new Date();
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     private datePipe: DatePipe,
     private checkRole: ValidateLoginService,
     private tokenStorage: TokenStorageService) {
-    // this.checkRole.checkToken(this.author);
+    this.checkRole.checkToken(this.author);
   }
 
   ngOnInit(): void {
@@ -76,26 +76,25 @@ export class HomeComponent implements OnInit {
 
   getReportSumProduct(){
     this.dashboardService.reportSumProduct().subscribe((data: any) =>{
-      // console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
+      console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
       this.blockProduct = data.block_product;
       this.soldOutProduct = data.sold_out;
     });
   }
 
-  getReportSumOrder(){
-    this.dashboardService.reportSumOrder().subscribe((data: any) =>{
-      this.sumUnconfimred = data.sumOrderUnConfimred;
-      this.sumPacking = data.sumOrderPacking;
-      this.sumShipping = data.sumOrderShipping;
-      this.sumCancel = data.sumOrderCancel;
-      // console.log(this.sumUnconfimred+"/"+this.sumPacking+"/"+this.sumShipping+"/"+this.sumCancel);
-    })
-  }
+  // getReportSumOrder(){
+  //   this.dashboardService.reportSumOrder().subscribe((data: any) =>{
+  //     this.sumUnconfimred = data.sumOrderUnConfimred;
+  //     this.sumPacking = data.sumOrderPacking;
+  //     this.sumShipping = data.sumOrderShipping;
+  //     this.sumCancel = data.sumOrderCancel;
+  //   })
+  // }
 
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
       this.products = data.items;
-      // console.log(data.items);
+      console.log(data.items);
     })
   }
 

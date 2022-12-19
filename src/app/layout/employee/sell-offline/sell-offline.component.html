@@ -15,8 +15,12 @@
     <div class="col-8 sell-list_product">
       <div class="sell-list_product-header p-2">
         <div class="row">
-          <div class="col-4">
-            <!--              <input type="text" class="form-control" placeholder="Mã sản phẩm">-->
+          <div class="col-1 pt-1">
+            <button class="btn-camera" (click)="openDialogScan()">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <div class="col-11">
             <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="product" [showClear]="true" (onFilter)="getProduct($event)"
                         styleClass="searchProduct">
               <ng-template let-product pTemplate="productItem" >
@@ -26,16 +30,12 @@
                 </div>
               </ng-template>
             </p-dropdown>
-            <button class="root-btn-product" (click)="openDialogScan()">Quét mã vạch</button>
-          </div>
-          <div class="col-8">
-            <p class="text-white float-end">Mã hóa đơn: {{cartCode}}</p>
           </div>
         </div>
       </div>
       <table *ngIf="cartItem.products!=null && viewBillRequest!=null" class="table mt-3">
         <tbody>
-        <tr *ngFor="let item of cartItem.products; let i=index" class="sell-list_product-body--item p-3">
+        <tr *ngFor="let item of cartItem.products; let i=index" class="sell-list_product-body--item">
           <th scope="row">{{i+1}}</th>
           <th>
             <button style="border: none; outline: none;" (click)="deleteProductOnCart(item.barCode)">

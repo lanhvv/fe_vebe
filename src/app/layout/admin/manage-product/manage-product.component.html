@@ -7,7 +7,7 @@
   <h5 translate>product.manage</h5>
   <div class="container pt-4 main-layout">
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
         <button type="button" (mousedown)="create()" class="root-btn" translate>
           <i class="fa-solid fa-plus me-2"></i>
           product.create
@@ -18,7 +18,7 @@
           <option value="1">Tất cả</option>
         </select>
       </div>
-      <div class="col-6">
+      <div class="col-5">
         <form style="width: 100%">
           <div class="input-group mb-3">
             <input type="text" name="name" class="form-control inputRoot" pInputText ngModel #search
@@ -27,6 +27,11 @@
                     icon="pi pi-search"></button>
           </div>
         </form>
+      </div>
+      <div class="col-2">
+        <button class="root-btn">
+          Thống kê
+        </button>
       </div>
     </div>
     <!-- table -->
