@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     this.status = 1;
     this.getReportSumProduct();
     this.getTop5Product();
-    this.getReportSumOrder();
+    // this.getReportSumOrder();
     this.getSumPriceOnDay();
     this.setUpDatePicker();
     // this.getCurrentDate(this.rangeDates);
