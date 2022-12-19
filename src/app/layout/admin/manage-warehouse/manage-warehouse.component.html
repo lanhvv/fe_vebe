@@ -322,17 +322,17 @@ rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 </p-dialog>
 
 <!--scan mã vạch-->
-<p-dialog header="" [(visible)]="dialogScanQR" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
-  <!--  <button (click)="enableCamera()">Camera</button>-->
-  <zxing-scanner
-    (camerasFound)="onCamerasFound($event)"
-    (scanSuccess)="onCodeResult($event)"
-    [torch]="torchEnabled"
-    [tryHarder]="tryHarder"
-    (permissionResponse)="onHasPermission($event)"
-    [(device)]="currentDevice"
-    (torchCompatible)="onTorchCompatible($event)"
-    [enable] = "enable"
-    [formats]="formatsEnabled"
-  ></zxing-scanner>
-</p-dialog>
+<!--<p-dialog header="" [(visible)]="dialogScanQR" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">-->
+<!--  &lt;!&ndash;  <button (click)="enableCamera()">Camera</button>&ndash;&gt;-->
+<!--  <zxing-scanner-->
+<!--    (camerasFound)="onCamerasFound($event)"-->
+<!--    (scanSuccess)="onCodeResult($event)"-->
+<!--    [torch]="torchEnabled"-->
+<!--    [tryHarder]="tryHarder"-->
+<!--    (permissionResponse)="onHasPermission($event)"-->
+<!--    [(device)]="currentDevice"-->
+<!--    (torchCompatible)="onTorchCompatible($event)"-->
+<!--    [enable] = "enable"-->
+<!--    [formats]="formatsEnabled"-->
+<!--  ></zxing-scanner>-->
+<!--</p-dialog>-->

@@ -16,10 +16,10 @@ import {TokenStorageService} from "../../../services/token-storage.service";
 export class HomeComponent implements OnInit {
   status: number | undefined;
 
-  sumUnconfimred = 0;
-  sumPacking = 0;
-  sumShipping = 0;
-  sumCancel = 0;
+  // sumUnconfimred = 0;
+  // sumPacking = 0;
+  // sumShipping = 0;
+  // sumCancel = 0;
   blockProduct: number | undefined = 0;
   soldOutProduct: number | undefined = 0;
   today = new Date();
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     this.status = 1;
     this.getReportSumProduct();
     this.getTop5Product();
-    this.getReportSumOrder();
+    // this.getReportSumOrder();
     this.getSumPriceOnDay();
     this.setUpDatePicker();
     // this.getCurrentDate(this.rangeDates);
@@ -82,15 +82,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getReportSumOrder(){
-    this.dashboardService.reportSumOrder().subscribe((data: any) =>{
-      this.sumUnconfimred = data.sumOrderUnConfimred;
-      this.sumPacking = data.sumOrderPacking;
-      this.sumShipping = data.sumOrderShipping;
-      this.sumCancel = data.sumOrderCancel;
-      console.log(this.sumUnconfimred+"/"+this.sumPacking+"/"+this.sumShipping+"/"+this.sumCancel);
-    })
-  }
+  // getReportSumOrder(){
+  //   this.dashboardService.reportSumOrder().subscribe((data: any) =>{
+  //     this.sumUnconfimred = data.sumOrderUnConfimred;
+  //     this.sumPacking = data.sumOrderPacking;
+  //     this.sumShipping = data.sumOrderShipping;
+  //     this.sumCancel = data.sumOrderCancel;
+  //   })
+  // }
 
   getTop5Product(){
     this.dashboardService.reportTop5Product('vi').subscribe((data: any) =>{
