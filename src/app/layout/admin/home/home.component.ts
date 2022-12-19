@@ -139,8 +139,13 @@ export class HomeComponent implements OnInit {
   }
 
   setUpLineChart(dates: string[], amounts: number[], sales: number[]){
-    console.log(amounts);
-    console.log(sales);
+
+    let countAmountsEqualZero = 0;
+    let countSalesEqualZero = 0
+
+    let amountsOfLineChart = [0];
+    let salesOfLineChart = [0];
+
     this.multiAxisData = {
       labels: dates,
       // labels: ["12-10-22","13-10-22", "14-10-22", "15-10-22", "16-10-22", "17-10-22","18-10-22"],
@@ -150,16 +155,39 @@ export class HomeComponent implements OnInit {
         borderColor: '#42A5F5',
         yAxisID: 'y',
         tension: .4,
-        data: sales
+        data: salesOfLineChart
       }, {
         label: 'Sản phẩm bán được',
         fill: false,
         borderColor: '#00bb7e',
         yAxisID: 'y1',
         tension: .4,
-        data: amounts
+        data: amountsOfLineChart
       }]
     };
+
+    for (let i = 0; i < dates.length; i++) {
+      if (amounts[i] === 0) {
+        countAmountsEqualZero++;
+      }
+      if (sales[i] === 0) {
+        countSalesEqualZero++;
+      }
+    }
+
+    if (countAmountsEqualZero === dates.length) {
+      this.multiAxisData.datasets[0].data = null;
+    } else {
+      this.multiAxisData.datasets[0].data = amounts;
+    }
+
+    if (countSalesEqualZero === dates.length) {
+      this.multiAxisData.datasets[1].data = null;
+    } else {
+      this.multiAxisData.datasets[1].data = sales;
+    }
+
+
 
     this.multiAxisOptions = {
       stacked: false,
