@@ -102,7 +102,7 @@
                   {{product.barcode}}
             </td>
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" [showClear]="true" placeholder="chọn loại sản phẩm">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
                     <div>{{this.product.typeProduct.name}}</div>
@@ -136,7 +136,7 @@
               </p-cellEditor>
             </td>
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" [showClear]="true" placeholder="chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -149,7 +149,7 @@
                 </ng-template>
               </p-dropdown></td>
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit!=null">
-              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" [filter]="true" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -185,6 +185,7 @@
                     <th>Đơn vị</th>
                     <th>Giá nhập</th>
                     <th>Giá bán</th>
+                    <th>số lượng</th>
                     <th>Thao tác</th>
                   </thead>
                   <tbody>
@@ -195,6 +196,9 @@
                       </td>
                       <td>
                         <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">
+                      </td>
+                      <td>
+                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="amount" [(ngModel)]="export.amount" disabled>
                       </td>
                       <td>
                         <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteExport(export,product)"></button>

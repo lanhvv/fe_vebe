@@ -5,4 +5,5 @@ export class GetUnitResult{
   statusName!: string;
   parentId!: number;
   description!: string;
+  amount!: number;
 }

@@ -181,8 +181,14 @@ export class ImportExcelComponent implements OnInit {
           this.failed(this.getExportsByUnitSelectedResponse.status.message);
         }else {
           this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
+          const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
+          for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
+            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
+            console.log("unit parent: "+this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount);
+            console.log("unit child: "+this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount);
+            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice=price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount;
+          }
           this.saveProducts();
-          console.log(this.productResponse.products);
         }
     })
   }
@@ -257,6 +263,7 @@ export class ImportExcelComponent implements OnInit {
   }
 
   getExportByUnitSelected(unitId: number){
+    console.log("response: "+JSON.stringify(this.productResponse.products));
     const getUnitsResults=[];
     for (let i = 0; i < this.getUnitResponse.results.length; i++) {
       if (this.getUnitResponse.results[i].id === unitId){
@@ -275,6 +282,7 @@ export class ImportExcelComponent implements OnInit {
         }
       }
     }
+    console.log("length getUnitsResults: "+getUnitsResults.length);
     return getUnitsResults;
   }
 
