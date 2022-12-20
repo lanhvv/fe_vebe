@@ -157,17 +157,17 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn xóa sản phẩm này khỏi đơn nhập hàng không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại'});
           }
         });
 
@@ -175,10 +175,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
@@ -216,17 +216,17 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteAll(key: any){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn những xóa đơn nhập hàng này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteAll(key,this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại!'});
           }
         });
 
@@ -234,10 +234,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }

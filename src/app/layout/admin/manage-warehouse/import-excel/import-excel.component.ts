@@ -94,13 +94,13 @@ export class ImportExcelComponent implements OnInit {
   //delete products selected in table
   deleteSelectedProducts() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected products?',
-      header: 'Confirm',
+      message: 'Bạn có chắc muốn xóa những sản phẩm này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.productResponse.products = this.productResponse.products.filter(val => !this.selectedProducts.includes(val));
         this.selectedProducts = [];
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công?', life: 3000});
         this.saveProducts();
       }
     });
@@ -110,13 +110,13 @@ export class ImportExcelComponent implements OnInit {
   deleteProduct(product: ImportProductResult) {
     console.log("32123123123")
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.productName + '?',
-      header: 'Confirm',
+      message: 'Bạn có chắc muốn xóa muốn xóa sản phẩm ' + product.productName + ' này không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.productResponse.products = this.productResponse.products.filter(val => val.id !== product.id);
         // this.product = [];
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Product Deleted', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công!', life: 3000});
         this.saveProducts();
       }
     });

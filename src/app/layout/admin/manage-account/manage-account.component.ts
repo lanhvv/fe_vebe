@@ -194,15 +194,15 @@ export class ManageAccountComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
             break;
         }
       }
     });
-    this.getall()
+    this.getall();
   }
 
   lockAccount(request: number) {
@@ -230,10 +230,10 @@ export class ManageAccountComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
             break;
         }
       }

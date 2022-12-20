@@ -101,20 +101,20 @@ export class ManageTypeProductComponent implements OnInit {
 
   delete(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Xóa danh mục sẽ ảnh hưởng tới trình quản lý sản phẩm?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.typeProductService.delete(request).subscribe(response => {
           this.typeResponse = response as CreateResponse;
           if (this.typeResponse.status.status == '1') {
             this.ngOnInit();
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Delete success'});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa danh mục sản phẩm thành công!'});
           } else {
             this.messageService.add({
               severity: 'error',
-              summary: 'Confirmed',
-              detail: "this.typeResponse.status.message"
+              summary: 'Xác nhận',
+              detail: "Xóa đơn vị thất bại, vui lòng thử lại!"
             });
           }
         });
@@ -122,10 +122,10 @@ export class ManageTypeProductComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ hành động!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ hành động!'});
             break;
         }
       }
@@ -140,9 +140,9 @@ export class ManageTypeProductComponent implements OnInit {
     this.typeProductService.update(this.updateTypeProductRequest).subscribe(responsse => {
       this.typeResponse = responsse as CreateResponse;
       if(this.typeResponse.status.status=='1'){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: ' Update success', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Chỉnh sửa danh mục sản phẩm thành công!', life: 3000});
       }else {
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Update failse', life: 3000});
+        this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Chỉnh sửa danh mục sản phẩm thất bại!', life: 3000});
       }
       this.ngOnInit();
     })
@@ -216,10 +216,10 @@ export class ManageTypeProductComponent implements OnInit {
     this.typeProductService.create(this.typeRequest).subscribe(response => {
       this.typeResponse = response as CreateResponse;
       if(this.typeResponse.status.status=='1'){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Thêm mới danh mục sản phẩm thành công!', life: 3000});
 
       }else {
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Add Account failse', life: 3000});
+        this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Thêm mới danh mục sản phẩm thất bại!', life: 3000});
       }
       this.ngOnInit();
     })
@@ -237,22 +237,20 @@ export class ManageTypeProductComponent implements OnInit {
     })
     this.updateType= true;
   }
-  createDetail() {
 
+  createDetail() {
     this.typeDetailRequest.id = this.category.id as number;
-    this.typeDetailRequest.id = this.category.id
-    console.log(this.typeDetailRequest.id)
+    this.typeDetailRequest.id = this.category.id;
+    // console.log(this.typeDetailRequest.id);
     this.typeProductService.createDetail(this.typeDetailRequest).subscribe(response => {
       this.typeResponse = response as CreateResponse;
       if(this.typeResponse.status.status=='1'){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Add Account success', life: 3000});
-
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Thêm mới danh mục sản phẩm thành công!', life: 3000});
       }else {
-        this.messageService.add({severity:'error', summary: 'Error', detail: 'Add Account failse', life: 3000});
+        this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Thêm mới danh mục sản phẩm thành công!', life: 3000});
       }
       this.ngOnInit();
     })
-
   }
 
 }
