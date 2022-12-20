@@ -9,7 +9,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Filter} from "../../../shared/model/Filter";
 import {CreateSupplierResponse} from "../../../shared/response/suppplier/CreateSupplierResponse";
 import {CreateSupplier} from "../../../shared/model/CreateSupplier";
-import {ConfirmationService, MessageService} from "primeng/api";
+import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api";
 import {DatePipe} from "@angular/common";
 
 interface StatusSupplier {
@@ -128,6 +128,16 @@ export class ManageDistributorComponent implements OnInit {
               currentItem.status = 2;
             }
           });
+        },
+        reject: (type: any) => {
+          switch (type) {
+            case ConfirmEventType.REJECT:
+              this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
+              break;
+            case ConfirmEventType.CANCEL:
+              this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
+              break;
+          }
         }
       });
     } else {
@@ -144,9 +154,20 @@ export class ManageDistributorComponent implements OnInit {
               currentItem.status = 1;
             }
           });
+        },
+        reject: (type: any) => {
+          switch (type) {
+            case ConfirmEventType.REJECT:
+              this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
+              break;
+            case ConfirmEventType.CANCEL:
+              this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
+              break;
+          }
         }
       });
     }
+    this.loadInit();
   }
 
   delete(id:number) {
