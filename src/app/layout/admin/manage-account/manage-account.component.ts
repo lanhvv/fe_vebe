@@ -140,16 +140,16 @@ export class ManageAccountComponent implements OnInit {
 
   delete(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Xóa tài khoản sẽ ảnh hưởng tới tài khoản của nhân viên, bạn có chắc muốn xóa không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.deleteAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Delete success'});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa tài khoản thành công!'});
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Delete failse'});
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa tài khoản thất bại, vui lòng thử lại!'});
           }
         });
 
@@ -157,10 +157,10 @@ export class ManageAccountComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác!'});
             break;
         }
       }
@@ -308,11 +308,11 @@ export class ManageAccountComponent implements OnInit {
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if(this.createAccountResponse.status.status="1"){
-        this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Tạo tài khoản thành công!', life: 3000});
         this.isDialogAccount=true;
         this.getall();
       }else {
-        this.messageService.add({severity:'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000});
+        this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Tạo tài khoản thất bại!', life: 3000});
         this.isDialogAccount=true;
       }
     })
