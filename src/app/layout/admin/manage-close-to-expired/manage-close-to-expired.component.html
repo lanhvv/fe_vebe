@@ -5,26 +5,66 @@
 
     <div class="mt-2">
       <div class="container-fluid">
-        <p-table>
-          <ng-template pTemplate="header">
+        <p-table [value]="response.closeToExpirationItems">
+          <ng-template  pTemplate="header">
             <tr>
-              <th class="col-1">STT</th>
-              <th class="col-1">Sản phẩm</th>
-              <th class="col-1">Mã sp</th>
+              <th class="col-2">Sản phẩm</th>
+<!--              <th class="col-1">Mã sp</th>-->
               <th class="col-1">Ngày nhập</th>
-              <th class="col-1">Ngày hết hạn</th>
+              <th class="col-1">Hết hạn</th>
               <th class="col-2">Người nhập</th>
-              <th class="col-1">Tồn</th>
-              <th class="col-2">Giá nhập</th>
+              <th class="col-2">Tồn</th>
+              <th class="col-1">Giá nhập</th>
               <th class="col-1">Thao tác</th>
             </tr>
           </ng-template>
-
+          <ng-template pTemplate="body" let-rowIndex="rowIndex" let-item let-expanded="expanded">
+            <tr>
+              <td>{{item.nameProduct}}</td>
+              <td>{{item.dateAdded | date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.expired | date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.creator}}</td>
+              <td>{{item.amount}}</td>
+              <td>{{item.inCome | number}}đ</td>
+              <td>
+                <button class="buttonRoot me-1" (click)="openDialog(item.idImport)">
+                  <i class="pi pi-pencil"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
         </p-table>
-<!--        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"-->
-<!--                     (onPageChange)="paginate($event)"></p-paginator>-->
+        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
+                     (onPageChange)="paginate($event)"></p-paginator>
       </div>
     </div>
   </div>
   <p-toast></p-toast>
+
+  <p-dialog [(visible)]="dialog" [style]="{width: '550px'}" header="Cập nhập giá" [modal]="true" styleClass="p-fluid" [draggable]="false">
+    <ng-template pTemplate="content">
+      <h5 class="form-label">Hàng tồn: {{inventory}}</h5> <br>
+      <div class="mb-3 input-group pb-1" *ngFor="let item of listUnit; let i = index">
+<!--        <label class="form-label">{{item.nameUnit}}</label>-->
+<!--        <input type="text" class="form-control"  required>-->
+<!--        <small class="text-danger" *ngIf="submitted && !unit.unitName">Tên đơn vị không được để trống.</small>-->
+
+<!--        <span class="p-float-label">-->
+<!--            <p-inputNumber  type="text" id="inputgroup" [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="2"></p-inputNumber>-->
+<!--            <label for="inputgroup">{{item.nameUnit}}</label>-->
+<!--        </span>-->
+<!--        <span class="p-inputgroup-addon" style="width: 90px">-->
+<!--            <b>đ/{{item.nameUnit}}</b>-->
+<!--        </span>-->
+
+
+        <input type="text" class="form-control" placeholder="{{item.nameUnit}}" aria-label="Recipient's username" [(ngModel)]="item.editAmount" aria-describedby="basic-addon2">
+        <span class="input-group-text" id="basic-addon2" style="width: 90px">đ/{{item.nameUnit}}</span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <hr>
+      <button class="root-btn" (click)="updateExport()">Cập nhập</button>
+    </ng-template>
+  </p-dialog>
 </main>
