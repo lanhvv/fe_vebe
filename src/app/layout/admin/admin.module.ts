@@ -66,6 +66,7 @@ import { ManageTypeProductComponent } from './manage-type-product/manage-type-pr
 import {TreeTableModule} from "primeng/treetable";
 import {SidebarModule} from 'primeng/sidebar';
 import { ManageExpiryDateComponent } from './manage-product/manage-expiry-date/manage-expiry-date.component';
+import { ManageDebitComponent } from './manage-debit/manage-debit.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { ManageExpiryDateComponent } from './manage-product/manage-expiry-date/m
     StatisticSupplierComponent,
     ManageTypeProductComponent,
     ManageExpiryDateComponent,
+    ManageDebitComponent,
   ],
   imports: [
     CommonModule,

@@ -65,7 +65,6 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   torchAvailable$ = new BehaviorSubject<boolean>(false);
   allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
   scanner !: ZXingScannerComponent;
-
   availableDevices !: MediaDeviceInfo[];
   currentDevice !: MediaDeviceInfo | undefined;
   enableCameraState : boolean = false;

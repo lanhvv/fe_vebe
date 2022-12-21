@@ -1,31 +1,30 @@
-import { MessageService } from 'primeng/api';
-import { DebitResponse } from './../../../shared/model/response/debitResponse';
-import { CreateDebitRequest } from './../../../shared/model/request/createDebitRequest';
-import { DebitDetailResponse } from './../../../shared/model/response/debitDetailResponse';
-import { GetOrderRequest } from './../../../shared/model/request/getOrderRequest';
-import { Filter } from './../../../shared/model/Filter';
-import { DebitService } from './../../../services/employee/debit/debit.service';
-import { DebitItemsResponse } from './../../../shared/model/response/debitItemsResponse';
-import { IDebitItems } from './../../../shared/model/iDebitIitems';
 import { Component, OnInit } from '@angular/core';
-import { DebitDetailItems } from '../../../shared/model/request/DebitDetailItems';
-import { GetUnitChildResponse } from '../../../shared/model/response/GetUnitChildResponse';
-import { InfoUnitItem } from '../../../shared/model/InfoUnitItem';
-import { DetailDebitItems } from 'src/app/shared/model/request/DetailDebitItems';
-import { UpdateDebitRequest } from '../../../shared/model/request/updateDebitRequest';
-import { PayRequest } from '../../../shared/model/request/PayRequest';
-import { ListPayRequest } from '../../../shared/model/request/ListPayRequest';
-import { DebitUserItemsResponse } from '../../../shared/model/response/debitUserItemsResponse';
-import { BillItems } from '../../../shared/model/billItems';
-import { ListBillItems } from '../../../shared/model/response/ListBillItems';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {FormGroup} from "@angular/forms";
+import {GetUnitChildResponse} from "../../../shared/model/response/GetUnitChildResponse";
+import {InfoUnitItem} from "../../../shared/model/InfoUnitItem";
+import {DebitDetailItems} from "../../../shared/model/request/DebitDetailItems";
+import {PayRequest} from "../../../shared/model/request/PayRequest";
+import {ListPayRequest} from "../../../shared/model/request/ListPayRequest";
+import {DebitUserItemsResponse} from "../../../shared/model/response/debitUserItemsResponse";
+import {IDebitItems} from "../../../shared/model/iDebitIitems";
+import {DebitItemsResponse} from "../../../shared/model/response/debitItemsResponse";
+import {GetOrderRequest} from "../../../shared/model/request/getOrderRequest";
+import {ListBillItems} from "../../../shared/model/response/ListBillItems";
+import {BillItems} from "../../../shared/model/billItems";
+import {Filter} from "../../../shared/model/Filter";
+import {DebitDetailResponse} from "../../../shared/model/response/debitDetailResponse";
+import {CreateDebitRequest} from "../../../shared/model/request/createDebitRequest";
+import {UpdateDebitRequest} from "../../../shared/model/request/updateDebitRequest";
+import {DebitResponse} from "../../../shared/model/response/debitResponse";
+import {DebitService} from "../../../services/employee/debit/debit.service";
+import {MessageService} from "primeng/api";
 
 @Component({
-  selector: 'app-debit',
-  templateUrl: './debit.component.html',
-  styleUrls: ['./debit.component.css'],
+  selector: 'app-manage-debit',
+  templateUrl: './manage-debit.component.html',
+  styleUrls: ['./manage-debit.component.css']
 })
-export class DebitComponent implements OnInit {
+export class ManageDebitComponent implements OnInit {
 
   status: number = 0;
   unitLayouts: any[] = [];
@@ -42,9 +41,9 @@ export class DebitComponent implements OnInit {
   selectedUnitChilds: InfoUnitItem[] = [];
 
   rangeDates?: Date[];
-  debitItems: DebitDetailItems[] = []
-  payRequest!: PayRequest
-  payRequests: ListPayRequest
+  debitItems: DebitDetailItems[] = [];
+  payRequest!: PayRequest;
+  payRequests: ListPayRequest;
 
 
   debitUserItemsResponse: DebitUserItemsResponse;
@@ -53,8 +52,8 @@ export class DebitComponent implements OnInit {
   debitItemsResponses: DebitItemsResponse[] = [];
   debitItemsResponse: DebitItemsResponse;
   getOrderRequest!: GetOrderRequest;
-  billItems:  ListBillItems
-  billItem:  BillItems
+  billItems:  ListBillItems;
+  billItem:  BillItems;
   page: number = 0;
   pageSize: number = 10;
   filter!: Filter;
@@ -73,26 +72,26 @@ export class DebitComponent implements OnInit {
   updateDialog!: boolean
   payDialog!:boolean
   es: any;
+
   constructor(private debitService: DebitService, private messageService: MessageService) {
     this.debitItemsResponse = new DebitItemsResponse();
     this.createDebitRequest = new CreateDebitRequest();
     this.debitResponse = new DebitResponse();
-    this.updateDebitRequest = new UpdateDebitRequest()
-    this.payRequest = new PayRequest()
-    this.payRequests = new ListPayRequest()
+    this.updateDebitRequest = new UpdateDebitRequest();
+    this.payRequest = new PayRequest();
+    this.payRequests = new ListPayRequest();
     this.debitUserItemsResponse = new DebitUserItemsResponse();
-    this.editDebitRequest = new UpdateDebitRequest()
-    this.billItems = new ListBillItems()
-    this.billItem = new BillItems()
+    this.editDebitRequest = new UpdateDebitRequest();
+    this.billItems = new ListBillItems();
+    this.billItem = new BillItems();
 
   }
 
   ngOnInit(): void {
-    this.getallListUser()
-    this.getTop10()
-    this.status = 3;
+    this.getallListUser();
+    this.getTop10();
+    this.status = 12;
   }
-
   searchByName(request: string) {
     this.searchText = request;
     this.filter = {"typeFilter": "none", "valueFilter": "none"}
@@ -162,6 +161,7 @@ export class DebitComponent implements OnInit {
       this.payDialog = true;
     });
   }
+
   getByUpdate(request: number) {
     this.debitService.getById(request).subscribe((data) => {
 
@@ -173,25 +173,26 @@ export class DebitComponent implements OnInit {
       this.updateDialog = true;
     });
   }
+
   getTop10(){
     this.debitService.getTop10().subscribe((response) => {
       this.billItems = response as ListBillItems;
     });
   }
-  pay() {
 
+  pay() {
     this.debitService.pay(this.updateDebitRequest.idDebit, this.payRequest).subscribe(response => {
       this.debitResponse = response as DebitResponse
       if (this.debitResponse.status.status == '1') {
-         this.getallListUser()
+        this.getallListUser()
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.debitResponse.status.message, life: 3000 });
       }
       else {
         this.messageService.add({ severity: 'error', summary: 'Error', detail:  this.debitResponse.status.message, life: 3000 });
       }
     })
-
   }
+
   create() {
     this.createDebitRequest.billId = this.billItem.id as number
     console.log(this.createDebitRequest.billId)
@@ -207,6 +208,7 @@ export class DebitComponent implements OnInit {
       }
     })
   }
+
   openCreate() {
     this.createDialog = true;
   }
@@ -234,6 +236,7 @@ export class DebitComponent implements OnInit {
       this.debitUserItemsResponse = response as DebitUserItemsResponse;
     });
   }
+
   Pageable(event: any) {
     this.page = event.page;
     this.pageSize = event.rows;
@@ -256,6 +259,4 @@ export class DebitComponent implements OnInit {
       this.listUnit.push(++num);
     }
   }
-
-
 }

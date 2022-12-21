@@ -3,4 +3,5 @@ export class ExportResult{
   outPrice!: number;
   unitId!:number;
   unitName!:string;
+  amount!: number;
 }

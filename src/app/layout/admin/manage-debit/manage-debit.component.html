@@ -1,5 +1,9 @@
-<employee-header xmlns="http://www.w3.org/1999/html" [Status]="status"></employee-header>
+<!--Main Navigation-->
+<admin-header [Status]=status></admin-header>
+<!--Main Navigation-->
+
 <main>
+  <h5>Quản lý ghi nợ</h5>
   <div class="container-fluid pt-4 main-layout">
     <div class="row">
       <div class="col-3 float-start">
@@ -98,13 +102,12 @@
     </p-table>
     <p-paginator [rows]="10" [totalRecords]="debitUserItemsResponse.totalItems" [rowsPerPageOptions]="[2, 10, 25, 50]"
                  currentPageReportTemplate="Showing {{debitUserItemsResponse.totalPages}} to {{ debitUserItemsResponse.totalPages }} of {{debitUserItemsResponse.totalItems}} entries" (onPageChange)="Pageable($event)"></p-paginator>
-    </div>
+  </div>
   </div>
   <p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
   <p-toast></p-toast>
-
+  <admin-footer></admin-footer>
 </main>
-<employee-footer></employee-footer>
 
 <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
 </p-confirmDialog>
@@ -216,7 +219,7 @@
       </div>
       <div class="field mt-3">
         <label for="address_customer_create">Địa chỉ</label>
-        <textarea id="address_customer_create" pInputTextarea [(ngModel)]="createDebitRequest.address" required rows="3"
+        <textarea id="address_customer_create" class="form-control" pInputTextarea [(ngModel)]="createDebitRequest.address" required rows="3"
                   cols="20"></textarea>
       </div>
     </div>
@@ -250,7 +253,7 @@
       </div>
       <div class="field mt-3">
         <label for="description_customer_create">Ghi chú</label>
-        <textarea id="description_customer_create" pInputTextarea [(ngModel)]="createDebitRequest.description" required
+        <textarea id="description_customer_create" class="form-control" pInputTextarea [(ngModel)]="createDebitRequest.description" required
                   rows="3" cols="20"></textarea>
       </div>
     </div>
@@ -372,7 +375,3 @@
   </div>
 
 </p-dialog>
-
-
-
-

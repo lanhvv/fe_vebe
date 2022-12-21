@@ -21,6 +21,9 @@ import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListIm
 import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
 import { UnitService } from 'src/app/services/unit/unit.service';
 import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
+import {BehaviorSubject} from "rxjs";
+import {BarcodeFormat} from "@zxing/library";
+import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -73,6 +76,24 @@ export class ManageWarehouseComponent implements OnInit {
 
   units:Unit[]=[];
 
+  //open cam
+  dialogScanQR: boolean = false;
+  enable : boolean = true;
+  hasPermission !: boolean;
+  torchEnabled = false;
+  tryHarder = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
+  scanner !: ZXingScannerComponent;
+  availableDevices !: MediaDeviceInfo[];
+  currentDevice !: MediaDeviceInfo | undefined;
+  enableCameraState : boolean = false;
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
 
   constructor(private messageService: MessageService ,
               private prodService:ProductService,
@@ -100,9 +121,11 @@ export class ManageWarehouseComponent implements OnInit {
       this.items = response as ImportInWarehouseInRedis[];
     });
   }
+
   back(){
     window.history.back();
   }
+
   update(){
     if(this.selectedCategory!=null){
       this.edit.categoryId=this.selectedCategory.id as number;
@@ -131,19 +154,20 @@ export class ManageWarehouseComponent implements OnInit {
     });
 
   }
+
   deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn xóa sản phẩm này khỏi đơn nhập hàng không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại'});
           }
         });
 
@@ -151,10 +175,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
@@ -162,15 +186,17 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
+
   getById(key:number, redisId: string){
+    console.log(key + " " + redisId);
     this.importService.edit(key, redisId, this.language).subscribe(response => {
       this.selectedCategory = response.category
-      console.log( this.selectedCategory.id,response.categoryId)
       this.edit = response as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
   }
+
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
       this.importWarehouseResponse = response as ImportWarehouseResponse[];
@@ -190,17 +216,17 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteAll(key: any){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn những xóa đơn nhập hàng này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteAll(key,this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại!'});
           }
         });
 
@@ -208,10 +234,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
@@ -225,6 +251,7 @@ export class ManageWarehouseComponent implements OnInit {
       console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
     });
   }
+
   create(){
 
     if(this.selectedCategory!=null){
@@ -254,6 +281,7 @@ export class ManageWarehouseComponent implements OnInit {
     });
 
   }
+
   getProductByBarcode() {
     this.importService.getProductByBarcode(this.createProductRequest.barCode, this.language).subscribe(response => {
       this.createProductRequest.nameProd =response.productName
@@ -265,7 +293,6 @@ export class ManageWarehouseComponent implements OnInit {
   showDialog() {
     this.display = true;
   }
-
 
   onUpload(event:Event){
     console.log(event)
@@ -280,6 +307,7 @@ export class ManageWarehouseComponent implements OnInit {
       }
     });
   }
+
   getUnitChild(){
 
     this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
@@ -287,6 +315,7 @@ export class ManageWarehouseComponent implements OnInit {
     })
 
   }
+
   pushUnit() {
     if (this.listUnit.length == 0) {
       this.listUnit.push(1);
@@ -348,22 +377,80 @@ export class ManageWarehouseComponent implements OnInit {
     }
 
   }
+
   onRemove(){
     console.log("remote: "+this.fileId);
     this.fileId=0;
 
   }
 
-
   changeImage(){
     this.url = '';
     this.enableImage = false;
   }
+
   success(message: string) {
     this.messageService.add({severity:'success', summary: this.translateService.getvalue("message.success"), detail: message});
   }
 
   failed(message: string) {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
+  }
+
+  // camera
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+  }
+
+  //get value scan
+  qrResultString !: string;
+  onCodeResult(resultString: string) {
+    this.qrResultString = resultString;
+    this.dialogScanQR = false;
+    this.currentDevice = undefined;
+    this.createProductRequest.barCode = this.qrResultString;
+    this.edit.barCode = this.qrResultString;
+    console.log(this.qrResultString);
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
+  }
+
+  onDeviceSelectChange(selected: Event) {
+    this.enable = true;
+    const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
+    // @ts-ignore
+    this.currentDevice = device;
+    console.log(this.currentDevice);
+  }
+
+  onTorchCompatible(isCompatible: boolean): void {
+    this.torchAvailable$.next(isCompatible || false);
+  }
+
+  getValue(event: Event): string {
+    console.log((event.target as HTMLInputElement).value);
+    return (event.target as HTMLInputElement).value;
+  }
+
+  enableCamera() {
+    this.enableCameraState = !this.enableCameraState;
+    if (this.enableCameraState) {
+      this.enable = true;
+      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
+      this.currentDevice = device;
+      console.log(this.currentDevice);
+    } else {
+      this.enable = false;
+      this.currentDevice = undefined;
+    }
+  }
+
+  openDialogScan(){
+    this.enableCamera();
+    setTimeout(() => {
+      this.dialogScanQR = true;
+    });
   }
 }
