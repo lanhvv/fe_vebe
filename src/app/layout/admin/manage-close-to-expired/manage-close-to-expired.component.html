@@ -1,0 +1,30 @@
+<admin-header [Status]="status"></admin-header>
+<main>
+  <div class="pt-2 card pb-4 mb-4" style="border-radius: 10px;
+              box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+
+    <div class="mt-2">
+      <div class="container-fluid">
+        <p-table>
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-1">STT</th>
+              <th class="col-1">Sản phẩm</th>
+              <th class="col-1">Mã sp</th>
+              <th class="col-1">Ngày nhập</th>
+              <th class="col-1">Ngày hết hạn</th>
+              <th class="col-2">Người nhập</th>
+              <th class="col-1">Tồn</th>
+              <th class="col-2">Giá nhập</th>
+              <th class="col-1">Thao tác</th>
+            </tr>
+          </ng-template>
+
+        </p-table>
+<!--        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"-->
+<!--                     (onPageChange)="paginate($event)"></p-paginator>-->
+      </div>
+    </div>
+  </div>
+  <p-toast></p-toast>
+</main>
