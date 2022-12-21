@@ -87,9 +87,25 @@ input[type=file] {
 }
 
 .buttonRoot {
-  color: white;
-  background-color: #0061C1;
   height: 40px;
+  background-color: #0061C1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  width: 40px;
+}
+
+.buttonRoot-delete {
+  height: 40px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  width: 40px;
 }
 
 >>> .p-datatable .p-datatable-thead > tr > th {

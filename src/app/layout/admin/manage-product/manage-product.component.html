@@ -63,8 +63,11 @@
 
         <ng-template pTemplate="body" let-item>
           <tr>
-            <td>
-
+            <td *ngIf="item.statusCode==1">
+              <p-inputSwitch [ngModel]="item.statusCode == 1" (click)="confirmLock(item.productCode)"></p-inputSwitch>
+            </td>
+            <td *ngIf="item.statusCode==2">
+              <p-inputSwitch [ngModel]="item.statusCode == 2" (click)="confirmUnlock(item.productCode)"></p-inputSwitch>
             </td>
             <td>
               <a
@@ -78,14 +81,16 @@
             <td>{{item.supName}}</td>
             <td>{{item.inventory}} ({{item.unit}})</td>
             <td>
-              <i *ngIf="item.statusCode==3" class="fa-solid fa-lock text-danger me-2"
-                 (click)="confirmUnlock(item.productCode)"></i>
-              <i *ngIf="item.statusCode!=3 && item.statusCode!=4" class="fa-solid fa-unlock text-success me-2"
-                 (click)="confirmLock(item.productCode)"></i>
-              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4"
-                 (click)="update(item.productCode)"></i>
-              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2"
-                 (click)="confirmRemove(item.productCode)"></i>
+<!--              <i *ngIf="item.statusCode==3" class="fa-solid fa-lock text-danger me-2"-->
+<!--                 (click)="confirmUnlock(item.productCode)"></i>-->
+<!--              <i *ngIf="item.statusCode!=3 && item.statusCode!=4" class="fa-solid fa-unlock text-success me-2"-->
+<!--                 (click)="confirmLock(item.productCode)"></i>-->
+              <button *ngIf="item.statusCode!=4" (click)="update(item.productCode)" class="buttonRoot me-1">
+                <i class="fa-solid fa-file-pen"></i>
+              </button>
+              <button *ngIf="item.statusCode!=4" (click)="confirmRemove(item.productCode)" class="buttonRoot-delete">
+                <i class="fa-solid fa-trash"></i>
+              </button>
             </td>
           </tr>
         </ng-template>

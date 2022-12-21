@@ -62,10 +62,10 @@
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
               <td>
-                <div *ngIf="item.statusName === 'Hoạt động'" class="active">
+                <div *ngIf="item.status === 1" class="active">
                   <p>{{item.statusName}}</p>
                 </div>
-                <div *ngIf="item.statusName === 'Không hoạt động'" class="in-active">
+                <div *ngIf="item.status === 2" class="in-active">
                   <p>{{item.statusName}}</p>
                 </div>
               </td>

@@ -35,7 +35,7 @@ export class ListProductComponent implements OnInit {
               private stallService:StallServiceService,
               private translateService:TranslateConfigService) { }
 
-  status: number | undefined;
+  status: number=0;
   products !:ViewStallResponse;
   notEmptyPost = true;
   notscrolly = true;
