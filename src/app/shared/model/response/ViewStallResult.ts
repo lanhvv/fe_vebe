@@ -2,11 +2,11 @@ import {ExportItem} from "./ExportItem";
 
 export class ViewStallResult{
   productId!:number;
-  productName!:String;
+  productName!:string;
   barCode!:string;
   importId!:number;
   img!:String;
   amount!:number;
   items!:ExportItem[];
-  productCode!:String;
+  productCode!:string;
 }

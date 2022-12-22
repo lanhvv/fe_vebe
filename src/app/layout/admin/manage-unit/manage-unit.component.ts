@@ -80,7 +80,7 @@ export class ManageUnitComponent implements OnInit {
 
       this.unitService.save(request).subscribe(data => {
           this.load();
-          this.messageService.add({severity:'success', summary: 'Successful', detail: 'Tạo đơn vị thành công', life: 3000});
+          this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Thêm mới đơn vị thành công', life: 3000});
         }
       );
       this.unitDialog = false;
@@ -108,7 +108,7 @@ export class ManageUnitComponent implements OnInit {
       request.description = this.unit.description;
       this.unitService.update(request).subscribe(data => {
           this.load();
-          this.messageService.add({severity:'success', summary: 'Successful', detail: 'Đã cập nhập đơn vị', life: 5000});
+          this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Cập nhật đơn vị thành công!', life: 5000});
         }
       );
       this.unitDialog = false;
@@ -198,7 +198,7 @@ export class ManageUnitComponent implements OnInit {
   deleteSelectUnit(idChild:number, idParent:number) {
     this.confirmationService.confirm({
       message: 'Bạn có chắc chắn xóa đơn vị đang chọn?',
-      header: 'Confirm',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (idParent !== 0) {
@@ -224,7 +224,7 @@ export class ManageUnitComponent implements OnInit {
   delete(id:number) {
     this.unitService.delete(id).subscribe(data => {
       this.load();
-      this.messageService.add({severity:'success', summary: 'Successful', detail: 'Đã  xóa đơn vị', life: 3000});
+      this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Đã xóa đơn vị thành công!', life: 3000});
     })
   }
 
@@ -270,8 +270,8 @@ export class ManageUnitComponent implements OnInit {
 
     if (flag === false) {
       this.confirmationService.confirm({
-        message: 'Đơn vị bạn chọn đang là nhỏ nhất trong nhánh có tiếp tục chứ?',
-        header: 'Confirm',
+        message: 'Đơn vị bạn chọn đang là nhỏ nhất trong nhánh, bạn có muốn tiếp tục?',
+        header: 'Xác nhận',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.cloneUnitDeleteEdit = this.unitDeleteEdit.map(x => Object.assign({}, x));
@@ -343,7 +343,7 @@ export class ManageUnitComponent implements OnInit {
 
   deleteParentIdEqual0(idDelete:number, idParent:number, list:UnitItems[]) {
     this.unitService.deleteParentIdEqual0(idDelete, idParent, list).subscribe(data => {
-      this.messageService.add({severity:'success', summary: 'Successful', detail: 'Đã  xóa đơn vị', life: 5000});
+      this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa đơn vị thành công!', life: 5000});
       this.load()
     });
   }

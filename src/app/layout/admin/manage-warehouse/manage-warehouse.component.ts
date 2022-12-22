@@ -27,6 +27,7 @@ import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
 import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
 import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
+import {UploadFileService} from "../../../services/upload_file/upload-file.service";
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -72,9 +73,6 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
-  categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
-  categoryitem: CategoryImportItems = new CategoryImportItems()
-  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -106,7 +104,8 @@ export class ManageWarehouseComponent implements OnInit {
               private unitService:UnitService,
               private translateService:TranslateConfigService,private fb: FormBuilder,
               private confirmationService: ConfirmationService,
-              private importService: ImportSupplierService) {
+              private importService: ImportSupplierService,
+              private uploadFileService: UploadFileService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
   }
@@ -115,7 +114,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.language=this.translateService.getLanguage()!;
     this.status = 8;
     this.getInformations();
-    this.getAllType()
   }
 
   data: AOV = [
@@ -164,8 +162,8 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn xóa sản phẩm này khỏi đơn nhập hàng không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
@@ -231,8 +229,8 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteAll(key: any){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn những xóa đơn nhập hàng này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteAll(key,this.language).subscribe(response => {
@@ -249,17 +247,18 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
     });
 
   }
-  getInformations() {
+
+  getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
       console.log(this.getInforCreateProductResponse.unitItems);
@@ -409,6 +408,19 @@ export class ManageWarehouseComponent implements OnInit {
 
   failed(message: string) {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
+  }
+
+  exportQRCode(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+        const doc = new jsPDF.jsPDF(response);
+        doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
   }
 
   // camera

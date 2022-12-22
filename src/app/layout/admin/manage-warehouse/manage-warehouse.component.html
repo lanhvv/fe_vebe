@@ -53,9 +53,9 @@
             <th pSortableColumn="price">Hạn dùng
               <p-sortIcon field="price"></p-sortIcon>
             </th>
-            <th pSortableColumn="price">Nhà cung cấp
-              <p-sortIcon field="price"></p-sortIcon>
-            </th>
+<!--            <th pSortableColumn="price">Nhà cung cấp-->
+<!--              <p-sortIcon field="price"></p-sortIcon>-->
+<!--            </th>-->
             <th>Hành động</th>
           </tr>
         </ng-template>
@@ -64,10 +64,10 @@
             <td>{{rowIndex + 1}}</td>
             <td>{{product.barcode}}</td>
             <td>{{product.productName}}</td>
-            <td>{{product.inAmount}}-{{product.unit}}</td>
-            <td>{{product.inPrice | currency:"VND":true }}</td>
+            <td>{{product.inAmount}}</td>
+            <td>{{product.inPrice | number: '1.0-0' }}</td>
             <td>{{product.rangeDate }}</td>
-            <td>{{product.supplierName }}</td>
+<!--            <td>{{product.supplierName }}</td>-->
             <td>
               <button class="root-btn-table me-1" (click)="getById(product.supplierId,product.id )">Chỉnh sửa</button>
               <button class="root-btn-danger" (click)="deleteById(product.supplierId,product.id )">Xóa</button>
@@ -76,7 +76,6 @@
         </ng-template>
       </p-table>
     </div>
-    <button class="root-btn-danger" (click)="doneImpport()">Hoàn thành</button>
   </div>
 </main>
 
@@ -86,7 +85,7 @@
 
 <!--dialog nhập kho-->
 <p-dialog header="Nhập kho" [(visible)]="display" [modal]="true" [style]="{width: '1034px', height: '630px'}"
-  [draggable]="false" [resizable]="false">
+          [draggable]="false" [resizable]="false">
   <div class="container-fluid">
     <form>
       <div class="row">
@@ -94,20 +93,20 @@
           <div class="mb-3">
             <label for="name_supplier_create" class="form-label">Nhà cung cấp</label>
             <input type="text" [(ngModel)]="selectedSupplier.name" [ngModelOptions]="{standalone: true}"
-              class="form-control" id="name_supplier_create" disabled>
+                   class="form-control" id="name_supplier_create" disabled>
           </div>
           <div class="mb-3">
             <label for="barcode_supplier_create" class="form-label">Mã sản phẩm <span><button (click)="openDialogScan()"
-                  class="root-btn-cam"><i class="fa-solid fa-camera"></i></button></span></label>
+                                                                                              class="root-btn-cam"><i
+              class="fa-solid fa-camera"></i></button></span></label>
             <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}"
-              (change)="getProductByBarcode()" class="form-control" id="barcode_supplier_create">
+                   (change)="getProductByBarcode()" class="form-control" id="barcode_supplier_create">
           </div>
           <div class="mb-3">
             <label for="name_product_create" class="form-label">Tên sản phẩm</label>
             <input type="text" [(ngModel)]="createProductRequest.nameProd" [ngModelOptions]="{standalone: true}"
               class="form-control" id="name_product_create">
           </div>
-
           <div class="mb-3"
             *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label class="form-label-category" translate>product.category.name</label> <br>
@@ -116,10 +115,10 @@
               filterBy="name" [showClear]="true" placeholder="Lựa chọn danh mục">
               <ng-template let-category pTemplate="selectedItem">
                 <div class="category-item">
-                  <div>{{category.name}}</div>
+                  <p>{{category.name}}</p>
                 </div>
               </ng-template>
-            </p-dropdown> <br>
+            </p-dropdown>
           </div>
         </div>
         <div class="col-6">
@@ -148,11 +147,10 @@
             <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update"
               [(ngModel)]="createProductRequest.inPrice" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           </div>
-
           <div class="mb-3">
             <label for="date_create">Hạn sử dụng</label>
             <p-calendar styleClass="dropdown_warehouse" id="date_create" [(ngModel)]="createProductRequest.rangeDates"
-              [ngModelOptions]="{standalone: true}" [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
+                        [ngModelOptions]="{standalone: true}" [locale]="es" dateFormat="dd/mm/yy"></p-calendar>
           </div>
         </div>
       </div>
@@ -207,7 +205,8 @@
 
 <!--dialog update kho-->
 <p-dialog header="Chỉnh sửa thông tin" [(visible)]="updateDisplay" [modal]="true"
-  [style]="{width: '1034px', height: '630px'}" [draggable]="false" [resizable]="false">
+          [style]="{width: '1034px', height: '630px'}"
+          [draggable]="false" [resizable]="false">
   <div class="container-fluid">
     <form>
       <div class="row">
@@ -215,21 +214,22 @@
           <div class="mb-3">
             <label for="distributor_update" class="form-label">Nhà cung cấp</label>
             <input type="text" [(ngModel)]="edit.supplierName" [ngModelOptions]="{standalone: true}"
-              class="form-control" id="distributor_update">
+                   class="form-control" id="distributor_update">
           </div>
           <div class="mb-3">
             <label for="barcode_product_update" class="form-label">Mã sản phẩm <span><button (click)="openDialogScan()"
-                  class="root-btn-cam"><i class="fa-solid fa-camera"></i></button></span></label>
+                                                                                             class="root-btn-cam"><i
+              class="fa-solid fa-camera"></i></button></span></label>
             <input type="text" [(ngModel)]="edit.barCode" [ngModelOptions]="{standalone: true}"
-              (change)="getProductByBarcode()" class="form-control" id="barcode_product_update">
+                   (change)="getProductByBarcode()" class="form-control" id="barcode_product_update">
           </div>
           <div class="mb-3">
             <label for="name_product_update" class="form-label">Tên sản phẩm</label>
             <input type="text" [(ngModel)]="edit.nameProd" [ngModelOptions]="{standalone: true}" class="form-control"
-              id="name_product_update">
+                   id="name_product_update">
           </div>
-          <!-- *ngIf="categoryItems!=null && categoryItems.items!=null" -->
-          <div class="mb-3">
+          <div class="mb-3"
+               *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label for="category_edit" class="mb-2">Danh mục sản phẩm</label>
 
             <p-dropdown styleClass="root-dropdown" id="bill_pay" dataKey="id" [options]="categoryItems.items"
@@ -246,7 +246,6 @@
                 </div>
               </ng-template>
             </p-dropdown>
-
           </div>
         </div>
         <div class="col-6">
@@ -270,13 +269,11 @@
           </div>
           <div class="mb-3">
             <label for="amount_update" class="form-label">Số lượng</label>
-            <input type="text" id="amount_update" [(ngModel)]="edit.amount" [ngModelOptions]="{standalone: true}"
-              class="form-control">
+            <input type="text" id="amount_update" [(ngModel)]="edit.amount" [ngModelOptions]="{standalone: true}" class="form-control">
           </div>
           <div class="mb-3">
             <label for="in_price_update" class="form-label">Giá nhập</label>
-            <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update"
-              [(ngModel)]="edit.inPrice" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+            <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update" [(ngModel)]="edit.inPrice" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           </div>
           <div class="mb-3">
             <label for="hsd_update" class="form-label">Hạn sử dụng</label> <br>
@@ -336,7 +333,15 @@
 <!--scan mã vạch-->
 <p-dialog header="" [(visible)]="dialogScanQR" [style]="{width: '50vw'}" [draggable]="true" [resizable]="false">
   <!--  <button (click)="enableCamera()">Camera</button>-->
-  <zxing-scanner (camerasFound)="onCamerasFound($event)" (scanSuccess)="onCodeResult($event)" [torch]="torchEnabled"
-    [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)" [(device)]="currentDevice"
-    (torchCompatible)="onTorchCompatible($event)" [enable]="enable" [formats]="formatsEnabled"></zxing-scanner>
+  <zxing-scanner
+    (camerasFound)="onCamerasFound($event)"
+    (scanSuccess)="onCodeResult($event)"
+    [torch]="torchEnabled"
+    [tryHarder]="tryHarder"
+    (permissionResponse)="onHasPermission($event)"
+    [(device)]="currentDevice"
+    (torchCompatible)="onTorchCompatible($event)"
+    [enable]="enable"
+    [formats]="formatsEnabled"
+  ></zxing-scanner>
 </p-dialog>
