@@ -58,25 +58,29 @@
 
   <p-dialog [(visible)]="dialog" [style]="{width: '550px'}" header="Cập nhập giá" [modal]="true" styleClass="p-fluid" [draggable]="false">
     <ng-template pTemplate="content">
-      <h5 class="form-label">Hàng tồn: {{inventory}}</h5> <br>
-      <div class="mb-3 input-group pb-1" *ngFor="let item of listUnit; let i = index">
-
-        <span class="p-float-label">
-            <p-inputNumber type="text" id="inputgroup+{{i}}" placeholder="{{item.nameUnit}}"  [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="0"></p-inputNumber>
-            <label for="inputgroup+{{i}}">{{item.nameUnit}}</label>
-        </span>
-        <span class="p-inputgroup-addon" style="width: 90px">
-            <b>đ/{{item.nameUnit}}</b>
-        </span>
-
-
-<!--        <input type="number" class="form-control" min="1000" placeholder="{{item.nameUnit}}" aria-label="Recipient's username" [(ngModel)]="item.editAmount" aria-describedby="basic-addon2">-->
-<!--        <span class="input-group-text" id="basic-addon2" style="width: 90px">đ/{{item.nameUnit}}</span>-->
-      </div>
+      <span *ngIf="listUnit.length != 0">
+        <h5 class="form-label">Hàng tồn: {{inventory}}</h5> <br>
+        <div class="mb-3 input-group pb-1" *ngFor="let item of listUnit; let i = index">
+          <span class="p-float-label">
+              <p-inputNumber type="text" id="inputgroup+{{i}}" placeholder="{{item.nameUnit}}"  [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="0"></p-inputNumber>
+              <label for="inputgroup+{{i}}">{{item.nameUnit}}</label>
+          </span>
+          <span class="p-inputgroup-addon" style="width: 90px">
+              <b>đ/{{item.nameUnit}}</b>
+          </span>
+        </div>
+      </span>
+      <span *ngIf="listUnit.length == 0">
+        <h5 class="form-label">Hãy đến chức năng quản lý kho để xuất hàng. <br> Rồi quay lại đây sửa giá!</h5> <br>
+      </span>
+      <!--        <input type="number" class="form-control" min="1000" placeholder="{{item.nameUnit}}" aria-label="Recipient's username" [(ngModel)]="item.editAmount" aria-describedby="basic-addon2">-->
+      <!--        <span class="input-group-text" id="basic-addon2" style="width: 90px">đ/{{item.nameUnit}}</span>-->
     </ng-template>
     <ng-template pTemplate="footer">
       <hr>
+      <span *ngIf="listUnit.length != 0">
       <button class="root-btn" (click)="updateExport()">Cập nhập</button>
+      </span>
     </ng-template>
   </p-dialog>
 </main>
