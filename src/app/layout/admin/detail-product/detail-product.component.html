@@ -37,7 +37,7 @@
           </p-dropdown>
         </div>
         <div class="mb-3" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.items!=null">
-          <label class="form-label-supplier" translate>product.supplier.name</label> <br>
+          <label class="form-label-supplier">Nhà cung cấp</label> <br>
           <p-dropdown [options]="getInforCreateProductResponse.items" [(ngModel)]="selectedSupplier" optionLabel="name"
                       [filter]="true" filterBy="name" [showClear]="true" placeholder="Chọn nhà cung cấp"
                       styleClass="dropdown_form">
