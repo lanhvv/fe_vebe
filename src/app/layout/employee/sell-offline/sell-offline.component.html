@@ -21,8 +21,10 @@
             </button>
           </div>
           <div class="col-11">
+<!--            {{ products?.length }}-->
             <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="product"
                         (onFilter)="getProduct($event)"
+                        [lazy]="true"
                         styleClass="searchProduct">
               <ng-template let-product pTemplate="productItem">
                 <div class="product float-start" (mousedown)="selectProduct(product.productCode)">

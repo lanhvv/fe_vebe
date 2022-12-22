@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ViewStallResponse} from "../../../shared/model/response/ViewStallResponse";
@@ -81,7 +81,8 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   constructor(private translateService: TranslateConfigService,
               private sellOfflineService: SellOfflineService,
               private productService:ProductService,
-              private billService:BillService) {
+              private billService:BillService,
+              private changeDetectorRef: ChangeDetectorRef) {
 
     this.cartsItem=[];
     this.carts=[];
@@ -90,6 +91,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.cartItem.cartCode=this.cartCode;
     this.carts.push(this.cartItem);
     this.cartsItem.push(new ViewStallResult());
+    this.products = [];
   }
 
   ngOnInit(): void {
@@ -190,11 +192,16 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   getProduct(input:Event){
     console.log(input)
     this.search=input
+    if (!this.search.filter) {
+      this.products = [];
+      return;
+    }
     this.productService.search(this.language,this.search.filter).subscribe(response=>{
       this.productResponse=response as ViewStallResponse;
       if (this.productResponse.status.status==="1"){
-        this.products=this.productResponse.results;
+        this.products=[...this.productResponse.results];
       }
+      this.changeDetectorRef.detectChanges();
     })
   }
 
