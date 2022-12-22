@@ -26,8 +26,8 @@
         </p-dropdown>
       </div>
       <div class="col-2 float-end">
-        <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="isShowFinal">
-          Hoàn tất
+        <button class="root-btn" (mousedown)="doneImpport()" *ngIf="isShowFinal">
+          Hoàn tất nhập kho
         </button>
       </div>
     </div>
@@ -96,8 +96,7 @@
                    class="form-control" id="name_supplier_create" disabled>
           </div>
           <div class="mb-3">
-            <label for="barcode_supplier_create" class="form-label">Mã sản phẩm <span><button (click)="openDialogScan()"
-                                                                                              class="root-btn-cam"><i
+            <label for="barcode_supplier_create" class="form-label">Mã sản phẩm <span><button (click)="openDialogScan()" class="root-btn-cam"><i
               class="fa-solid fa-camera"></i></button></span></label>
             <input type="text" [(ngModel)]="createProductRequest.barCode" [ngModelOptions]="{standalone: true}"
                    (change)="getProductByBarcode()" class="form-control" id="barcode_supplier_create">
@@ -112,7 +111,7 @@
             <label class="form-label-category" translate>product.category.name</label> <br>
             <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" dataKey="id"
               [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true"
-              filterBy="name" [showClear]="true" placeholder="Lựa chọn danh mục">
+              filterBy="name" placeholder="Lựa chọn danh mục">
               <ng-template let-category pTemplate="selectedItem">
                 <div class="category-item">
                   <p>{{category.name}}</p>
@@ -369,7 +368,7 @@
         <td>{{product.inPrice}}</td>
         <td>{{product.amount}}</td>
         <td>
-          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã QR</button>
         </td>
       </tr>
     </ng-template>

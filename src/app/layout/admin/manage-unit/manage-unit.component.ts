@@ -18,7 +18,7 @@ export class ManageUnitComponent implements OnInit {
   idUnit : number = 0;
   idUnitParent : number = 0;
   idUnitChild : number = 0;
-  selectedValueLocateUnit : string = "";
+  selectedValueLocateUnit : string = "child";
   unitDialog !: boolean;
   unit : UnitItems = new UnitItems();
   submitted!: boolean;
@@ -200,7 +200,7 @@ export class ManageUnitComponent implements OnInit {
 
   deleteSelectUnit(idChild:number, idParent:number) {
     this.confirmationService.confirm({
-      message: 'Bạn có chắc chắn xóa đơn vị đang chọn?',
+      message: 'Hành động xóa này sẽ gây ảnh hưởng tới trình quản lý và thống kê, bạn vẫn muốn xóa?',
       header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

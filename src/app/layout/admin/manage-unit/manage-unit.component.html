@@ -114,16 +114,16 @@
     </div>
     <div class="field mb-3" *ngIf="showCategory">
       <label class="mb-3">Danh mục</label>
-      <div class="formgrid grid">
-        <div class="field-radiobutton col-6">
+      <div class="row">
+        <div class="field-radiobutton col">
           <p-radioButton id="locate1" name="locate" value="parent"
                          [(ngModel)]="selectedValueLocateUnit"></p-radioButton>
-          <label for="locate1">Danh mục cha</label>
+          <label for="locate1" class="ms-2">Đơn vị cha</label>
         </div>
-        <div class="field-radiobutton col-6">
+        <div class="field-radiobutton col">
           <p-radioButton id="locate2" name="locate" value="child"
-                         [(ngModel)]="selectedValueLocateUnit" check></p-radioButton>
-          <label for="locate2">Danh mục con</label>
+                         [(ngModel)]="selectedValueLocateUnit"></p-radioButton>
+          <label for="locate2" class="ms-2">Đơn vị con</label>
         </div>
       </div>
     </div>
@@ -132,7 +132,7 @@
 <!--    </div>-->
   </ng-template>
   <ng-template pTemplate="footer">
-    <button class="root-btn" (click)="saveAndUpdateUnit()">Thêm mới</button>
+    <button class="root-btn p-2" (click)="saveAndUpdateUnit()">Hoàn thành</button>
   </ng-template>
 </p-dialog>
 
