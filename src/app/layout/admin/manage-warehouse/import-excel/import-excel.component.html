@@ -9,7 +9,7 @@
         </a>
         <a type="button"
            class="root-btn text-decoration-none pt-2 text-center"
-           href="../../../../../../../be/src/main/resources/static/qrcode/VB45986106121937167172334155112_22_2022_22_35_43.pdf"
+           href="assets/importdata.xlsx"
            download>
           <i class="fa-solid fa-download me-1"></i>
           Tải file mẫu
@@ -38,7 +38,7 @@
             [disabled]="!productResponse"
             (mousedown)="import()" ></button>
         </ng-template>
-        <div style="width: 64%" *ngIf="this.getSuppliersResponse.suppliers!=null && this.getSuppliersResponse.suppliers.length>0">
+        <div style="width: 64%">
           <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
             <ng-template pTemplate="selectedItem">
               <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
@@ -104,13 +104,13 @@
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
               <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" placeholder="Chọn loại sản phẩm">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="product.typeProduct">
-                    <div>{{product.typeProduct.name}}</div>
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
+                    <div>{{this.product.typeProduct.name}}</div>
                   </div>
                 </ng-template>
                 <ng-template let-category pTemplate="item">
                   <div class="supplier">
-                    <div>{{category.name}}</div>
+                    <p>{{category.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown>
@@ -139,13 +139,13 @@
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit==null" >
               <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="productResponse.products[index].unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(productResponse.products[index],productResponse.products[index].unit.id)" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="product.unit">
-                    <div>{{product.unit.name}}</div>
+                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                    <p>{{product.unit.name}}</p>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
                   <div class="unit" >
-                    <div>{{unit.name}}</div>
+                    <p>{{unit.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown></td>
@@ -243,7 +243,7 @@
         <td>{{product.inPrice}}</td>
         <td>{{product.amount}}</td>
         <td>
-          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã QR</button>
         </td>
       </tr>
     </ng-template>

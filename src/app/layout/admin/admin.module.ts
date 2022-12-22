@@ -51,7 +51,6 @@ import {ManageProfileComponent} from './manage-profile/manage-profile.component'
 import {ImageModule} from 'primeng/image';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 import {TreeSelectModule} from 'primeng/treeselect';
-import {ManagerWarehouseImportComponent} from './manager-warehouse-import/manager-warehouse-import.component';
 import {PasswordModule} from "primeng/password";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import {PrintBarcodeComponent} from './manage-product/print-barcode/print-barcode.component';
@@ -67,6 +66,8 @@ import {TreeTableModule} from "primeng/treetable";
 import {SidebarModule} from 'primeng/sidebar';
 import { ManageExpiryDateComponent } from './manage-product/manage-expiry-date/manage-expiry-date.component';
 import { ManageDebitComponent } from './manage-debit/manage-debit.component';
+import {ManageCloseToExpiredComponent} from "./manage-close-to-expired/manage-close-to-expired.component";
+import {ManageExpiredComponent} from "./manage-expired/manage-expired.component";
 
 @NgModule({
   declarations: [
@@ -91,7 +92,6 @@ import { ManageDebitComponent } from './manage-debit/manage-debit.component';
     ManageWarehouseComponent,
     ManageProfileComponent,
     ManageUnitComponent,
-    ManagerWarehouseImportComponent,
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
@@ -100,6 +100,8 @@ import { ManageDebitComponent } from './manage-debit/manage-debit.component';
     ManageTypeProductComponent,
     ManageExpiryDateComponent,
     ManageDebitComponent,
+    ManageCloseToExpiredComponent,
+    ManageExpiredComponent
   ],
   imports: [
     CommonModule,

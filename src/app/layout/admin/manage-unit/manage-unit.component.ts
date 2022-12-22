@@ -18,13 +18,14 @@ export class ManageUnitComponent implements OnInit {
   idUnit : number = 0;
   idUnitParent : number = 0;
   idUnitChild : number = 0;
-  selectedValueLocateUnit : string = "";
+  selectedValueLocateUnit : string = "child";
   unitDialog !: boolean;
   unit : UnitItems = new UnitItems();
   submitted!: boolean;
   showCategory : boolean = false;
   totalItems = 0;
   nameSearch = "";
+  titleModal: string = '';
 
   status: number = 0;
 
@@ -120,6 +121,7 @@ export class ManageUnitComponent implements OnInit {
     this.feature = "create";
     this.idUnitParent = 0;
     this.idUnit = id;
+    this.titleModal = 'Thêm mới đơn vị';
     this.selectedValueLocateUnit = "";
     if (this.idUnit > 0) {
       this.findById(this.idUnit, idParent);
@@ -141,6 +143,7 @@ export class ManageUnitComponent implements OnInit {
 
   openUpdate(id:number, idParent : number) {
     this.feature = "update";
+    this.titleModal = 'Chỉnh sửa đơn vị';
     this.idUnit = id;
     this.showCategory = false;
     console.log(id +"-"+ idParent);
@@ -197,7 +200,7 @@ export class ManageUnitComponent implements OnInit {
 
   deleteSelectUnit(idChild:number, idParent:number) {
     this.confirmationService.confirm({
-      message: 'Bạn có chắc chắn xóa đơn vị đang chọn?',
+      message: 'Hành động xóa này sẽ gây ảnh hưởng tới trình quản lý và thống kê, bạn vẫn muốn xóa?',
       header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

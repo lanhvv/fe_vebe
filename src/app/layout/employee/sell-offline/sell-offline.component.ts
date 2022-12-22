@@ -256,6 +256,12 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     }
   }
 
+  // createCart(){
+  //   this.cartCode="CartCode::"+(new Date().getFullYear())
+  //   this.cartItem=new CartItem();
+  //   this.cartItem.cartCode=this.cartCode;
+  //   this.carts.push(this.cartItem);
+  // }
 
   selectCart(cartNumber:number){
     this.cartsItem=this.carts[cartNumber].products;
