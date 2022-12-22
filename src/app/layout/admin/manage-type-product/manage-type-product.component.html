@@ -100,22 +100,22 @@
         <input [(ngModel)]="typeRequest.name" [ngModelOptions]="{standalone: true}" type="text"
                class="form-control" id="name-category">
       </div>
-      <div class="mb-3">
-        <label class="form-label">Danh mục chính</label>
-        <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"
-                    optionLabel="name" [filter]="true" filterBy="name" styleClass="dropdown-select">
-          <ng-template pTemplate="selectedItem">
-            <div class="country-item country-item-value" *ngIf="category">
-              <p>{{category.name}}</p>
-            </div>
-          </ng-template>
-          <ng-template let-category pTemplate="item">
-            <div class="country-item">
-              <div>{{category.name}}</div>
-            </div>
-          </ng-template>
-        </p-dropdown>
-      </div>
+<!--      <div class="mb-3">-->
+<!--        <label class="form-label">Danh mục chính</label>-->
+<!--        <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"-->
+<!--                    optionLabel="name" [filter]="true" filterBy="name" styleClass="dropdown-select">-->
+<!--          <ng-template pTemplate="selectedItem">-->
+<!--            <div class="country-item country-item-value" *ngIf="category">-->
+<!--              <p>{{category.name}}</p>-->
+<!--            </div>-->
+<!--          </ng-template>-->
+<!--          <ng-template let-category pTemplate="item">-->
+<!--            <div class="country-item">-->
+<!--              <div>{{category.name}}</div>-->
+<!--            </div>-->
+<!--          </ng-template>-->
+<!--        </p-dropdown>-->
+<!--      </div>-->
       <div class="mb-3">
         <label for="description-category" class="form-label">Mô tả</label>
         <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
@@ -133,7 +133,7 @@
   </form>
 </p-dialog>
 
-<p-dialog header="Thêm danh mục con" [(visible)]="displaydetail" [modal]="true" [style]="{width: '50vw'}">
+<p-dialog header="Thêm danh mục con" [(visible)]="displaydetail" [draggable]="false" [modal]="true" [style]="{width: '50vw'}">
   <form>
     <div class="row">
       <div class="mb-3">
@@ -160,7 +160,7 @@
   </form>
 </p-dialog>
 
-<p-dialog header="Chỉnh sửa thông tin danh mục" [(visible)]="updateType" [modal]="true" [style]="{width: '50vw'}">
+<p-dialog header="Chỉnh sửa thông tin danh mục" [(visible)]="updateType" [modal]="true" [draggable]="false" [style]="{width: '50vw'}">
   <form>
     <div class="row">
       <div class="mb-3">
@@ -176,7 +176,7 @@
       <div class="row text-center">
         <div class="col">
           <button type="submit" class="root-btn me-2" (mousedown)="create()">
-            Thêm mới
+            Hoàn thiện
           </button>
           <button type="submit" class="btn btn-outline-primary">
             Hủy

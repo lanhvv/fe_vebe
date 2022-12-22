@@ -14,9 +14,9 @@
         </button>
       </div>
       <div class="col-2">
-        <select class="form-select" aria-label="Default select example">
-          <option value="1">Tất cả</option>
-        </select>
+<!--        <select class="form-select" aria-label="Default select example">-->
+<!--          <option value="1">Tất cả</option>-->
+<!--        </select>-->
       </div>
       <div class="col-5">
         <form style="width: 100%">
@@ -42,7 +42,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th class="col-1">Khóa/Mở</th>
-            <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.name
+            <th pSortableColumn="name-product" class="col-3" (mousedown)="sort('nameProd')" translate>product.name
               <p-sortIcon field="name-product"></p-sortIcon>
             </th>
             <th pSortableColumn="price" (mousedown)="sort('price')" translate>product.unit.outprice
