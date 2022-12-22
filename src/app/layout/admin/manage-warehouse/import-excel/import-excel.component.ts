@@ -22,7 +22,8 @@ import {ImportWarehouseItemsResponse} from "../../../../shared/response/v_import
 import {ExportService} from "../../../../services/exportPDF/export.service";
 import {UploadFileService} from "../../../../services/upload_file/upload-file.service";
 import {GetUnitResult} from "../../../../shared/result/v_unit/GetUnitResult";
-
+import {Router} from '@angular/router';
+import {DownloadFilePdfResponse} from "../../../../shared/response/DownloadFilePdfResponse";
 
 type AOV = any[][];
 
@@ -59,6 +60,7 @@ export class ImportExcelComponent implements OnInit {
 
   //after import
   isSidebarDialog: boolean = false;
+  downloadFilePdf!:DownloadFilePdfResponse;
 
   constructor(private fb: FormBuilder,
               private supplierService:SupplierService,
@@ -70,7 +72,8 @@ export class ImportExcelComponent implements OnInit {
               private unitService: UnitService,
               private importService: ImportService,
               private exportQR: ExportService,
-              private uploadFileService: UploadFileService) {
+              private uploadFileService: UploadFileService,
+              private router: Router) {
     // this.getSuppliersResponse = new GetSuppliersResponse();
   }
 
@@ -108,7 +111,6 @@ export class ImportExcelComponent implements OnInit {
 
   //delete product selected in table
   deleteProduct(product: ImportProductResult) {
-    console.log("32123123123")
     this.confirmationService.confirm({
       message: 'Bạn có chắc muốn xóa muốn xóa sản phẩm ' + product.productName + ' này không?',
       header: 'Xác nhận',
@@ -137,6 +139,7 @@ export class ImportExcelComponent implements OnInit {
         this.failed(this.productResponse.status.message);
       }
     });
+
   }
 
   getFormGroup(control: AbstractControl) {
@@ -146,7 +149,6 @@ export class ImportExcelComponent implements OnInit {
   getSuppliers() {
     this.supplierService.getSuppliers(this.language+"").subscribe(response=>{
       this.getSuppliersResponse = response as GetSuppliersResponse;
-      console.log(this.getSuppliersResponse);
       if (this.getSuppliersResponse.status.status === '0'){
         this.failed(this.getSuppliersResponse.status.message);
       }
@@ -156,7 +158,6 @@ export class ImportExcelComponent implements OnInit {
   getCategory() {
     this.typeProductService.getTypeProducts(this.language+"").subscribe(response=>{
       this.getTypeProductsResponse = response as GetTypeProductResponse;
-      console.log(this.getSuppliersResponse);
       if (this.getSuppliersResponse.status.status === '0'){
         this.failed(this.getSuppliersResponse.status.message);
       }
@@ -166,27 +167,28 @@ export class ImportExcelComponent implements OnInit {
   getUnits() {
     this.typeProductService.getUnits(this.language+"").subscribe(response=>{
       this.getUnitResponse = response as GetUnitResponse;
-      console.log(this.getUnitResponse);
       if (this.getUnitResponse.status.status === '0'){
         this.failed(this.getUnitResponse.status.message);
       }
     })
   }
 
-  selectUnit(request:ImportProductResult){
-    console.log(request);
+  selectUnit(request:ImportProductResult,unitId:number){
+      console.log("unit 3: ",request.unit.id);
+      console.log("unit 4: ",unitId);
     this.unitService.getUnitsByUnitSelected(this.language+"",request.unit.id).subscribe(data=>{
         this.getExportsByUnitSelectedResponse=data as GetExportsByUnitSelectResponse;
+
         if (this.getExportsByUnitSelectedResponse.status.status === '0'){
           this.failed(this.getExportsByUnitSelectedResponse.status.message);
         }else {
+
           this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
           const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
           for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
             this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
-            console.log("unit parent: "+this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount);
-            console.log("unit child: "+this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount);
-            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice=price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount;
+            const priceChild=(price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount).toFixed(0)
+            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice= priceChild as unknown as number;
           }
           this.saveProducts();
         }
@@ -194,9 +196,7 @@ export class ImportExcelComponent implements OnInit {
   }
 
   deleteExport(req:ExportResult,request:ImportProductResult){
-    console.log(req);
-    console.log(this.productResponse.products.filter(value => value.id === request.id)[0].exports);
-    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unitId === req.unitId);
+    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unitId !== req.unitId);
     this.saveProducts();
   }
 
@@ -205,13 +205,9 @@ export class ImportExcelComponent implements OnInit {
   }
 
   saveProducts(){
+
     this.warehouseService.saveProductsToRedis(this.productResponse,this.language!).subscribe(response=>{
       this.baseResponse = response as BaseResponse;
-      if (this.baseResponse.status.status === '0'){
-        console.log(this.baseResponse.status.message);
-      }else {
-        console.log(this.baseResponse.status.message);
-      }
     })
   }
 
@@ -250,40 +246,11 @@ export class ImportExcelComponent implements OnInit {
   }
 
   exportQRCode(code: string, amount: number){
-    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-          const doc = new jsPDF.jsPDF(response);
-          doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
-      let url = window.URL.createObjectURL(blob);
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(x=>{
+      const blob = new Blob([x], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
       window.open(url);
     });
-  }
-
-  getExportByUnitSelected(unitId: number){
-    console.log("response: "+JSON.stringify(this.productResponse.products));
-    const getUnitsResults=[];
-    for (let i = 0; i < this.getUnitResponse.results.length; i++) {
-      if (this.getUnitResponse.results[i].id === unitId){
-        if (this.getUnitResponse.results[i].parentId !== 0){
-          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
-            if (this.getUnitResponse.results[j].id===this.getUnitResponse.results[i].parentId || this.getUnitResponse.results[i].parentId === this.getUnitResponse.results[i].parentId){
-              getUnitsResults.push(this.getUnitResponse.results[j]);
-            }
-          }
-        }else{
-          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
-            if (this.getUnitResponse.results[j].parentId===this.getUnitResponse.results[i].id || this.getUnitResponse.results[i].id === this.getUnitResponse.results[i].id){
-              getUnitsResults.push(this.getUnitResponse.results[j]);
-            }
-          }
-        }
-      }
-    }
-    console.log("length getUnitsResults: "+getUnitsResults.length);
-    return getUnitsResults;
   }
 
   back(){

@@ -9,7 +9,7 @@
         </a>
         <a type="button"
            class="root-btn text-decoration-none pt-2 text-center"
-           href="assets/importdata.xlsx"
+           href="../../../../../../../be/src/main/resources/static/qrcode/VB45986106121937167172334155112_22_2022_22_35_43.pdf"
            download>
           <i class="fa-solid fa-download me-1"></i>
           Tải file mẫu
@@ -38,7 +38,7 @@
             [disabled]="!productResponse"
             (mousedown)="import()" ></button>
         </ng-template>
-        <div style="width: 64%">
+        <div style="width: 64%" *ngIf="this.getSuppliersResponse.suppliers!=null && this.getSuppliersResponse.suppliers.length>0">
           <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">
             <ng-template pTemplate="selectedItem">
               <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
@@ -80,7 +80,7 @@
             <th class="th-table">Thao tác</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-product let-expanded="expanded">
+        <ng-template pTemplate="body" let-product let-index="rowIndex" let-expanded="expanded">
           <tr>
             <td>
               <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -104,8 +104,8 @@
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
               <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" placeholder="Chọn loại sản phẩm">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
-                    <div>{{this.product.typeProduct.name}}</div>
+                  <div class="supplier-item supplier-item-value" *ngIf="product.typeProduct">
+                    <div>{{product.typeProduct.name}}</div>
                   </div>
                 </ng-template>
                 <ng-template let-category pTemplate="item">
@@ -135,10 +135,11 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" placeholder="Chọn đơn vị">
+
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit==null" >
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="productResponse.products[index].unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(productResponse.products[index],productResponse.products[index].unit.id)" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
+                  <div class="supplier-item supplier-item-value" *ngIf="product.unit">
                     <div>{{product.unit.name}}</div>
                   </div>
                 </ng-template>
@@ -148,11 +149,11 @@
                   </div>
                 </ng-template>
               </p-dropdown></td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit!=null">
-              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" [filter]="true" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit!=null">
+              <p-dropdown styleClass="dropdown_table" [options]="productResponse.products[index].units" [(ngModel)]="productResponse.products[index].unit" [filter]="true" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(productResponse.products[index],productResponse.products[index].unit.id)">
                 <ng-template pTemplate="selectedItem">
-                  <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
-                    <div>{{product.unit.name}}</div>
+                  <div class="unit-item unit-item-value" *ngIf="productResponse.products[index].unit">
+                    <div>{{productResponse.products[index].unit.name}}</div>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
@@ -188,11 +189,11 @@
                     <th>Giá bán</th>
                     <th>Thao tác</th>
                   </thead>
-                  <tbody>
+                  <tbody *ngIf="this.productResponse.products[product.id].exports!=null ">
                     <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
                       <td>
-                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="amount" [(ngModel)]="export.amount" disabled>
+                        <input type="number" class="form-control" style="width: 60%;" id="amount" [(ngModel)]="export.amount" disabled>
                       </td>
                       <td>
                         <p-inputNumber id="in-price" style="width: 60%; height: 40px" [(ngModel)]="export.inPrice" (ngModelChange)="saveProducts()"></p-inputNumber>
