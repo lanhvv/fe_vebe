@@ -22,7 +22,7 @@
           </div>
           <div class="col-11">
             <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="product"
-                        [showClear]="true" (onFilter)="getProduct($event)"
+                        (onFilter)="getProduct($event)"
                         styleClass="searchProduct">
               <ng-template let-product pTemplate="productItem">
                 <div class="product float-start" (mousedown)="selectProduct(product.productCode)">
@@ -121,10 +121,10 @@
               <td>Tổng tiền hàng</td>
               <td>{{numToString() | number: '1.0-0'}}</td>
             </tr>
-            <tr>
-              <td>Giảm giá</td>
-              <td><input value="0" class="inputSale"></td>
-            </tr>
+<!--            <tr>-->
+<!--              <td>Giảm giá</td>-->
+<!--              <td><input value="0" class="inputSale"></td>-->
+<!--            </tr>-->
             <tr>
               <td class="fw-bold">Khách cần trả</td>
               <td>{{numToString() | number: '1.0-0'}}</td>
@@ -187,9 +187,9 @@
       <img src="./assets/image/images.png">
     </div>
     <div class="col">
-      <div class="mb-3">STK: <b>9521012002</b></div>
-      <div class="mb-3">Chủ tài khoản: <br><b>NGUYEN LE HAI</b></div>
-      <div>Ngân hàng: <b>MB BANK</b></div>
+      <div class="mb-3">STK: <b>020095478485</b></div>
+      <div class="mb-3">Chủ tài khoản: <br><b>LE THI HIEN</b></div>
+      <div>Ngân hàng: <b>Sacombank</b></div>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -218,7 +218,7 @@
 </p-dialog>
 
 <!--dialog export hóa đơn-->
-<p-dialog header="" [(visible)]="dialogExportBill" [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
+<p-dialog header="" [(visible)]="dialogExportBill" [modal]="true" [style]="{width: '25vw'}" [draggable]="false" [resizable]="false">
   <div class="text-center">
     <img src="assets/image/export.png" width="81" height="81">
     <h5>Bạn có muốn in hóa đơn không?</h5>

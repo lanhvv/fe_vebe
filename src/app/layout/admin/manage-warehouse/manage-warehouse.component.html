@@ -53,9 +53,9 @@
             <th pSortableColumn="price">Hạn dùng
               <p-sortIcon field="price"></p-sortIcon>
             </th>
-            <th pSortableColumn="price">Nhà cung cấp
-              <p-sortIcon field="price"></p-sortIcon>
-            </th>
+<!--            <th pSortableColumn="price">Nhà cung cấp-->
+<!--              <p-sortIcon field="price"></p-sortIcon>-->
+<!--            </th>-->
             <th>Hành động</th>
           </tr>
         </ng-template>
@@ -65,12 +65,15 @@
             <td>{{product.barcode}}</td>
             <td>{{product.productName}}</td>
             <td>{{product.inAmount}}</td>
-            <td>{{product.inPrice | currency:"VND":true }}</td>
+            <td>{{product.inPrice | number: '1.0-0' }}</td>
             <td>{{product.rangeDate }}</td>
-            <td>{{product.supplierName }}</td>
+<!--            <td>{{product.supplierName }}</td>-->
             <td>
               <button class="root-btn-table me-1" (click)="getById(product.supplierId,product.id )">Chỉnh sửa</button>
-              <button class="root-btn-danger" (click)="deleteById(product.supplierId,product.id )">Xóa</button>
+              <button class="root-btn-danger me-1" (click)="deleteById(product.supplierId,product.id )">Xóa</button>
+              <button class="root-btn-table p-2" (click)="exportQRCode(product.barcode, product.inAmount)">
+                <i class="fa-solid fa-qrcode"></i>
+              </button>
             </td>
           </tr>
         </ng-template>

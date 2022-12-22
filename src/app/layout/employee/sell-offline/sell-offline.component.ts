@@ -227,9 +227,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
         }
         this.viewBillRequest.cartCode=this.cartCode;
         this.carts.push(this.cartItem);
-        this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-          console.log(response);
-        })
+        this.changeAmount();
       }
     })
   }
@@ -264,7 +262,8 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   deleteProductOnCart(code: string){
-    this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code)
+    this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code);
+    this.changeAmount();
   }
 
   // chosseUnit(identity:number){
@@ -282,6 +281,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
       console.log(response);
     })
+    this.moneyPay = this.numToString();
   }
 
   transaction(){
