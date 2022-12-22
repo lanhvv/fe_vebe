@@ -33,7 +33,7 @@ main {
   border-radius: 5px;
 }
 
->>> .p-fileupload-choose,
+.p-fileupload-choose,
 .root-btn-outline {
   width: 183px;
   height: 40px;

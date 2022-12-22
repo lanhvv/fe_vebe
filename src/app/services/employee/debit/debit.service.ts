@@ -14,7 +14,7 @@ import { ListPayRequest } from 'src/app/shared/model/request/ListPayRequest';
   providedIn: 'root'
 })
 export class DebitService {
-  readonly URL="http://localhost:1507/vibee/api/v1/auth/";
+  readonly URL="http://localhost:1507/vibee/api/v1/auth/debit/";
   key: string = " ";
   httpOptions = {
     headers: new HttpHeaders({

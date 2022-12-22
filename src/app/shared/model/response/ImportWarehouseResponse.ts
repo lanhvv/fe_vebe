@@ -1,5 +1,5 @@
 import { BaseResponse } from 'src/app/shared/response/BaseResponse';
-export class ImportWarehouseResponse extends BaseResponse {
+export class ImportWarehouseResponse {
       importId!: number ;
       productCode!: string;
       qrCode!: string;

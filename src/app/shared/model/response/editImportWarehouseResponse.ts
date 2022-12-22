@@ -14,4 +14,9 @@ export class EditImportWarehouseResponse {
   fileId!:number;
   rangeDates!: string;
   supplierName!: string;
+  categoryName!: string
+  amountUnit!: number;
+  descriptionUnit!: string;
+  nameUploadFile!: string;
+  urlUpload!: string;
 }

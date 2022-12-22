@@ -24,6 +24,9 @@ import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWa
 import {BehaviorSubject} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
+import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
+import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
+import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -69,6 +72,9 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
+  categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
+  categoryitem: CategoryImportItems = new CategoryImportItems()
+  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -109,6 +115,7 @@ export class ManageWarehouseComponent implements OnInit {
     this.language=this.translateService.getLanguage()!;
     this.status = 8;
     this.getInformations();
+    this.getAllType()
   }
 
   data: AOV = [
@@ -127,8 +134,8 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   update(){
-    if(this.selectedCategory!=null){
-      this.edit.categoryId=this.selectedCategory.id as number;
+    if(this.categoryitem!=null){
+      this.edit.categoryId=this.categoryitem.id as number;
     }
     if(this.selectedSupplier!=null){
       this.edit.supplierId=this.selectedSupplier.id as number;
@@ -148,7 +155,7 @@ export class ManageWarehouseComponent implements OnInit {
         this.updateDisplay = false;
       }else{
         this.failed(this.createProductResponse.status.message);
-           this.updateDisplay = true;
+        this.updateDisplay = true;
       }
 
     });
@@ -186,12 +193,22 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
+  getAllType(){
+    this.importService.getAllType().subscribe(response => {
+      this.categoryItems = response as ListCategoryImportItemsItems
+      console.log( this.categoryItems  +" dòng197")
+    })
+  }
 
   getById(key:number, redisId: string){
-    console.log(key + " " + redisId);
-    this.importService.edit(key, redisId, this.language).subscribe(response => {
-      this.selectedCategory = response.category
-      this.edit = response as EditImportWarehouseResponse
+    this.importService.edit(key, redisId, this.language).subscribe(data => {
+      this.selectedUnitParent.unitId = data.unitId
+      this.selectedUnitParent.unitName = data.unit
+      this.selectedUnitParent.amount = data.amountUnit
+      this.selectedUnitParent.description = data.descriptionUnit
+      this.categoryitem.id = data.categoryId as number
+      this.categoryitem.name = data.categoryName
+      this.edit = data as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
@@ -199,16 +216,14 @@ export class ManageWarehouseComponent implements OnInit {
 
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
-      this.importWarehouseResponse = response as ImportWarehouseResponse[];
-      for (const iterator of  this.importWarehouseResponse) {
-        if(iterator.status.status=== '1'){
-          this.success(iterator.status.message);
-          this.deleteAll(this.selectedSupplier.id)
+      this.itemsafterDone = response as ListImportWarehouse;
+       if(this.itemsafterDone.status.status=="1"){
+        this.success(this.itemsafterDone.status.message);
+       }
+       else{
+        this.failed(this.itemsafterDone.status.message);
+       }
 
-        }else{
-          this.failed(iterator.status.message);
-        }
-      }
 
     });
 
@@ -244,11 +259,10 @@ export class ManageWarehouseComponent implements OnInit {
     });
 
   }
-
-  getInformations(){
+  getInformations() {
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
+      console.log(this.getInforCreateProductResponse.unitItems);
     });
   }
 
@@ -256,7 +270,6 @@ export class ManageWarehouseComponent implements OnInit {
 
     if(this.selectedCategory!=null){
       this.createProductRequest.categoryId=this.selectedCategory.id ;
-          console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -273,6 +286,7 @@ export class ManageWarehouseComponent implements OnInit {
       if(this.createProductResponse.status.status=== '1'){
         this.success(this.createProductResponse.status.message);
         this.getAllImportInWarehouse( this.createProductRequest.supplierId);
+        this.clearSearch()
         this.display = false;
       }else{
         this.failed(this.createProductResponse.status.message);
@@ -452,5 +466,10 @@ export class ManageWarehouseComponent implements OnInit {
     setTimeout(() => {
       this.dialogScanQR = true;
     });
+  }
+  clearSearch() {
+    this.createProductRequest.amount = 0;
+    this.createProductRequest.barCode = '';
+    this.selectedCategory.name=""
   }
 }

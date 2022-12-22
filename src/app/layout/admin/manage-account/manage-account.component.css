@@ -1,10 +1,10 @@
 main {
-  margin: 6% 0 0 17%;
+  margin: 7% 0 0 17%;
 }
 
 .main-layout {
   width: 100%;
-  height: auto;
+  height: 100vh;
   border-radius: 10px;
   box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
 }
@@ -27,7 +27,7 @@ main {
 }
 
 .inputRoot {
-  width: 90% !important;
+  width: 500px !important;
   height: 40px;
 }
 
@@ -35,23 +35,7 @@ main {
   color: white;
   background-color: #0061C1;
   height: 40px;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  text-align: center;
 }
-
-.buttonRoot-delete {
-  width: 45px;
-  color: white;
-  background-color: #dc3545;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  text-align: center;
-}
-
 .p-datatable .p-datatable-thead > tr > th {
   background: #E5EFF9 !important;
   border-radius: 5px;
@@ -60,28 +44,4 @@ main {
 .p-dropdown{
   width: 100% !important;
   height: 40px !important;
-}
-
-.active{
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  background-color: rgba(33, 150, 83, 0.1);
-  text-align: center;
-}
-
-.active p{
-  color: #219653;
-}
-
-.in-active{
-  width: auto;
-  height: auto;
-  border-radius: 5px;
-  background-color: rgba(235, 87, 87, 0.1);
-  text-align: center;
-}
-
-.in-active p{
-  color: #EB5757;
 }
