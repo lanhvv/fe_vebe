@@ -315,6 +315,9 @@ export class ManageAccountComponent implements OnInit {
       } else {
         this.isDialogAccount = true;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
+      }
+    });
+  }
 
   update(){
     // this.id = this.activatedRoute.snapshot.params['id'];
@@ -329,6 +332,6 @@ export class ManageAccountComponent implements OnInit {
       else if(this.createAccountResponse.status.status=="0") {
         this.messageService.add({severity:'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000});
       }
-    })
+    });
   }
 }

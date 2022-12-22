@@ -14,18 +14,17 @@
         <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
       <div class="col-2">
-        <select class="form-select" aria-label="Default select example">
-          <option value="1">Tất cả</option>
-          <option value="2">Đang hoạt động</option>
-          <option value="3">Không hoạt động</option>
-        </select>
+<!--        <select class="form-select" aria-label="Default select example">-->
+<!--          <option value="1">Tất cả</option>-->
+<!--          <option value="2">Đang hoạt động</option>-->
+<!--          <option value="3">Không hoạt động</option>-->
+<!--        </select>-->
       </div>
       <div class="col-5">
         <div class="input-group mb-3">
           <form style="width: 100%">
             <div class="input-group mb-3">
-              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #username
-                     placeholder="Nhập tên nhân viên...">
+              <input type="text" name="name_staff" class="form-control inputRoot" pInputText ngModel #username placeholder="Nhập tên nhân viên...">
               <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
                       (mousedown)="searchByUsername(username.value)"></button>
             </div>
@@ -50,13 +49,12 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
-              <td *ngIf="item.status == 2">
-                <p-inputSwitch [ngModel]="item.status === 2" (click)="unlockAccount(item.id)"></p-inputSwitch>
+              <td *ngIf="item.status === 2">
+                <p-inputSwitch [ngModel]="!(item.status === 2)" (click)="unlockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td *ngIf="item.status == 1">
+              <td *ngIf="item.status === 1">
                 <p-inputSwitch [ngModel]="item.status === 1" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
@@ -75,7 +73,7 @@
                 <button (click)="getId(item.id)" class="buttonRoot m-1" style="width: 45px">
                   <i class="fa-solid fa-file-pen me-2"></i>
                 </button>
-                <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
+                <button *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
                   <i class="fa-solid fa-trash"></i>
                 </button>
 
