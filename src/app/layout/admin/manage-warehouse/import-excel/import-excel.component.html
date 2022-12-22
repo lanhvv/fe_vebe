@@ -102,7 +102,7 @@
                   {{product.barcode}}
             </td>
             <td *ngIf="this.getTypeProductsResponse!=null && this.getTypeProductsResponse.status.status=='1'">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" [showClear]="true" placeholder="chọn loại sản phẩm">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" placeholder="Chọn loại sản phẩm">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
                     <div>{{this.product.typeProduct.name}}</div>
@@ -131,12 +131,12 @@
                   <input pInputText type="text" [(ngModel)]="product.inAmount" (ngModelChange)="saveProducts()">
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{product.inAmount}}
+                  {{product.inAmount | number: '1.0-0'}}
                 </ng-template>
               </p-cellEditor>
             </td>
             <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" [showClear]="true" placeholder="chọn đơn vị">
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
                     <div>{{product.unit.name}}</div>
@@ -167,7 +167,7 @@
                   <input pInputText type="text" [(ngModel)]="product.inPrice" (ngModelChange)="saveProducts()">
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{product.inPrice}}
+                  {{product.inPrice | number: '1.0-0'}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -183,22 +183,24 @@
                 <table>
                   <thead>
                     <th>Đơn vị</th>
+                    <th>Số lượng</th>
                     <th>Giá nhập</th>
                     <th>Giá bán</th>
-                    <th>số lượng</th>
                     <th>Thao tác</th>
                   </thead>
                   <tbody>
                     <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
                       <td>
-                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.inPrice" id="in-price" (ngModelChange)="saveProducts()">
-                      </td>
-                      <td>
-                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">
-                      </td>
-                      <td>
                         <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="amount" [(ngModel)]="export.amount" disabled>
+                      </td>
+                      <td>
+                        <p-inputNumber id="in-price" style="width: 60%; height: 40px" [(ngModel)]="export.inPrice" (ngModelChange)="saveProducts()"></p-inputNumber>
+<!--                        <input type="number" class="form-control"  [(ngModel)]="export.inPrice" >-->
+                      </td>
+                      <td>
+                        <p-inputNumber id="out-price" style="width: 60%; height: 40px" [(ngModel)]="export.outPrice" (ngModelChange)="saveProducts()"></p-inputNumber>
+<!--                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">-->
                       </td>
                       <td>
                         <button pButton pRipple icon="pi pi-trash" class="root-btn-danger" (click)="deleteExport(export,product)"></button>

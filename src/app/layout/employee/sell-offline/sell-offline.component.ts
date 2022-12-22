@@ -56,7 +56,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   unitIndex=0;
   transactionRequest!:TransactionBillRequest;
   transactionResponse!:BaseResponse;
-
+  moneyTransaction=0;
   dialogScanQR: boolean = false;
   enable : boolean = true;
   hasPermission !: boolean;
@@ -68,9 +68,8 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   availableDevices !: MediaDeviceInfo[];
   currentDevice !: MediaDeviceInfo | undefined;
   enableCameraState : boolean = false;
-
   dialogExportBill: boolean = false;
-
+  valueProductSelected!:ProductStallResult;
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
     BarcodeFormat.DATA_MATRIX,
@@ -94,7 +93,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cartCode="CartCode::"+(new Date().getTime())
-    console.log(this.cartCode)
+    this.getProduct();
     this.cartItem.cartCode=this.cartCode;
     this.status = 2;
     this.language = this.translateService.getLanguage()!;
@@ -105,6 +104,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     } else {
       this.checkList = false;
     }
+
     this.enableCamera();
   }
 
@@ -187,10 +187,20 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.currentBill = index;
   }
 
-  getProduct(input:Event){
-    console.log(input)
-    this.search=input
-    this.productService.search(this.language,this.search.filter).subscribe(response=>{
+  // getProduct(input:Event){
+  //   console.log(input)
+  //   this.search=input
+  //   this.productService.search(this.language,this.search.filter).subscribe(response=>{
+  //     this.productResponse=response as ViewStallResponse;
+  //     if (this.productResponse.status.status==="1"){
+  //       this.products=this.productResponse.results;
+  //     }
+  //   })
+  // }
+
+  getProduct(){
+    console.log("getProduct")
+    this.productService.getProducts(this.language).subscribe(response=>{
       this.productResponse=response as ViewStallResponse;
       if (this.productResponse.status.status==="1"){
         this.products=this.productResponse.results;
@@ -199,6 +209,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   selectProduct(productCode:string){
+    console.log("selectProduct")
     this.productService.selectProduct(this.language,productCode,this.cartCode).subscribe(response=>{
       this.productSelected=response as SelectProductResponse;
       if (this.productSelected.status.status==="1"){
@@ -227,9 +238,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
         }
         this.viewBillRequest.cartCode=this.cartCode;
         this.carts.push(this.cartItem);
-        this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-          console.log(response);
-        })
+        this.changeAmount();
       }
     })
   }
@@ -264,24 +273,15 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   deleteProductOnCart(code: string){
-    this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code)
+    this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code);
+    this.changeAmount();
   }
-
-  // chosseUnit(identity:number){
-  //   console.log(this.unitIndex);
-  //   this.viewBillRequest.detailBills[identity].unitId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].unitId;
-  //   this.sumPrice-=this.viewBillRequest.detailBills[identity].outPrice;
-  //   this.viewBillRequest.detailBills[identity].outPrice=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].outPrice;
-  //   this.viewBillRequest.detailBills[identity].exportId=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products[identity].items[this.unitIndex].exportId;
-  //   this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-  //     console.log(response);
-  //   })
-  // }
 
   changeAmount(){
     this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
       console.log(response);
     })
+    this.moneyPay = this.numToString();
   }
 
   transaction(){
@@ -289,7 +289,11 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.transactionRequest.cartCode=this.cartCode;
     this.transactionRequest.paymentMethod=this.selectedValue;
     this.transactionRequest.transactionType="Thanh Toán";
-    this.transactionRequest.inPrice=this.moneyPay;
+    if (this.moneyTransaction!=null){
+      this.transactionRequest.inPrice=this.moneyPay+this.moneyTransaction;
+    }else{
+      this.transactionRequest.inPrice=this.moneyPay;
+    }
     this.transactionRequest.language=this.language;
     this.billService.transactionBill(this.transactionRequest).subscribe(response=>{
       this.transactionResponse=response as BaseResponse;
@@ -297,7 +301,9 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
         this.isPayment=true;
         this.dialogPayment=false;
         this.cartsItem=[];
-        alert("Thanh toán thành công");
+        this.viewBillRequest.detailBills=[];
+        this.cartCode="";
+        this.cartItem=new CartItem();
       }
     })
     this.dialogPayment = false;

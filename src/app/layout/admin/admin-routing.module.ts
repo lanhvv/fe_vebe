@@ -22,7 +22,6 @@ import {ImportExcelComponent} from "./manage-warehouse/import-excel/import-excel
 import {PrintBarcodeComponent} from "./manage-product/print-barcode/print-barcode.component";
 // import * as path from "path";
 // import * as path from "path";
-import { ManagerWarehouseImportComponent } from './manager-warehouse-import/manager-warehouse-import.component';
 import {ImportOfStatisticComponent} from "./statistic-supplier/imports-of-supplier/import-of-statistic.component";
 import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplier.component";
 import {ManageTypeProductComponent} from "./manage-type-product/manage-type-product.component";
@@ -141,10 +140,6 @@ export const AdminRouting: Route[] = [
       {
         path:'manager-profile',
         component:ManageProfileComponent
-      },
-      {
-        path: 'manage-warehouse-import',
-        component: ManagerWarehouseImportComponent
       },
       {
         path: 'manage-type',

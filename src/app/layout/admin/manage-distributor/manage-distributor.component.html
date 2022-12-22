@@ -36,7 +36,7 @@
             <th pSortableColumn="name-supplier" (mousedown)="sort('nameSup')">Tên <p-sortIcon field="name-supplier"></p-sortIcon></th>
             <th pSortableColumn="phone-number" (mousedown)="sort('phoneNumber')" style="width: 165px">Số điện thoại <p-sortIcon field="phone-number"></p-sortIcon></th>
             <th pSortableColumn="email" (mousedown)="sort('email')">Email <p-sortIcon field="email"></p-sortIcon></th>
-            <th pSortableColumn="address" (mousedown)="sort('address')">Địa chỉ <p-sortIcon field="address"></p-sortIcon></th>
+<!--            <th pSortableColumn="address" (mousedown)="sort('address')">Địa chỉ <p-sortIcon field="address"></p-sortIcon></th>-->
             <th>Trạng thái</th>
             <th scope="col">Thao tác</th>
           </tr>
@@ -55,7 +55,7 @@
             <td>{{distributor.nameSup}}</td>
             <td>{{distributor.numberPhone}}</td>
             <td>{{distributor.email}}</td>
-            <td>{{distributor.address}}</td>
+<!--            <td>{{distributor.address}}</td>-->
             <td>
               <div *ngIf="distributor.statusName === 'Còn hợp tác'" class="active">
                 <p>{{distributor.statusName}}</p>

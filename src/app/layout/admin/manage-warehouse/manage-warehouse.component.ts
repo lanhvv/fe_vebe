@@ -21,9 +21,14 @@ import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListIm
 import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
 import { UnitService } from 'src/app/services/unit/unit.service';
 import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, isEmpty} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
+import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
+import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
+import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
+import {UploadFileService} from "../../../services/upload_file/upload-file.service";
+import {ImportWarehouseItemsResponse} from "../../../shared/response/v_import/ImportWarehouseItemsResponse";
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -69,6 +74,9 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
+  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
+  categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
+  categoryitem: CategoryImportItems = new CategoryImportItems()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -95,12 +103,19 @@ export class ManageWarehouseComponent implements OnInit {
     BarcodeFormat.QR_CODE,
   ];
 
+  isShowFinal: boolean = false;
+
+  //after import
+  isSidebarDialog: boolean = false;
+  importResponse!: ImportWarehouseItemsResponse;
+
   constructor(private messageService: MessageService ,
               private prodService:ProductService,
               private unitService:UnitService,
               private translateService:TranslateConfigService,private fb: FormBuilder,
               private confirmationService: ConfirmationService,
-              private importService: ImportSupplierService) {
+              private importService: ImportSupplierService,
+              private uploadFileService: UploadFileService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
   }
@@ -119,6 +134,12 @@ export class ManageWarehouseComponent implements OnInit {
   getAllImportInWarehouse(id: any){
     this.importService.getImportInWarehouse(id).subscribe(response => {
       this.items = response as ImportInWarehouseInRedis[];
+      console.log(response)
+      if(response.length === 0){
+        this.isShowFinal = false;
+      } else {
+        this.isShowFinal = true;
+      }
     });
   }
 
@@ -148,7 +169,7 @@ export class ManageWarehouseComponent implements OnInit {
         this.updateDisplay = false;
       }else{
         this.failed(this.createProductResponse.status.message);
-           this.updateDisplay = true;
+        this.updateDisplay = true;
       }
 
     });
@@ -164,10 +185,10 @@ export class ManageWarehouseComponent implements OnInit {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -175,16 +196,23 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
     });
 
 
+  }
+
+  getAllType(){
+    this.importService.getAllType().subscribe(response => {
+      this.categoryItems = response as ListCategoryImportItemsItems
+      console.log( this.categoryItems  +" dòng197")
+    })
   }
 
   getById(key:number, redisId: string){
@@ -199,19 +227,15 @@ export class ManageWarehouseComponent implements OnInit {
 
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
-      this.importWarehouseResponse = response as ImportWarehouseResponse[];
-      for (const iterator of  this.importWarehouseResponse) {
-        if(iterator.status.status=== '1'){
-          this.success(iterator.status.message);
-          this.deleteAll(this.selectedSupplier.id)
-
-        }else{
-          this.failed(iterator.status.message);
-        }
+      this.itemsafterDone = response as ListImportWarehouse;
+      if(this.itemsafterDone.status.status=== '1'){
+        this.success(this.itemsafterDone.status.message);
+        this.deleteAll(this.selectedSupplier.id)
+      }else{
+        this.failed(this.itemsafterDone.status.message);
       }
 
     });
-
   }
 
   deleteAll(key: any){
@@ -223,10 +247,10 @@ export class ManageWarehouseComponent implements OnInit {
         this.importService.deleteAll(key,this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại!'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -248,7 +272,7 @@ export class ManageWarehouseComponent implements OnInit {
   getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
+      console.log(this.getInforCreateProductResponse.unitItems);
     });
   }
 
@@ -256,7 +280,6 @@ export class ManageWarehouseComponent implements OnInit {
 
     if(this.selectedCategory!=null){
       this.createProductRequest.categoryId=this.selectedCategory.id ;
-          console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -273,6 +296,7 @@ export class ManageWarehouseComponent implements OnInit {
       if(this.createProductResponse.status.status=== '1'){
         this.success(this.createProductResponse.status.message);
         this.getAllImportInWarehouse( this.createProductRequest.supplierId);
+        this.clearSearch()
         this.display = false;
       }else{
         this.failed(this.createProductResponse.status.message);
@@ -397,6 +421,19 @@ export class ManageWarehouseComponent implements OnInit {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 
+  exportQRCode(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+        const doc = new jsPDF.jsPDF(response);
+        doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+
   // camera
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
@@ -452,5 +489,10 @@ export class ManageWarehouseComponent implements OnInit {
     setTimeout(() => {
       this.dialogScanQR = true;
     });
+  }
+  clearSearch() {
+    this.createProductRequest.amount = 0;
+    this.createProductRequest.barCode = '';
+    this.selectedCategory.name=""
   }
 }

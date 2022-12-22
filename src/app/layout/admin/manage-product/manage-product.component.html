@@ -41,7 +41,7 @@
                [filterDelay]="0">
         <ng-template pTemplate="header">
           <tr>
-            <th>Khóa/Mở</th>
+            <th class="col-1">Khóa/Mở</th>
             <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.name
               <p-sortIcon field="name-product"></p-sortIcon>
             </th>
@@ -66,8 +66,8 @@
             <td *ngIf="item.statusCode==1">
               <p-inputSwitch [ngModel]="item.statusCode == 1" (click)="confirmLock(item.productCode)"></p-inputSwitch>
             </td>
-            <td *ngIf="item.statusCode==2">
-              <p-inputSwitch [ngModel]="item.statusCode == 2" (click)="confirmUnlock(item.productCode)"></p-inputSwitch>
+            <td *ngIf="item.statusCode==3">
+              <p-inputSwitch [ngModel]="!(item.statusCode == 3)" (click)="confirmUnlock(item.productCode)"></p-inputSwitch>
             </td>
             <td>
               <a

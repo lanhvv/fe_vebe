@@ -51,7 +51,6 @@ import {ManageProfileComponent} from './manage-profile/manage-profile.component'
 import {ImageModule} from 'primeng/image';
 import {ManageUnitComponent} from "./manage-unit/manage-unit.component";
 import {TreeSelectModule} from 'primeng/treeselect';
-import {ManagerWarehouseImportComponent} from './manager-warehouse-import/manager-warehouse-import.component';
 import {PasswordModule} from "primeng/password";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import {PrintBarcodeComponent} from './manage-product/print-barcode/print-barcode.component';
@@ -93,7 +92,6 @@ import {ManageExpiredComponent} from "./manage-expired/manage-expired.component"
     ManageWarehouseComponent,
     ManageProfileComponent,
     ManageUnitComponent,
-    ManagerWarehouseImportComponent,
     ImportExcelComponent,
     CellComponent,
     PrintBarcodeComponent,
