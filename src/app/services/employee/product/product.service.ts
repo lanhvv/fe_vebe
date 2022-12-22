@@ -24,6 +24,10 @@ export class ProductService {
     return this.httpClient.get(this.api+"/view-stall?searchValue="+searchValue+"&language="+language, this.httpOptions);
   }
 
+  getProducts(language:string){
+    return this.httpClient.get(this.api+"/view-stall?searchValue="+"&language="+language, this.httpOptions);
+  }
+
   selectProduct(language:string,productCode:string,cartId:string){
     return this.httpClient.get(this.api+`/selected/${productCode}/${cartId}?language=`+language, this.httpOptions);
   }

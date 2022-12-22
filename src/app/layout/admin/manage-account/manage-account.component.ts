@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {GetAccountItemsResponse} from '../../../shared/model/response/getAccountItemsResponse';
-import {GetAccountItemsRequest} from '../../../shared/model/request/getAccountItemsRequest';
-import {Router} from '@angular/router';
-import {ManagerAccountService} from '../../../services/manager-account/manager-account.service';
-import {DeleteAccountResponse} from "../../../shared/model/response/deleteAccountResponse";
-import {ConfirmationService, ConfirmEventType, Message, MessageService} from 'primeng/api';
-import {TranslateConfigService} from "../../../services/translate-config.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {CreateAccountResponse} from "../../../shared/model/response/createAccountResponse";
-import {CreateAccountRequest} from "../../../shared/model/request/createAccountRequest";
+import { Component, OnInit } from '@angular/core';
+import { GetAccountItemsResponse } from '../../../shared/model/response/getAccountItemsResponse';
+import { GetAccountItemsRequest } from '../../../shared/model/request/getAccountItemsRequest';
+import { Router } from '@angular/router';
+import { ManagerAccountService } from '../../../services/manager-account/manager-account.service';
+import { DeleteAccountResponse } from "../../../shared/model/response/deleteAccountResponse";
+import { ConfirmationService, ConfirmEventType, Message, MessageService } from 'primeng/api';
+import { TranslateConfigService } from "../../../services/translate-config.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { CreateAccountResponse } from "../../../shared/model/response/createAccountResponse";
+import { CreateAccountRequest } from "../../../shared/model/request/createAccountRequest";
 import { UpdateAccountRequest } from '../../../shared/model/request/updateAccountRequest';
 import { EditAccountRequest } from '../../../shared/model/request/editAccountRequest';
 
@@ -202,7 +202,7 @@ export class ManageAccountComponent implements OnInit {
         }
       }
     });
-    this.getall();
+    this.getall()
   }
 
   lockAccount(request: number) {
@@ -307,16 +307,14 @@ export class ManageAccountComponent implements OnInit {
 
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
-      if(this.createAccountResponse.status.status="1"){
-        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Tạo tài khoản thành công!', life: 3000});
-        this.isDialogAccount=true;
-        this.getall();
-      }else {
-        this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Tạo tài khoản thất bại!', life: 3000});
-        this.isDialogAccount=true;
-      }
-    })
-  }
+      if (this.createAccountResponse.status.status = "1") {
+        this.isDialogAccount = false;
+        this.getall()
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
+
+      } else {
+        this.isDialogAccount = true;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
 
   update(){
     // this.id = this.activatedRoute.snapshot.params['id'];

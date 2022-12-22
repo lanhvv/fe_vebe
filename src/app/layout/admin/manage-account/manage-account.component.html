@@ -50,12 +50,13 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
+              <td *ngIf="item.status == 2">
+                <p-inputSwitch [ngModel]="item.status === 2" (click)="unlockAccount(item.id)"></p-inputSwitch>
+              </td>
               <td *ngIf="item.status == 1">
                 <p-inputSwitch [ngModel]="item.status === 1" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td *ngIf="item.status == 2">
-                <p-inputSwitch [ngModel]="!(item.status === 2)" (click)="unlockAccount(item.id)"></p-inputSwitch>
-              </td>
+              <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
@@ -77,8 +78,10 @@
                 <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
                   <i class="fa-solid fa-trash"></i>
                 </button>
+
               </td>
             </tr>
+
           </ng-template>
 
           <ng-template pTemplate="emptymessage">

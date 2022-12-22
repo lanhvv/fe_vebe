@@ -24,6 +24,9 @@ import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWa
 import {BehaviorSubject} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
+import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
+import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
+import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
 import {UploadFileService} from "../../../services/upload_file/upload-file.service";
 type AOV = any[][];
 @Component({
@@ -129,8 +132,8 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   update(){
-    if(this.selectedCategory!=null){
-      this.edit.categoryId=this.selectedCategory.id as number;
+    if(this.categoryitem!=null){
+      this.edit.categoryId=this.categoryitem.id as number;
     }
     if(this.selectedSupplier!=null){
       this.edit.supplierId=this.selectedSupplier.id as number;
@@ -150,7 +153,7 @@ export class ManageWarehouseComponent implements OnInit {
         this.updateDisplay = false;
       }else{
         this.failed(this.createProductResponse.status.message);
-           this.updateDisplay = true;
+        this.updateDisplay = true;
       }
 
     });
@@ -166,10 +169,10 @@ export class ManageWarehouseComponent implements OnInit {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -177,10 +180,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
@@ -188,12 +191,22 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
+  getAllType(){
+    this.importService.getAllType().subscribe(response => {
+      this.categoryItems = response as ListCategoryImportItemsItems
+      console.log( this.categoryItems  +" dòng197")
+    })
+  }
 
   getById(key:number, redisId: string){
-    console.log(key + " " + redisId);
-    this.importService.edit(key, redisId, this.language).subscribe(response => {
-      this.selectedCategory = response.category
-      this.edit = response as EditImportWarehouseResponse
+    this.importService.edit(key, redisId, this.language).subscribe(data => {
+      this.selectedUnitParent.unitId = data.unitId
+      this.selectedUnitParent.unitName = data.unit
+      this.selectedUnitParent.amount = data.amountUnit
+      this.selectedUnitParent.description = data.descriptionUnit
+      this.categoryitem.id = data.categoryId as number
+      this.categoryitem.name = data.categoryName
+      this.edit = data as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
@@ -201,16 +214,14 @@ export class ManageWarehouseComponent implements OnInit {
 
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
-      this.importWarehouseResponse = response as ImportWarehouseResponse[];
-      for (const iterator of  this.importWarehouseResponse) {
-        if(iterator.status.status=== '1'){
-          this.success(iterator.status.message);
-          this.deleteAll(this.selectedSupplier.id)
+      this.itemsafterDone = response as ListImportWarehouse;
+       if(this.itemsafterDone.status.status=="1"){
+        this.success(this.itemsafterDone.status.message);
+       }
+       else{
+        this.failed(this.itemsafterDone.status.message);
+       }
 
-        }else{
-          this.failed(iterator.status.message);
-        }
-      }
 
     });
 
@@ -225,10 +236,10 @@ export class ManageWarehouseComponent implements OnInit {
         this.importService.deleteAll(key,this.language).subscribe(response => {
           this.baseResponse = response as BaseResponse;
           if (this.baseResponse.status.status === '1') {
-            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa sản phẩm thành công!'});
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: this.baseResponse.status.message});
             this.getAllImportInWarehouse(key);
           } else {
-            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa sản phẩm thất bại!'});
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: this.baseResponse.status.message});
           }
         });
 
@@ -250,7 +261,7 @@ export class ManageWarehouseComponent implements OnInit {
   getInformations(){
     this.prodService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
-      console.log(this.getInforCreateProductResponse.typeProductItems, this.selectedCategory.id );
+      console.log(this.getInforCreateProductResponse.unitItems);
     });
   }
 
@@ -258,7 +269,6 @@ export class ManageWarehouseComponent implements OnInit {
 
     if(this.selectedCategory!=null){
       this.createProductRequest.categoryId=this.selectedCategory.id ;
-          console.log(this.selectedCategory.id+" dòng 116"+ this.createProductRequest.amount)
     }
     if(this.selectedSupplier!=null){
       this.createProductRequest.supplierId=this.selectedSupplier.id as number;
@@ -275,6 +285,7 @@ export class ManageWarehouseComponent implements OnInit {
       if(this.createProductResponse.status.status=== '1'){
         this.success(this.createProductResponse.status.message);
         this.getAllImportInWarehouse( this.createProductRequest.supplierId);
+        this.clearSearch()
         this.display = false;
       }else{
         this.failed(this.createProductResponse.status.message);
@@ -467,5 +478,10 @@ export class ManageWarehouseComponent implements OnInit {
     setTimeout(() => {
       this.dialogScanQR = true;
     });
+  }
+  clearSearch() {
+    this.createProductRequest.amount = 0;
+    this.createProductRequest.barCode = '';
+    this.selectedCategory.name=""
   }
 }
