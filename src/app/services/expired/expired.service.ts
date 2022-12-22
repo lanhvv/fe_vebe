@@ -8,8 +8,8 @@ const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
 })
-export class CloseToExpiredService {
-  api = AUTH_API+"close-to-expiration";
+export class ExpiredService {
+  api = AUTH_API+"expiration";
   constructor(private httpClient: HttpClient, private tokenService : TokenStorageService) { }
 
   httpOptions = {
@@ -25,7 +25,4 @@ export class CloseToExpiredService {
     return this.httpClient.get(this.api+"?nameSearch="+nameSearch+"&page="+page+"&record="+row, this.httpOptions);
   }
 
-  editPriceExport(editPriceExportRequest:EditPriceExportRequest) {
-    return this.httpClient.post(this.api+"/edit-price-export", editPriceExportRequest, this.httpOptions);
-  }
 }

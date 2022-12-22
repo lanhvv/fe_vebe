@@ -68,6 +68,7 @@ import {SidebarModule} from 'primeng/sidebar';
 import { ManageExpiryDateComponent } from './manage-product/manage-expiry-date/manage-expiry-date.component';
 import { ManageDebitComponent } from './manage-debit/manage-debit.component';
 import {ManageCloseToExpiredComponent} from "./manage-close-to-expired/manage-close-to-expired.component";
+import {ManageExpiredComponent} from "./manage-expired/manage-expired.component";
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import {ManageCloseToExpiredComponent} from "./manage-close-to-expired/manage-cl
     ManageTypeProductComponent,
     ManageExpiryDateComponent,
     ManageDebitComponent,
-    ManageCloseToExpiredComponent
+    ManageCloseToExpiredComponent,
+    ManageExpiredComponent
   ],
   imports: [
     CommonModule,

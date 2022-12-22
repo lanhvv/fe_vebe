@@ -116,7 +116,7 @@
               <td>{{item.expiredDate| date: 'dd/MM/yyyy'}}</td>
               <td>{{item.creator}}</td>
               <td>{{item.inAmount | number}}</td>
-              <td>{{item.inMoney | number}}đ</td>
+              <td>{{item.inMoney/item.inAmount | number}}đ</td>
               <td>{{item.unitName}}</td>
               <td>{{item.totalPurchasePrice | number}}đ</td>
             </tr>

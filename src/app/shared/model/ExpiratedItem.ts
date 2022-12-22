@@ -1,4 +1,4 @@
-export default class CloseToExpirationItem{
+export default class ExpiratedItem{
   idImport !: number;
   nameProduct !: string;
   amount !: string;
@@ -18,7 +18,3 @@ export class Uitem {
   outPrice !: number;
 }
 
-export class ExportItem {
-  amount !: number;
-  idExport !: number;
-}

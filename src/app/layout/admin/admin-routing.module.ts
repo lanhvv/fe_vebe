@@ -28,6 +28,7 @@ import {StatisticSupplierComponent} from "./statistic-supplier/statistic-supplie
 import {ManageTypeProductComponent} from "./manage-type-product/manage-type-product.component";
 import {ManageDebitComponent} from "./manage-debit/manage-debit.component";
 import {ManageCloseToExpiredComponent} from "./manage-close-to-expired/manage-close-to-expired.component";
+import {ManageExpiredComponent} from "./manage-expired/manage-expired.component";
 
 
 export const AdminRouting: Route[] = [
@@ -164,6 +165,10 @@ export const AdminRouting: Route[] = [
       {
         path: 'manage-close-to-expired',
         component: ManageCloseToExpiredComponent
+      },
+      {
+        path: 'manage-expired',
+        component: ManageExpiredComponent
       }
     ]
   }
