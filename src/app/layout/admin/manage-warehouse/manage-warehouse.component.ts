@@ -24,6 +24,7 @@ import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWa
 import {BehaviorSubject} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
+import {UploadFileService} from "../../../services/upload_file/upload-file.service";
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -100,7 +101,8 @@ export class ManageWarehouseComponent implements OnInit {
               private unitService:UnitService,
               private translateService:TranslateConfigService,private fb: FormBuilder,
               private confirmationService: ConfirmationService,
-              private importService: ImportSupplierService) {
+              private importService: ImportSupplierService,
+              private uploadFileService: UploadFileService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
   }
@@ -395,6 +397,19 @@ export class ManageWarehouseComponent implements OnInit {
 
   failed(message: string) {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
+  }
+
+  exportQRCode(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+        const doc = new jsPDF.jsPDF(response);
+        doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
   }
 
   // camera

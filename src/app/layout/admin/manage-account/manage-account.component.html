@@ -40,7 +40,6 @@
           <ng-template pTemplate="header">
             <tr>
               <th scope="col">Mở/Khóa</th>
-              <th scope="col">Mã nhân viên</th>
               <th scope="col">Họ và tên</th>
               <th scope="col">Email</th>
               <th scope="col">Số điện thoại</th>
@@ -57,7 +56,6 @@
               <td *ngIf="item.status == 2">
                 <p-inputSwitch [ngModel]="!(item.status === 2)" (click)="unlockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
@@ -79,10 +77,8 @@
                 <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
                   <i class="fa-solid fa-trash"></i>
                 </button>
-
               </td>
             </tr>
-
           </ng-template>
 
           <ng-template pTemplate="emptymessage">
