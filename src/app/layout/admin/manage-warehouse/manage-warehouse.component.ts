@@ -216,7 +216,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getById(key:number, redisId: string){
-    console.log(key + " " + redisId);
     this.importService.edit(key, redisId, this.language).subscribe(response => {
       this.selectedCategory = response.category
       this.edit = response as EditImportWarehouseResponse
@@ -319,7 +318,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onUpload(event:Event){
-    console.log(event)
     this.image=event;
     this.prodService.pushFileToStorage(this.image.currentFiles[0],this.language).subscribe(result=>{
       this.createProductResponse=result as CreateProductResponse;
@@ -370,7 +368,6 @@ export class ManageWarehouseComponent implements OnInit {
 
       /* save data */
       this.data = <AOV>XLSX.utils.sheet_to_json(ws, { header: 1 });
-      console.log(this.data);
       this.excelForm = this.fb.group({
         data: this.fb.array([]),
       });
@@ -403,7 +400,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onRemove(){
-    console.log("remote: "+this.fileId);
     this.fileId=0;
 
   }
@@ -423,12 +419,7 @@ export class ManageWarehouseComponent implements OnInit {
 
   exportQRCode(code: string, amount: number){
     this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-        const doc = new jsPDF.jsPDF(response);
-        doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let blob = new Blob([response], { type: 'application/pdf' });
       let url = window.URL.createObjectURL(blob);
       window.open(url);
     });
@@ -447,7 +438,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.currentDevice = undefined;
     this.createProductRequest.barCode = this.qrResultString;
     this.edit.barCode = this.qrResultString;
-    console.log(this.qrResultString);
   }
 
   onHasPermission(has: boolean) {
@@ -459,7 +449,6 @@ export class ManageWarehouseComponent implements OnInit {
     const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
     // @ts-ignore
     this.currentDevice = device;
-    console.log(this.currentDevice);
   }
 
   onTorchCompatible(isCompatible: boolean): void {
@@ -467,7 +456,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getValue(event: Event): string {
-    console.log((event.target as HTMLInputElement).value);
     return (event.target as HTMLInputElement).value;
   }
 
@@ -477,7 +465,6 @@ export class ManageWarehouseComponent implements OnInit {
       this.enable = true;
       const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
       this.currentDevice = device;
-      console.log(this.currentDevice);
     } else {
       this.enable = false;
       this.currentDevice = undefined;
