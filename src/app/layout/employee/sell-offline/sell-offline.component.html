@@ -21,8 +21,7 @@
             </button>
           </div>
           <div class="col-11">
-            <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="product"
-                        (onFilter)="getProduct($event)"
+            <p-dropdown [options]="products" optionLabel="productName" [filter]="true" filterBy="productName" [showClear]="true" placeholder="Tìm kiếm sản phẩm"
                         styleClass="searchProduct">
               <ng-template let-product pTemplate="productItem">
                 <div class="product float-start" (mousedown)="selectProduct(product.productCode)">
@@ -141,8 +140,11 @@
             <tr>
               <td class="fw-bold">Tiền thừa</td>
               <td>
-                <div class="col-8">
+                <div class="col-8" *ngIf="moneyTransaction==null">
                   <input type="text" class="form-control inputSale" [value]="moneyPay - numToString()" disabled>
+                </div>
+                <div class="col-8">
+                  <input type="text" class="form-control inputSale" [value]="moneyPay + moneyTransaction - numToString()" disabled>
                 </div>
               </td>
             </tr>
@@ -150,7 +152,7 @@
               <td class="fw-bold">Khách chuyển khoản</td>
               <td>
                 <div class="col-8">
-                  <input type="text" class="form-control inputSale">
+                  <input type="text" class="form-control inputSale" [(ngModel)]="moneyTransaction">
                 </div>
               </td>
             </tr>
@@ -165,7 +167,7 @@
                            [(ngModel)]="selectedValue"
                            label="Quét mã"></p-radioButton>
             <p-radioButton (click)="chooseABoth()" name="groupname" value="both" [(ngModel)]="selectedValue"
-                           label="Cả hai phương thức"></p-radioButton>
+                           label="Cả hai phương thức" ></p-radioButton>
           </div>
         </div>
       </div>
