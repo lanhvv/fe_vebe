@@ -21,13 +21,14 @@ import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListIm
 import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
 import { UnitService } from 'src/app/services/unit/unit.service';
 import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, isEmpty} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
 import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
 import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
 import {UploadFileService} from "../../../services/upload_file/upload-file.service";
+import {ImportWarehouseItemsResponse} from "../../../shared/response/v_import/ImportWarehouseItemsResponse";
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -73,6 +74,9 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
+  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
+  categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
+  categoryitem: CategoryImportItems = new CategoryImportItems()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -99,6 +103,12 @@ export class ManageWarehouseComponent implements OnInit {
     BarcodeFormat.QR_CODE,
   ];
 
+  isShowFinal: boolean = false;
+
+  //after import
+  isSidebarDialog: boolean = false;
+  importResponse!: ImportWarehouseItemsResponse;
+
   constructor(private messageService: MessageService ,
               private prodService:ProductService,
               private unitService:UnitService,
@@ -124,6 +134,12 @@ export class ManageWarehouseComponent implements OnInit {
   getAllImportInWarehouse(id: any){
     this.importService.getImportInWarehouse(id).subscribe(response => {
       this.items = response as ImportInWarehouseInRedis[];
+      console.log(response)
+      if(response.length === 0){
+        this.isShowFinal = false;
+      } else {
+        this.isShowFinal = true;
+      }
     });
   }
 
@@ -132,8 +148,8 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   update(){
-    if(this.categoryitem!=null){
-      this.edit.categoryId=this.categoryitem.id as number;
+    if(this.selectedCategory!=null){
+      this.edit.categoryId=this.selectedCategory.id as number;
     }
     if(this.selectedSupplier!=null){
       this.edit.supplierId=this.selectedSupplier.id as number;
@@ -191,6 +207,7 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
+
   getAllType(){
     this.importService.getAllType().subscribe(response => {
       this.categoryItems = response as ListCategoryImportItemsItems
@@ -199,14 +216,10 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getById(key:number, redisId: string){
-    this.importService.edit(key, redisId, this.language).subscribe(data => {
-      this.selectedUnitParent.unitId = data.unitId
-      this.selectedUnitParent.unitName = data.unit
-      this.selectedUnitParent.amount = data.amountUnit
-      this.selectedUnitParent.description = data.descriptionUnit
-      this.categoryitem.id = data.categoryId as number
-      this.categoryitem.name = data.categoryName
-      this.edit = data as EditImportWarehouseResponse
+    console.log(key + " " + redisId);
+    this.importService.edit(key, redisId, this.language).subscribe(response => {
+      this.selectedCategory = response.category
+      this.edit = response as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
@@ -215,16 +228,14 @@ export class ManageWarehouseComponent implements OnInit {
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
       this.itemsafterDone = response as ListImportWarehouse;
-       if(this.itemsafterDone.status.status=="1"){
+      if(this.itemsafterDone.status.status=== '1'){
         this.success(this.itemsafterDone.status.message);
-       }
-       else{
+        this.deleteAll(this.selectedSupplier.id)
+      }else{
         this.failed(this.itemsafterDone.status.message);
-       }
-
+      }
 
     });
-
   }
 
   deleteAll(key: any){

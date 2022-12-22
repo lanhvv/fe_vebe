@@ -6,18 +6,13 @@
   <h5>Nhập kho hàng</h5>
   <div class="container pt-4 main-layout">
     <div class="row pb-3">
-      <div class="col-2">
+      <div class="col-3">
         <button class="root-btn" (click)="showDialog()">Thêm sản phẩm</button>
       </div>
-      <div class="col-2">
-        <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="!items">
-          Hoàn tất
-        </button>
-      </div>
-      <div class="col" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.items!=null">
+      <div class="col-7" *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.items!=null">
         <p-dropdown [options]="getInforCreateProductResponse.items" [(ngModel)]="selectedSupplier"
           [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true" filterBy="name"
-          placeholder="Lựa chọn nhà cung cấp" (onChange)="getAllImportInWarehouse(selectedSupplier.id)">
+          placeholder="Lựa chọn nhà cung cấp" (onChange)="getAllImportInWarehouse(selectedSupplier.id)" styleClass="dropdown_warehouse">
           <ng-template pTemplate="selectedItem">
             <div class="supplier-item supplier-item-value" *ngIf="selectedSupplier">
               <div>{{selectedSupplier.name}}</div>
@@ -29,6 +24,11 @@
             </div>
           </ng-template>
         </p-dropdown>
+      </div>
+      <div class="col-2 float-end">
+        <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="isShowFinal">
+          Hoàn tất
+        </button>
       </div>
     </div>
     <div class="row">
@@ -181,14 +181,14 @@
               <input type="text" class="form-control" placeholder="Số lượng">
             </div>
             <div class="col-3">
-              <label>Giá nhập</label>
-              <p-inputNumber id="price" [(ngModel)]="items.inPrice" mode="currency" currency="VND" locale="en-US"
+              <label for="in_price">Giá nhập</label>
+              <p-inputNumber id="in_price" [(ngModel)]="items.inPrice" mode="currency" currency="VND" locale="en-US"
                 [ngModelOptions]="{standalone: true}">
               </p-inputNumber>
             </div>
             <div class="col-3">
-              <label>Giá bán</label>
-              <p-inputNumber id="price" [(ngModel)]="items.outPrice" mode="currency" currency="VND" locale="en-US"
+              <label for="out_price">Giá bán</label>
+              <p-inputNumber id="out_price" [(ngModel)]="items.outPrice" mode="currency" currency="VND" locale="en-US"
                 [ngModelOptions]="{standalone: true}">
               </p-inputNumber>
 
@@ -231,8 +231,7 @@
           <div class="mb-3"
                *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
             <label for="category_edit" class="mb-2">Danh mục sản phẩm</label>
-
-            <p-dropdown styleClass="root-dropdown" id="bill_pay" dataKey="id" [options]="categoryItems.items"
+            <p-dropdown styleClass="root-dropdown" id="category_edit" dataKey="id" [options]="categoryItems.items"
               [(ngModel)]="categoryitem" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true"
               filterBy="name" filterBy="name">
               <ng-template pTemplate="selectedItem">
@@ -345,3 +344,34 @@
     [formats]="formatsEnabled"
   ></zxing-scanner>
 </p-dialog>
+
+<!--preview after import-->
+<p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
+  <h5>Xuất thông tin sản phẩm</h5>
+  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse.items" *ngIf="this.importResponse!=null && this.importResponse.status.status==='1'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="th-table">Tên sản phẩm</th>
+        <th class="th-table">Mã sản phẩm</th>
+        <th class="th-table">QR code</th>
+        <th class="th-table">Hạn sử dụng</th>
+        <th class="th-table">Giá nhập</th>
+        <th class="th-table">Số lượng</th>
+        <th class="th-table">Thao tác</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.productName}}</td>
+        <td>{{product.productCode}}</td>
+        <td>{{product.qrCode}}</td>
+        <td>{{product.rangeDate | date: "dd/MM/yyyy"}}</td>
+        <td>{{product.inPrice}}</td>
+        <td>{{product.amount}}</td>
+        <td>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-sidebar>
