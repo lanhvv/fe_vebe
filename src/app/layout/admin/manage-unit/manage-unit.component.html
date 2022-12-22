@@ -94,7 +94,7 @@
 </main>
 <!--Main layout-->
 
-<p-dialog [(visible)]="unitDialog" [style]="{width: '550px'}" header="Thêm mới đơn vị" [modal]="true" styleClass="p-fluid" [draggable]="false">
+<p-dialog [(visible)]="unitDialog" [style]="{width: '550px'}" [header]="titleModal" [modal]="true" styleClass="p-fluid" [draggable]="false">
   <ng-template pTemplate="content">
     <div class="mb-3">
       <label for="name" class="form-label">Tên đơn vị</label>
@@ -118,12 +118,12 @@
         <div class="field-radiobutton col-6">
           <p-radioButton id="locate1" name="locate" value="parent"
                          [(ngModel)]="selectedValueLocateUnit"></p-radioButton>
-          <label for="locate1">Parent</label>
+          <label for="locate1">Danh mục cha</label>
         </div>
         <div class="field-radiobutton col-6">
           <p-radioButton id="locate2" name="locate" value="child"
                          [(ngModel)]="selectedValueLocateUnit" check></p-radioButton>
-          <label for="locate2">Child</label>
+          <label for="locate2">Danh mục con</label>
         </div>
       </div>
     </div>

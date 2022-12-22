@@ -25,6 +25,7 @@ export class ManageUnitComponent implements OnInit {
   showCategory : boolean = false;
   totalItems = 0;
   nameSearch = "";
+  titleModal: string = '';
 
   status: number = 0;
 
@@ -120,6 +121,7 @@ export class ManageUnitComponent implements OnInit {
     this.feature = "create";
     this.idUnitParent = 0;
     this.idUnit = id;
+    this.titleModal = 'Thêm mới đơn vị';
     this.selectedValueLocateUnit = "";
     if (this.idUnit > 0) {
       this.findById(this.idUnit, idParent);
@@ -141,6 +143,7 @@ export class ManageUnitComponent implements OnInit {
 
   openUpdate(id:number, idParent : number) {
     this.feature = "update";
+    this.titleModal = 'Chỉnh sửa đơn vị';
     this.idUnit = id;
     this.showCategory = false;
     console.log(id +"-"+ idParent);

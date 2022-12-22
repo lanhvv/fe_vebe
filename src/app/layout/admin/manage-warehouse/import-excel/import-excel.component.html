@@ -105,12 +105,12 @@
               <p-dropdown styleClass="dropdown_table" [options]="this.getTypeProductsResponse.results" [(ngModel)]="product.typeProduct" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="saveProducts()" placeholder="Chọn loại sản phẩm">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.typeProduct">
-                    <div>{{this.product.typeProduct.name}}</div>
+                    <p>{{this.product.typeProduct.name}}</p>
                   </div>
                 </ng-template>
                 <ng-template let-category pTemplate="item">
                   <div class="supplier">
-                    <div>{{category.name}}</div>
+                    <p>{{category.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown>
@@ -139,12 +139,12 @@
               <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
-                    <div>{{product.unit.name}}</div>
+                    <p>{{product.unit.name}}</p>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
                   <div class="unit" >
-                    <div>{{unit.name}}</div>
+                    <p>{{unit.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown></td>
