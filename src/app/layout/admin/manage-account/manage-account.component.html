@@ -11,7 +11,7 @@
         <span><p>Số người đang hoạt động: {{listAccountItems.countStatus}}</p></span>
       </div>
       <div class="col-3">
-        <a type="button" class="btn btn-outline-primary" (click)="isDialogAccount=true">Thêm tài khoản</a>
+        <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
       <div class="col-2">
 <!--        <select class="form-select" aria-label="Default select example">-->
@@ -49,10 +49,10 @@
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr class="p-selectable-row">
-              <td *ngIf="item.status === 2">
-                <p-inputSwitch [ngModel]="!(item.status === 2)" (click)="unlockAccount(item.id)"></p-inputSwitch>
+              <td *ngIf="item.status == 2">
+                <p-inputSwitch [ngModel]="item.status === 2" (click)="unlockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td *ngIf="item.status === 1">
+              <td *ngIf="item.status == 1">
                 <p-inputSwitch [ngModel]="item.status === 1" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
               <td>{{item.fullname}}</td>
@@ -271,14 +271,14 @@
         </div>
       </div>
       <div class="mb-3 text-center">
-        <button (click)="createAccount()" [disabled]="!accountForm.valid" type="submit" class="root-btn">Thêm tài khoản</button>
+        <button (click)="createAccount()" type="submit" class="root-btn">Thêm tài khoản</button>
       </div>
     </div>
   </form>
 </p-dialog>
 
 <!-- Update -->
-<p-dialog header="Chỉnh sửa tài khoản" [(visible)]="isUpdateAccount" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Update tài khoản" [(visible)]="isUpdateAccount" [modal]="true" [style]="{width: '50vw'}"
           [draggable]="false" [resizable]="false">
   <form class="row mt-2">
     <div class="row">

@@ -34,6 +34,9 @@ import { DebitComponent } from './debit/debit.component';
 import {InputTextModule} from 'primeng/inputtext';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import { FormGroup, FormControl, Validators ,ReactiveFormsModule } from '@angular/forms'
+import {DataViewModule} from 'primeng/dataview';
+import {RatingModule} from 'primeng/rating';
+import { ProductListComponent } from './product-list/product-list.component';
 @NgModule({
   declarations: [
     ListProductComponent,
@@ -45,7 +48,8 @@ import { FormGroup, FormControl, Validators ,ReactiveFormsModule } from '@angula
     TypeProductComponent,
     ManageOrderComponent,
     ManageProfileComponent,
-    DebitComponent
+    DebitComponent,
+    ProductListComponent
   ],
   imports: [
     RouterModule.forChild(EmployeeRouting),
@@ -71,7 +75,9 @@ import { FormGroup, FormControl, Validators ,ReactiveFormsModule } from '@angula
     ZXingScannerModule,
     InputTextModule,
     InputTextareaModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DataViewModule,
+    RatingModule
   ],
   exports:[
     SellOfflineComponent

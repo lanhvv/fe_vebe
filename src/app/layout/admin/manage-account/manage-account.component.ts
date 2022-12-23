@@ -46,7 +46,7 @@ export class ManageAccountComponent implements OnInit {
   messagePhone: any;
   createAccountRequest: CreateAccountRequest;
   createAccountResponse: CreateAccountResponse;
-  editAccount: CreateAccountResponse;
+  editAccount!: CreateAccountResponse;
   isDialogAccount: boolean = false;
   isUpdateAccount: boolean = false;
   accountForm!: FormGroup;
@@ -60,16 +60,15 @@ export class ManageAccountComponent implements OnInit {
   checked_false: boolean = false;
 
   constructor(private router: Router,
-              private managerAccountService: ManagerAccountService,
-              private confirmationService: ConfirmationService,
-              private translateService: TranslateConfigService,
-              private fb: FormBuilder,
-              private messageService: MessageService) {
+    private managerAccountService: ManagerAccountService,
+    private confirmationService: ConfirmationService,
+    private translateService: TranslateConfigService,
+    private fb: FormBuilder,
+    private messageService: MessageService) {
     this.listAccountItems = new GetAccountItemsResponse();
     this.deleteAccountResponse = new DeleteAccountResponse();
     this.createAccountResponse = new CreateAccountResponse();
     this.createAccountRequest = new CreateAccountRequest();
-    this.editAccount = new CreateAccountResponse();
     // this.roleAccount = [
     //   {id: 1, role: 'Chủ cửa hàng'},
     //   {id: 2, role: 'Nhân viên'}
@@ -81,15 +80,6 @@ export class ManageAccountComponent implements OnInit {
     this.status = 3;
     this.language = this.translateService.getLanguage();
     this.getall();
-    this.updateForm = this.fb.group({
-      fullName: new FormControl('', [Validators.minLength(5), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexFullName)]),
-      userName: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.required]),
-      passWord: new FormControl('', [Validators.minLength(8), Validators.maxLength(50), Validators.required, Validators.pattern(this.regexPassWord)]),
-      cccd: new FormControl('', [Validators.minLength(9), Validators.maxLength(12)]),
-      phoneNumber: new FormControl('', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPhone)]),
-      email: new FormControl('', [Validators.minLength(5), Validators.maxLength(100), Validators.pattern(this.regexEmail)]),
-      address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
-    });
   }
 
   formAccount() {
@@ -103,7 +93,19 @@ export class ManageAccountComponent implements OnInit {
       address: new FormControl('', [Validators.minLength(10), Validators.maxLength(200)]),
       // role: new FormControl('', [Validators.required])
     })
-
+    this.updateForm = new FormGroup<any>({
+      fullname: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+      cccd: new FormControl('', [Validators.required]),
+      numberPhone: new FormControl('', [Validators.required]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[A-Za-z_.0-9]+@+[a-z]+.[a-z]+.[a-z]+/),
+      ]),
+      address: new FormControl('', [Validators.required]),
+      role: new FormControl('', [Validators.required]),
+    });
   }
 
   getall() {
@@ -141,7 +143,6 @@ export class ManageAccountComponent implements OnInit {
     });
     this.isUpdateAccount = true;
   }
-
   update() {
     this.updateAccountRequest = new UpdateAccountRequest(this.createAccountResponse.idUser,  this.createAccountResponse.username,
       this.createAccountResponse.fullname, this.createAccountResponse.password, this.createAccountResponse.cccd, this.createAccountResponse.address,
@@ -149,30 +150,29 @@ export class ManageAccountComponent implements OnInit {
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status == "1") {
-        this.isUpdateAccount = false;
-        this.getall();
-        this.removeForm();
-        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: this.createAccountResponse.status.message, life: 3000 });
+        this.isDialogAccount = false;
+        this.getall()
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
       }
       else if (this.createAccountResponse.status.status == "0") {
-        this.isUpdateAccount = true;
-        this.messageService.add({ severity: 'error', summary: 'Thất bại', detail: this.createAccountResponse.status.message, life: 3000 });
+        this.isDialogAccount = true;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
       }
     })
   }
 
   delete(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Xóa tài khoản sẽ ảnh hưởng tới tài khoản của nhân viên, bạn có chắc muốn xóa không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.deleteAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status === '1') {
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Delete success' });
+            this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa tài khoản thành công!'});
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Delete failse' });
+            this.messageService.add({severity: 'error', summary: 'Xác nhận', detail: 'Xóa tài khoản thất bại, vui lòng thử lại!'});
           }
         });
 
@@ -180,10 +180,10 @@ export class ManageAccountComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác!'});
             break;
         }
       }
@@ -194,34 +194,33 @@ export class ManageAccountComponent implements OnInit {
 
   unlockAccount(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có muốn mở khóa tài khoản này không?',
+      header: 'Cảnh báo',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.unlockAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
-          if (this.deleteAccountResponse.status.status === '2') {
+          if (this.deleteAccountResponse.status.status == '2') {
             this.ngOnInit();
             const currentItem = this.listAccountItems.items.find(item => item.id === request);
             if (currentItem) {
               currentItem.status = 2;
             }
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Unlock success' });
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Mở khóa tài khoản thành công!'});
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Unlock false' });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Mở khóa lỗi, vui lòng thử lại!'});
           }
         }, (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Mở khóa lỗi, vui lòng thử lại!'});
         });
-
       },
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
             break;
         }
       }
@@ -231,40 +230,40 @@ export class ManageAccountComponent implements OnInit {
 
   lockAccount(request: number) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Khóa tài khoản sẽ gây ảnh hưởng tới việc sử dụng hệ thống, bạn có muốn khóa không?',
+      header: 'Cảnh báo',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.managerAccountService.lockAccount(request, this.language).subscribe(response => {
           this.deleteAccountResponse = response as DeleteAccountResponse;
           if (this.deleteAccountResponse.status.status == '1') {
             this.ngOnInit();
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Lock success' });
+            this.messageService.add({severity: 'info', summary: 'Confirmed', detail: 'Khóa tài khoản thành công!'});
             const currentItem = this.listAccountItems.items.find(item => item.id === request);
             if (currentItem) {
               currentItem.status = 1;
             }
           } else {
-            this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+            this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Khóa tài khoản thất bại!'});
           }
         }, (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Confirmed', detail: 'Lock false' });
+          this.messageService.add({severity: 'error', summary: 'Confirmed', detail: 'Khóa tài khoản thất bại!'});
         });
-
       },
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này!'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Bạn đã hủy bỏ thao tác này'});
             break;
         }
       }
     });
-    this.getall()
+    this.getall();
   }
+
   Pageable(event: any) {
     this.page = event.page;
     this.pageSize = event.rows;
@@ -294,7 +293,7 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountRequest.cccd = value.cccd
     this.createAccountRequest.numberPhone = value.phoneNumber
     this.createAccountRequest.username = value.userName
-    this.createAccountRequest.password = value.passWord
+
     this.managerAccountService.checkAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status == "username" && this.createAccountRequest.username != null) {
@@ -327,22 +326,22 @@ export class ManageAccountComponent implements OnInit {
     this.createAccountRequest.cccd = value.cccd
     this.createAccountRequest.numberPhone = value.phoneNumber
     this.createAccountRequest.username = value.userName
+    this.createAccountRequest.password = value.passWord
 
     this.managerAccountService.createAccount(this.createAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status = "1") {
         this.isDialogAccount = false;
-        this.getall();
-        this.removeForm();
+        this.getall()
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
+
       } else {
         this.isDialogAccount = true;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
-
       }
-
     })
-  }
+    }
+
 
   removeForm(){
     this.accountForm = this.fb.group({
