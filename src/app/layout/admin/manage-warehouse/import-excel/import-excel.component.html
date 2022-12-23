@@ -35,8 +35,8 @@
             pButton pRipple
             label="Hoàn thành"
             class="root-btn ms-3"
-            [disabled]="!productResponse && isEnableDone!=0"
-            (mousedown)="import()" id="btn-done"></button>
+            [disabled]="!productResponse"
+            (mousedown)="import()" ></button>
         </ng-template>
         <div style="width: 64%">
           <p-dropdown styleClass="select_ncc" [options]="this.getSuppliersResponse.suppliers" [(ngModel)]="selectedSupplier" optionLabel="supplierName" [filter]="true" filterBy="name" placeholder="Nhà cung cấp" (ngModelChange)="chooseSupplier()">

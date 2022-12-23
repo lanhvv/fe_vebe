@@ -94,11 +94,13 @@
       </div>
       <div class="col-4">
         <label for="unit_amount" translate>product.unit.amount</label>
-        <input type="text" class="form-control" required id="unit_amount" [(ngModel)]="createProductRequest.amount">
+        <p-inputNumber id="unit_amount" style="width: 100%" [(ngModel)]="createProductRequest.amount" [required]="true"></p-inputNumber>
+<!--        <input type="number" min="1" class="form-control" required id="unit_amount" [(ngModel)]="createProductRequest.amount">-->
       </div>
       <div class="col-4">
         <label for="unit_inprice" translate>product.unit.inprice</label>
-        <input type="text" class="form-control" required id="unit_inprice" [(ngModel)]="createProductRequest.inPrice">
+        <p-inputNumber id="unit_inprice" style="width: 100%" [(ngModel)]="createProductRequest.inPrice" [required]="true"></p-inputNumber>
+<!--        <input type="number" min="0" class="form-control" required id="unit_inprice" [(ngModel)]="createProductRequest.inPrice">-->
       </div>
     </div>
     <div *ngIf="selectedUnitParent !=null && selectedUnitParent.unitId!=null && getUnitChileResponse!=null && getUnitChileResponse.unitItems!=null">
@@ -112,11 +114,13 @@
           </div>
           <div class="col-3">
             <label for="unit_inprice{{i}}" translate>product.unit.inprice <span>{{i+1}}</span></label>
-            <input type="text" class="form-control" required id="unit_inprice{{i}}" [(ngModel)]="createProductRequest.units[i].inPrice">
+            <p-inputNumber id="unit_inprice{{i}}" [(ngModel)]="createProductRequest.units[i].inPrice" [required]="true"></p-inputNumber>
+<!--            <input type="text" class="form-control" required id="unit_inprice{{i}}" [(ngModel)]="createProductRequest.units[i].inPrice">-->
           </div>
           <div class="col-3">
             <label for="unit_outprice{{i}}" translate>product.unit.outprice <span>{{i+1}}</span></label>
-            <input type="text" class="form-control" required id="unit_outprice{{i}}" [(ngModel)]="createProductRequest.units[i].outPrice">
+            <p-inputNumber id="unit_outprice{{i}}" style="width: 100%" [(ngModel)]="createProductRequest.units[i].outPrice" [required]="true"></p-inputNumber>
+<!--            <input type="text" class="form-control" required id="unit_outprice{{i}}" [(ngModel)]="createProductRequest.units[i].outPrice">-->
           </div>
           <div class="col-3">
             <button class="btn_form-delete me-2" (mousedown)="deleteUnitLayout(i)" *ngIf="1!=unitLayouts.length">
