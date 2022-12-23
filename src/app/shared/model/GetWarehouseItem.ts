@@ -9,4 +9,7 @@ export class GetWarehouseItem{
     outAmount!:number;
     inPrice!:number;
     inventory!:number;
+    productCode!:string;
+    importId!:number;
+    expireDate!:string;
 }

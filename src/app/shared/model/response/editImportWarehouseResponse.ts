@@ -1,5 +1,5 @@
 import { Unit } from '../Unit';
-import {Units} from "../Units";
+import { Units } from '../Units';
 export class EditImportWarehouseResponse {
   id!: string
   nameProd!:string;

@@ -70,6 +70,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   enableCameraState : boolean = false;
   dialogExportBill: boolean = false;
   valueProductSelected!:ProductStallResult;
+  enableDone:boolean=true;
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
     BarcodeFormat.DATA_MATRIX,
@@ -187,17 +188,6 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.currentBill = index;
   }
 
-  // getProduct(input:Event){
-  //   console.log(input)
-  //   this.search=input
-  //   this.productService.search(this.language,this.search.filter).subscribe(response=>{
-  //     this.productResponse=response as ViewStallResponse;
-  //     if (this.productResponse.status.status==="1"){
-  //       this.products=this.productResponse.results;
-  //     }
-  //   })
-  // }
-
   getProduct(){
     console.log("getProduct")
     this.productService.getProducts(this.language).subscribe(response=>{
@@ -209,7 +199,6 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   selectProduct(productCode:string){
-    console.log("selectProduct")
     this.productService.selectProduct(this.language,productCode,this.cartCode).subscribe(response=>{
       this.productSelected=response as SelectProductResponse;
       if (this.productSelected.status.status==="1"){
@@ -238,9 +227,10 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
         }
         this.viewBillRequest.cartCode=this.cartCode;
         this.carts.push(this.cartItem);
-        this.changeAmount();
+        // this.changeAmount();
       }
     })
+    this.checkMoneyPay();
   }
 
   selectUnit(unitId:number,importId:number){
@@ -256,13 +246,6 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     }
   }
 
-  // createCart(){
-  //   this.cartCode="CartCode::"+(new Date().getFullYear())
-  //   this.cartItem=new CartItem();
-  //   this.cartItem.cartCode=this.cartCode;
-  //   this.carts.push(this.cartItem);
-  // }
-
   selectCart(cartNumber:number){
     this.cartsItem=this.carts[cartNumber].products;
   }
@@ -274,14 +257,15 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
 
   deleteProductOnCart(code: string){
     this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code);
-    this.changeAmount();
+    // this.changeAmount();
   }
 
-  changeAmount(){
+  changeAmount(result: number) {
+    console.log(result);
+    this.checkMoneyPay();
     this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
       console.log(response);
     })
-    this.moneyPay = this.numToString();
   }
 
   transaction(){
@@ -368,5 +352,29 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   exportBill(){
     //  xử lý xuất bill file pdf
     this.dialogExportBill = false;
+  }
+
+  validate(number:number){
+    if (number==null){
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
+    }
+    this.checkMoneyPay();
+  }
+
+  checkMoneyPay(){
+
+    if (this.moneyPay==null || this.moneyPay==0){
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
+    }
+    console.log(this.moneyPay)
+    if ((this.selectedValue==="money" || this.selectedValue==="both") && this.moneyPay<this.numToString()){
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
+    }else{
+      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
+    }
   }
 }

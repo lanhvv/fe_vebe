@@ -11,6 +11,7 @@ import { GetWarehouseRequest } from 'src/app/shared/model/request/GetWarehouseRe
 import { DeleteWarehouseResponse } from 'src/app/shared/model/response/DeleteWarehouseResponse';
 import { GetProductResult } from 'src/app/shared/model/response/GetProductResult';
 import { GetWarehouseResponse } from 'src/app/shared/model/response/GetWarehouseResponse';
+import {UploadFileService} from "../../../../services/upload_file/upload-file.service";
 
 @Component({
   selector: 'app-were-house-manager',
@@ -33,10 +34,14 @@ export class WereHouseManagerComponent implements OnInit {
   retio=0;
   deleteWarehouseResponse!:DeleteWarehouseResponse;
   status: number = 0;
+  amountExport:number=0;
+  displayAmount!: boolean;
+  displayImport!: boolean;
   constructor(private router:ActivatedRoute,
                               private route:Router,
                               private warehouseManagerService:WarehouseManagerService,
                               private messageService: MessageService,
+                              private uploadFileService: UploadFileService,
                               private translateService:TranslateConfigService) {
     this.getWarehouseResponse=new GetWarehouseResponse();
     this.getWarehouseResponse.getProductResult=new GetProductResult();
@@ -51,6 +56,14 @@ export class WereHouseManagerComponent implements OnInit {
     this.getall();
 
     console.log(this.translateService.getvalue("message.success"))
+  }
+
+  showBasicDialog() {
+    this.displayAmount = true;
+  }
+
+  showDetailImport() {
+    this.displayImport = true;
   }
 
   sort(nameFilter:string){
@@ -176,5 +189,14 @@ export class WereHouseManagerComponent implements OnInit {
 
   back(){
     window.history.back();
+  }
+
+
+  exportExcel(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(x=>{
+      const blob = new Blob([x], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
   }
 }

@@ -27,27 +27,15 @@
         <p-treeTable #tt [value]="files.data" [columns]="cols">
           <ng-template pTemplate="header" let-columns>
             <tr>
-              <th ttSortableColumn="name" (mousedown)="sort('name')">
-                Tên danh mục
-                <p-treeTableSortIcon field="name"></p-treeTableSortIcon>
+              <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
+                {{col.header}}
+                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
               </th>
-              <th ttSortableColumn="statusName" (mousedown)="sort('statusName')">
-                Trạng thái
-                <p-treeTableSortIcon field="statusName"></p-treeTableSortIcon>
-              </th>
-              <th ttSortableColumn="amountProduct" (mousedown)="sort('amountProduct')">
-                Số lượng hàng
-                <p-treeTableSortIcon field="amountProduct"></p-treeTableSortIcon>
-              </th>
-              <th ttSortableColumn="creator" (mousedown)="sort('creator')">
-                Người tạo
-                <p-treeTableSortIcon field="creator"></p-treeTableSortIcon>
-              </th>
-              <th>
-                Hành động
-              </th>
+                <th style="width: 10rem">
+                    <p-button icon="pi pi-cog"></p-button>
+                </th>
             </tr>
-          </ng-template>
+        </ng-template>
           <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
             <tr>
               <td >
@@ -63,7 +51,7 @@
                 </div>
               </td>
               <td>{{rowData.amountProduct}}</td>
-              <td ttEditableColumn>{{rowData.creator}}</td>
+              <td>{{rowData.creator}}</td>
               <td>
                 <button type="button" class="btn btn-primary m-1" (click)="showDialogDetail(rowData.id)">
                   <i class="fa-solid fa-plus"></i>
@@ -100,22 +88,7 @@
         <input [(ngModel)]="typeRequest.name" [ngModelOptions]="{standalone: true}" type="text"
                class="form-control" id="name-category">
       </div>
-<!--      <div class="mb-3">-->
-<!--        <label class="form-label">Danh mục chính</label>-->
-<!--        <p-dropdown [options]="filesType.data" [(ngModel)]="category" [ngModelOptions]="{standalone: true}"-->
-<!--                    optionLabel="name" [filter]="true" filterBy="name" styleClass="dropdown-select">-->
-<!--          <ng-template pTemplate="selectedItem">-->
-<!--            <div class="country-item country-item-value" *ngIf="category">-->
-<!--              <p>{{category.name}}</p>-->
-<!--            </div>-->
-<!--          </ng-template>-->
-<!--          <ng-template let-category pTemplate="item">-->
-<!--            <div class="country-item">-->
-<!--              <div>{{category.name}}</div>-->
-<!--            </div>-->
-<!--          </ng-template>-->
-<!--        </p-dropdown>-->
-<!--      </div>-->
+
       <div class="mb-3">
         <label for="description-category" class="form-label">Mô tả</label>
         <textarea [(ngModel)]="typeRequest.description" [ngModelOptions]="{standalone: true}"
@@ -175,8 +148,8 @@
       </div>
       <div class="row text-center">
         <div class="col">
-          <button type="submit" class="root-btn me-2" (mousedown)="create()">
-            Hoàn thiện
+          <button type="submit" class="root-btn me-2" (mousedown)="update()">
+           Cập nhật
           </button>
           <button type="submit" class="btn btn-outline-primary">
             Hủy
