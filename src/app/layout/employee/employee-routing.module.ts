@@ -6,6 +6,7 @@ import {TypeProductComponent} from "./type-product/type-product.component";
 import {ManageOrderComponent} from "./manage-order/manage-order.component";
 import {ManageProfileComponent} from "./manage-profile/manage-profile.component";
 import { DebitComponent } from './debit/debit.component';
+import { ProductListComponent } from './product-list/product-list.component';
 
 export const EmployeeRouting: Route[] = [
   {
@@ -47,7 +48,11 @@ export const EmployeeRouting: Route[] = [
       {
         path: 'user-debit',
         component: DebitComponent
-      }
+      },
+      {
+        path: 'product-list',
+        component: ProductListComponent
+      },
     ]
   }
 ]

@@ -20,40 +20,28 @@ export class ManageExpiryDateComponent implements OnInit {
   status: number = 0;
   submitted!: boolean;
   dialog !: boolean;
-  page = 0;
-  row = 10;
+  pageEx = 0;
+  rowEx = 10;
+  pageCloseToEx = 0;
+  rowCloseToEx = 10;
+
   totalItems = 0;
-  nameSearch = "";
+  nameSearchCloseToEx = "";
+  nameSearchEx = "";
   responseExpired !: ExpiredResponse;
   responseToExpired !: CloseToExpiresResponse;
 
-  //camera
-  availableDevices !: MediaDeviceInfo[];
-  qrResultString !: string;
-  dialogScanQR: boolean = false;
-  currentDevice !: MediaDeviceInfo | undefined;
-  torchEnabled = false;
-  tryHarder = false;
-  hasPermission !: boolean;
-  torchAvailable$ = new BehaviorSubject<boolean>(false);
-  enable : boolean = true;
-  enableCameraState : boolean = false;
-  formatsEnabled: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.QR_CODE,
-  ];
   constructor(private expiredService: ExpiredService,
               private messageService: MessageService,
               private closeToExpiredService: CloseToExpiredService) { }
 
   ngOnInit(): void {
     this.status = 6;
-    this.getALl(this.nameSearch, this.page, this.row);
+    this.getALlExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
-  getALl(nameSearch:string, page:number, row:number) {
+  getALlExpired(nameSearch:string, page:number, row:number) {
     this.expiredService.getAll(nameSearch,page,row).subscribe(data => {
       this.responseExpired = data as ExpiredResponse;
       this.totalItems = this.responseExpired.totalItems;
@@ -61,10 +49,26 @@ export class ManageExpiryDateComponent implements OnInit {
     })
   }
 
-  paginate(event:any) {
-    this.page = event.page;
-    this.row = event.rows;
-    this.getALl(this.nameSearch, this.page, this.row);
+  getALlToExpired(nameSearch:string, page:number, row:number) {
+    this.closeToExpiredService.getAll(nameSearch,page,row).subscribe(data => {
+      this.responseToExpired = data as CloseToExpiresResponse;
+      this.totalItems = this.responseToExpired.totalItems;
+      console.log(this.responseToExpired);
+    })
+  }
+
+  paginateEx(event:any) {
+    this.pageEx = event.page;
+    this.rowEx = event.rows;
+    this.getALlToExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+    this.getALlExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+  }
+
+  paginateCloseToEx(event:any) {
+    this.pageCloseToEx = event.page;
+    this.rowCloseToEx = event.rows;
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
+    this.getALlExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
   hideDialog() {
@@ -78,7 +82,15 @@ export class ManageExpiryDateComponent implements OnInit {
   idImport !: number;
 
   onSearch() {
-    this.getALl(this.nameSearch, this.page, this.row);
+    this.pageEx= 0;
+    this.rowEx = 10;
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageEx, this.rowEx);
+  }
+
+  onSearchExpired() {
+    this.pageCloseToEx = 0;
+    this.rowCloseToEx = 10;
+    this.getALlExpired(this.nameSearchEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
   openDialog(idImport:number) {
@@ -127,45 +139,5 @@ export class ManageExpiryDateComponent implements OnInit {
         this.hideDialog();
       })
     }
-  }
-
-  //  camera
-  openDialogScan(){
-    this.enableCamera();
-    setTimeout(() => {
-      this.dialogScanQR = true;
-    });
-  }
-
-  enableCamera() {
-    this.enableCameraState = !this.enableCameraState;
-    if (this.enableCameraState) {
-      this.enable = true;
-      const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
-      this.currentDevice = device;
-    } else {
-      this.enable = false;
-      this.currentDevice = undefined;
-    }
-  }
-
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
-    this.availableDevices = devices;
-  }
-
-  // get value
-  onCodeResult(resultString: string) {
-    this.qrResultString = resultString;
-    this.dialogScanQR = false;
-    this.currentDevice = undefined;
-    console.log(this.qrResultString);
-  }
-
-  onHasPermission(has: boolean) {
-    this.hasPermission = has;
-  }
-
-  onTorchCompatible(isCompatible: boolean): void {
-    this.torchAvailable$.next(isCompatible || false);
   }
 }

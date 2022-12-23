@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     private datePipe: DatePipe,
     private checkRole: ValidateLoginService,
     private tokenStorage: TokenStorageService) {
-    this.checkRole.checkToken(this.author);
+    // this.checkRole.checkToken(this.author);
   }
 
   ngOnInit(): void {
@@ -73,12 +73,16 @@ export class HomeComponent implements OnInit {
     this.maxDate = today;
   }
 
+  totalCloseToExpired : number | undefined = 0;
+  totalExpired : number | undefined = 0;
 
   getReportSumProduct(){
     this.dashboardService.reportSumProduct().subscribe((data: any) =>{
       console.log("getReportSumProduct:  " + data.block_product +"/"+ data.sold_out);
       this.blockProduct = data.block_product;
       this.soldOutProduct = data.sold_out;
+      this.totalExpired = data.totalExpired;
+      this.totalCloseToExpired = data.totalCloseToExpired;
     });
   }
 
@@ -144,7 +148,7 @@ export class HomeComponent implements OnInit {
 
     let amountsOfLineChart = [0];
     let salesOfLineChart = [0];
-
+    console.log(dates);
     this.multiAxisData = {
       labels: dates,
       // labels: ["12-10-22","13-10-22", "14-10-22", "15-10-22", "16-10-22", "17-10-22","18-10-22"],
@@ -237,18 +241,20 @@ export class HomeComponent implements OnInit {
   chooseDate() {
     this.startDate = this.datePipe.transform(this.minDate,"yyyy-MM-dd");
     this.endDate = this.datePipe.transform(this.maxDate,"yyyy-MM-dd");
+    console.log(this.startDate + "-" + this.endDate);
+    this.changeObject(this.startDate,this.endDate);
   }
 
   amounts = [];
   sales = [];
   changeObject(startDate: string, endDate: string){
     this.dashboardService.reportLineChart(startDate, endDate).subscribe((data: any) =>{
-      // console.log(data.statisticOfDay);
+      console.log(data.statisticOfDay);
       let item = '';
       let amount = 0;
       let sale = 0;
       for(let i = 0; i < data.statisticOfDay.length; i++){
-        item = <string> this.datePipe.transform(data.statisticOfDay[i].date, "dd-MM-yy");
+        item = data.statisticOfDay[i].date;
         amount = <number> data.statisticOfDay[i].amount;
         sale = <number> data.statisticOfDay[i].sales;
         // @ts-ignore

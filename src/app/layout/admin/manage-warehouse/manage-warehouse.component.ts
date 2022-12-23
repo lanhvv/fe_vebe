@@ -80,9 +80,9 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
-  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
   categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
   categoryitem: CategoryImportItems = new CategoryImportItems()
+  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -149,7 +149,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   update(){
-    console.log(this.edit.id +" dòng 152")
     if(this.selectedCategory!=null){
       this.edit.categoryId=this.selectedCategory.id as number;
     }
@@ -161,6 +160,7 @@ export class ManageWarehouseComponent implements OnInit {
       this.edit.unitId=this.selectedUnitParent.unitId as number;
       this.edit.unit=this.selectedUnitParent.unitName as string;
     }
+
     this.edit.fileId=this.fileId;
     this.importService.update(this.edit.supplierId, this.edit.id,this.edit).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
@@ -232,13 +232,14 @@ export class ManageWarehouseComponent implements OnInit {
   doneImpport(){
     this.importService.add(this.items, this.language).subscribe(response => {
       this.itemsafterDone = response as ListImportWarehouse;
-      if(this.itemsafterDone.status.status=== '1'){
-        this.success(this.itemsafterDone.status.message);
-        this.deleteAll(this.selectedSupplier.id)
+        if(this.itemsafterDone.status.status=== '1'){
+          this.success(this.itemsafterDone.status.message);
+          this.deleteAll(this.selectedSupplier.id)
 
-      }else{
-        this.failed(this.itemsafterDone.status.message);
-      }
+        }else{
+          this.failed(this.itemsafterDone.status.message);
+        }
+
 
     });
 
@@ -264,10 +265,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
@@ -324,6 +325,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onUpload(event:Event){
+    console.log(event)
     this.image=event;
     this.prodService.pushFileToStorage(this.image.currentFiles[0],this.language).subscribe(result=>{
       this.createProductResponse=result as CreateProductResponse;
@@ -356,8 +358,8 @@ export class ManageWarehouseComponent implements OnInit {
   removeUnit(index: number) {
     this.listUnit = this.listUnit.filter(x => x !== index);
   }
-  inPrice!: number;
-  getPrice(){
+   inPrice!: number;
+   getPrice(){
     this.importService.getPrice(this.selectedUnitParent.unitId,this.createProductRequest.inPrice,this.createProductRequest.amount,this.language).subscribe(response=>{
 
       this.createProductRequest.units = response as Units[]
@@ -382,6 +384,7 @@ export class ManageWarehouseComponent implements OnInit {
 
       /* save data */
       this.data = <AOV>XLSX.utils.sheet_to_json(ws, { header: 1 });
+      console.log(this.data);
       this.excelForm = this.fb.group({
         data: this.fb.array([]),
       });
@@ -414,6 +417,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onRemove(){
+    console.log("remote: "+this.fileId);
     this.fileId=0;
 
   }
@@ -430,6 +434,19 @@ export class ManageWarehouseComponent implements OnInit {
   failed(message: string) {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
+
+  // exportQRCode(code: string, amount: number){
+  //   this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+  //     console.log(response);
+  //     import("jspdf").then(jsPDF => {
+  //       const doc = new jsPDF.jsPDF(response);
+  //       doc.save('products.pdf');
+  //     })
+  //     let blob = new Blob([response as string], { type: 'application/pdf' });
+  //     let url = window.URL.createObjectURL(blob);
+  //     window.open(url);
+  //   });
+  // }
 
   // camera
   onCamerasFound(devices: MediaDeviceInfo[]): void {

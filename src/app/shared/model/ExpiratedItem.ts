@@ -6,6 +6,7 @@ export default class ExpiratedItem{
   expired !: Date;
   inCome !: number;
   creator !: string;
+  supplier !: string;
   list !: Uitem[];
 }
 
