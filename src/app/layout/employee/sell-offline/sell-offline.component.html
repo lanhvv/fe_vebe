@@ -65,7 +65,7 @@
           <td *ngIf="this.item!=null">
             <p-dropdown styleClass="dropdown_root" [options]="this.item.items"
                         [(ngModel)]="this.viewBillRequest.detailBills[i].export" optionLabel="unitName" [filter]="true"
-                        filterBy="name" (ngModelChange)="changeAmount()">
+                        filterBy="name" (ngModelChange)="changeAmount(123123)">
               <ng-template pTemplate="selectedItem">
                 <div class="supplier-item supplier-item-value" *ngIf="this.viewBillRequest.detailBills[i].export">
                   <p>{{this.viewBillRequest.detailBills[i].export.unitName}}</p>
@@ -80,9 +80,7 @@
           </td>
           <td>
             <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-              <p-inputNumber [(ngModel)]="viewBillRequest.detailBills[i].amount" [showButtons]="true"
-                             inputId="minmax-buttons" mode="decimal" name="amount+{{item.productId}}+{{i}}" [min]="1"
-                             [max]="viewBillRequest.detailBills[i].export.inventory" (ngModelChange)="changeAmount()"></p-inputNumber>
+              <p-inputNumber id="inputSale" style="width: 60%; height: 40px"  [(ngModel)]="viewBillRequest.detailBills[i].amount" [min]="1" [max]="viewBillRequest.detailBills[i].export.inventory" (ngModelChange)="changeAmount(viewBillRequest.detailBills[i].amount)"></p-inputNumber>
             </div>
           </td>
           <td>
@@ -102,28 +100,12 @@
     <div class="col-4 sell-money p-3">
       <div class="sell-money_content">
         <div class="row">
-<!--          <div class="col">-->
-<!--            <div class="btn-group">-->
-<!--              <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"-->
-<!--                      data-bs-auto-close="true" aria-expanded="false">-->
-<!--                Nhân viên-->
-<!--              </button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="col">-->
-<!--                          <button class="btn btn-secondary float-end"><i class="fa-solid fa-clock-rotate-left"></i> Lịch sử đơn hàng-->
-<!--                          </button>-->
-<!--          </div>-->
           <table class="m-3 tableInfoMoney">
             <tbody>
             <tr>
               <td>Tổng tiền hàng</td>
               <td>{{numToString() | number: '1.0-0'}}</td>
             </tr>
-<!--            <tr>-->
-<!--              <td>Giảm giá</td>-->
-<!--              <td><input value="0" class="inputSale"></td>-->
-<!--            </tr>-->
             <tr>
               <td class="fw-bold">Khách cần trả</td>
               <td>{{numToString() | number: '1.0-0'}}</td>
@@ -131,20 +113,17 @@
             <tr>
               <td class="fw-bold">Khách thanh toán</td>
               <td>
-                <input class="inputSale" [(ngModel)]="moneyPay">
-                <!--                <div class="col-8">-->
-                <!--                  <input type="text" class="form-control" placeholder="Số tiền khách đưa">-->
-                <!--                </div>-->
+                <p-inputNumber id="inputSale" style="width: 60%; height: 40px" [min]="0"  [(ngModel)]="moneyPay" [min]="0" (ngModelChange)="validate(moneyPay)"></p-inputNumber>
               </td>
             </tr>
             <tr>
               <td class="fw-bold">Tiền thừa</td>
               <td>
                 <div class="col-8" *ngIf="moneyTransaction==null">
-                  <input type="text" class="form-control inputSale" [value]="moneyPay - numToString()" disabled>
+                  <input type="number" class="form-control inputSale" [value]="moneyPay - numToString()" disabled>
                 </div>
                 <div class="col-8">
-                  <input type="text" class="form-control inputSale" [value]="moneyPay + moneyTransaction - numToString()" disabled>
+                  <input type="number" class="form-control inputSale" [value]="moneyPay + moneyTransaction - numToString()" disabled>
                 </div>
               </td>
             </tr>
@@ -152,7 +131,7 @@
               <td class="fw-bold">Khách chuyển khoản</td>
               <td>
                 <div class="col-8">
-                  <input type="text" class="form-control inputSale" [(ngModel)]="moneyTransaction">
+                  <input type="number" class="form-control inputSale" [(ngModel)]="moneyTransaction" [min]="0">
                 </div>
               </td>
             </tr>
@@ -173,7 +152,7 @@
       </div>
       <div class="sell-money_footer mt-3">
         <div class="d-grid gap-2">
-          <button class="btn text-uppercase" type="button" *ngIf="isPayment" (mousedown)="transaction()">thanh toán
+          <button class="btn text-uppercase" type="button" id="btn-transaction" [disabled]="!viewBillRequest" (mousedown)="transaction()">thanh toán
           </button>
         </div>
       </div>
