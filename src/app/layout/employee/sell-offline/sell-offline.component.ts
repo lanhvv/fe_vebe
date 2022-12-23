@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
+import {MatDialog} from "@angular/material/dialog";
 import {ViewStallResponse} from "../../../shared/model/response/ViewStallResponse";
 import {ViewStallResult} from "../../../shared/model/response/ViewStallResult";
 import {ProductService} from "../../../services/employee/product/product.service";
@@ -17,6 +18,24 @@ import {BehaviorSubject} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 import {BillService} from "../../../services/bill/bill.service";
+import { DebitUserItemsResponse } from '../../../shared/model/response/debitUserItemsResponse';
+import { IDebitItems } from '../../../shared/model/iDebitIitems';
+import { DebitItemsResponse } from '../../../shared/model/response/debitItemsResponse';
+import { GetOrderRequest } from '../../../../../../../../Vibee/Vibee/src/app/shared/model/request/getOrderRequest';
+import { ListBillItems } from '../../../shared/model/response/ListBillItems';
+import { BillItems } from '../../../shared/model/billItems';
+import { Filter } from '../../../../../../../../Vibee/Vibee/src/app/shared/model/Filter';
+import { DebitDetailResponse } from '../../../shared/model/response/debitDetailResponse';
+import { UpdateDebitRequest } from '../../../shared/model/request/updateDebitRequest';
+import { CreateDebitRequest } from '../../../shared/model/request/createDebitRequest';
+import { DebitResponse } from '../../../shared/model/response/debitResponse';
+import { DebitService } from '../../../services/employee/debit/debit.service';
+import { PayRequest } from '../../../shared/model/request/PayRequest';
+import { ListPayRequest } from '../../../shared/model/request/ListPayRequest';
+import { DebitDetailItems } from '../../../shared/model/request/DebitDetailItems';
+import { MessageService } from 'primeng/api';
+import { DebitBillRequest } from '../../../shared/model/request/DebitBillRequest';
+
 @Component({
   selector: 'app-sell-offline',
   templateUrl: './sell-offline.component.html',
@@ -50,6 +69,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   selectedValue: string = 'money';
   currentBill = 1;
   dialogPayment: boolean = false;
+  createDialog: boolean = false
   sumPrice=0;
   createDetailBillResult!:CreateDetailBillResult;
   unitIndex=0;
@@ -71,6 +91,38 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   dialogExportBill: boolean = false;
   enableDone:boolean=true;
   closeButton=0;
+
+  debitItems: DebitDetailItems[] = []
+  payRequest!: PayRequest
+  payRequests: ListPayRequest
+
+  debitUserItemsResponse: DebitUserItemsResponse;
+
+  itemsDebit: IDebitItems[] = [];
+  debitItemsResponses: DebitItemsResponse[] = [];
+  debitItemsResponse: DebitItemsResponse;
+  getOrderRequest!: GetOrderRequest;
+  billItems:  ListBillItems
+  billItem:  BillItems
+  page: number = 0;
+  pageSize: number = 10;
+  filter!: Filter;
+  searchText = '';
+  dialogVisible!: boolean;
+  debitDetail: DebitDetailResponse[] = [];
+  createDebitRequest: CreateDebitRequest;
+
+  updateDebitRequest: UpdateDebitRequest;
+
+  editDebitRequest: UpdateDebitRequest;
+  debtRequest: DebitBillRequest= new DebitBillRequest()
+
+
+  debitResponse: DebitResponse
+  updateDialog!: boolean
+  payDialog!:boolean
+  es: any;
+
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
     BarcodeFormat.DATA_MATRIX,
@@ -80,7 +132,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
 
   constructor(private translateService: TranslateConfigService,
               private sellOfflineService: SellOfflineService,
-              private productService:ProductService,
+              private productService:ProductService,private debitService: DebitService,private messageService: MessageService,
               private billService:BillService) {
 
     this.cartsItem=[];
@@ -93,6 +145,16 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.transactionRequest=new TransactionBillRequest();
     this.transactionRequest.cartCode=this.cartCode;
     this.transactionRequest.transactionType="Thanh Toán";
+    this.debitItemsResponse = new DebitItemsResponse();
+    this.createDebitRequest = new CreateDebitRequest();
+    this.debitResponse = new DebitResponse();
+    this.updateDebitRequest = new UpdateDebitRequest()
+    this.payRequest = new PayRequest()
+    this.payRequests = new ListPayRequest()
+    this.debitUserItemsResponse = new DebitUserItemsResponse();
+    this.editDebitRequest = new UpdateDebitRequest()
+    this.billItems = new ListBillItems()
+    this.billItem = new BillItems()
   }
 
   ngOnInit(): void {
@@ -128,6 +190,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
 
     }
   }
+
 
   numToString() {
     if (this.viewBillRequest==null || this.viewBillRequest.detailBills.length==0){
@@ -190,6 +253,10 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   showDialogPayment() {
     this.isPayment = false;
     this.dialogPayment = true;
+  }
+
+  showDialogDebt() {
+    this.createDialog = true;
   }
 
   deleteProductOnCart(code: string){
@@ -293,6 +360,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
       (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
     }
     this.checkMoneyPay();
+    
   }
 
   checkMoneyPay(){
@@ -310,5 +378,38 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     console.log("addAmount");
     this.moneyPayment += request.amount * request.exportSelected.outPrice;
     this.changeAmount()
+  }
+  addDebtPrice(request: ViewStallResult) {
+    console.log("addAmount");
+    this.moneyPayment += request.amount * request.exportSelected.outPrice;
+    this.debtRequest.totalPriceDebt=  this.moneyPayment - this.moneyPay;
+    this.changeAmount()
+  }
+
+  create() {
+
+    this.debtRequest.paymentMethod=this.selectedValue;
+    if (this.moneyTransaction!=null){
+      this.debtRequest.inPrice=this.moneyPay+this.moneyTransaction;
+    }else {
+      this.debtRequest.inPrice = this.moneyPayment - this.moneyPay;
+    }
+    this.debtRequest.totalPriceDebt = this.moneyPayment - this.moneyPay;;
+      this.debtRequest.language=this.language;
+      this.billService.debit(this.debtRequest).subscribe(response=>{
+        this.transactionResponse=response as BaseResponse;
+        if (this.transactionResponse.status.status==="1"){
+          this.isPayment=true;
+          this.dialogPayment=false;
+          this.cartsItem=[];
+          this.viewBillRequest.detailBills=[];
+          this.cartCode="";
+          this.cartItem=new CartItem();
+        }
+      })
+      this.dialogPayment = false;
+      this.dialogExportBill = true
+
+
   }
 }

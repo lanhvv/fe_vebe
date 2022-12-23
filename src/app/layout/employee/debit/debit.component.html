@@ -135,27 +135,7 @@
         <label for="totalAmountOwed_customer_create">Tổng tiền nợ</label>
         <p-inputNumber id="price" [(ngModel)]="createDebitRequest.totalAmountOwed"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
       </div>
-      <div class="field mt-3">
-        <label for="order_customer_create">Hóa đơn</label>
-        <p-dropdown id="order_customer_create" styleClass="root-dropdown" [options]="billItems.items"
-                    [(ngModel)]="billItem"
-                    [ngModelOptions]="{standalone: true}" optionLabel="id" [filter]="true" filterBy="id" filterBy="id"
-                    placeholder="Lựa chọn hóa đơn">
-          <ng-template pTemplate="selectedItem">
-            <div class="unit-item unit-item-value" *ngIf="billItem">
-              <div>HD{{billItem.id}} - {{billItem.createDate| date: 'dd/MM/yyyy HH:mm:ss' }} - {{billItem.total |
-                currency:'VND'}}</div>
-            </div>
-          </ng-template>
-          <ng-template let-items pTemplate="items">
-            <div class="unit-Item">
-              <div>HD{{items.id}} - {{items.createDate| date: 'dd/MM/yyyy HH:mm:ss' }}
-                - {{items.total | currency:'VND'}}
-              </div>
-            </div>
-          </ng-template>
-        </p-dropdown>
-      </div>
+
       <div class="field mt-3">
         <label for="description_customer_create">Ghi chú</label>
         <textarea id="description_customer_create" pInputTextarea [(ngModel)]="createDebitRequest.description" required
@@ -196,7 +176,7 @@
       </div>
       <div class="field mb-3">
         <label for="inPrice_pay">Tiền trả nợ</label>
-        <p-inputNumber styleClass="root-dropdown" id="inPrice_pay" [(ngModel)]="payRequest.inPrice" mode="currency" autofocus></p-inputNumber>
+        <p-inputNumber id="price" [(ngModel)]="payRequest.inPrice"  mode="currency" currency="USD" locale="en-US" ></p-inputNumber>
       </div>
       <div class="field mb-3">
         <label label="bill_pay">Hóa đơn</label>

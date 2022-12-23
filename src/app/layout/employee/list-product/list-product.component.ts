@@ -60,13 +60,13 @@ export class ListProductComponent implements OnInit {
 showList(){
   this.productService.showProduct().subscribe(response =>{
     this.items = response as ShowListProduct;
-    // console.log(this.items)
-    // if (this.items == null) {
-    //   this.notEmptyPost = false;
-    // } else {
-    //   this.notscrolly = true;
-    //   this.numberPage++;
-    // }
+    console.log(this.items)
+    if (this.items == null) {
+      this.notEmptyPost = false;
+    } else {
+      this.notscrolly = true;
+      this.numberPage++;
+    }
   })
 }
 showUnit(id: number, unitId: number){
@@ -76,13 +76,13 @@ showUnit(id: number, unitId: number){
   })
 }
 
-  // onScroll() {
-  //    if (this.notscrolly && this.notEmptyPost) {
-  //       this.spinner.show();
-  //       this.notscrolly = false;
-  //       this.showList()
-  //    }
-  // }
+  onScroll() {
+     if (this.notscrolly && this.notEmptyPost) {
+        this.spinner.show();
+        this.notscrolly = false;
+        this.showList()
+     }
+  }
 
 
   typePrices : typePrice[] = [
