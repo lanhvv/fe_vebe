@@ -80,9 +80,9 @@ export class ManageWarehouseComponent implements OnInit {
   baseResponse: BaseResponse = new BaseResponse()
   edit: EditImportWarehouseResponse = new EditImportWarehouseResponse()
   category: SelectionTypeProductItems = new SelectionTypeProductItems()
+  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
   categoryItems: ListCategoryImportItemsItems = new ListCategoryImportItemsItems()
   categoryitem: CategoryImportItems = new CategoryImportItems()
-  itemsafterDone: ListImportWarehouse = new ListImportWarehouse()
 
   importWarehouseResponse: ImportWarehouseResponse[]=[]
 
@@ -179,8 +179,8 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn xóa sản phẩm này khỏi đơn nhập hàng không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
@@ -246,8 +246,8 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteAll(key: any){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn những xóa đơn nhập hàng này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteAll(key,this.language).subscribe(response => {
@@ -324,7 +324,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onUpload(event:Event){
-    console.log(event)
     this.image=event;
     this.prodService.pushFileToStorage(this.image.currentFiles[0],this.language).subscribe(result=>{
       this.createProductResponse=result as CreateProductResponse;
@@ -383,7 +382,6 @@ export class ManageWarehouseComponent implements OnInit {
 
       /* save data */
       this.data = <AOV>XLSX.utils.sheet_to_json(ws, { header: 1 });
-      console.log(this.data);
       this.excelForm = this.fb.group({
         data: this.fb.array([]),
       });
@@ -416,7 +414,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   onRemove(){
-    console.log("remote: "+this.fileId);
     this.fileId=0;
 
   }
@@ -447,7 +444,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.currentDevice = undefined;
     this.createProductRequest.barCode = this.qrResultString;
     this.edit.barCode = this.qrResultString;
-    console.log(this.qrResultString);
   }
 
   onHasPermission(has: boolean) {
@@ -459,7 +455,6 @@ export class ManageWarehouseComponent implements OnInit {
     const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
     // @ts-ignore
     this.currentDevice = device;
-    console.log(this.currentDevice);
   }
 
   onTorchCompatible(isCompatible: boolean): void {
@@ -467,7 +462,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getValue(event: Event): string {
-    console.log((event.target as HTMLInputElement).value);
     return (event.target as HTMLInputElement).value;
   }
 
@@ -477,7 +471,6 @@ export class ManageWarehouseComponent implements OnInit {
       this.enable = true;
       const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
       this.currentDevice = device;
-      console.log(this.currentDevice);
     } else {
       this.enable = false;
       this.currentDevice = undefined;
