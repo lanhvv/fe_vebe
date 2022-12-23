@@ -113,7 +113,7 @@
             <tr>
               <td class="fw-bold">Khách thanh toán</td>
               <td>
-                <p-inputNumber class="col-8" id="inputSale" [(ngModel)]="moneyPay" [min]="0" (ngModelChange)="validate(moneyPay)"></p-inputNumber>
+                <p-inputNumber class="col-8" id="inputSale" [(ngModel)]="moneyPay" [min]="0" (ngModelChange)="validate(moneyPay)" ></p-inputNumber>
               </td>
             </tr>
             <tr>
@@ -205,7 +205,8 @@
     <div class="col-6">
       <div class="field">
         <label for="totalAmountOwed_customer_create">Tổng tiền nợ</label>
-        <p-inputNumber id="price" [(ngModel)]="debtRequest.totalPriceDebt"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+        <!-- <p-inputNumber id="price" [(ngModel)]="debtRequest.totalPriceDebt"  mode="currency" currency="USD" locale="en-US"></p-inputNumber> -->
+        <input type="number" class="form-control inputSale" [(ngModel)]="debtRequest.totalPriceDebt" [value]=" moneyPayment - moneyPay " disabled>
       </div>
       <div class="field mt-3">
         <label for="description_customer_create">Ghi chú</label>

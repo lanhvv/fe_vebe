@@ -135,6 +135,7 @@
         <label for="totalAmountOwed_customer_create">Tổng tiền nợ</label>
         <p-inputNumber id="price" [(ngModel)]="createDebitRequest.totalAmountOwed"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
       </div>
+
       <div class="field mt-3">
         <label for="description_customer_create">Ghi chú</label>
         <textarea id="description_customer_create" pInputTextarea [(ngModel)]="createDebitRequest.description" required
@@ -175,7 +176,7 @@
       </div>
       <div class="field mb-3">
         <label for="inPrice_pay">Tiền trả nợ</label>
-        <p-inputNumber styleClass="root-dropdown" id="inPrice_pay" [(ngModel)]="payRequest.inPrice" mode="currency" autofocus></p-inputNumber>
+        <p-inputNumber id="price" [(ngModel)]="payRequest.inPrice"  mode="currency" currency="USD" locale="en-US" ></p-inputNumber>
       </div>
       <div class="field mb-3">
         <label label="bill_pay">Hóa đơn</label>

@@ -1,4 +1,5 @@
 import { BaseRequest } from './BaseRequest';
+import { ViewStallResult } from '../response/ViewStallResult';
 
 export class DebitBillRequest extends BaseRequest {
   inPrice!: number;
@@ -10,4 +11,5 @@ export class DebitBillRequest extends BaseRequest {
   phoneNumber!: string;
   totalPriceDebt!: number;
   message!: string
+  viewStallResults: ViewStallResult[]=[];
 }

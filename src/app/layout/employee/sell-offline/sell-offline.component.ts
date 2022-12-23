@@ -360,6 +360,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
       (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
     }
     this.checkMoneyPay();
+    
   }
 
   checkMoneyPay(){
@@ -378,44 +379,37 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.moneyPayment += request.amount * request.exportSelected.outPrice;
     this.changeAmount()
   }
+  addDebtPrice(request: ViewStallResult) {
+    console.log("addAmount");
+    this.moneyPayment += request.amount * request.exportSelected.outPrice;
+    this.debtRequest.totalPriceDebt=  this.moneyPayment - this.moneyPay;
+    this.changeAmount()
+  }
 
   create() {
 
-    this.transactionRequest=new TransactionBillRequest();
-    this.debtRequest.cartCode=this.cartCode;
     this.debtRequest.paymentMethod=this.selectedValue;
-    this.debtRequest.transactionType="Ghi Nợ";
     if (this.moneyTransaction!=null){
       this.debtRequest.inPrice=this.moneyPay+this.moneyTransaction;
-    }else{
-      this.debtRequest.inPrice=this.moneyPay;
+    }else {
+      this.debtRequest.inPrice = this.moneyPayment - this.moneyPay;
     }
-    this.debtRequest.language=this.language;
-    this.billService.debit(this.debtRequest).subscribe(response=>{
-      this.transactionResponse=response as BaseResponse;
-      if (this.transactionResponse.status.status==="1"){
-        this.isPayment=true;
-        this.dialogPayment=false;
-        this.cartsItem=[];
-        this.viewBillRequest.detailBills=[];
-        this.cartCode="";
-        this.cartItem=new CartItem();
-      }
-    })
-    this.dialogPayment = false;
-    this.dialogExportBill = true;
+    this.debtRequest.totalPriceDebt = this.moneyPayment - this.moneyPay;;
+      this.debtRequest.language=this.language;
+      this.billService.debit(this.debtRequest).subscribe(response=>{
+        this.transactionResponse=response as BaseResponse;
+        if (this.transactionResponse.status.status==="1"){
+          this.isPayment=true;
+          this.dialogPayment=false;
+          this.cartsItem=[];
+          this.viewBillRequest.detailBills=[];
+          this.cartCode="";
+          this.cartItem=new CartItem();
+        }
+      })
+      this.dialogPayment = false;
+      this.dialogExportBill = true
 
-    this.createDebitRequest.billId = this.billItem.id as number
-    console.log(this.createDebitRequest.billId)
-    this.debitService.create(this.createDebitRequest).subscribe(response => {
 
-      this.debitResponse = response as DebitResponse
-      if (this.debitResponse.status.status == '1') {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail:  this.debitResponse.status.message, life: 3000 });
-      }
-      else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail:  this.debitResponse.status.message, life: 3000 });
-      }
-    })
   }
 }
