@@ -3,7 +3,7 @@
 <div class="row mb-2">
   <div class="float-start">
     <div class="tabPOS p-2 float-start me-1" *ngFor="let bill of listBill">
-      <span (click)="changeBill(bill)">Hóa đơn {{bill}}</span>
+      <span>Hóa đơn</span>
       <i class="fa-solid fa-x float-end mt-1 ms-1" (click)="deleteBill(bill)" *ngIf="listBill.length!==1"></i>
     </div>
     <button class="btnPOS ms-2" (click)="addBill()" *ngIf="!isButtonPOS"><i class="fa-solid fa-plus"></i></button>
@@ -46,13 +46,13 @@
           <th>Thành tiền</th>
         </tr>
         </thead>
-        <tbody *ngIf="cartItem.products!=null && viewBillRequest!=null">
-        <tr *ngFor="let item of cartItem.products; let i=index" class="sell-list_product-body--item">
+        <tbody *ngIf="this.transactionRequest!=null && this.transactionRequest.viewStallResults!=null">
+        <tr *ngFor="let item of transactionRequest.viewStallResults; let i=index" class="sell-list_product-body--item">
           <td>
             <p class="p-table">{{i + 1}}</p>
           </td>
           <td>
-            <button style="border: none; outline: none; background-color: white;" class="mt-2" (click)="deleteProductOnCart(item.barCode)">
+            <button style="border: none; outline: none; background-color: white;" class="mt-2" (click)="deleteProductOnCart(item.productCode)">
               <i class="fa-solid fa-trash text-danger"></i>
             </button>
           </td>
@@ -64,11 +64,11 @@
           </td>
           <td *ngIf="this.item!=null">
             <p-dropdown styleClass="dropdown_root" [options]="this.item.items"
-                        [(ngModel)]="this.viewBillRequest.detailBills[i].export" optionLabel="unitName" [filter]="true"
-                        filterBy="name" (ngModelChange)="changeAmount(123123)">
+                        [(ngModel)]="item.exportSelected" optionLabel="unitName" [filter]="true"
+                        filterBy="name" (ngModelChange)="changeAmount()">
               <ng-template pTemplate="selectedItem">
-                <div class="supplier-item supplier-item-value" *ngIf="this.viewBillRequest.detailBills[i].export">
-                  <p>{{this.viewBillRequest.detailBills[i].export.unitName}}</p>
+                <div class="supplier-item supplier-item-value" *ngIf="item.exportSelected">
+                  <p>{{item.exportSelected.unitName}}</p>
                 </div>
               </ng-template>
               <ng-template let-category pTemplate="item">
@@ -79,18 +79,18 @@
             </p-dropdown>
           </td>
           <td>
-            <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-              <p-inputNumber id="inputSale" style="width: 60%; height: 40px"  [(ngModel)]="viewBillRequest.detailBills[i].amount" [min]="1" [max]="viewBillRequest.detailBills[i].export.inventory" (ngModelChange)="changeAmount(viewBillRequest.detailBills[i].amount)"></p-inputNumber>
+            <div *ngIf="null!=item && null !=item.exportSelected">
+              <p-inputNumber id="inputSale" style="width: 200px; height: 40px"  [(ngModel)]="item.amount" [min]="1" [max]="item.exportSelected.inventory" (ngModelChange)="addAmount(item)"></p-inputNumber>
             </div>
           </td>
           <td>
-            <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-              <p class="p-table">{{viewBillRequest.detailBills[i].export.outPrice | number: '1.0-0'}}</p>
+            <div *ngIf="null!=item && null !=item.exportSelected">
+              <p class="p-table">{{item.exportSelected.outPrice | number: '1.0-0'}}</p>
             </div>
           </td>
           <td>
-            <div *ngIf="null!=viewBillRequest && null !=viewBillRequest.detailBills">
-              <p class="p-table">{{viewBillRequest.detailBills[i].export.outPrice * viewBillRequest.detailBills[i].amount | number: '1.0-0'}}</p>
+            <div *ngIf="null!=item && null !=item.exportSelected">
+              <p class="p-table">{{item.exportSelected.outPrice * item.amount | number: '1.0-0'}}</p>
             </div>
           </td>
         </tr>
@@ -104,26 +104,26 @@
             <tbody>
             <tr>
               <td>Tổng tiền hàng</td>
-              <td>{{numToString() | number: '1.0-0'}}</td>
+              <td>{{moneyPayment | number: '1.0-0'}}</td>
             </tr>
             <tr>
               <td class="fw-bold">Khách cần trả</td>
-              <td>{{numToString() | number: '1.0-0'}}</td>
+              <td>{{moneyPayment | number: '1.0-0'}}</td>
             </tr>
             <tr>
               <td class="fw-bold">Khách thanh toán</td>
               <td>
-                <p-inputNumber id="inputSale" style="width: 60%; height: 40px" [min]="0"  [(ngModel)]="moneyPay" [min]="0" (ngModelChange)="validate(moneyPay)"></p-inputNumber>
+                <p-inputNumber class="col-8" id="inputSale" [(ngModel)]="moneyPay" [min]="0" (ngModelChange)="validate(moneyPay)"></p-inputNumber>
               </td>
             </tr>
             <tr>
               <td class="fw-bold">Tiền thừa</td>
               <td>
                 <div class="col-8" *ngIf="moneyTransaction==null">
-                  <input type="number" class="form-control inputSale" [value]="moneyPay - numToString()" disabled>
+                  <input type="number" class="form-control inputSale" [value]="moneyPay - moneyPayment" disabled>
                 </div>
                 <div class="col-8">
-                  <input type="number" class="form-control inputSale" [value]="moneyPay + moneyTransaction - numToString()" disabled>
+                  <input type="number" class="form-control inputSale" [value]="moneyPay + moneyTransaction - moneyPayment" disabled>
                 </div>
               </td>
             </tr>
@@ -141,19 +141,18 @@
           <div style="display: flex;">
             <p-radioButton class="me-3" (click)="choosePayment()" name="groupname" value="money"
                            [(ngModel)]="selectedValue"
-                           label="Tiền mặt"></p-radioButton>
+                           label="Tiền mặt" checked="checked" (ngModelChange)="changeAmount()"></p-radioButton>
             <p-radioButton class="me-3" (click)="showDialogPayment()" name="groupname" value="payment"
                            [(ngModel)]="selectedValue"
                            label="Quét mã"></p-radioButton>
-            <p-radioButton (click)="chooseABoth()" name="groupname" value="both" [(ngModel)]="selectedValue"
-                           label="Cả hai phương thức" ></p-radioButton>
+<!--            <p-radioButton (click)="chooseABoth()" name="groupname" value="both" [(ngModel)]="this.transactionRequest.paymentMethod"-->
+<!--                           label="Cả hai phương thức" ></p-radioButton>-->
           </div>
         </div>
       </div>
       <div class="sell-money_footer mt-3">
         <div class="d-grid gap-2">
-          <button class="btn text-uppercase" type="button" id="btn-transaction" [disabled]="!viewBillRequest" (mousedown)="transaction()">thanh toán
-          </button>
+          <button class="btn text-uppercase" type="button" id="btntransaction" (mousedown)="transaction()">thanh toán</button>
         </div>
       </div>
     </div>
