@@ -6,6 +6,7 @@ export default class CloseToExpirationItem{
   expired !: Date;
   inCome !: number;
   creator !: string;
+  supplier !: string;
   list !: Uitem[];
 }
 

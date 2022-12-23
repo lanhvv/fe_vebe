@@ -23,7 +23,7 @@
               <div class="input-group mb-3 float-end">
                 <form style="width: 100%" (ngSubmit)="onSearch()">
                   <div class="input-group mb-3">
-                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"
+                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearchCloseToEx"
                            placeholder="Nhập tên sản phẩm...">
                     <button type="submit" class="buttonRoot">
                       <i class="fa-solid fa-camera"></i>
@@ -43,7 +43,7 @@
                     <th class="col-1">Ngày nhập</th>
                     <th class="col-1">Hết hạn</th>
                     <th class="col-2">Người nhập</th>
-                    <th class="col-2">Tồn</th>
+                    <th class="col-2">Nhà cung cấp</th>
                     <th class="col-1">Giá nhập</th>
                     <th class="col-1">Thao tác</th>
                   </tr>
@@ -54,7 +54,7 @@
                     <td>{{item.dateAdded | date: 'dd/MM/yyyy'}}</td>
                     <td>{{item.expired | date: 'dd/MM/yyyy'}}</td>
                     <td>{{item.creator}}</td>
-                    <td>{{item.amount}}</td>
+                    <td>{{item.supplier}}</td>
                     <td>{{item.inCome | number}}đ</td>
                     <td>
                       <button class="buttonRoot me-1" (click)="openDialog(item.idImport)">
@@ -65,7 +65,7 @@
                 </ng-template>
               </p-table>
               <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
-                           (onPageChange)="paginate($event)"></p-paginator>
+                           (onPageChange)="paginateCloseToEx($event)"></p-paginator>
             </div>
           </div>
         </div>
@@ -78,10 +78,10 @@
             <div class="col-6"></div>
             <div class="col-6">
               <div class="input-group mb-3 float-end">
-                <form style="width: 100%" (ngSubmit)="onSearch()">
+                <form style="width: 100%" (ngSubmit)="onSearchExpired()">
                   <div class="input-group mb-3">
-                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"
-                           placeholder="Nhập mã sản phẩm...">
+                    <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearchEx"
+                           placeholder="Nhập tên sản phẩm...">
                     <button type="submit" class="buttonRoot">
                       <i class="fa-solid fa-camera"></i>
                     </button>
@@ -100,7 +100,7 @@
                     <th class="col-1">Ngày nhập</th>
                     <th class="col-1">Hết hạn</th>
                     <th class="col-2">Người nhập</th>
-                    <th class="col-2">Tồn</th>
+                    <th class="col-2">Nhà cung cấp</th>
                     <th class="col-1">Giá nhập</th>
                   </tr>
                 </ng-template>
@@ -110,13 +110,13 @@
                     <td>{{item.dateAdded | date: 'dd/MM/yyyy'}}</td>
                     <td>{{item.expired | date: 'dd/MM/yyyy'}}</td>
                     <td>{{item.creator}}</td>
-                    <td>{{item.amount}}</td>
+                    <td>{{item.supplier}}</td>
                     <td>{{item.inCome | number}}đ</td>
                   </tr>
                 </ng-template>
               </p-table>
               <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
-                           (onPageChange)="paginate($event)"></p-paginator>
+                           (onPageChange)="paginateEx($event)"></p-paginator>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@
         <h5 class="form-label">Hàng tồn: {{inventory}}</h5> <br>
         <div class="mb-3 input-group pb-1" *ngFor="let item of listUnit; let i = index">
           <span class="p-float-label">
-              <p-inputNumber type="text" id="inputgroup+{{i}}" placeholder="{{item.nameUnit}}"  [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="0"></p-inputNumber>
+              <p-inputNumber type="text" id="inputgroup+{{i}}" placeholder="{{item.nameUnit}}" [min]="0"  [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="0"></p-inputNumber>
               <label for="inputgroup+{{i}}">{{item.nameUnit}}</label>
           </span>
           <span class="p-inputgroup-addon" style="width: 90px">

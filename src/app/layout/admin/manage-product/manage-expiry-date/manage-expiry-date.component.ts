@@ -20,10 +20,14 @@ export class ManageExpiryDateComponent implements OnInit {
   status: number = 0;
   submitted!: boolean;
   dialog !: boolean;
-  page = 0;
-  row = 10;
+  pageEx = 0;
+  rowEx = 10;
+  pageCloseToEx = 0;
+  rowCloseToEx = 10;
+
   totalItems = 0;
-  nameSearch = "";
+  nameSearchCloseToEx = "";
+  nameSearchEx = "";
   responseExpired !: ExpiredResponse;
   responseToExpired !: CloseToExpiresResponse;
 
@@ -33,8 +37,8 @@ export class ManageExpiryDateComponent implements OnInit {
 
   ngOnInit(): void {
     this.status = 6;
-    this.getALlExpired(this.nameSearch, this.page, this.row);
-    this.getALlToExpired(this.nameSearch, this.page, this.row);
+    this.getALlExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
   getALlExpired(nameSearch:string, page:number, row:number) {
@@ -53,11 +57,18 @@ export class ManageExpiryDateComponent implements OnInit {
     })
   }
 
-  paginate(event:any) {
-    this.page = event.page;
-    this.row = event.rows;
-    this.getALlToExpired(this.nameSearch, this.page, this.row);
-    this.getALlExpired(this.nameSearch, this.page, this.row);
+  paginateEx(event:any) {
+    this.pageEx = event.page;
+    this.rowEx = event.rows;
+    this.getALlToExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+    this.getALlExpired(this.nameSearchEx, this.pageEx, this.rowEx);
+  }
+
+  paginateCloseToEx(event:any) {
+    this.pageCloseToEx = event.page;
+    this.rowCloseToEx = event.rows;
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
+    this.getALlExpired(this.nameSearchCloseToEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
   hideDialog() {
@@ -71,8 +82,15 @@ export class ManageExpiryDateComponent implements OnInit {
   idImport !: number;
 
   onSearch() {
-    this.getALlExpired(this.nameSearch, this.page, this.row);
-    this.getALlToExpired(this.nameSearch, this.page, this.row);
+    this.pageEx= 0;
+    this.rowEx = 10;
+    this.getALlToExpired(this.nameSearchCloseToEx, this.pageEx, this.rowEx);
+  }
+
+  onSearchExpired() {
+    this.pageCloseToEx = 0;
+    this.rowCloseToEx = 10;
+    this.getALlExpired(this.nameSearchEx, this.pageCloseToEx, this.rowCloseToEx);
   }
 
   openDialog(idImport:number) {
