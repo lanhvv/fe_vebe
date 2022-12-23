@@ -46,7 +46,7 @@ export class ManageAccountComponent implements OnInit {
   messagePhone: any;
   createAccountRequest: CreateAccountRequest;
   createAccountResponse: CreateAccountResponse;
-  editAccount: CreateAccountResponse;
+  editAccount!: CreateAccountResponse;
   isDialogAccount: boolean = false;
   isUpdateAccount: boolean = false;
   accountForm!: FormGroup;
@@ -338,20 +338,10 @@ export class ManageAccountComponent implements OnInit {
       } else {
         this.isDialogAccount = true;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
-
-  update(){
-    // this.id = this.activatedRoute.snapshot.params['id'];
-    const value = this.updateAccount.value;
-    this.updateAccountRequest = new UpdateAccountRequest(this.id,value.username, value.fullname, value.password, value.cccd, value.address,
-      value.numberPhone, value.email);
-    this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
-      this.createAccountResponse = response as CreateAccountResponse;
-      if(this.createAccountResponse.status.status=="1"){
-        this.messageService.add({severity:'success', summary: 'Successful', detail:this.createAccountResponse.status.message , life: 3000});
       }
-
     })
-  }
+    }
+
 
   removeForm(){
     this.accountForm = this.fb.group({

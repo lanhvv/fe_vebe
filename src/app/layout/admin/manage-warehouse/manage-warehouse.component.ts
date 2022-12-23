@@ -341,7 +341,7 @@ export class ManageWarehouseComponent implements OnInit {
   getUnitChild(){
 
     this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-      this.createProductRequest.units = response as Unit[]
+      this.createProductRequest.units = response as Units[]
     })
 
   }
@@ -435,18 +435,18 @@ export class ManageWarehouseComponent implements OnInit {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 
-  exportQRCode(code: string, amount: number){
-    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-        const doc = new jsPDF.jsPDF(response);
-        doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
-    });
-  }
+  // exportQRCode(code: string, amount: number){
+  //   this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+  //     console.log(response);
+  //     import("jspdf").then(jsPDF => {
+  //       const doc = new jsPDF.jsPDF(response);
+  //       doc.save('products.pdf');
+  //     })
+  //     let blob = new Blob([response as string], { type: 'application/pdf' });
+  //     let url = window.URL.createObjectURL(blob);
+  //     window.open(url);
+  //   });
+  // }
 
   // camera
   onCamerasFound(devices: MediaDeviceInfo[]): void {
