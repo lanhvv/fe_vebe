@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GetWarehouseRequest } from 'src/app/shared/model/request/GetWarehouseRequest';
 import { TokenStorageService } from '../../token-storage.service';
 import {environment} from "../../../../environments/environment";
+import {GetExportItems} from "../../../shared/item/GetExportItems";
 
 const AUTH_API = environment.baseApi;
 @Injectable({
@@ -38,5 +39,13 @@ export class WarehouseManagerService {
 
   delete(request:number){
     return this.httpClient.post(this.api+"/delete",request,this.httpOptions);
+  }
+
+  detail(importId:number){
+    return this.httpClient.get(this.api+"/detail/"+importId+"?language=vi",this.httpOptions);
+  }
+
+  update(request:GetExportItems){
+    return this.httpClient.post(this.api+"/update?language=vi",request,this.httpOptions);
   }
 }
