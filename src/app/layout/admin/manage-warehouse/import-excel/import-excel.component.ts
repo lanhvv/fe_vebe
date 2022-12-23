@@ -61,7 +61,7 @@ export class ImportExcelComponent implements OnInit {
   //after import
   isSidebarDialog: boolean = false;
   isEnableDone=0;
-
+  price=0;
   downloadFilePdf!:DownloadFilePdfResponse;
 
   constructor(private fb: FormBuilder,
@@ -181,12 +181,14 @@ export class ImportExcelComponent implements OnInit {
       if (unit) {
         this.productResponse.products[index].unit = this.productResponse.products[index].units.filter((unit) => unit.id === unitId)[0];
         this.productResponse.products[index].exports = []
+        this.price= (this.productResponse.products[index].inPrice/this.productResponse.products[index].inAmount).toFixed(0) as unknown as number;
         for (let i = 0; i < this.productResponse.products[index].units.length; i++) {
             if (this.productResponse.products[index].units[i].amount >= this.productResponse.products[index].unit.amount) {
               this.exportsItem = new ExportResult();
               this.exportsItem.amount = this.productResponse.products[index].units[i].amount/this.productResponse.products[index].unit.amount;
               this.exportsItem.unitId= this.productResponse.products[index].units[i].id;
-              this.exportsItem.inPrice= this.productResponse.products[index].inPrice/this.productResponse.products[index].unit.amount/this.productResponse.products[index].inAmount;
+              const unitPrice=(this.price/this.productResponse.products[index].unit.amount/this.exportsItem.amount).toFixed(0) as unknown as number;
+              this.exportsItem.inPrice= unitPrice;
               this.exportsItem.unitName= this.productResponse.products[index].units[i].name;
               this.exportsItem.outPrice= 0;
               this.productResponse.products[index].exports.push(this.exportsItem);
@@ -283,7 +285,7 @@ export class ImportExcelComponent implements OnInit {
   changeExpireDate(expireDate: string,index: number){
     const date = expireDate;
     const formatDate= date.split('-');
-    const newDate = formatDate[2] + '/' + formatDate[1] + '/' + formatDate[0];
+    const newDate = formatDate[1] + '/' + formatDate[2] + '/' + formatDate[0];
     this.productResponse.products[index].rangeDates = newDate;
     this.saveProducts();
   }
