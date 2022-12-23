@@ -25,7 +25,7 @@
                         styleClass="searchProduct">
               <ng-template let-product pTemplate="productItem">
                 <div class="product float-start" (mousedown)="selectProduct(product.productCode)">
-                  <img [src]="product.img" [class]="'flag flag-' + product.productId"/>
+                  <!-- <img [src]="product.img" [class]="'flag flag-' + product.productId"/> -->
                   {{product.productName}}-{{product.productCode}}
                 </div>
               </ng-template>
@@ -147,6 +147,8 @@
                            label="Quét mã"></p-radioButton>
             <p-radioButton (click)="chooseABoth()" name="groupname" value="both" [(ngModel)]="selectedValue"
                            label="Cả hai phương thức" ></p-radioButton>
+             <p-radioButton (click)="showDialogDebt()" name="groupname" value="debt" [(ngModel)]="selectedValue"
+                           label="Ghi nợ" ></p-radioButton>
           </div>
         </div>
       </div>
@@ -180,6 +182,43 @@
       </div>
     </div>
   </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="createDialog" [style]="{width: '50rem'}" header="Ghi nợ mới" [modal]="true" styleClass="p-fluid">
+  <div class="row">
+    <div class="col-6">
+      <div class="field">
+        <label for="name_customer_create">Tên khách hàng</label>
+        <input class="root-input" type="text" pInputText id="name_customer_create"
+               [(ngModel)]="debtRequest.fullName" required autofocus/>
+      </div>
+      <div class="field mt-3">
+        <label for="phone_customer_create">Số điện thoại</label>
+        <input class="root-input" type="text" pInputText id="phone_customer_create"
+               [(ngModel)]="debtRequest.phoneNumber" required/>
+      </div>
+      <div class="field mt-3">
+        <label for="address_customer_create">Địa chỉ</label>
+        <textarea id="address_customer_create" pInputTextarea [(ngModel)]="debtRequest.address" required rows="3"
+                  cols="20"></textarea>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="totalAmountOwed_customer_create">Tổng tiền nợ</label>
+        <p-inputNumber id="price" [(ngModel)]="debtRequest.totalPriceDebt"  mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+      </div>
+      <div class="field mt-3">
+        <label for="description_customer_create">Ghi chú</label>
+        <textarea id="description_customer_create" pInputTextarea [(ngModel)]="debtRequest.message" required
+                  rows="3" cols="20"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-3">
+    <button class="root-btn" (click)="create()">Thêm mới ghi nợ</button>
+  </div>
 </p-dialog>
 
 <!--scan mã vạch-->

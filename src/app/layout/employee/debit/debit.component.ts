@@ -46,7 +46,6 @@ export class DebitComponent implements OnInit {
   payRequest!: PayRequest
   payRequests: ListPayRequest
 
-
   debitUserItemsResponse: DebitUserItemsResponse;
 
   itemsDebit: IDebitItems[] = [];

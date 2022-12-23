@@ -5,6 +5,7 @@ import {TokenStorageService} from "../token-storage.service";
 import {ViewBillRequest} from "../../shared/model/response/ViewBillResquest";
 import {TransactionBillRequest} from "../../shared/model/request/TransactionBillRequest";
 import {environment} from "../../../environments/environment";
+import { DebitBillRequest } from '../../shared/model/request/DebitBillRequest';
 const AUTH_API = environment.baseApi;
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,8 @@ export class BillService {
   }
   transactionBill(request:TransactionBillRequest){
     return this.httpClient.post(this.api+"/transaction",request,this.httpOptions);
+  }
+  debit(request:DebitBillRequest){
+    return this.httpClient.post(this.api+"/addDebit",request,this.httpOptions);
   }
 }
