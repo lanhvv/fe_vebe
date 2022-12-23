@@ -191,13 +191,12 @@
                [filterDelay]="0">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.warehouse.import.creator <p-sortIcon field="name-product" ></p-sortIcon></th>
-            <th pSortableColumn="price" (mousedown)="sort('price')" translate>product.warehouse.import.createddate <p-sortIcon field="price" ></p-sortIcon></th>
-            <th pSortableColumn="status" (mousedown)="sort('status')" translate>product.warehouse.import.money.in <p-sortIcon field="status" ></p-sortIcon></th>
-            <th pSortableColumn="status" (mousedown)="sort('status')" translate>product.warehouse.import.amount.in <p-sortIcon field="status" ></p-sortIcon></th>
-            <th pSortableColumn="distributor" (mousedown)="sort('supplierName')" translate>product.warehouse.export.amount.out <p-sortIcon field="distributor" ></p-sortIcon></th>
-            <th pSortableColumn="warehouse" (mousedown)="sort('quality')" translate>product.warehouse.import.amount.inventory <p-sortIcon field="warehouse" ></p-sortIcon></th>
-            <th pSortableColumn="warehouse" (mousedown)="sort('quality')" translate>product.warehouse.status <p-sortIcon field="warehouse" ></p-sortIcon></th>
+            <th pSortableColumn="creator">người tạo <p-sortIcon field="name-product" ></p-sortIcon></th>
+            <th pSortableColumn="createdDate">ngày tạo<p-sortIcon field="price" ></p-sortIcon></th>
+            <th pSortableColumn="productCode">mã sản phẩm <p-sortIcon field="status" ></p-sortIcon></th>
+            <th pSortableColumn="expireDate">ngày hết hạn <p-sortIcon field="status" ></p-sortIcon></th>
+            <th pSortableColumn="inventory">tồn kho<p-sortIcon field="warehouse" ></p-sortIcon></th>
+            <th pSortableColumn="statusName">trạng thái<p-sortIcon field="warehouse" ></p-sortIcon></th>
             <th>Thao tác</th>
           </tr>
         </ng-template>
@@ -206,14 +205,30 @@
           <tr>
             <td>{{item.creator}}</td>
             <td>{{item.createdDate}}</td>
-            <td>{{item.inPrice}}</td>
-            <td>{{item.inAmount}} ({{item.unit}})</td>
-            <td>{{item.outAmount}} ({{item.unit}})</td>
-            <td>{{item.inventory}}</td>
+            <td>{{item.productCode}}</td>
+            <td>{{item.expireDate}}</td>
+            <td>{{item.inventory}} ({{item.unit}})</td>
             <td>{{item.statusName}}</td>
             <td>
-              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4" (mousedown)="update(item.warehouseId)"></i>
-              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2" (mousedown)="deleteProd(item.warehouseId)"></i>
+              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4" (mousedown)="update(item.warehouseId)" (click)="showDetailImport()"></i>
+              <p-dialog header="Header" [(visible)]="displayImport" [modal]="true" [style]="{width: '50vw'}"
+                        [draggable]="false" [resizable]="false">
+                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <ng-template pTemplate="footer">
+                  <p-button icon="pi pi-check" (click)="displayImport=false" label="Ok" styleClass="p-button-text"></p-button>
+                </ng-template>
+              </p-dialog>
+<!--              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2" (mousedown)="deleteProd(item.warehouseId)"></i>-->
+              <i *ngIf="item.statusCode!=4" class="fas fa-file-pdf" (mousedown)="showBasicDialog()"></i>
+              <p-dialog [(visible)]="displayAmount" [style]="{width: '50vw'}">
+                <p>nhập số lượng mã QR</p>
+                <p-inputNumber id="amount"  [min]="0" [max]="1000" [(ngModel)]="amountExport" (ngModelChange)="exportExcel(item.productCode, amountExport)"></p-inputNumber>
+                <ng-template pTemplate="footer">
+                  <p-button icon="pi pi-check" (click)="displayAmount=false" label="Ok" styleClass="p-button-text"></p-button>
+                </ng-template>
+              </p-dialog>
             </td>
           </tr>
         </ng-template>
