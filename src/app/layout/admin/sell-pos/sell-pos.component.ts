@@ -200,34 +200,7 @@ export class SellPosComponent implements OnInit, OnDestroy {
     this.productService.selectProduct(this.language,productCode,this.cartCode).subscribe(response=>{
       this.productSelected=response as SelectProductResponse;
       if (this.productSelected.status.status==="1"){
-        this.createDetailBillResult=new CreateDetailBillResult()
-        this.createDetailBillResult.productCode=this.productSelected.result.productCode;
-        this.createDetailBillResult.productId=this.productSelected.result.productId;
-        this.createDetailBillResult.img=this.productSelected.result.img;
-        this.createDetailBillResult.productName=this.productSelected.result.productName;
-        this.createDetailBillResult.amount=this.productSelected.result.amount;
-        this.createDetailBillResult.importId=this.productSelected.result.importId;
-        this.createDetailBillResult.barCode=this.productSelected.result.barCode;
-        this.createDetailBillResult.export=this.productSelected.result.items[this.productSelected.result.items.length-1];
-        if (this.viewBillRequest==null){
-          this.viewBillRequest=new ViewBillRequest();
-          this.viewBillRequest.detailBills=[this.createDetailBillResult];
-        }else{
-          this.viewBillRequest.detailBills.push(this.createDetailBillResult);
-        }
-        // this.cartsItem.push(this.productSelected.result);
-        if (this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products==null){
-          this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products=[this.productSelected.result];
-          this.cartsItem=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products;
-        }else {
-          this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products.push(this.productSelected.result);
-          this.cartsItem=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products;
-        }
-        this.viewBillRequest.cartCode=this.cartCode;
-        this.carts.push(this.cartItem);
-        // this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-        //   console.log(response);
-        // })
+        this.transactionRequest.viewStallResults.push(this.productSelected.result);
       }
     })
   }
@@ -276,11 +249,11 @@ export class SellPosComponent implements OnInit, OnDestroy {
   //   })
   // }
 
-  // changeAmount(){
-  //   this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-  //     console.log(response);
-  //   })
-  // }
+  changeAmount(){
+    this.billService.saveBilltoRedis(this.transactionRequest).subscribe(response=>{
+      console.log(response);
+    })
+  }
 
   transaction(){
     this.transactionRequest=new TransactionBillRequest();

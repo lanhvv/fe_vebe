@@ -22,12 +22,13 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <a class="">
-                    <img alt="Image placeholder" [src]="getWarehouseResponse.getProductResult.img" class="avatar rounded-circle" height="100px" width="100px">
+                    <img alt="Image placeholder" [src]="getWarehouseResponse.getProductResult.img"
+                         class="avatar rounded-circle" height="100px" width="100px">
                   </a>
                 </div>
                 <div class="col ml-md-n2">
                   <a class="d-block h6 mb-0">{{getWarehouseResponse.getProductResult.productName}}</a>
-                  <small class="d-block text-muted" >{{getWarehouseResponse.getProductResult.statusName}}</small>
+                  <small class="d-block text-muted">{{getWarehouseResponse.getProductResult.statusName}}</small>
                 </div>
                 <div class="col-auto">
                   <button type="button" class="btn btn-xs btn-primary btn-icon rounded-pill">
@@ -60,7 +61,7 @@
                 </div>
               </div>
               <hr class="my-3">
-              <div class="row align-items-center" >
+              <div class="row align-items-center">
                 <div class="col">
                   <h6 class="text-sm mb-0" translate>
                     product.warehouse.import.amount.count
@@ -130,11 +131,13 @@
                   <span class="block text-500 font-medium mb-3" translate="">product.warehouse.import.money.in</span>
                   <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.inPrice}} VND</div>
                 </div>
-                <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width:2.5rem;height:2.5rem">
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                     style="width:2.5rem;height:2.5rem">
                   <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareInMoney}} % </span>
+              <span
+                class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareInMoney}} % </span>
               <span class="text-500" translate>product.warehouse.import.lastest</span>
             </div>
           </div>
@@ -143,13 +146,16 @@
               <div class="flex justify-content-between mb-3">
                 <div>
                   <span class="block text-500 font-medium mb-3" translate>product.warehouse.export.money.out</span>
-                  <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.outPrice}} VND</div>
+                  <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.outPrice}} VND
+                  </div>
                 </div>
-                <div class="flex align-items-center justify-content-center bg-orange-100 border-round" style="width:2.5rem;height:2.5rem">
+                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                     style="width:2.5rem;height:2.5rem">
                   <i class="pi pi-map-marker text-orange-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareOutMoney}} % </span>
+              <span
+                class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareOutMoney}} % </span>
               <span class="text-500" translate>product.warehouse.import.lastest</span>
             </div>
           </div>
@@ -160,11 +166,13 @@
                   <span class="block text-500 font-medium mb-3" translate>product.warehouse.export.money.profit</span>
                   <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.profit}}</div>
                 </div>
-                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round" style="width:2.5rem;height:2.5rem">
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                     style="width:2.5rem;height:2.5rem">
                   <i class="pi pi-inbox text-cyan-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareProfit}} % </span>
+              <span
+                class="text-green-500 font-medium">{{getWarehouseResponse.getLastImportItem.compareProfit}} % </span>
               <span class="text-500" translate>product.warehouse.import.lastest</span>
             </div>
           </div>
@@ -173,13 +181,17 @@
               <div class="flex justify-content-between mb-3">
                 <div>
                   <span class="block text-500 font-medium mb-3" translate>product.warehouse.ratio</span>
-                  <div class="text-900 font-medium text-xl">{{getWarehouseResponse.getLastImportItem.outAmount}}/{{getWarehouseResponse.getLastImportItem.inAmount}}</div>
+                  <div class="text-900 font-medium text-xl">
+                    {{getWarehouseResponse.getLastImportItem.outAmount}}/{{getWarehouseResponse.getLastImportItem.inAmount}}
+                  </div>
                 </div>
-                <div class="flex align-items-center justify-content-center bg-purple-100 border-round" style="width:2.5rem;height:2.5rem">
+                <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
+                     style="width:2.5rem;height:2.5rem">
                   <i class="pi pi-comment text-purple-500 text-xl"></i>
                 </div>
               </div>
-              <span class="text-green-500 font-medium"><p-progressBar value="{{retio}}" labelTemplate="{value}%" displayOnly="true"></p-progressBar></span>
+              <span class="text-green-500 font-medium"><p-progressBar value="{{retio}}" labelTemplate="{value}%"
+                                                                      displayOnly="true"></p-progressBar></span>
             </div>
           </div>
         </div>
@@ -187,16 +199,29 @@
     </section>
     <!-- table -->
     <section class="table-account">
-      <p-table [value]="getWarehouseResponse.getWarehouseItems" #dt dataKey="id" styleClass="p-datatable-getProductsResponse.totalPages" [rowHover]="true"  responsiveLayout="scroll"
+      <p-table [value]="getWarehouseResponse.getWarehouseItems" #dt dataKey="id"
+               styleClass="p-datatable-getProductsResponse.totalPages" [rowHover]="true" responsiveLayout="scroll"
                [filterDelay]="0">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="creator">người tạo <p-sortIcon field="name-product" ></p-sortIcon></th>
-            <th pSortableColumn="createdDate">ngày tạo<p-sortIcon field="price" ></p-sortIcon></th>
-            <th pSortableColumn="productCode">mã sản phẩm <p-sortIcon field="status" ></p-sortIcon></th>
-            <th pSortableColumn="expireDate">ngày hết hạn <p-sortIcon field="status" ></p-sortIcon></th>
-            <th pSortableColumn="inventory">tồn kho<p-sortIcon field="warehouse" ></p-sortIcon></th>
-            <th pSortableColumn="statusName">trạng thái<p-sortIcon field="warehouse" ></p-sortIcon></th>
+            <th pSortableColumn="creator">người tạo
+              <p-sortIcon field="name-product"></p-sortIcon>
+            </th>
+            <th pSortableColumn="createdDate">ngày tạo
+              <p-sortIcon field="price"></p-sortIcon>
+            </th>
+            <th pSortableColumn="productCode">mã sản phẩm
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="expireDate">ngày hết hạn
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="inventory">tồn kho
+              <p-sortIcon field="warehouse"></p-sortIcon>
+            </th>
+            <th pSortableColumn="statusName">trạng thái
+              <p-sortIcon field="warehouse"></p-sortIcon>
+            </th>
             <th>Thao tác</th>
           </tr>
         </ng-template>
@@ -210,41 +235,127 @@
             <td>{{item.inventory}} ({{item.unit}})</td>
             <td>{{item.statusName}}</td>
             <td>
-              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4" (mousedown)="update(item.warehouseId)" (click)="showDetailImport()"></i>
+              <i class="fa-solid fa-file-pen me-2" *ngIf="item.statusCode!=4" (mousedown)="update(item.warehouseId)"
+                 (click)="showDetailImport(item.id)"></i>
               <p-dialog header="Header" [(visible)]="displayImport" [modal]="true" [style]="{width: '50vw'}"
                         [draggable]="false" [resizable]="false">
-                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <ng-template pTemplate="footer">
-                  <p-button icon="pi pi-check" (click)="displayImport=false" label="Ok" styleClass="p-button-text"></p-button>
+                <div class="row" *ngIf="detailWarehouseResponse!=null && detailWarehouseResponse.status.status=='1'">
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label for="name_supplier" class="form-label">Nhà cung cấp</label>
+                      <input id="name_supplier" class="form-control" [(ngModel)]="detailWarehouseResponse.supplierName"
+                             disabled/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="bar_code" class="form-label">Mã sản phẩm</label>
+                      <input id="bar_code" class="form-control" [(ngModel)]="detailWarehouseResponse.productCode"
+                             disabled/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="amount_export" class="form-label">Số lượng bán</label>
+                      <input id="amount_export" class="form-control"
+                             value="{{detailWarehouseResponse.outAmount}}({{detailWarehouseResponse.unitName}})"
+                             disabled/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="amount_import" class="form-label">Số lượng nhập</label>
+                      <input id="amount_import" class="form-control"
+                             value="{{detailWarehouseResponse.inAmount}}({{detailWarehouseResponse.unitName}})"
+                             disabled/>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label for="expired_date" class="form-label">Ngày hết hạn</label>
+                      <input id="expired_date" class="form-control" [(ngModel)]="detailWarehouseResponse.expireDate"
+                             disabled/>
+                    </div>
+                    <div class="mb-3">
+                      <label for="price_export" class="form-label">Tiền nhập hàng</label>
+                      <input id="price_export" class="form-control" [(ngModel)]="detailWarehouseResponse.inPrice"
+                             disabled/>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row" *ngIf="detailWarehouseResponse!=null && detailWarehouseResponse.status.status=='1' && detailWarehouseResponse.exportItems!=null">
+                  <p-table [value]="detailWarehouseResponse.exportItems" dataKey="id" editMode="row"
+                           [tableStyle]="{'min-width': '50rem'}">
+                    <ng-template pTemplate="header">
+          <tr>
+            <td>đơn vị</td>
+            <th>giá nhập</th>
+            <th>giá bán</th>
+            <th>sửa</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-export let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="export">
+            <td>
+              {{export.unitName}}
+            </td>
+            <td>
+              <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="number" [min]="0" [(ngModel)]="export.inPrice" (ngModelChange)="checkChange(export.inPrice,export.exportId)" required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{export.inPrice}}
+                  </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText type="number" [min]="0" [(ngModel)]="export.outPrice" (ngModelChange)="checkChange(export.outPrice,export.exportId)" required>
                 </ng-template>
-              </p-dialog>
-<!--              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2" (mousedown)="deleteProd(item.warehouseId)"></i>-->
-              <i *ngIf="item.statusCode!=4" class="fas fa-file-pdf" (mousedown)="showBasicDialog()"></i>
-              <p-dialog [(visible)]="displayAmount" [style]="{width: '50vw'}">
-                <p>nhập số lượng mã QR</p>
-                <p-inputNumber id="amount"  [min]="0" [max]="1000" [(ngModel)]="amountExport" (ngModelChange)="exportExcel(item.productCode, amountExport)"></p-inputNumber>
-                <ng-template pTemplate="footer">
-                  <p-button icon="pi pi-check" (click)="displayAmount=false" label="Ok" styleClass="p-button-text"></p-button>
+                <ng-template pTemplate="output">
+                  {{export.outPrice}}
                 </ng-template>
-              </p-dialog>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="flex align-items-center justify-content-center gap-2">
+                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                        (click)="onRowEditSave(export)"
+                        class="p-button-rounded p-button-text p-button-success mr-2" id="{{export.exportId}}"></button>
+              </div>
             </td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="paginatorleft" let-state>
-          {{state.first}}
-          <button type="button" pButton icon="pi-refresh"></button>
-        </ng-template>
-        <ng-template pTemplate="paginatorright">
-          <button type="button" pButton icon="pi-cloud-upload"></button>
-        </ng-template>
-        <ng-template let-item pTemplate="paginatordropdownitem">
-          {{item.value}} - per page
-        </ng-template>
       </p-table>
-    </section>
   </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="displayImport=false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template>
+  </p-dialog>
+  <!--              <i *ngIf="item.statusCode!=4" class="fa-solid fa-trash me-2" (mousedown)="deleteProd(item.warehouseId)"></i>-->
+  <i *ngIf="item.statusCode!=4" class="fas fa-file-pdf" (mousedown)="showBasicDialog()"></i>
+  <p-dialog [(visible)]="displayAmount" [style]="{width: '50vw'}">
+    <p>nhập số lượng mã QR</p>
+    <p-inputNumber id="amount" [min]="0" [max]="1000" [(ngModel)]="amountExport"
+                   (ngModelChange)="exportExcel(item.productCode, amountExport)"></p-inputNumber>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="displayAmount=false" label="Ok" styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-dialog>
+  </td>
+  </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft" let-state>
+    {{state.first}}
+    <button type="button" pButton icon="pi-refresh"></button>
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+    <button type="button" pButton icon="pi-cloud-upload"></button>
+  </ng-template>
+  <ng-template let-item pTemplate="paginatordropdownitem">
+    {{item.value}} - per page
+  </ng-template>
+  </p-table>
+  </section>
+</div>
 </div>
 
 <admin-footer></admin-footer>
