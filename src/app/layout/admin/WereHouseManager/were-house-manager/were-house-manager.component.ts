@@ -12,6 +12,9 @@ import { DeleteWarehouseResponse } from 'src/app/shared/model/response/DeleteWar
 import { GetProductResult } from 'src/app/shared/model/response/GetProductResult';
 import { GetWarehouseResponse } from 'src/app/shared/model/response/GetWarehouseResponse';
 import {UploadFileService} from "../../../../services/upload_file/upload-file.service";
+import {DetailWarehouseResponse} from "../../../../shared/response/v_warehouse/DetailWarehouseResponse";
+import {GetExportItems} from "../../../../shared/item/GetExportItems";
+import {BaseResponse} from "../../../../shared/response/BaseResponse";
 
 @Component({
   selector: 'app-were-house-manager',
@@ -37,6 +40,8 @@ export class WereHouseManagerComponent implements OnInit {
   amountExport:number=0;
   displayAmount!: boolean;
   displayImport!: boolean;
+  detailWarehouseResponse!:DetailWarehouseResponse;
+  baseResponse!:BaseResponse;
   constructor(private router:ActivatedRoute,
                               private route:Router,
                               private warehouseManagerService:WarehouseManagerService,
@@ -62,8 +67,13 @@ export class WereHouseManagerComponent implements OnInit {
     this.displayAmount = true;
   }
 
-  showDetailImport() {
-    this.displayImport = true;
+  showDetailImport(importId:number) {
+    this.warehouseManagerService.detail(importId).subscribe(response => {
+      this.detailWarehouseResponse = response as DetailWarehouseResponse;
+      if(this.detailWarehouseResponse.status.status === '1'){
+        this.displayImport = true;
+      }
+    });
   }
 
   sort(nameFilter:string){
@@ -199,4 +209,24 @@ export class WereHouseManagerComponent implements OnInit {
       window.open(url);
     });
   }
+
+  onRowEditSave(request: GetExportItems) {
+    this.warehouseManagerService.update(request).subscribe(response => {
+      this.baseResponse=response as BaseResponse;
+      if(this.baseResponse.status.status=== '1'){
+        this.success(this.baseResponse.status.message)
+        this.displayImport = false;
+      }else{
+        this.failed(this.baseResponse.status.message)
+      }
+    })
+  }
+  checkChange(index: number,exportId: number){
+    if (index<0){
+      (<HTMLInputElement> document.getElementById(String(exportId))).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById(String(exportId))).disabled = false;
+    }
+  }
 }
+
