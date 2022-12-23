@@ -490,12 +490,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
   exportQRCode(code: string, amount: number){
     this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-        const doc = new jsPDF.jsPDF(response);
-        doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let blob = new Blob([response], { type: 'application/pdf' });
       let url = window.URL.createObjectURL(blob);
       window.open(url);
     });
