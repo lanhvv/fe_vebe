@@ -160,6 +160,7 @@ export class ManageWarehouseComponent implements OnInit {
       this.edit.unitId=this.selectedUnitParent.unitId as number;
       this.edit.unit=this.selectedUnitParent.unitName as string;
     }
+
     this.edit.fileId=this.fileId;
     this.importService.update(this.edit.supplierId, this.edit.id,this.edit).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
@@ -178,8 +179,8 @@ export class ManageWarehouseComponent implements OnInit {
 
   deleteById(key:number, redisId: string){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn xóa sản phẩm này khỏi đơn nhập hàng không?',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteById(key, redisId, this.language).subscribe(response => {
@@ -239,14 +240,15 @@ export class ManageWarehouseComponent implements OnInit {
           this.failed(this.itemsafterDone.status.message);
         }
 
+
     });
 
   }
 
   deleteAll(key: any){
     this.confirmationService.confirm({
-      message: 'Do you want to delete this account?',
-      header: 'Confirmation',
+      message: 'Bạn có chắc muốn những xóa đơn nhập hàng này không??',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.importService.deleteAll(key,this.language).subscribe(response => {
@@ -263,10 +265,10 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
+            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
+            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
             break;
         }
       }
@@ -339,7 +341,7 @@ export class ManageWarehouseComponent implements OnInit {
   getUnitChild(){
 
     this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-      this.createProductRequest.units = response as Units[]
+      this.createProductRequest.units = response as Unit[]
     })
 
   }
@@ -433,6 +435,19 @@ export class ManageWarehouseComponent implements OnInit {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 
+  exportQRCode(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+        const doc = new jsPDF.jsPDF(response);
+        doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
+  }
+
   // camera
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
@@ -446,7 +461,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.currentDevice = undefined;
     this.createProductRequest.barCode = this.qrResultString;
     this.edit.barCode = this.qrResultString;
-    console.log(this.qrResultString);
   }
 
   onHasPermission(has: boolean) {
@@ -458,7 +472,6 @@ export class ManageWarehouseComponent implements OnInit {
     const device = this.availableDevices.find(x => x.deviceId === this.getValue(selected));
     // @ts-ignore
     this.currentDevice = device;
-    console.log(this.currentDevice);
   }
 
   onTorchCompatible(isCompatible: boolean): void {
@@ -466,7 +479,6 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getValue(event: Event): string {
-    console.log((event.target as HTMLInputElement).value);
     return (event.target as HTMLInputElement).value;
   }
 
@@ -476,7 +488,6 @@ export class ManageWarehouseComponent implements OnInit {
       this.enable = true;
       const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
       this.currentDevice = device;
-      console.log(this.currentDevice);
     } else {
       this.enable = false;
       this.currentDevice = undefined;
@@ -496,12 +507,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
   exportQRCode(code: string, amount: number){
     this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-        const doc = new jsPDF.jsPDF(response);
-        doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let blob = new Blob([response], { type: 'application/pdf' });
       let url = window.URL.createObjectURL(blob);
       window.open(url);
     });

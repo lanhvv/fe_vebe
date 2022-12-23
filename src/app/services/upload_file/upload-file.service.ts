@@ -13,7 +13,9 @@ export class UploadFileService {
       'Content-Type': 'application/json',
       'Authorization':`Bearer `+ this.tokenService.getToken()!,
       'Access-Control-Allow-Origin': 'http://localhost:4200/',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      responseType: 'blob'
     }),
   };
 
@@ -29,7 +31,7 @@ export class UploadFileService {
               private tokenService: TokenStorageService) { }
 
   downloadQrCode(productCode:string, amount:number, language:string) {
-    return this.client.get(this.api+`/pdf/download?productCode=${productCode}&amount=${amount}&language=${language}`, this.httpOptionsFile);
+    return this.client.get(this.api+`/pdf/download?productCode=${productCode}&amount=${amount}&language=${language}`,{responseType: 'blob'});
   }
 }
 

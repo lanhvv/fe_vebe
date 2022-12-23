@@ -117,7 +117,7 @@ export class ManageDistributorComponent implements OnInit {
     if (status === 1) {
       this.confirmationService.confirm({
         message: 'Bạn muốn ngừng hợp đồng với nhà phân phối này?',
-        header: 'Confirm',
+        header: 'Xác nhận',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.distributorService.lock_unlock(id).subscribe(data => {
@@ -143,7 +143,7 @@ export class ManageDistributorComponent implements OnInit {
     } else {
       this.confirmationService.confirm({
         message: 'Bạn muốn tiếp tục hợp đồng với nhà phân phối này?',
-        header: 'Confirm',
+        header: 'Xác nhận',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.distributorService.lock_unlock(id).subscribe(data => {
@@ -173,7 +173,7 @@ export class ManageDistributorComponent implements OnInit {
   delete(id:number) {
     this.confirmationService.confirm({
       message: 'Bạn muốn xóa nhà phân phối này?',
-      header: 'Confirm',
+      header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.distributorService.delete(id).subscribe(data => {
@@ -246,11 +246,11 @@ export class ManageDistributorComponent implements OnInit {
   }
 
   showSuccess(detail:string) {
-    this.messageService.add({severity:'success', summary: 'Success', detail: detail});
+    this.messageService.add({severity:'success', summary: 'Thành công', detail: detail});
   }
 
   showError(error:string) {
-    this.messageService.add({severity:'error', summary: 'Error', detail: error});
+    this.messageService.add({severity:'error', summary: 'Thất bại', detail: error});
   }
 
   paginate(event:any) {

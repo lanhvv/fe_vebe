@@ -19,6 +19,7 @@ export class ImportProductResult{
   barcode!: string;
   productCode!: string;
   unit!: GetUnitResult;
+  units!: GetUnitResult[];
   exports!:ExportResult[];
   creator!: string;
   rangeDates!: string;

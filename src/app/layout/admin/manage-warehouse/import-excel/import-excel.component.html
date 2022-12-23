@@ -80,7 +80,7 @@
             <th class="th-table">Thao tác</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-product let-expanded="expanded">
+        <ng-template pTemplate="body" let-product let-index="rowIndex" let-expanded="expanded">
           <tr>
             <td>
               <button type="button" pButton pRipple [pRowToggler]="product" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -110,7 +110,7 @@
                 </ng-template>
                 <ng-template let-category pTemplate="item">
                   <div class="supplier">
-                    <div>{{category.name}}</div>
+                    <p>{{category.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown>
@@ -118,7 +118,7 @@
             <td pEditableColumn>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="product.rangeDates" (ngModelChange)="saveProducts()">
+                  <input pInputText type="Date" [(ngModel)]="product.rangeDates" (ngModelChange)="changeExpireDate(product.rangeDates,index)" dateFormat="dd/MM/yy" inputId="dateformat">
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{product.rangeDates}}
@@ -128,31 +128,45 @@
             <td pEditableColumn>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="product.inAmount" (ngModelChange)="saveProducts()">
+                  <input pInputText type="number" [(ngModel)]="product.inAmount" (ngModelChange)="changeInAmount(index)" min="0">
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{product.inAmount | number: '1.0-0'}}
                 </ng-template>
               </p-cellEditor>
             </td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit==null">
-              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="this.product.unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnit(product)" placeholder="Chọn đơn vị">
+
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit==null" >
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="productResponse.products[index].unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnitNew(productResponse.products[index])" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
-                    <div>{{product.unit.name}}</div>
+                    <p>{{productResponse.products[index].unit.name}}</p>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
                   <div class="unit" >
-                    <div>{{unit.name}}</div>
+                    <p>{{unit.name}}</p>
                   </div>
                 </ng-template>
               </p-dropdown></td>
-            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && this.product.unit!=null">
-              <p-dropdown styleClass="dropdown_table" [options]="getExportByUnitSelected(this.product.unit.id)" [(ngModel)]="this.product.unit" [filter]="true" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(product)">
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit!=null && productResponse.products[index].units==null" >
+              <p-dropdown styleClass="dropdown_table" [options]="this.getUnitResponse.results" [(ngModel)]="productResponse.products[index].unit" optionLabel="name" [filter]="true" filterBy="name" (ngModelChange)="selectUnitNew(productResponse.products[index])" placeholder="Chọn đơn vị">
                 <ng-template pTemplate="selectedItem">
                   <div class="supplier-item supplier-item-value" *ngIf="this.product.unit">
-                    <div>{{product.unit.name}}</div>
+                    <p>{{productResponse.products[index].unit.name}}</p>
+                  </div>
+                </ng-template>
+                <ng-template let-unit pTemplate="item">
+                  <div class="unit" >
+                    <p>{{unit.name}}</p>
+                  </div>
+                </ng-template>
+              </p-dropdown></td>
+            <td *ngIf="this.getUnitResponse!=null && this.getUnitResponse.status.status=='1' && productResponse.products[index]!=null && productResponse.products[index].unit!=null && productResponse.products[index].units!=null">
+              <p-dropdown styleClass="dropdown_table" [options]="productResponse.products[index].units" [(ngModel)]="productResponse.products[index].unit" [filter]="true" optionLabel="name" filterBy="name" (ngModelChange)="selectUnit(productResponse.products[index],productResponse.products[index].unit.id,index)">
+                <ng-template pTemplate="selectedItem">
+                  <div class="unit-item unit-item-value" *ngIf="productResponse.products[index].unit">
+                    <div>{{productResponse.products[index].unit.name}}</div>
                   </div>
                 </ng-template>
                 <ng-template let-unit pTemplate="item">
@@ -164,7 +178,7 @@
             <td pEditableColumn>
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input pInputText type="text" [(ngModel)]="product.inPrice" (ngModelChange)="saveProducts()">
+                  <input pInputText type="number" [(ngModel)]="product.inPrice" (ngModelChange)="changeInPrice(index)" min="0">
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{product.inPrice | number: '1.0-0'}}
@@ -188,18 +202,18 @@
                     <th>Giá bán</th>
                     <th>Thao tác</th>
                   </thead>
-                  <tbody>
+                  <tbody *ngIf="this.productResponse.products[product.id].exports!=null ">
                     <tr *ngFor="let export of this.productResponse.products[product.id].exports">
                       <td>{{export.unitName}}</td>
                       <td>
-                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="amount" [(ngModel)]="export.amount" disabled>
+                        <input type="number" class="form-control" style="width: 60%;" id="amount" [(ngModel)]="export.amount" disabled>
                       </td>
                       <td>
-                        <p-inputNumber id="in-price" style="width: 60%; height: 40px" [(ngModel)]="export.inPrice" (ngModelChange)="saveProducts()"></p-inputNumber>
+                        <p-inputNumber id="in-price" style="width: 60%; height: 40px" [(ngModel)]="export.inPrice" (ngModelChange)="checkChange(export.inPrice)" [min]="0"></p-inputNumber>
 <!--                        <input type="number" class="form-control"  [(ngModel)]="export.inPrice" >-->
                       </td>
                       <td>
-                        <p-inputNumber id="out-price" style="width: 60%; height: 40px" [(ngModel)]="export.outPrice" (ngModelChange)="saveProducts()"></p-inputNumber>
+                        <p-inputNumber id="out-price" style="width: 60%; height: 40px" [min]="0" [(ngModel)]="export.outPrice" (ngModelChange)="checkChange(export.outPrice)"></p-inputNumber>
 <!--                        <input type="number" class="form-control" style="width: 60%;" [(ngModel)]="export.outPrice" id="out-price" (ngModelChange)="saveProducts()">-->
                       </td>
                       <td>
@@ -242,7 +256,7 @@
         <td>{{product.inPrice}}</td>
         <td>{{product.amount}}</td>
         <td>
-          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã QR</button>
         </td>
       </tr>
     </ng-template>

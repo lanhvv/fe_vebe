@@ -123,3 +123,8 @@ main{
 >>> .p-fileupload .p-fileupload-buttonbar .p-button{
   width: 120px;
 }
+
+>>> .p-inputnumber input{
+  width: 100% !important;
+  height: 40px !important;
+}

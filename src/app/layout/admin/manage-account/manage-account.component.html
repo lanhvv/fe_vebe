@@ -14,18 +14,17 @@
         <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
       <div class="col-2">
-        <select class="form-select" aria-label="Default select example">
-          <option value="1">Tất cả</option>
-          <option value="2">Đang hoạt động</option>
-          <option value="3">Không hoạt động</option>
-        </select>
+<!--        <select class="form-select" aria-label="Default select example">-->
+<!--          <option value="1">Tất cả</option>-->
+<!--          <option value="2">Đang hoạt động</option>-->
+<!--          <option value="3">Không hoạt động</option>-->
+<!--        </select>-->
       </div>
       <div class="col-5">
         <div class="input-group mb-3">
           <form style="width: 100%">
             <div class="input-group mb-3">
-              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText ngModel #username
-                     placeholder="Nhập tên nhân viên...">
+              <input type="text" name="name_staff" class="form-control inputRoot" pInputText ngModel #username placeholder="Nhập tên nhân viên...">
               <button type="button" class="buttonRoot" pButton pRipple icon="pi pi-search"
                       (mousedown)="searchByUsername(username.value)"></button>
             </div>
@@ -56,7 +55,6 @@
               <td *ngIf="item.status == 1">
                 <p-inputSwitch [ngModel]="item.status === 1" (click)="lockAccount(item.id)"></p-inputSwitch>
               </td>
-              <td>{{item.id}}</td>
               <td>{{item.fullname}}</td>
               <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
@@ -75,7 +73,7 @@
                 <button (click)="getId(item.id)" class="buttonRoot m-1" style="width: 45px">
                   <i class="fa-solid fa-file-pen me-2"></i>
                 </button>
-                <button label="Confirm" *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
+                <button *ngIf="item.status==1" (mousedown)="delete(item.id)" class="buttonRoot-delete m-1">
                   <i class="fa-solid fa-trash"></i>
                 </button>
 
@@ -285,58 +283,37 @@
   <form class="row mt-2">
     <div class="row">
       <div class="mb-3 col-md-6">
-        <label for="fullname" class="form-label">Tên Nhân Viên: </label>
-        <input type="text" class="form-control" id="fullname" [(ngModel)]="createAccountResponse.fullname" name="fullname"
-               placeholder="Nhập tên nhân viên"
-               required>
+        <label for="fullname" class="form-label">Họ và tên </label>
+        <input type="text" class="form-control" id="fullname" [(ngModel)]="createAccountResponse.fullname" name="fullname">
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Username:</label>
-        <input type="text" class="form-control" id="username" [(ngModel)]="createAccountResponse.username" name="username"
-               placeholder="Nhập username nhân viên"
-               required>
+        <label for="username" class="form-label">Tên tài khoản</label>
+        <input type="text" class="form-control" id="username" [(ngModel)]="createAccountResponse.username" name="username" disabled>
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Password:</label>
-        <input type="text" class="form-control" id="password" [(ngModel)]="createAccountResponse.password" name="password"
-               placeholder="Nhập username nhân viên"
-               required>
-      </div>
-      <div class="mb-3 col-md-6">
-        <label class="form-label">Số Chứng Minh Thư: </label>
+        <label class="form-label">Số chứng minh thư</label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.cccd"
                placeholder="Nhập chứng minh thư" name="cccd" required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Số Điện Thoại: </label>
+        <label class="form-label">Số điện thoại </label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.phoneNumber" name="phoneNumber"
                placeholder="Nhập số điện thoại" required>
       </div>
 
       <div class="mb-3 col-md-6">
-        <label class="form-label">Email: </label>
+        <label class="form-label">Email </label>
         <input type="text" class="form-control" [(ngModel)]="createAccountResponse.email" name="email"
                placeholder="Nhập email" required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Địa chỉ: </label>
+        <label class="form-label">Địa chỉ </label>
         <input type="text" class="form-control"[(ngModel)]="createAccountResponse.address" name="address"
                placeholder="Nhập địa chỉ" required>
       </div>
-
-      <div class="col-md-3 mb-3"></div>
-      <div class="col-md-3 mb-3">
-        <button (click)="update()"  type="submit" class="btn btn-success"
-        >Thêm Nhân Viên
-        </button>
-      </div>
-      <div class="col-md-3 mb-3">
-        <button type="submit" class="btn btn-success"
-        >Hủy
-        </button>
-      </div>
-      <div class="col-md-3 mb-3"></div>
+    </div>
+    <div class="row text-center mt-3">
+      <button (click)="update()" type="submit" class="root-btn">Hoàn thiện</button>
     </div>
   </form>
 </p-dialog>
-

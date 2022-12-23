@@ -4,19 +4,14 @@
 
 <!--Main layout-->
 <main>
-  <h5 translate>product.manage</h5>
+  <h5>Quản lý sản phẩm</h5>
   <div class="container pt-4 main-layout">
     <div class="row">
-      <div class="col-3">
+      <div class="col-4">
         <button type="button" (mousedown)="create()" class="root-btn" translate>
           <i class="fa-solid fa-plus me-2"></i>
           product.create
         </button>
-      </div>
-      <div class="col-2">
-        <select class="form-select" aria-label="Default select example">
-          <option value="1">Tất cả</option>
-        </select>
       </div>
       <div class="col-5">
         <form style="width: 100%">
@@ -28,10 +23,10 @@
           </div>
         </form>
       </div>
-      <div class="col-2">
-        <button class="root-btn">
-          Thống kê
-        </button>
+      <div class="col-3 float-end">
+        <a type="button" class="root-btn text-decoration-none pt-2" href="/admin/manage-expiry-date">
+          Thống kê hạn sử dụng
+        </a>
       </div>
     </div>
     <!-- table -->
@@ -41,8 +36,8 @@
                [filterDelay]="0">
         <ng-template pTemplate="header">
           <tr>
-            <th>Khóa/Mở</th>
-            <th pSortableColumn="name-product" (mousedown)="sort('nameProd')" translate>product.name
+            <th class="col-1">Khóa/Mở</th>
+            <th pSortableColumn="name-product" class="col-3" (mousedown)="sort('nameProd')" translate>product.name
               <p-sortIcon field="name-product"></p-sortIcon>
             </th>
             <th pSortableColumn="price" (mousedown)="sort('price')" translate>product.unit.outprice
@@ -66,8 +61,8 @@
             <td *ngIf="item.statusCode==1">
               <p-inputSwitch [ngModel]="item.statusCode == 1" (click)="confirmLock(item.productCode)"></p-inputSwitch>
             </td>
-            <td *ngIf="item.statusCode==2">
-              <p-inputSwitch [ngModel]="item.statusCode == 2" (click)="confirmUnlock(item.productCode)"></p-inputSwitch>
+            <td *ngIf="item.statusCode==3">
+              <p-inputSwitch [ngModel]="!(item.statusCode == 3)" (click)="confirmUnlock(item.productCode)"></p-inputSwitch>
             </td>
             <td>
               <a

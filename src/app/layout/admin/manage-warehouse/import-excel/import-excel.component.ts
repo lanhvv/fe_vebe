@@ -22,7 +22,8 @@ import {ImportWarehouseItemsResponse} from "../../../../shared/response/v_import
 import {ExportService} from "../../../../services/exportPDF/export.service";
 import {UploadFileService} from "../../../../services/upload_file/upload-file.service";
 import {GetUnitResult} from "../../../../shared/result/v_unit/GetUnitResult";
-
+import {Router} from '@angular/router';
+import {DownloadFilePdfResponse} from "../../../../shared/response/DownloadFilePdfResponse";
 
 type AOV = any[][];
 
@@ -56,9 +57,12 @@ export class ImportExcelComponent implements OnInit {
   productDialog!: boolean;
   getExportsByUnitSelectedResponse!: GetExportsByUnitSelectResponse;
   importResponse!: ImportWarehouseItemsResponse;
-
+  exportsItem!:ExportResult;
   //after import
   isSidebarDialog: boolean = false;
+  isEnableDone=0;
+
+  downloadFilePdf!:DownloadFilePdfResponse;
 
   constructor(private fb: FormBuilder,
               private supplierService:SupplierService,
@@ -70,7 +74,8 @@ export class ImportExcelComponent implements OnInit {
               private unitService: UnitService,
               private importService: ImportService,
               private exportQR: ExportService,
-              private uploadFileService: UploadFileService) {
+              private uploadFileService: UploadFileService,
+              private router: Router) {
     // this.getSuppliersResponse = new GetSuppliersResponse();
   }
 
@@ -100,7 +105,7 @@ export class ImportExcelComponent implements OnInit {
       accept: () => {
         this.productResponse.products = this.productResponse.products.filter(val => !this.selectedProducts.includes(val));
         this.selectedProducts = [];
-        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công?', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công', life: 3000});
         this.saveProducts();
       }
     });
@@ -108,7 +113,6 @@ export class ImportExcelComponent implements OnInit {
 
   //delete product selected in table
   deleteProduct(product: ImportProductResult) {
-    console.log("32123123123")
     this.confirmationService.confirm({
       message: 'Bạn có chắc muốn xóa muốn xóa sản phẩm ' + product.productName + ' này không?',
       header: 'Xác nhận',
@@ -137,6 +141,7 @@ export class ImportExcelComponent implements OnInit {
         this.failed(this.productResponse.status.message);
       }
     });
+
   }
 
   getFormGroup(control: AbstractControl) {
@@ -146,7 +151,6 @@ export class ImportExcelComponent implements OnInit {
   getSuppliers() {
     this.supplierService.getSuppliers(this.language+"").subscribe(response=>{
       this.getSuppliersResponse = response as GetSuppliersResponse;
-      console.log(this.getSuppliersResponse);
       if (this.getSuppliersResponse.status.status === '0'){
         this.failed(this.getSuppliersResponse.status.message);
       }
@@ -156,7 +160,6 @@ export class ImportExcelComponent implements OnInit {
   getCategory() {
     this.typeProductService.getTypeProducts(this.language+"").subscribe(response=>{
       this.getTypeProductsResponse = response as GetTypeProductResponse;
-      console.log(this.getSuppliersResponse);
       if (this.getSuppliersResponse.status.status === '0'){
         this.failed(this.getSuppliersResponse.status.message);
       }
@@ -166,37 +169,57 @@ export class ImportExcelComponent implements OnInit {
   getUnits() {
     this.typeProductService.getUnits(this.language+"").subscribe(response=>{
       this.getUnitResponse = response as GetUnitResponse;
-      console.log(this.getUnitResponse);
       if (this.getUnitResponse.status.status === '0'){
         this.failed(this.getUnitResponse.status.message);
       }
     })
   }
 
-  selectUnit(request:ImportProductResult){
-    console.log(request);
-    this.unitService.getUnitsByUnitSelected(this.language+"",request.unit.id).subscribe(data=>{
-        this.getExportsByUnitSelectedResponse=data as GetExportsByUnitSelectResponse;
-        if (this.getExportsByUnitSelectedResponse.status.status === '0'){
-          this.failed(this.getExportsByUnitSelectedResponse.status.message);
-        }else {
-          this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
-          const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
-          for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
-            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
-            console.log("unit parent: "+this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount);
-            console.log("unit child: "+this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount);
-            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice=price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount;
-          }
-          this.saveProducts();
+  selectUnit(request:ImportProductResult,unitId:number,index:number){
+    if (this.productResponse.products[index].units.length > 0) {
+      const unit = this.productResponse.products[index].units.find((unit) => unit.id === unitId);
+      if (unit) {
+        this.productResponse.products[index].unit = this.productResponse.products[index].units.filter((unit) => unit.id === unitId)[0];
+        this.productResponse.products[index].exports = []
+        for (let i = 0; i < this.productResponse.products[index].units.length; i++) {
+            if (this.productResponse.products[index].units[i].amount >= this.productResponse.products[index].unit.amount) {
+              this.exportsItem = new ExportResult();
+              this.exportsItem.amount = this.productResponse.products[index].units[i].amount/this.productResponse.products[index].unit.amount;
+              this.exportsItem.unitId= this.productResponse.products[index].units[i].id;
+              this.exportsItem.inPrice= this.productResponse.products[index].inPrice/this.productResponse.products[index].unit.amount/this.productResponse.products[index].inAmount;
+              this.exportsItem.unitName= this.productResponse.products[index].units[i].name;
+              this.exportsItem.outPrice= 0;
+              this.productResponse.products[index].exports.push(this.exportsItem);
+            }
         }
+      }
+    }
+          this.saveProducts();
+  }
+
+  selectUnitNew(request:ImportProductResult){
+    this.unitService.getUnitsByUnitSelected(this.language+"",request.unit.id).subscribe(data=>{
+      this.getExportsByUnitSelectedResponse=data as GetExportsByUnitSelectResponse;
+
+      if (this.getExportsByUnitSelectedResponse.status.status === '0'){
+        this.failed(this.getExportsByUnitSelectedResponse.status.message);
+      }else {
+        this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
+        this.productResponse.products.filter(value => value.id === request.id)[0].unit = request.unit;
+        console.log("unit 1: ",request.unit.name);
+        const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
+        for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
+          this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
+          const priceChild=(price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount).toFixed(0);
+          this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice= priceChild as unknown as number;
+        }
+        this.saveProducts();
+      }
     })
   }
 
   deleteExport(req:ExportResult,request:ImportProductResult){
-    console.log(req);
-    console.log(this.productResponse.products.filter(value => value.id === request.id)[0].exports);
-    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unitId === req.unitId);
+    this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.productResponse.products.filter(value => value.id === request.id)[0].exports.filter(value => value.unitId !== req.unitId);
     this.saveProducts();
   }
 
@@ -205,13 +228,9 @@ export class ImportExcelComponent implements OnInit {
   }
 
   saveProducts(){
+
     this.warehouseService.saveProductsToRedis(this.productResponse,this.language!).subscribe(response=>{
       this.baseResponse = response as BaseResponse;
-      if (this.baseResponse.status.status === '0'){
-        console.log(this.baseResponse.status.message);
-      }else {
-        console.log(this.baseResponse.status.message);
-      }
     })
   }
 
@@ -250,43 +269,49 @@ export class ImportExcelComponent implements OnInit {
   }
 
   exportQRCode(code: string, amount: number){
-    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      console.log(response);
-      import("jspdf").then(jsPDF => {
-          const doc = new jsPDF.jsPDF(response);
-          doc.save('products.pdf');
-      })
-      let blob = new Blob([response as string], { type: 'application/pdf' });
-      let url = window.URL.createObjectURL(blob);
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(x=>{
+      const blob = new Blob([x], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
       window.open(url);
     });
   }
 
-  getExportByUnitSelected(unitId: number){
-    console.log("response: "+JSON.stringify(this.productResponse.products));
-    const getUnitsResults=[];
-    for (let i = 0; i < this.getUnitResponse.results.length; i++) {
-      if (this.getUnitResponse.results[i].id === unitId){
-        if (this.getUnitResponse.results[i].parentId !== 0){
-          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
-            if (this.getUnitResponse.results[j].id===this.getUnitResponse.results[i].parentId || this.getUnitResponse.results[i].parentId === this.getUnitResponse.results[i].parentId){
-              getUnitsResults.push(this.getUnitResponse.results[j]);
-            }
-          }
-        }else{
-          for (let j = 0; j < this.getUnitResponse.results.length; j++) {
-            if (this.getUnitResponse.results[j].parentId===this.getUnitResponse.results[i].id || this.getUnitResponse.results[i].id === this.getUnitResponse.results[i].id){
-              getUnitsResults.push(this.getUnitResponse.results[j]);
-            }
-          }
-        }
-      }
-    }
-    console.log("length getUnitsResults: "+getUnitsResults.length);
-    return getUnitsResults;
-  }
-
   back(){
     window.history.back();
+  }
+
+  changeExpireDate(expireDate: string,index: number){
+    const date = expireDate;
+    const formatDate= date.split('-');
+    const newDate = formatDate[2] + '/' + formatDate[1] + '/' + formatDate[0];
+    this.productResponse.products[index].rangeDates = newDate;
+    this.saveProducts();
+  }
+
+  changeInPrice(index: number){
+    if (this.productResponse.products[index].inPrice<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
+  }
+
+  changeInAmount(index: number){
+    if (this.productResponse.products[index].inAmount<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
+  }
+
+  checkChange(index: number){
+    if (index<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
   }
 }

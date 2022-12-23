@@ -1,0 +1,85 @@
+<admin-header [Status]="status"></admin-header>
+<main>
+  <div class="pt-2 card pb-4 mb-4" style="border-radius: 10px;
+              box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);">
+
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <div class="input-group mb-3 float-end">
+          <form style="width: 100%" (ngSubmit)="onSearch()">
+            <div class="input-group mb-3">
+              <input type="text" name="phonenumber" class="form-control inputRoot" pInputText [(ngModel)]="nameSearch"
+                     placeholder="Nhập tên sản phẩm...">
+              <button type="submit" class="buttonRoot" pButton pRipple icon="pi pi-search"></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-2">
+      <div class="container-fluid">
+        <p-table [value]="response.closeToExpirationItems">
+          <ng-template  pTemplate="header">
+            <tr>
+              <th class="col-2">Sản phẩm</th>
+              <th class="col-1">Ngày nhập</th>
+              <th class="col-1">Hết hạn</th>
+              <th class="col-2">Người nhập</th>
+              <th class="col-2">Tồn</th>
+              <th class="col-1">Giá nhập</th>
+              <th class="col-1">Thao tác</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowIndex="rowIndex" let-item let-expanded="expanded">
+            <tr>
+              <td>{{item.nameProduct}}</td>
+              <td>{{item.dateAdded | date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.expired | date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.creator}}</td>
+              <td>{{item.amount}}</td>
+              <td>{{item.inCome | number}}đ</td>
+              <td>
+                <button class="buttonRoot me-1" (click)="openDialog(item.idImport)">
+                  <i class="pi pi-pencil"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-paginator [rows]="10" [totalRecords]="totalItems" [rowsPerPageOptions]="[10,25,50]"
+                     (onPageChange)="paginate($event)"></p-paginator>
+      </div>
+    </div>
+  </div>
+  <p-toast></p-toast>
+
+  <p-dialog [(visible)]="dialog" [style]="{width: '550px'}" header="Cập nhập giá" [modal]="true" styleClass="p-fluid" [draggable]="false">
+    <ng-template pTemplate="content">
+      <span *ngIf="listUnit.length != 0">
+        <h5 class="form-label">Hàng tồn: {{inventory}}</h5> <br>
+        <div class="mb-3 input-group pb-1" *ngFor="let item of listUnit; let i = index">
+          <span class="p-float-label">
+              <p-inputNumber type="text" id="inputgroup+{{i}}" placeholder="{{item.nameUnit}}"  [(ngModel)]="item.editAmount" mode="decimal" [minFractionDigits]="0"></p-inputNumber>
+              <label for="inputgroup+{{i}}">{{item.nameUnit}}</label>
+          </span>
+          <span class="p-inputgroup-addon" style="width: 90px">
+              <b>đ/{{item.nameUnit}}</b>
+          </span>
+        </div>
+      </span>
+      <span *ngIf="listUnit.length == 0">
+        <h5 class="form-label">Hãy đến chức năng quản lý kho để xuất hàng. <br> Rồi quay lại đây sửa giá!</h5> <br>
+      </span>
+      <!--        <input type="number" class="form-control" min="1000" placeholder="{{item.nameUnit}}" aria-label="Recipient's username" [(ngModel)]="item.editAmount" aria-describedby="basic-addon2">-->
+      <!--        <span class="input-group-text" id="basic-addon2" style="width: 90px">đ/{{item.nameUnit}}</span>-->
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <hr>
+      <span *ngIf="listUnit.length != 0">
+      <button class="root-btn" (click)="updateExport()">Cập nhập</button>
+      </span>
+    </ng-template>
+  </p-dialog>
+</main>

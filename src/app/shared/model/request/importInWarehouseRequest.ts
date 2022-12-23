@@ -1,4 +1,5 @@
-import { Units } from '../Units';
+import { Unit } from '../Unit';
+import {Units} from "../Units";
 export class ImportInWarehouseRequest {
     nameProd!:string;
     unit!:string;

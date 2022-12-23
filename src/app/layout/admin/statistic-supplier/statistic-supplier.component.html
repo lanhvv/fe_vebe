@@ -21,9 +21,10 @@
           <ng-template pTemplate="header">
             <tr>
               <th class="col-1">STT</th>
-              <th class="col-3">Tên</th>
-              <th class="col-3">Ngày hợp tác</th>
-              <th class="col-1">SĐT</th>
+              <th class="col-2">Tên</th>
+              <th class="col-2">Ngày hợp tác</th>
+              <th class="col-2">Email</th>
+              <th class="col-2">SĐT</th>
               <th class="col-2">Số lần nhập</th>
               <th>Thao tác</th>
             </tr>
@@ -33,6 +34,7 @@
               <td>{{rowIndex+1}}</td>
               <td>{{item.nameSup}}</td>
               <td>{{item.createdDate| date: 'dd/MM/yyyy'}}</td>
+              <td>{{item.email}}</td>
               <td>{{item.numberPhone}}</td>
               <td>{{item.numberOfEntry}}</td>
               <td>

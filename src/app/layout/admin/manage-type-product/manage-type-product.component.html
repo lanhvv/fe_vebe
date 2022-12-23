@@ -43,7 +43,12 @@
                 {{rowData.name}}
               </td>
               <td>
-                {{rowData.statusName}}
+                <div *ngIf="rowData.status==1" class="active">
+                  <p>{{rowData.status == 1 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
+                <div *ngIf="!(rowData.status == 1)" class="in-active">
+                  <p>{{rowData.status == 2 ? 'Đang hoạt động' : 'Không hoạt động'}}</p>
+                </div>
               </td>
               <td>{{rowData.amountProduct}}</td>
               <td>{{rowData.creator}}</td>
@@ -101,7 +106,7 @@
   </form>
 </p-dialog>
 
-<p-dialog header="Thêm danh mục con" [(visible)]="displaydetail" [modal]="true" [style]="{width: '50vw'}">
+<p-dialog header="Thêm danh mục con" [(visible)]="displaydetail" [draggable]="false" [modal]="true" [style]="{width: '50vw'}">
   <form>
     <div class="row">
       <div class="mb-3">
@@ -128,7 +133,7 @@
   </form>
 </p-dialog>
 
-<p-dialog header="Chỉnh sửa thông tin danh mục" [(visible)]="updateType" [modal]="true" [style]="{width: '50vw'}">
+<p-dialog header="Chỉnh sửa thông tin danh mục" [(visible)]="updateType" [modal]="true" [draggable]="false" [style]="{width: '50vw'}">
   <form>
     <div class="row">
       <div class="mb-3">
