@@ -9,4 +9,5 @@ export class ViewStallResult{
   amount!:number;
   items!:ExportItem[];
   productCode!:string;
+  exportSelected!:ExportItem;
 }

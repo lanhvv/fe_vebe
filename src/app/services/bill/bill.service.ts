@@ -21,7 +21,7 @@ export class BillService {
     }),
   };
 
-  saveBilltoRedis(request:ViewBillRequest){
+  saveBilltoRedis(request:TransactionBillRequest){
     return this.httpClient.post(this.api+"/save-bill",request,this.httpOptions);
   }
   transactionBill(request:TransactionBillRequest){

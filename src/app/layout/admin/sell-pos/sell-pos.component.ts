@@ -225,9 +225,9 @@ export class SellPosComponent implements OnInit, OnDestroy {
         }
         this.viewBillRequest.cartCode=this.cartCode;
         this.carts.push(this.cartItem);
-        this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-          console.log(response);
-        })
+        // this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
+        //   console.log(response);
+        // })
       }
     })
   }
@@ -276,11 +276,11 @@ export class SellPosComponent implements OnInit, OnDestroy {
   //   })
   // }
 
-  changeAmount(){
-    this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
-      console.log(response);
-    })
-  }
+  // changeAmount(){
+  //   this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
+  //     console.log(response);
+  //   })
+  // }
 
   transaction(){
     this.transactionRequest=new TransactionBillRequest();
