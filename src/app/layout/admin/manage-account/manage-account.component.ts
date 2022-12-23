@@ -141,6 +141,7 @@ export class ManageAccountComponent implements OnInit {
     });
     this.isUpdateAccount = true;
   }
+
   update() {
     this.updateAccountRequest = new UpdateAccountRequest(this.createAccountResponse.idUser,  this.createAccountResponse.username,
       this.createAccountResponse.fullname, this.createAccountResponse.password, this.createAccountResponse.cccd, this.createAccountResponse.address,
@@ -148,13 +149,14 @@ export class ManageAccountComponent implements OnInit {
     this.managerAccountService.updateAccount(this.updateAccountRequest).subscribe(response => {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status == "1") {
-        this.isDialogAccount = false;
-        this.getall()
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
+        this.isUpdateAccount = false;
+        this.getall();
+        this.removeForm();
+        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: this.createAccountResponse.status.message, life: 3000 });
       }
       else if (this.createAccountResponse.status.status == "0") {
-        this.isDialogAccount = true;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
+        this.isUpdateAccount = true;
+        this.messageService.add({ severity: 'error', summary: 'Thất bại', detail: this.createAccountResponse.status.message, life: 3000 });
       }
     })
   }
@@ -317,7 +319,6 @@ export class ManageAccountComponent implements OnInit {
   }
 
   createAccount() {
-
     const value = this.accountForm.value;
     this.createAccountRequest.fullname = value.fullName
     this.createAccountRequest.address = value.address
@@ -331,15 +332,27 @@ export class ManageAccountComponent implements OnInit {
       this.createAccountResponse = response as CreateAccountResponse;
       if (this.createAccountResponse.status.status = "1") {
         this.isDialogAccount = false;
-        this.getall()
+        this.getall();
+        this.removeForm();
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: this.createAccountResponse.status.message, life: 3000 });
-
       } else {
         this.isDialogAccount = true;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: this.createAccountResponse.status.message, life: 3000 });
 
       }
 
+    })
+  }
+
+  removeForm(){
+    this.accountForm = this.fb.group({
+      fullName: new FormControl(''),
+      userName: new FormControl(''),
+      passWord: new FormControl(''),
+      cccd: new FormControl(''),
+      phoneNumber: new FormControl(''),
+      email: new FormControl(''),
+      address: new FormControl('')
     })
   }
 }

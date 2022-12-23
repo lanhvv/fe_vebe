@@ -13,13 +13,6 @@ import {MessageService} from "primeng/api";
   styleUrls: ['./manage-close-to-expired.component.css']
 })
 export class ManageCloseToExpiredComponent implements OnInit {
-  ngOnInit(): void {
-    this.getALl(this.nameSearch, this.page, this.row);
-  }
-
-  constructor(private closeToExpiredService: CloseToExpiredService,
-              private messageService: MessageService) {
-  }
 
   submitted!: boolean;
   dialog !: boolean;
@@ -29,6 +22,20 @@ export class ManageCloseToExpiredComponent implements OnInit {
   totalItems = 0;
   nameSearch = "";
   response !: CloseToExpiresResponse;
+  listUnit !: Uitem[];
+  inventory = "";
+  listEditExport : EditPriceExportItem[] = [];
+  idImport !: number;
+
+  ngOnInit(): void {
+    this.status = 6;
+    this.getALl(this.nameSearch, this.page, this.row);
+  }
+
+  constructor(private closeToExpiredService: CloseToExpiredService,
+              private messageService: MessageService) {
+  }
+
 
   getALl(nameSearch:string, page:number, row:number) {
     this.closeToExpiredService.getAll(nameSearch,page,row).subscribe(data => {
@@ -49,10 +56,6 @@ export class ManageCloseToExpiredComponent implements OnInit {
     this.submitted = false;
   }
 
-  listUnit !: Uitem[];
-  inventory = "";
-  listEditExport : EditPriceExportItem[] = [];
-  idImport !: number;
   openDialog(idImport:number) {
     this.dialog = true;
     this.submitted = false;

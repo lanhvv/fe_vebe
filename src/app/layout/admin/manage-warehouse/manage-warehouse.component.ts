@@ -21,14 +21,15 @@ import { ListImportWarehouseInRedis } from 'src/app/shared/model/response/ListIm
 import { EditImportWarehouseResponse } from 'src/app/shared/model/response/editImportWarehouseResponse';
 import { UnitService } from 'src/app/services/unit/unit.service';
 import { ImportWarehouseResponse } from '../../../shared/model/response/ImportWarehouseResponse';
-import {BehaviorSubject, isEmpty} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 import {BarcodeFormat} from "@zxing/library";
 import {ZXingScannerComponent} from "@zxing/ngx-scanner";
 import { ListCategoryImportItemsItems } from '../../../shared/model/response/ListCategoryImportItemsItems';
 import { CategoryImportItems } from '../../../shared/item/v_import/CategoryImportItems';
 import { ListImportWarehouse } from '../../../shared/model/response/ListImportWarehouse';
+import { ImportWarehouseItemsResponse } from '../../../shared/response/v_import/ImportWarehouseItemsResponse';
 import {UploadFileService} from "../../../services/upload_file/upload-file.service";
-import {ImportWarehouseItemsResponse} from "../../../shared/response/v_import/ImportWarehouseItemsResponse";
+import { Units } from '../../../shared/model/Units';
 type AOV = any[][];
 @Component({
   selector: 'app-manage-warehouse',
@@ -55,6 +56,11 @@ export class ManageWarehouseComponent implements OnInit {
   id!: number
   image!:any;
   es: any;
+  isShowFinal: boolean = false;
+
+  //after import
+  isSidebarDialog: boolean = false;
+  importResponse!: ImportWarehouseItemsResponse;
 
   currentFile?: File;
   selectedFiles?: FileList;
@@ -82,7 +88,7 @@ export class ManageWarehouseComponent implements OnInit {
 
   updateWarehouse!: FormGroup;
 
-  units:Unit[]=[];
+  units:Units[]=[];
 
   //open cam
   dialogScanQR: boolean = false;
@@ -103,19 +109,13 @@ export class ManageWarehouseComponent implements OnInit {
     BarcodeFormat.QR_CODE,
   ];
 
-  isShowFinal: boolean = false;
-
-  //after import
-  isSidebarDialog: boolean = false;
-  importResponse!: ImportWarehouseItemsResponse;
-
   constructor(private messageService: MessageService ,
               private prodService:ProductService,
               private unitService:UnitService,
               private translateService:TranslateConfigService,private fb: FormBuilder,
               private confirmationService: ConfirmationService,
-              private importService: ImportSupplierService,
-              private uploadFileService: UploadFileService) {
+              private uploadFileService: UploadFileService,
+              private importService: ImportSupplierService) {
     this.createProductRequest=new ImportInWarehouseRequest();
     this.importInWarehouse= new ListImportWarehouseInRedis();
   }
@@ -124,6 +124,7 @@ export class ManageWarehouseComponent implements OnInit {
     this.language=this.translateService.getLanguage()!;
     this.status = 8;
     this.getInformations();
+    this.getAllType()
   }
 
   data: AOV = [
@@ -148,6 +149,7 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   update(){
+    console.log(this.edit.id +" dòng 152")
     if(this.selectedCategory!=null){
       this.edit.categoryId=this.selectedCategory.id as number;
     }
@@ -159,9 +161,8 @@ export class ManageWarehouseComponent implements OnInit {
       this.edit.unitId=this.selectedUnitParent.unitId as number;
       this.edit.unit=this.selectedUnitParent.unitName as string;
     }
-
     this.edit.fileId=this.fileId;
-    this.importService.update(this.edit,this.edit.supplierId, this.edit.id).subscribe(response => {
+    this.importService.update(this.edit.supplierId, this.edit.id,this.edit).subscribe(response => {
       this.createProductResponse = response as CreateProductResponse;
       if(this.createProductResponse.status.status=== '1'){
         this.getAllImportInWarehouse(this.edit.supplierId);
@@ -207,7 +208,6 @@ export class ManageWarehouseComponent implements OnInit {
 
 
   }
-
   getAllType(){
     this.importService.getAllType().subscribe(response => {
       this.categoryItems = response as ListCategoryImportItemsItems
@@ -216,9 +216,14 @@ export class ManageWarehouseComponent implements OnInit {
   }
 
   getById(key:number, redisId: string){
-    this.importService.edit(key, redisId, this.language).subscribe(response => {
-      this.selectedCategory = response.category
-      this.edit = response as EditImportWarehouseResponse
+    this.importService.edit(key, redisId, this.language).subscribe(data => {
+      this.selectedUnitParent.unitId = data.unitId
+      this.selectedUnitParent.unitName = data.unit
+      this.selectedUnitParent.amount = data.amountUnit
+      this.selectedUnitParent.description = data.descriptionUnit
+      this.selectedCategory.id = data.categoryId as number
+      this.selectedCategory.name = data.categoryName
+      this.edit = data as EditImportWarehouseResponse
       this.updateDisplay= true
     });
 
@@ -230,11 +235,13 @@ export class ManageWarehouseComponent implements OnInit {
       if(this.itemsafterDone.status.status=== '1'){
         this.success(this.itemsafterDone.status.message);
         this.deleteAll(this.selectedSupplier.id)
+
       }else{
         this.failed(this.itemsafterDone.status.message);
       }
 
     });
+
   }
 
   deleteAll(key: any){
@@ -257,19 +264,18 @@ export class ManageWarehouseComponent implements OnInit {
       reject: (type: any) => {
         switch (type) {
           case ConfirmEventType.REJECT:
-            this.messageService.add({severity: 'error', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'error', summary: 'Rejected', detail: 'You have rejected'});
             break;
           case ConfirmEventType.CANCEL:
-            this.messageService.add({severity: 'warn', summary: 'Hủy bỏ', detail: 'Hủy bỏ thao tác'});
+            this.messageService.add({severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled'});
             break;
         }
       }
     });
 
   }
-
-  getInformations(){
-    this.prodService.getInforCreateProduct().subscribe(response => {
+  getInformations() {
+    this.importService.getInforCreateProduct().subscribe(response => {
       this.getInforCreateProductResponse = response as GetInfoCreateProdResponse;
       console.log(this.getInforCreateProductResponse.unitItems);
     });
@@ -333,7 +339,7 @@ export class ManageWarehouseComponent implements OnInit {
   getUnitChild(){
 
     this.importService.findByUnitId(this.selectedUnitParent.unitId,this.language).subscribe(response=>{
-      this.createProductRequest.units = response as Unit[]
+      this.createProductRequest.units = response as Units[]
     })
 
   }
@@ -349,6 +355,14 @@ export class ManageWarehouseComponent implements OnInit {
 
   removeUnit(index: number) {
     this.listUnit = this.listUnit.filter(x => x !== index);
+  }
+  inPrice!: number;
+  getPrice(){
+    this.importService.getPrice(this.selectedUnitParent.unitId,this.createProductRequest.inPrice,this.createProductRequest.amount,this.language).subscribe(response=>{
+
+      this.createProductRequest.units = response as Units[]
+
+    })
   }
 
 //  upload file excel
@@ -417,14 +431,6 @@ export class ManageWarehouseComponent implements OnInit {
     this.messageService.add({severity:'error', summary: this.translateService.getvalue("message.failed"), detail: message});
   }
 
-  exportQRCode(code: string, amount: number){
-    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
-      let blob = new Blob([response], { type: 'application/pdf' });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
-    });
-  }
-
   // camera
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
@@ -481,5 +487,17 @@ export class ManageWarehouseComponent implements OnInit {
     this.createProductRequest.amount = 0;
     this.createProductRequest.barCode = '';
     this.selectedCategory.name=""
+  }
+  exportQRCode(code: string, amount: number){
+    this.uploadFileService.downloadQrCode(code, amount, "vi").subscribe(response=>{
+      console.log(response);
+      import("jspdf").then(jsPDF => {
+        const doc = new jsPDF.jsPDF(response);
+        doc.save('products.pdf');
+      })
+      let blob = new Blob([response as string], { type: 'application/pdf' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    });
   }
 }
