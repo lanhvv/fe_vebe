@@ -143,7 +143,6 @@ export class ManageExpiryDateComponent implements OnInit {
       this.enable = true;
       const device = this.availableDevices.find(x => x.deviceId === this.availableDevices[1].deviceId);
       this.currentDevice = device;
-      console.log(this.currentDevice);
     } else {
       this.enable = false;
       this.currentDevice = undefined;
