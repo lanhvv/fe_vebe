@@ -75,7 +75,6 @@ export class ManageTypeProductComponent implements OnInit {
     );
     this.cols = [
       {field: 'name', header: 'Name'},
-      {field: 'description', header: 'Description'},
       {field: 'status', header: 'Status'},
       {field: 'amountProduct', header: 'Amount Product'},
       {field: 'creator', header: 'Creator'},
@@ -92,7 +91,7 @@ export class ManageTypeProductComponent implements OnInit {
       searchText: this.searchText
     };
 
-    this.typeProductService.getAllTypeProduct(this.getOrderRequest).subscribe(response => {
+    this.typeProductService.getAll().subscribe(response => {
       this.files = response as TypeProductItemsResponse
       console.log(this.files)
       console.log(this.category.id +" dòng 96");
@@ -108,7 +107,7 @@ export class ManageTypeProductComponent implements OnInit {
         this.typeProductService.delete(request).subscribe(response => {
           this.typeResponse = response as CreateResponse;
           if (this.typeResponse.status.status == '1') {
-            this.ngOnInit();
+            this.getall()
             this.messageService.add({severity: 'info', summary: 'Xác nhận', detail: 'Xóa danh mục sản phẩm thành công!'});
           } else {
             this.messageService.add({
@@ -136,15 +135,20 @@ export class ManageTypeProductComponent implements OnInit {
   update() {
     this.updateTypeProductRequest={"name":this.updateTypeProductResponse.name,"description":this.updateTypeProductResponse.description,
       "parentId": this.updateTypeProductResponse.parentid, "id": this.updateTypeProductResponse.id}
-    console.log(this.typeProductItems.Id)
+
     this.typeProductService.update(this.updateTypeProductRequest).subscribe(responsse => {
       this.typeResponse = responsse as CreateResponse;
       if(this.typeResponse.status.status=='1'){
         this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Chỉnh sửa danh mục sản phẩm thành công!', life: 3000});
+        this.getall()
+        this.updateType = false
       }else {
         this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Chỉnh sửa danh mục sản phẩm thất bại!', life: 3000});
+        this.getall()
+        this.updateType = true
+
       }
-      this.ngOnInit();
+
     })
   }
 
@@ -217,11 +221,14 @@ export class ManageTypeProductComponent implements OnInit {
       this.typeResponse = response as CreateResponse;
       if(this.typeResponse.status.status=='1'){
         this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Thêm mới danh mục sản phẩm thành công!', life: 3000});
+        this.getall()
+        this.display = false
 
       }else {
         this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Thêm mới danh mục sản phẩm thất bại!', life: 3000});
+        this.display = true
       }
-      this.ngOnInit();
+
     })
 
   }
@@ -249,7 +256,7 @@ export class ManageTypeProductComponent implements OnInit {
       }else {
         this.messageService.add({severity:'error', summary: 'Thất bại', detail: 'Thêm mới danh mục sản phẩm thành công!', life: 3000});
       }
-      this.ngOnInit();
+      this.displaydetail;
     })
   }
 

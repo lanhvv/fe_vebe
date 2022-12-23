@@ -1,4 +1,4 @@
-import { Unit } from '../Unit';
+import { Units } from '../Units';
 export class ImportInWarehouseRequest {
     nameProd!:string;
     unit!:string;
@@ -8,7 +8,7 @@ export class ImportInWarehouseRequest {
     barCode!:string;
     amount!:number;
     inPrice!:number;
-    units:Unit[]=[];
+    units:Units[]=[];
     unitId!:number;
     fileId!:number;
     rangeDates!: string;

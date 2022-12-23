@@ -9,8 +9,8 @@
       <div class="col-2">
         <button class="root-btn" (click)="showDialog()">Thêm sản phẩm</button>
       </div>
-      <div class="col-2">
-        <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="!items">
+      <div class="col-2 float-end">
+        <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="isShowFinal">
           Hoàn tất
         </button>
       </div>
@@ -76,6 +76,9 @@
         </ng-template>
       </p-table>
     </div>
+    <button class="btn btn-danger" (mousedown)="doneImpport()" *ngIf="!items">
+      Hoàn tất
+    </button>
   </div>
 </main>
 
@@ -120,6 +123,12 @@
               </ng-template>
             </p-dropdown>
           </div>
+
+          <div class="mb-3">
+            <label for="description-product" class="form-label" translate>product.description</label>
+            <textarea class="form-control" id="description-product" name="description" rows="3" style="resize: none;"
+                      [(ngModel)]="createProductRequest.description"></textarea>
+          </div>
         </div>
         <div class="col-6">
           <p-dropdown inputId="dropdown" [options]="getInforCreateProductResponse.unitItems"
@@ -145,7 +154,7 @@
           <div class="mb-3">
             <label for="in_price_update" class="form-label">Giá nhập</label>
             <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update"
-              [(ngModel)]="createProductRequest.inPrice" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+              [(ngModel)]="createProductRequest.inPrice" (ngModelChange)=" getPrice()" [ngModelOptions]="{standalone: true}" (ngModelChange)="getPrice()"></p-inputNumber>
           </div>
           <div class="mb-3">
             <label for="date_create">Hạn sử dụng</label>
@@ -178,7 +187,7 @@
             </div>
             <div class="col-3">
               <label>Số lượng</label>
-              <input type="text" class="form-control" placeholder="Số lượng">
+              <input type="text" class="form-control" [(ngModel)]="items.amount" [ngModelOptions]="{standalone: true}" placeholder="Số lượng">
             </div>
             <div class="col-3">
               <label>Giá nhập</label>
@@ -229,24 +238,25 @@
                    id="name_product_update">
           </div>
           <div class="mb-3"
-               *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
-            <label for="category_edit" class="mb-2">Danh mục sản phẩm</label>
+          *ngIf="getInforCreateProductResponse!=null && getInforCreateProductResponse.typeProductItems!=null">
+          <label class="form-label-category" translate>product.category.name</label> <br>
+          <p-dropdown [options]="getInforCreateProductResponse.typeProductItems" dataKey="id"
+            [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true"
+            filterBy="name" [showClear]="true" placeholder="Lựa chọn danh mục">
+            <ng-template let-category pTemplate="selectedItem">
+              <div class="category-item">
+                <p>{{category.name}}</p>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
 
-            <p-dropdown styleClass="root-dropdown" id="bill_pay" dataKey="id" [options]="categoryItems.items"
-              [(ngModel)]="categoryitem" [ngModelOptions]="{standalone: true}" optionLabel="name" [filter]="true"
-              filterBy="name" filterBy="name">
-              <ng-template pTemplate="selectedItem">
-                <div class="unit-item unit-item-value" *ngIf="categoryitem">
-                  <div>{{categoryitem.name}}</div>
-                </div>
-              </ng-template>
-              <ng-template let-items pTemplate="items">
-                <div class="unit-Item">
-                  <div>{{items.name}}</div>
-                </div>
-              </ng-template>
-            </p-dropdown>
+          <div class="mb-3">
+            <label for="description-product" class="form-label" translate>product.description</label>
+            <textarea class="form-control" id="description-product" name="description" rows="3" style="resize: none;"
+                      [(ngModel)]="edit.description"></textarea>
           </div>
+
         </div>
         <div class="col-6">
           <div class="mb-3">
@@ -273,7 +283,7 @@
           </div>
           <div class="mb-3">
             <label for="in_price_update" class="form-label">Giá nhập</label>
-            <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update" [(ngModel)]="edit.inPrice" [ngModelOptions]="{standalone: true}"></p-inputNumber>
+            <p-inputNumber style="width: 100%; height: 40px" inputId="integeronly" id="in_price_update" [(ngModel)]="edit.inPrice" (ngModelChange)=" getPrice()" [ngModelOptions]="{standalone: true}"></p-inputNumber>
           </div>
           <div class="mb-3">
             <label for="hsd_update" class="form-label">Hạn sử dụng</label> <br>
@@ -298,27 +308,29 @@
       <div class="row">
         <p>Thêm đơn vị sản phẩm</p>
 
-        <div *ngFor="let items of edit.units; let i=index">
+        <div *ngFor="let items of edit.units;">
           <div class="row mb-3">
-            <div class="col">
-              <label for="unit_update_{{i}}">Đơn vị</label>
-              <input type="text" id="unit_update_{{i}}" class="form-control" [(ngModel)]="items.unitName"
-                [ngModelOptions]="{standalone: true}" placeholder="Đơn vị" name="nameunit_{{i}}">
+            <div class="col-3">
+              <label>Đơn vị</label>
+              <input type="text" class="form-control" [(ngModel)]="items.unitName" [ngModelOptions]="{standalone: true}"
+                placeholder="Đơn vị">
             </div>
-            <div class="col">
-              <label for="amount_update_{{i}}">Số lượng</label>
-              <input type="text" class="form-control" id="amount_update_{{i}}" placeholder="Số lượng"
-                name="amountunit_{{i}}">
+            <div class="col-3">
+              <label>Số lượng</label>
+              <input type="text" class="form-control" [(ngModel)]="items.amount" [ngModelOptions]="{standalone: true}" placeholder="Số lượng">
             </div>
-            <div class="col">
-              <label for="inprice_update_{{i}}">Đơn giá</label>
-              <input type="text" class="form-control" [(ngModel)]="items.inPrice" [ngModelOptions]="{standalone: true}"
-                placeholder="Đơn giá" id="inprice_update_{{i}}" name="price_{{i}}">
+            <div class="col-3">
+              <label>Giá nhập</label>
+              <p-inputNumber id="price" [(ngModel)]="items.inPrice" mode="currency" currency="VND" locale="en-US"
+                [ngModelOptions]="{standalone: true}">
+              </p-inputNumber>
             </div>
-            <div class="col">
-              <label for="outprice_update_{{i}}">Giá bán</label>
-              <input type="text" class="form-control" [(ngModel)]="items.outPrice" [ngModelOptions]="{standalone: true}"
-                placeholder="Giá bán" id="outprice_update_{{i}}" name="cost_{{i}}">
+            <div class="col-3">
+              <label>Giá bán</label>
+              <p-inputNumber id="price" [(ngModel)]="items.outPrice" mode="currency" currency="VND" locale="en-US"
+                [ngModelOptions]="{standalone: true}">
+              </p-inputNumber>
+
             </div>
           </div>
         </div>
@@ -345,3 +357,34 @@
     [formats]="formatsEnabled"
   ></zxing-scanner>
 </p-dialog>
+
+<!--preview after import-->
+<p-sidebar [(visible)]="isSidebarDialog" position="right" [baseZIndex]="10000">
+  <h5>Xuất thông tin sản phẩm</h5>
+  <p-table [tableStyle]="{'width': '100%'}" [value]="importResponse.items" *ngIf="this.importResponse!=null && this.importResponse.status.status==='1'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="th-table">Tên sản phẩm</th>
+        <th class="th-table">Mã sản phẩm</th>
+        <th class="th-table">QR code</th>
+        <th class="th-table">Hạn sử dụng</th>
+        <th class="th-table">Giá nhập</th>
+        <th class="th-table">Số lượng</th>
+        <th class="th-table">Thao tác</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.productName}}</td>
+        <td>{{product.productCode}}</td>
+        <td>{{product.qrCode}}</td>
+        <td>{{product.rangeDate | date: "dd/MM/yyyy"}}</td>
+        <td>{{product.inPrice}}</td>
+        <td>{{product.amount}}</td>
+        <td>
+          <button class="root-btn" (mousedown)="exportQRCode(product.productCode, product.amount)">Xuất mã vạch</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-sidebar>

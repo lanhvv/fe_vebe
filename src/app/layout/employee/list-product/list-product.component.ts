@@ -1,8 +1,8 @@
+import { GetUnit } from './../../../shared/item/product/getUnit';
 import { Component, OnInit } from '@angular/core';
 
 import {NgxSpinnerService} from "ngx-spinner";
 import {TypeProductService} from "../../../services/type-product/type-product.service";
-import {ResponseProducts} from "../../../shared/model/response/ResponseProducts";
 import {ResponseTypeProducts} from "../../../shared/model/response/ResponseTypeProduct";
 import {TypeProduct} from "../../../shared/model/TypeProduct";
 import {SellOfflineService} from "../../../services/employee/sell-offline.service";
@@ -11,7 +11,8 @@ import {Filter} from "../../../shared/model/Filter";
 import {GetProductsRequest} from "../../../shared/model/request/GetProductsRequest";
 import {TranslateConfigService} from "../../../services/translate-config.service";
 import {ViewStallResponse} from "../../../shared/response/product/ViewStallResponse";
-import { ProductService } from 'src/app/services/Product/product.service';
+import { ShowListProduct } from '../../../shared/model/response/ShowListProduct';
+import { ProductService } from 'src/app/services/employee/product/product.service';
 
 
 
@@ -47,46 +48,43 @@ export class ListProductComponent implements OnInit {
   page=0;
   pageSize=10;
   language!:string;
+  items: ShowListProduct = new ShowListProduct()
+  units: GetUnit[]=[]
+  unit: GetUnit= new GetUnit()
 
   ngOnInit(): void {
     this.status = 1;
     this.language=this.translateService.getLanguage()!;
-    this.loadInitPost();
-    this.loadTypeProducts();
+    this.showList()
   }
+showList(){
+  this.productService.showProduct().subscribe(response =>{
+    this.items = response as ShowListProduct;
+    // console.log(this.items)
+    // if (this.items == null) {
+    //   this.notEmptyPost = false;
+    // } else {
+    //   this.notscrolly = true;
+    //   this.numberPage++;
+    // }
+  })
+}
+showUnit(id: number, unitId: number){
+  this.productService.showUnit(id, unitId).subscribe(response =>{
+    this.unit = response as GetUnit;
+    console.log(this.units)
+  })
+}
 
-  loadInitPost() {
-    this.filter={"typeFilter":"none","valueFilter":"none"}
-    this.getProductsRequest={"page":this.page,"pageSize":this.pageSize,"filter":this.filter,"language":this.language,searchText:""};
-    this.stallService.view(this.getProductsRequest).subscribe(response =>{
-      this.products = response as ViewStallResponse;
-      this.numberPage++;
-    })
-  }
+  // onScroll() {
+  //    if (this.notscrolly && this.notEmptyPost) {
+  //       this.spinner.show();
+  //       this.notscrolly = false;
+  //       this.showList()
+  //    }
+  // }
 
-  onScroll() {
-     if (this.notscrolly && this.notEmptyPost) {
-        this.spinner.show();
-        this.notscrolly = false;
-        this.loadNextProduct();
-     }
-  }
 
-  loadNextProduct() {
-    this.productService.getProduct(this.selectedType, this.selectedValue, this.searchProduct,this.numberPage).subscribe(data => {
-        const newProduct = data as ViewStallResponse;
-        this.spinner.hide();
-        if (newProduct.results === null) {
-          this.notEmptyPost = false;
-        } else {
-          this.products.results = this.products.results.concat(newProduct.results);
-          this.notscrolly = true;
-          this.numberPage++;
-        }
-     });
-  }
-
-  //sidebar
   typePrices : typePrice[] = [
     {price:0 , title: "Tất cả"},
     {price:1 , title: "Dưới 50.000đ"},
@@ -112,54 +110,30 @@ export class ListProductComponent implements OnInit {
     });
   }
 
-  loadGetProductByType() {
-    this.numberPage = 0;
-    // this.productService.getTypeProduct
-    this.productService.getProduct(this.selectedType, this.selectedValue, this.searchProduct,this.numberPage).subscribe(response =>{
-      this.products = response as ViewStallResponse;
-      this.numberPage++;
-    })
-  }
 
   onClick(){
     //this.searchProduct = "";
     this.notEmptyPost = true;
     this.notscrolly = true;
-    this.loadGetProductByType();
+    // this.loadGetProductByType();
   }
 
-  loadGetProductByPrice() {
-    this.numberPage = 0;
-    // this.productService.getProductsByPrice
-    this.productService.getProduct(this.selectedType, this.selectedValue, this.searchProduct,this.numberPage).subscribe(response =>{
-      this.products = response as ViewStallResponse;
-      this.numberPage++;
-    })
-  }
-
-  onClickRadio(){
-    console.log(this.selectedType);
-    //this.searchProduct = "";
-    this.notEmptyPost = true;
-    this.notscrolly = true;
-    this.loadGetProductByPrice();
-  };
 
   //search
   onSearch() {
     this.numberPage = 0;
     // this.selectedType = -1;
     // this.selectedValue = this.typePrices[0].price;
-    this.loadProductByName();
+    // this.loadProductByName();
   };
 
-  loadProductByName() {
-    this.products.results = [];
-    this.productService.getProduct(this.selectedType, this.selectedValue, this.searchProduct,this.numberPage).subscribe(response =>{
-      this.products = response as ViewStallResponse;
-      this.numberPage++;
-    })
-  }
+  // loadProductByName() {
+  //   this.products.results = [];
+  //   this.productService.getProduct(this.selectedType, this.selectedValue, this.searchProduct,this.numberPage).subscribe(response =>{
+  //     this.products = response as ViewStallResponse;
+  //     this.numberPage++;
+  //   })
+  // }
 
   reloadPage(): void {
     window.location.reload();
