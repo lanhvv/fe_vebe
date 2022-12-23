@@ -1,4 +1,5 @@
 import { Unit } from '../Unit';
+import {Units} from "../Units";
 export class EditImportWarehouseResponse {
   id!: string
   nameProd!:string;
@@ -9,7 +10,7 @@ export class EditImportWarehouseResponse {
   barCode!:string;
   amount!:number;
   inPrice!:number;
-  units:Unit[]=[];
+  units:Units[]=[];
   unitId!:number;
   fileId!:number;
   rangeDates!: string;

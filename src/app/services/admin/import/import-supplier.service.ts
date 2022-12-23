@@ -55,6 +55,11 @@ export class ImportSupplierService {
     return this.httpClient.get<any>(this.URL+'/unitId-parent/'+parent+'?language='+language, this.httpOptions)
   }
 
+  getPrice(parent:any, inPrice: number, amount: number, language:string){
+    return this.httpClient.get<any>(this.URL+'/getPriceChild/'+parent+'/'+ inPrice+'/'+ amount+'?language='+language, this.httpOptions)
+  }
+
+
   getImportInWarehouse(id: any) {
     return this.httpClient.get<any>(this.URL + '/getAllRedis-importWarehouse/' + id, this.httpOptions)
   }
@@ -75,7 +80,10 @@ export class ImportSupplierService {
     return this.httpClient.get<any>(this.URL + '/deleteAll-importWarehouse/' + key + '?language=' + language, this.httpOptions)
   }
 
-  update(request: ImportInWarehouseRequest, key: number, redisId: string) {
+  update(key: number, redisId: string,request: ImportInWarehouseRequest) {
     return this.httpClient.post(this.URL + "/update-import/" + key + '/' + redisId, request, this.httpOptions);
+  }
+  getInforCreateProduct(){
+    return this.httpClient.get(this.URL+"/create/info?language=vi",this.httpOptions);
   }
 }

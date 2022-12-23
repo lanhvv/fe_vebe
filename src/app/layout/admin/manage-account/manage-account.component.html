@@ -11,7 +11,7 @@
         <span><p>Số người đang hoạt động: {{listAccountItems.countStatus}}</p></span>
       </div>
       <div class="col-3">
-        <a type="button" class="btn root-btn" (click)="isDialogAccount=true">Thêm tài khoản</a>
+        <a type="button" class="btn btn-outline-primary" (click)="isDialogAccount=true">Thêm tài khoản</a>
       </div>
       <div class="col-2">
 <!--        <select class="form-select" aria-label="Default select example">-->
@@ -271,69 +271,49 @@
         </div>
       </div>
       <div class="mb-3 text-center">
-        <button (click)="createAccount()" type="submit" class="root-btn">Thêm tài khoản</button>
+        <button (click)="createAccount()" [disabled]="!accountForm.valid" type="submit" class="root-btn">Thêm tài khoản</button>
       </div>
     </div>
   </form>
 </p-dialog>
 
 <!-- Update -->
-<p-dialog header="Update tài khoản" [(visible)]="isUpdateAccount" [modal]="true" [style]="{width: '50vw'}"
+<p-dialog header="Chỉnh sửa tài khoản" [(visible)]="isUpdateAccount" [modal]="true" [style]="{width: '50vw'}"
           [draggable]="false" [resizable]="false">
   <form class="row mt-2">
     <div class="row">
       <div class="mb-3 col-md-6">
-        <label for="fullname" class="form-label">Họ và tên: </label>
-        <input type="text" class="form-control" id="fullname" [(ngModel)]="createAccountResponse.fullname" name="fullname"
-               placeholder="Nhập tên nhân viên"
-               required>
+        <label for="fullname" class="form-label">Họ và tên </label>
+        <input type="text" class="form-control" id="fullname" [(ngModel)]="createAccountResponse.fullname" name="fullname">
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Tên tài khoản:</label>
-        <input type="text" class="form-control" id="username" [(ngModel)]="createAccountResponse.username" name="username"
-               placeholder="Nhập username nhân viên"
-               required>
+        <label for="username" class="form-label">Tên tài khoản</label>
+        <input type="text" class="form-control" id="username" [(ngModel)]="createAccountResponse.username" name="username" disabled>
       </div>
       <div class="mb-3 col-md-6">
-        <label for="username" class="form-label">Mật khẩu:</label>
-        <input type="text" class="form-control" id="password" [(ngModel)]="createAccountResponse.password" name="password"
-               placeholder="Nhập username nhân viên"
-               required>
-      </div>
-      <div class="mb-3 col-md-6">
-        <label class="form-label">Số chứng minh thư: </label>
+        <label class="form-label">Số chứng minh thư</label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.cccd"
                placeholder="Nhập chứng minh thư" name="cccd" required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Số điện thoại: </label>
+        <label class="form-label">Số điện thoại </label>
         <input type="text" class="form-control"  [(ngModel)]="createAccountResponse.phoneNumber" name="phoneNumber"
                placeholder="Nhập số điện thoại" required>
       </div>
 
       <div class="mb-3 col-md-6">
-        <label class="form-label">Email: </label>
+        <label class="form-label">Email </label>
         <input type="text" class="form-control" [(ngModel)]="createAccountResponse.email" name="email"
                placeholder="Nhập email" required>
       </div>
       <div class="mb-3 col-md-6">
-        <label class="form-label">Địa chỉ: </label>
+        <label class="form-label">Địa chỉ </label>
         <input type="text" class="form-control"[(ngModel)]="createAccountResponse.address" name="address"
                placeholder="Nhập địa chỉ" required>
       </div>
-
-      <div class="col-md-3 mb-3"></div>
-      <div class="col-md-3 mb-3">
-        <button (click)="update()"  type="submit" class="btn btn-success"
-        >Hoàn thiện
-        </button>
-      </div>
-      <div class="col-md-3 mb-3">
-        <button type="submit" class="btn btn-success"
-        >Hủy
-        </button>
-      </div>
-      <div class="col-md-3 mb-3"></div>
+    </div>
+    <div class="row text-center mt-3">
+      <button (click)="update()" type="submit" class="root-btn">Hoàn thiện</button>
     </div>
   </form>
 </p-dialog>
