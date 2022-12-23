@@ -76,6 +76,7 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   transactionRequest!:TransactionBillRequest;
   transactionResponse!:BaseResponse;
   moneyTransaction=0;
+  moneyPayment=0;
   dialogScanQR: boolean = false;
   enable : boolean = true;
   hasPermission !: boolean;
@@ -88,8 +89,8 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   currentDevice !: MediaDeviceInfo | undefined;
   enableCameraState : boolean = false;
   dialogExportBill: boolean = false;
-  valueProductSelected!:ProductStallResult;
   enableDone:boolean=true;
+  closeButton=0;
 
   debitItems: DebitDetailItems[] = []
   payRequest!: PayRequest
@@ -136,11 +137,14 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
 
     this.cartsItem=[];
     this.carts=[];
-    this.cartCode="CartCode::"+(new Date().getTime());
+    this.cartCode="CartCode::"+1234;
     this.cartItem=new CartItem();
     this.cartItem.cartCode=this.cartCode;
     this.carts.push(this.cartItem);
     this.cartsItem.push(new ViewStallResult());
+    this.transactionRequest=new TransactionBillRequest();
+    this.transactionRequest.cartCode=this.cartCode;
+    this.transactionRequest.transactionType="Thanh Toán";
     this.debitItemsResponse = new DebitItemsResponse();
     this.createDebitRequest = new CreateDebitRequest();
     this.debitResponse = new DebitResponse();
@@ -154,13 +158,11 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.cartCode="CartCode::"+(new Date().getTime())
+    this.checkMoneyPay();
     this.getProduct();
-    this.cartItem.cartCode=this.cartCode;
     this.status = 2;
     this.language = this.translateService.getLanguage()!;
     this.toltal = 0;
-    // this.getTotal();
     if (this.listCart.length === 0) {
       this.checkList = true;
     } else {
@@ -174,29 +176,12 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.enable = false;
   }
 
-  getTotal() {
-    this.listCart = this.sellOfflineService.getListGioHang();
-    for (let i = 0; i < this.listCart.length; i++) {
-      this.toltal += (this.listCart[i].gia * ((100 - this.listCart[i].promotion) / 100)) * this.listCart[i].productQuantity;
-    }
-  }
-
   openDialogDelete(productId: any) {
     this.sellOfflineService.xoaSanPham(productId);
     alert("Xóa thành công")
     this.ngOnInit();
   }
 
-  // payment() {
-  //   var listProduct = this.sellOfflineService.getListGioHang();
-  //   console.log(this.listCart);
-  //   for (let i = 0; i < this.listCart.length; i++) {
-  //     var productId = this.listCart[i].masp;
-  //     var productName = this.listCart[i].tensp;
-  //
-  //   }
-  //
-  // }
 
   OpenPayment() {
     if (this.listCart.length === 0) {
@@ -245,11 +230,6 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.choosePayment();
   }
 
-  changeBill(index: number) {
-    this.selectCart(index);
-    this.currentBill = index;
-  }
-
   getProduct(){
     console.log("getProduct")
     this.productService.getProducts(this.language).subscribe(response=>{
@@ -264,54 +244,12 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
     this.productService.selectProduct(this.language,productCode,this.cartCode).subscribe(response=>{
       this.productSelected=response as SelectProductResponse;
       if (this.productSelected.status.status==="1"){
-        this.createDetailBillResult=new CreateDetailBillResult()
-        this.createDetailBillResult.productCode=this.productSelected.result.productCode;
-        this.createDetailBillResult.productId=this.productSelected.result.productId;
-        this.createDetailBillResult.img=this.productSelected.result.img;
-        this.createDetailBillResult.productName=this.productSelected.result.productName;
-        this.createDetailBillResult.amount=this.productSelected.result.amount;
-        this.createDetailBillResult.importId=this.productSelected.result.importId;
-        this.createDetailBillResult.barCode=this.productSelected.result.barCode;
-        this.createDetailBillResult.export=this.productSelected.result.items[this.productSelected.result.items.length-1];
-        if (this.viewBillRequest==null){
-          this.viewBillRequest=new ViewBillRequest();
-          this.viewBillRequest.detailBills=[this.createDetailBillResult];
-        }else{
-          this.viewBillRequest.detailBills.push(this.createDetailBillResult);
-        }
-        // this.cartsItem.push(this.productSelected.result);
-        if (this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products==null){
-          this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products=[this.productSelected.result];
-          this.cartsItem=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products;
-        }else {
-          this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products.push(this.productSelected.result);
-          this.cartsItem=this.carts.filter((item)=>item.cartCode===this.cartCode)[0].products;
-        }
-        this.viewBillRequest.cartCode=this.cartCode;
-        this.carts.push(this.cartItem);
-        // this.changeAmount();
+        this.transactionRequest.viewStallResults.push(this.productSelected.result);
+        this.moneyPayment+=this.productSelected.result.exportSelected.outPrice*this.productSelected.result.amount;
       }
     })
     this.checkMoneyPay();
   }
-
-  selectUnit(unitId:number,importId:number){
-    this.index=unitId;
-    for (let i=0;i<this.cartItem.products.length;i++){
-      if (this.cartItem.products[i].productId===importId) {
-        for (let j = 0; j < this.cartItem.products[i].items.length; j++) {
-          if (this.cartItem.products[i].items[j].unitId === unitId) {
-            this.selectedUnit = this.cartItem.products[i].items[j];
-          }
-        }
-      }
-    }
-  }
-
-  selectCart(cartNumber:number){
-    this.cartsItem=this.carts[cartNumber].products;
-  }
-
   showDialogPayment() {
     this.isPayment = false;
     this.dialogPayment = true;
@@ -322,27 +260,23 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   deleteProductOnCart(code: string){
-    this.cartItem.products = this.cartItem.products.filter(x => x.barCode !== code);
-    // this.changeAmount();
+    this.transactionRequest.viewStallResults=this.transactionRequest.viewStallResults.filter(x=>x.productCode!==code);
+    this.changeAmount();
   }
 
-  changeAmount(result: number) {
-    console.log(result);
+  changeAmount() {
     this.checkMoneyPay();
-    this.billService.saveBilltoRedis(this.viewBillRequest).subscribe(response=>{
+    this.billService.saveBilltoRedis(this.transactionRequest).subscribe(response=>{
       console.log(response);
     })
   }
 
   transaction(){
-    this.transactionRequest=new TransactionBillRequest();
-    this.transactionRequest.cartCode=this.cartCode;
     this.transactionRequest.paymentMethod=this.selectedValue;
-    this.transactionRequest.transactionType="Thanh Toán";
     if (this.moneyTransaction!=null){
       this.transactionRequest.inPrice=this.moneyPay+this.moneyTransaction;
-    }else{
-      this.transactionRequest.inPrice=this.moneyPay;
+    }else {
+      this.transactionRequest.inPrice = this.moneyPay;
     }
     this.transactionRequest.language=this.language;
     this.billService.transactionBill(this.transactionRequest).subscribe(response=>{
@@ -421,10 +355,9 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   }
 
   validate(number:number){
+
     if (number==null){
       (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
-    }else {
-      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
     }
     this.checkMoneyPay();
   }
@@ -432,16 +365,18 @@ export class SellOfflineComponent implements OnInit, OnDestroy {
   checkMoneyPay(){
 
     if (this.moneyPay==null || this.moneyPay==0){
-      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
-    }else {
-      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
-    }
-    console.log(this.moneyPay)
-    if ((this.selectedValue==="money" || this.selectedValue==="both") && this.moneyPay<this.numToString()){
-      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = true;
+      (<HTMLInputElement> document.getElementById("btntransaction")).disabled = true;
+    }else if (this.selectedValue==="money" && this.moneyPay<this.moneyPayment){
+      (<HTMLInputElement> document.getElementById("btntransaction")).disabled = true;
     }else{
-      (<HTMLInputElement> document.getElementById("btn-transaction")).disabled = false;
+      (<HTMLInputElement> document.getElementById("btntransaction")).disabled = false;
     }
+  }
+
+  addAmount(request: ViewStallResult) {
+    console.log("addAmount");
+    this.moneyPayment += request.amount * request.exportSelected.outPrice;
+    this.changeAmount()
   }
 
   create() {

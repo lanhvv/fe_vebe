@@ -54,17 +54,17 @@
         </div>
         <div class="col-4">
           <div class="field col-12 md:col-4">
-            <p-calendar
-              [(ngModel)]="rangeDates"
-              selectionMode="range"
-              [readonlyInput]="true"
-              inputId="range"
-              placeholder="Lựa chọn khoảng ngày"
-              inputStyleClass="calendar"
-              [showIcon]="true"
-              (onSelect)="chooseDate()"
-              [maxDate]="maxDateValue"
-            ></p-calendar>
+<!--            <p-calendar-->
+<!--              [(ngModel)]="rangeDates"-->
+<!--              selectionMode="range"-->
+<!--              [readonlyInput]="true"-->
+<!--              inputId="range"-->
+<!--              placeholder="Lựa chọn khoảng ngày"-->
+<!--              inputStyleClass="calendar"-->
+<!--              [showIcon]="true"-->
+<!--              (onSelect)="chooseDate()"-->
+<!--              [maxDate]="maxDateValue"-->
+<!--            ></p-calendar>-->
           </div>
         </div>
       </div>
@@ -76,43 +76,43 @@
     <div class="todolist p-3 rounded mt-3">
       <div class="row">
         <div class="col-3 text-center">
-          <p class="text-primary fs-2 fw-bold">45</p>
+          <p class="text-primary fs-2 fw-bold">{{totalCloseToExpired}}</p>
           <p>Sản phẩm sắp hết hạn</p>
         </div>
         <div class="col-3 text-center">
-          <p class="text-primary fs-2 fw-bold">65</p>
+          <p class="text-primary fs-2 fw-bold">{{totalExpired}}</p>
           <p>Sản phẩm đã hết hạn</p>
         </div>
-        <div class="col-2 text-center">
-          <p class="text-primary fs-2 fw-bold">54</p>
-          <p>Sản phẩm tiêu hủy</p>
-        </div>
-        <div class="col-2 text-center">
+<!--        <div class="col-1 text-center">-->
+<!--&lt;!&ndash;          <p class="text-primary fs-2 fw-bold">54</p>&ndash;&gt;-->
+<!--&lt;!&ndash;          <p>Sản phẩm tiêu hủy</p>&ndash;&gt;-->
+<!--        </div>-->
+        <div class="col-3 text-center">
           <p class="text-primary fs-2 fw-bold">{{blockProduct}}</p>
           <p>Sản phẩm tạm khóa</p>
         </div>
-        <div class="col-2 text-center">
+        <div class="col-3 text-center">
           <p class="text-primary fs-2 fw-bold">{{soldOutProduct}}</p>
           <p>Sản phẩm hết hàng</p>
         </div>
       </div>
     </div>
     <!-- sản phẩm của tôi -->
-    <div class="myproduct mt-3 p-3 rounded">
-      <h2>Sản phẩm của tôi</h2>
-      <button class="btn btn-outline-success">Thêm sản phẩm</button>
-      <p>Đăng tải thêm sản phẩm để bắt đầu kinh doanh</p>
-      <div class="myproduct-top">
-        <div class="row">
-          <!-- top 5 product -->
-          <div class="col-2" *ngFor="let product of products">
-            <div class="myproduct-top_item">
-              <img src="{{product.img}}" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div class="myproduct mt-3 p-3 rounded">-->
+<!--      <h2>Sản phẩm của tôi</h2>-->
+<!--      <button class="btn btn-outline-success">Thêm sản phẩm</button>-->
+<!--      <p>Đăng tải thêm sản phẩm để bắt đầu kinh doanh</p>-->
+<!--      <div class="myproduct-top">-->
+<!--        <div class="row">-->
+<!--          &lt;!&ndash; top 5 product &ndash;&gt;-->
+<!--          <div class="col-2" *ngFor="let product of products">-->
+<!--            <div class="myproduct-top_item">-->
+<!--              <img src="{{product.img}}" alt="">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 
   <admin-footer></admin-footer>
