@@ -57,9 +57,11 @@ export class ImportExcelComponent implements OnInit {
   productDialog!: boolean;
   getExportsByUnitSelectedResponse!: GetExportsByUnitSelectResponse;
   importResponse!: ImportWarehouseItemsResponse;
-
+  exportsItem!:ExportResult;
   //after import
   isSidebarDialog: boolean = false;
+  isEnableDone=0;
+
   downloadFilePdf!:DownloadFilePdfResponse;
 
   constructor(private fb: FormBuilder,
@@ -103,7 +105,7 @@ export class ImportExcelComponent implements OnInit {
       accept: () => {
         this.productResponse.products = this.productResponse.products.filter(val => !this.selectedProducts.includes(val));
         this.selectedProducts = [];
-        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công?', life: 3000});
+        this.messageService.add({severity:'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công', life: 3000});
         this.saveProducts();
       }
     });
@@ -173,25 +175,46 @@ export class ImportExcelComponent implements OnInit {
     })
   }
 
-  selectUnit(request:ImportProductResult,unitId:number){
-      console.log("unit 3: ",request.unit.id);
-      console.log("unit 4: ",unitId);
-    this.unitService.getUnitsByUnitSelected(this.language+"",request.unit.id).subscribe(data=>{
-        this.getExportsByUnitSelectedResponse=data as GetExportsByUnitSelectResponse;
-
-        if (this.getExportsByUnitSelectedResponse.status.status === '0'){
-          this.failed(this.getExportsByUnitSelectedResponse.status.message);
-        }else {
-
-          this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
-          const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
-          for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
-            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
-            const priceChild=(price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount).toFixed(0)
-            this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice= priceChild as unknown as number;
-          }
-          this.saveProducts();
+  selectUnit(request:ImportProductResult,unitId:number,index:number){
+    if (this.productResponse.products[index].units.length > 0) {
+      const unit = this.productResponse.products[index].units.find((unit) => unit.id === unitId);
+      if (unit) {
+        this.productResponse.products[index].unit = this.productResponse.products[index].units.filter((unit) => unit.id === unitId)[0];
+        this.productResponse.products[index].exports = []
+        for (let i = 0; i < this.productResponse.products[index].units.length; i++) {
+            if (this.productResponse.products[index].units[i].amount >= this.productResponse.products[index].unit.amount) {
+              this.exportsItem = new ExportResult();
+              this.exportsItem.amount = this.productResponse.products[index].units[i].amount/this.productResponse.products[index].unit.amount;
+              this.exportsItem.unitId= this.productResponse.products[index].units[i].id;
+              this.exportsItem.inPrice= this.productResponse.products[index].inPrice/this.productResponse.products[index].unit.amount/this.productResponse.products[index].inAmount;
+              this.exportsItem.unitName= this.productResponse.products[index].units[i].name;
+              this.exportsItem.outPrice= 0;
+              this.productResponse.products[index].exports.push(this.exportsItem);
+            }
         }
+      }
+    }
+          this.saveProducts();
+  }
+
+  selectUnitNew(request:ImportProductResult){
+    this.unitService.getUnitsByUnitSelected(this.language+"",request.unit.id).subscribe(data=>{
+      this.getExportsByUnitSelectedResponse=data as GetExportsByUnitSelectResponse;
+
+      if (this.getExportsByUnitSelectedResponse.status.status === '0'){
+        this.failed(this.getExportsByUnitSelectedResponse.status.message);
+      }else {
+        this.productResponse.products.filter(value => value.id === request.id)[0].exports = this.getExportsByUnitSelectedResponse.results;
+        this.productResponse.products.filter(value => value.id === request.id)[0].unit = request.unit;
+        console.log("unit 1: ",request.unit.name);
+        const price=(this.productResponse.products.filter(value => value.id === request.id)[0].inPrice/this.productResponse.products.filter(value => value.id === request.id)[0].inAmount)
+        for(let i=0;i<this.productResponse.products.filter(value => value.id === request.id)[0].exports.length;i++){
+          this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount=this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount/this.productResponse.products.filter(value => value.id === request.id)[0].unit.amount;
+          const priceChild=(price/this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].amount).toFixed(0);
+          this.productResponse.products.filter(value => value.id === request.id)[0].exports[i].inPrice= priceChild as unknown as number;
+        }
+        this.saveProducts();
+      }
     })
   }
 
@@ -255,5 +278,40 @@ export class ImportExcelComponent implements OnInit {
 
   back(){
     window.history.back();
+  }
+
+  changeExpireDate(expireDate: string,index: number){
+    const date = expireDate;
+    const formatDate= date.split('-');
+    const newDate = formatDate[2] + '/' + formatDate[1] + '/' + formatDate[0];
+    this.productResponse.products[index].rangeDates = newDate;
+    this.saveProducts();
+  }
+
+  changeInPrice(index: number){
+    if (this.productResponse.products[index].inPrice<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
+  }
+
+  changeInAmount(index: number){
+    if (this.productResponse.products[index].inAmount<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
+  }
+
+  checkChange(index: number){
+    if (index<0){
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = true;
+    }else {
+      (<HTMLInputElement> document.getElementById("btn-done")).disabled = false;
+      this.saveProducts();
+    }
   }
 }
